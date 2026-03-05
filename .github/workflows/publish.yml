@@ -5,7 +5,7 @@ on:
     branches: ["main"]
 
 env:
-  VUEDIR: Thesis2026
+  VUEDIR: louis-armstrong
 
 jobs:
   build:
