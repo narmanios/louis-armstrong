@@ -95,7 +95,7 @@ This thesis positions Armstrong not only as a musician but as a lens through whi
 
 Description: Louis Armstrong’s life as 2000 facts that can be discovered. Masked around an iconic silhouette of Louis Armstrong’s head and shoulders, these facts are searchable. Louis Armstrong's name is recognizable but most do not know who he was and what he accomplsied throughtout his life and beyond. This visualization will show who Armstrong is through facts that are well known and other facts that less commonly known.
 
-![Facts of Louis Armstrong](/public/sketches/facts.jpg)
+![Facts of Louis Armstrong](louis-armstrong/public/sketches/facts.jpg)
 
 ## Louis Armstrong’s World Tour: A Map of Influence
 
@@ -103,7 +103,7 @@ Description: Louis Armstrong’s life as 2000 facts that can be discovered. Mask
 
 Description: The enormity of Louis Armstrong's life and influence across time and space. He performed in many cities across the world and his influence is still felt today. This map will show the locations of Armstrong's performances and the influence he had on other musicians and artists.
 
-![Facts of Louis Armstrong](/public/sketches/map.jpg)
+![Facts of Louis Armstrong](louis-armstrong/public/sketches/map.jpg)
 
 ## The History Behind Louis Armstrong
 
@@ -111,7 +111,7 @@ Description: The enormity of Louis Armstrong's life and influence across time an
 
 Description: The chronological journey of Louis Armstrong's life and career. This timeline will show the key events in Armstrong's life, including his birth, early life, career milestones, and legacy. It will also show the role history played on decisions Louis Armstrong made. With events such as the Great Depression, World War II, and the Civil Rights Movement, Armstrong's life and career were shaped by the historical context in which he lived. This timeline will show how these events influenced Armstrong's decisions and how he navigated the challenges of his time.
 
-![Map of Itinerary and Facts:](/public/sketches/timeline.jpg)
+![Map of Itinerary and Facts:](louis-armstrong/public/sketches/timeline.jpg)
 
 ## Discovering Armstrong: A Randomized Curation
 
@@ -119,7 +119,7 @@ Description: The chronological journey of Louis Armstrong's life and career. Thi
 
 Description: This data visualization presents Louis Armstrong's life and work in an interactive virtual curation format. Users can explore his musical legacy through curated collections of performances, recordings, and historical artifacts.
 
-![Sketch:](/public/sketches/virtual-curation.jpg)
+![Sketch:](louis-armstrong/public/sketches/virtual-curation.jpg)
 
 ## The Louis Armstrong Ripple Effect: A Network of Influence
 
@@ -141,7 +141,7 @@ Description: This visualization shows Louis Armstrong’s legacy as a single con
 
 Description: Louis Armstrong’s life as 2000 facts that can be discovered. Masked around an iconic silhouette of Louis Armstrong’s head and shoulders, these facts are searchable. Louis Armstrong's name is recognizable but most do not know who he was and what he accomplsied throughtout his life and beyond. This visualization will show who Armstrong is through facts that are well known and other facts that less commonly known.
 
-![Facts of Louis Armstrong](/public/designs/facts.jpg)
+![Facts of Louis Armstrong](louis-armstrong/public/designs/facts.jpg)
 
 ## Louis Armstrong Opinions
 
@@ -149,7 +149,7 @@ Description: Louis Armstrong’s life as 2000 facts that can be discovered. Mask
 
 Description: This visualization will show the opinions of Louis Armstrong. It will show the opinions of people who knew him, people who were influenced by him, and people who have studied him. This visualization will show the different perspectives on Louis Armstrong and how he is viewed by different people.
 
-![Opinions](/public/designs/opinions.jpg)
+![Opinions](louis-armstrong/public/designs/opinions.jpg)
 
 ## The History Behind Louis Armstrong
 
@@ -157,7 +157,7 @@ Description: This visualization will show the opinions of Louis Armstrong. It wi
 
 Description: The chronological journey of Louis Armstrong's life and career. This timeline will show the key events in Armstrong's life, including his birth, early life, career milestones, and legacy. It will also show the role history played on decisions Louis Armstrong made. With events such as the Great Depression, World War II, and the Civil Rights Movement, Armstrong's life and career were shaped by the historical context in which he lived. This timeline will show how these events influenced Armstrong's decisions and how he navigated the challenges of his time.
 
-![Map of Itinerary and Facts:](/public/designs/timeline.jpg)
+![Map of Itinerary and Facts:](louis-armstrong/public/designs/timeline.jpg)
 
 ## Louis Armstrong’s World Tour: A Map of Influence
 
@@ -165,7 +165,7 @@ Description: The chronological journey of Louis Armstrong's life and career. Thi
 
 Description: The enormity of Louis Armstrong's life and influence across time and space. He performed in many cities across the world and his influence is still felt today. This map will show the locations of Armstrong's performances and the influence he had on other musicians and artists.
 
-![Map](/public/designs/map.jpg)
+![Map](louis-armstrong/public/designs/map.jpg)
 
 ## Louis Armstrong’s Original Songs: A Network of Influence
 
@@ -173,7 +173,7 @@ Description: The enormity of Louis Armstrong's life and influence across time an
 
 Description: This visualization will show the influence of Louis Armstrong's original songs. It will show how many cover versions each song has generated and how many people have been influenced by each song.
 
-![Originals](/public/designs/originals.jpg)
+![Originals](louis-armstrong/public/designs/originals.jpg)
 
 ## Louis Armstrong’s What a Wonderful World
 
@@ -181,7 +181,7 @@ Description: This visualization will show the influence of Louis Armstrong's ori
 
 Description: This visualization will show the influence of Louis Armstrong's song "What a Wonderful World". It will show how many cover versions the song has generated and how many people have been influenced by the song.
 
-![What a Wonderful World](public/designs/wonderfulworld.jpg)
+![What a Wonderful World](louis-armstrong/public/designs/wonderfulworld.jpg)
 
 ## Louis Armstrong’s Re-recordings
 
@@ -189,4 +189,4 @@ Description: This visualization will show the influence of Louis Armstrong's son
 
 Description: This visualization will show the influence of Louis Armstrong's re-recordings. This visualization will show the impact of Louis Armstrong's re-recordings and how they continue to influence people today.
 
-![Vinyl](/public/designs/vinyl.png)
+![Vinyl](louis-armstrong/public/designs/vinyl.png)
