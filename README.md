@@ -8,7 +8,7 @@ How did Louis Armstrong become an ambassador of American culture before he was e
 In what ways did his life and career position him as one of the first Black global stars and one of the earliest international representatives of jazz? <br>
 How did his official Africa tour of 1960–1961, especially his visit to the Congo during a moment of political crisis, reveal the contradictions of American cultural diplomacy during the Cold War? <br>
 How did The Real Ambassadors critique those contradictions by asking who America’s “real ambassadors” truly were? <br>
-And how does Armstrong’s lasting global legacy, especially through songs like “What a Wonderful World,” show that his ambassadorial role continues long after his lifetime?<br>
+And how does Armstrong’s lasting global legacy, especially through songs like “What a Wonderful World,” show that hisl role as ambassador continues long after his lifetime?<br>
 
 ### Significance:
 
@@ -16,7 +16,7 @@ Louis Armstrong is widely remembered as a brilliant jazz musician, but that reco
 
 ### Purpose:
 
-This project seeks to bring greater attention to Louis Armstrong’s ambassadorial role by examining how his career helped carry jazz and American culture across the world. It aims to show that Armstrong was more than an entertainer. He was a central figure in the making of modern American cultural identity at home and abroad. By tracing his rise from New Orleans to international fame, his official Africa tour, his involvement in The Real Ambassadors, and the lasting afterlife of his music, the project reveals how Armstrong’s work shaped the global image of the United States while also exposing the contradictions within that image. Through a combination of archival research, historical analysis, and data visualization, this project offers a new interpretation of Louis Armstrong as a foundational cultural figure whose influence continues to resonate today.
+This project seeks to bring greater attention to Louis Armstrong’s role as an ambassador by examining how his career helped carry jazz and American culture across the world. It aims to show that Armstrong was more than an entertainer. He was a central figure in the making of modern American cultural identity at home and abroad. By tracing his rise from New Orleans to international fame, his official Africa tour, his involvement in The Real Ambassadors, and the lasting afterlife of his music, the project reveals how Armstrong’s work shaped the global image of the United States while also exposing the contradictions within that image. Through a combination of archival research, historical analysis, and data visualization, this project offers a new interpretation of Louis Armstrong as a foundational cultural figure whose influence continues to resonate today.
 
 ### Table of Contents
 
@@ -34,7 +34,7 @@ This section focuses on Armstrong’s early international fame, world travel, fi
 
 4. The Official Jazz Ambassador<br>
 
-This section examines Armstrong’s State Department-sponsored Africa tour of 1960–1961 and places it within the larger Cold War program later known as the Jazz Ambassadors. It also considers the other major jazz ambassadors, including Dizzy Gillespie, Benny Goodman, Dave Brubeck, and Duke Ellington, and the different parts of the world they toured in order to promote American culture abroad.
+This section examines Armstrong’s State Department sponsored Africa tour of 1960–1961 and places it within the larger Cold War program later known as the Jazz Ambassadors. It also considers the other major jazz ambassadors, including Dizzy Gillespie, Benny Goodman, Dave Brubeck, and Duke Ellington, and the different parts of the world they toured in order to promote American culture abroad.
 
 5. Africa, Egypt, and the Congo Crisis<br>
 
@@ -46,7 +46,7 @@ This section explores the contradiction at the heart of Armstrong’s role. He w
 
 7. The Legacy of an Ambassador<br>
 
-This section shows that Armstrong’s role as an ambassador did not end with the official Africa tour or with The Real Ambassadors. It examines how later works, especially “What a Wonderful World,” extended his image as a global voice of human connection and hope. Through rerecordings, international popularity, and continued circulation, Armstrong’s music demonstrates that his role as ambassador continues into the present.
+This section shows that Armstrong’s role as an ambassador did not end with the official Africa tour or with The Real Ambassadors. It examines how later works, especially “What a Wonderful World,” extended his image as a global voice of human connection and hope. Through rerecordings and international popularity, Armstrong’s music demonstrates that his role as ambassador continues into the present.
 
 8. Conclusion: How Should We Remember Louis Armstrong?<br>
 
