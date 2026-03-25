@@ -1,0 +1,168 @@
+.tl-mobile-root,
+.tl-desktop-root {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: rgb(0, 9, 39);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+}
+
+.tl-mobile-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  padding-top: 6px;
+}
+
+.tl-header-title {
+  font-family: var(--tl-lyric-font, Georgia, 'Times New Roman', serif);
+  color: rgba(255, 255, 255, 1);
+  font-style: italic;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.tl-lyric {
+  font-family: var(--tl-lyric-font, Georgia, 'Times New Roman', serif);
+  font-style: italic;
+  font-weight: 600;
+  cursor: default;
+  transition:
+    fill 0.18s ease,
+    font-size 0.18s ease;
+  fill: var(--tl-lyric-color);
+  font-size: var(--tl-lyric-size);
+}
+
+.tl-header-title-mobile {
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.tl-header-title-desktop {
+  position: absolute;
+  top: 16px;
+  left: 40px;
+  z-index: 2;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.tl-sound-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.tl-sound-btn-mobile {
+  margin-left: auto;
+  margin-right: 40px;
+  margin-top: 20px;
+}
+
+.tl-sound-btn-desktop {
+  position: sticky;
+  top: 16px;
+  left: 10px;
+  z-index: 10;
+}
+
+.tl-sound-icon-mobile {
+  width: 14px;
+  height: 14px;
+}
+
+.tl-sound-icon-desktop {
+  width: 20px;
+  height: 20px;
+}
+
+.tl-scroll-surface {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  scrollbar-width: none;
+}
+
+.tl-scroll-surface-mobile {
+  cursor: auto;
+}
+
+.tl-scroll-surface-desktop {
+  cursor: grab;
+}
+
+.tl-mob-scroll,
+.tl-bar-scroll {
+  scrollbar-width: none;
+}
+
+.tl-mob-scroll::-webkit-scrollbar,
+.tl-bar-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.tl-svg {
+  display: block;
+  user-select: none;
+}
+
+.tl-role-line {
+  transition: opacity 0.2s ease;
+}
+
+.tl-pill-row {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 4px;
+}
+
+.tl-pill {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s ease;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.tl-pill.is-active {
+  width: 22px;
+  background: rgba(255, 255, 255, 1);
+}
+
+.tl-logo {
+  position: fixed;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+  z-index: 10000;
+  object-fit: contain;
+}
+
+.tl-logo-mobile {
+  bottom: 220px;
+}
+
+.tl-logo-desktop {
+  bottom: 180px;
+}
