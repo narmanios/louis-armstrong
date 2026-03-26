@@ -83,7 +83,7 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
         flexShrink: 0,
         scrollSnapAlign: "start",
         minHeight: "800px",
-        backgroundColor: "#E9E6D9",
+        backgroundColor: "#F5F3EA",
         position: "relative",
         fontFamily: '"Helvetica Neue", sans-serif',
         overflowX: "hidden",

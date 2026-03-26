@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import {
   totalWidth,
   timelineHeight,
@@ -10,27 +16,32 @@ import {
   lyricLabels,
   rawLyrics,
   getSectionWidth,
-} from './TimelineShared';
-import './TimelineBar.css';
+} from "./TimelineShared";
+import "./TimelineBar.css";
 
 // Pale grey for all 5 lines
-const lineDefaultColor = 'rgba(220, 220, 220, 1)';
-const lineDefaultOpacity = 0.5;
+const lineDefaultColor = "rgb(0, 0, 0)";
+const lineDefaultOpacity = 1;
+const roleLineStartOffset = 40;
+const lyricLabelStartOffset = 60;
+const lyricHoverBackground = "#F5F3EA";
+const mobileLyricLetterSpacing = 0.08;
+const desktopLyricLetterSpacing = 0.1;
 
 // Musical font for lyrics
 const lyricFont = "Georgia, 'Times New Roman', serif";
 
 // Vibrant colors from the role dots — used randomly on lyric hover
 const hoverColors = [
-  'rgba(73, 188, 255, 1)',
+  "rgb(0, 0, 0)",
   // actor blue
-  'rgba(255, 132, 0, 1)',
+  "rgb(104, 96, 18)",
   // musician orange
-  'rgba(208, 28, 145, 1)',
+  "rgb(0, 0, 0)",
   // bandleader pink
-  'rgba(26, 187, 99, 1)',
+  "rgb(71, 69, 44)",
   // vocalist green
-  'rgba(151, 71, 255, 1)', // ambassador purple
+  "rgb(158, 158, 109)", // ambassador purple
 ];
 function hashStringToInt(str: string): number {
   let hash = 0;
@@ -39,6 +50,20 @@ function hashStringToInt(str: string): number {
   }
   return hash;
 }
+
+function estimateLyricWidth(
+  text: string,
+  fontSizePx: number,
+  letterSpacingEm: number,
+): number {
+  const averageGlyphWidth = fontSizePx * 0.56;
+  const letterSpacingPx = fontSizePx * letterSpacingEm;
+  return (
+    text.length * averageGlyphWidth +
+    Math.max(text.length - 1, 0) * letterSpacingPx
+  );
+}
+
 export function TimelineBar({
   onDotClick,
   isMobile,
@@ -49,7 +74,7 @@ export function TimelineBar({
   const [hoveredLyricId, setHoveredLyricId] = useState<string | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const lyricFontVar = { '--tl-lyric-font': lyricFont } as React.CSSProperties;
+  const lyricFontVar = { "--tl-lyric-font": lyricFont } as React.CSSProperties;
 
   // Play audio when sound is enabled
   const playAudio = useCallback(() => {
@@ -80,7 +105,7 @@ export function TimelineBar({
   // Pre-compute a stable color per lyric
   const lyricColorMap = useMemo(() => {
     const map: Record<string, string> = {};
-    lyricLabels.forEach(lyr => {
+    lyricLabels.forEach((lyr) => {
       map[lyr.id] = hoverColors[hashStringToInt(lyr.id) % hoverColors.length];
     });
     return map;
@@ -89,9 +114,10 @@ export function TimelineBar({
   // Pre-compute a stable color per phrase group
   const phraseGroupColorMap = useMemo(() => {
     const map: Record<number, string> = {};
-    rawLyrics.forEach(lyric => {
+    rawLyrics.forEach((lyric) => {
       if (!(lyric.phraseGroup in map)) {
-        map[lyric.phraseGroup] = hoverColors[lyric.phraseGroup % hoverColors.length];
+        map[lyric.phraseGroup] =
+          hoverColors[lyric.phraseGroup % hoverColors.length];
       }
     });
     return map;
@@ -104,16 +130,16 @@ export function TimelineBar({
     const el = scrollRef.current;
     if (!el) return;
     const onScroll = () => setTlScrollLeft(el.scrollLeft);
-    el.addEventListener('scroll', onScroll, {
+    el.addEventListener("scroll", onScroll, {
       passive: true,
     });
-    return () => el.removeEventListener('scroll', onScroll);
+    return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
   // Calculate section positions based on dynamic widths
   const sectionPositions = useMemo(() => {
     let x = 0;
-    const positions = sectionsMeta.map(sec => {
+    const positions = sectionsMeta.map((sec) => {
       const startX = x;
       const width = getSectionWidth(sec.startYear, sec.endYear);
       x += width;
@@ -137,7 +163,7 @@ export function TimelineBar({
     if (el) {
       el.scrollTo({
         left: sectionPositions[idx]?.start || 0,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
     onDotClick(idx);
@@ -145,33 +171,38 @@ export function TimelineBar({
 
   const renderLyricLabels = (isMobileView: boolean) => {
     const yOffset = isMobileView ? 4 : 2;
-    const idleColor = isMobileView ? 'rgba(180,180,180,0.38)' : 'rgba(180,180,180,0.32)';
-    const letterSpacing = isMobileView ? '0.12em' : '0.14em';
-    const hoveredIndex = hoveredLyricId ? lyricLabels.findIndex(l => l.id === hoveredLyricId) : -1;
-    const hoveredPhraseGroup = hoveredIndex >= 0 ? rawLyrics[hoveredIndex].phraseGroup : -1;
+    const idleColor = isMobileView
+      ? "rgba(180,180,180,0.38)"
+      : "rgba(180,180,180,0.32)";
+    const letterSpacingEm = isMobileView
+      ? mobileLyricLetterSpacing
+      : desktopLyricLetterSpacing;
+    const letterSpacing = `${letterSpacingEm}em`;
+    const hoveredIndex = hoveredLyricId
+      ? lyricLabels.findIndex((l) => l.id === hoveredLyricId)
+      : -1;
+    const hoveredPhraseGroup =
+      hoveredIndex >= 0 ? rawLyrics[hoveredIndex].phraseGroup : -1;
 
     return lyricLabels.map((lyr, lyrIndex) => {
       const lineY = timelineTopPad + lyr.lineIndex * timelineLineSpacing;
       const isHovered = hoveredLyricId === lyr.id;
       const isInSamePhrase =
-        hoveredPhraseGroup >= 0 && rawLyrics[lyrIndex].phraseGroup === hoveredPhraseGroup;
+        hoveredPhraseGroup >= 0 &&
+        rawLyrics[lyrIndex].phraseGroup === hoveredPhraseGroup;
+      const isActive = isHovered || isInSamePhrase;
       const hoverColor = isInSamePhrase
         ? phraseGroupColorMap[hoveredPhraseGroup]
         : lyricColorMap[lyr.id];
+      const fontSize = isActive ? 13 : 9;
+      const textX = lyr.x + lyricLabelStartOffset;
+      const textWidth = estimateLyricWidth(lyr.text, fontSize, letterSpacingEm);
+      const backgroundHeight = fontSize + 6;
+      const backgroundY = lineY + yOffset - fontSize + 1 - 3;
 
       return (
-        <text
+        <g
           key={lyr.id}
-          x={lyr.x}
-          y={lineY + yOffset}
-          className={`tl-lyric ${isMobileView ? 'is-mobile' : 'is-desktop'} ${isHovered || isInSamePhrase ? 'is-active' : 'is-idle'}`}
-          style={
-            {
-              '--tl-lyric-color': isHovered || isInSamePhrase ? hoverColor : idleColor,
-              '--tl-lyric-size': isHovered || isInSamePhrase ? '13px' : '9px',
-              letterSpacing,
-            } as React.CSSProperties
-          }
           onMouseEnter={() => {
             setHoveredLyricId(lyr.id);
             playAudio();
@@ -197,8 +228,29 @@ export function TimelineBar({
               : undefined
           }
         >
-          {lyr.text}
-        </text>
+          <rect
+            x={textX - 6}
+            y={backgroundY}
+            width={textWidth + 12}
+            height={backgroundHeight}
+            rx={backgroundHeight / 2}
+            fill={lyricHoverBackground}
+          />
+          <text
+            x={textX}
+            y={lineY + yOffset}
+            className={`tl-lyric ${isMobileView ? "is-mobile" : "is-desktop"} ${isActive ? "is-active" : "is-idle"}`}
+            style={
+              {
+                "--tl-lyric-color": isActive ? hoverColor : idleColor,
+                "--tl-lyric-size": `${fontSize}px`,
+                letterSpacing,
+              } as React.CSSProperties
+            }
+          >
+            {lyr.text}
+          </text>
+        </g>
       );
     });
   };
@@ -211,7 +263,10 @@ export function TimelineBar({
     const svgH = mobileTimelineHeight - headerH - pillH;
     return (
       <>
-        <div className="tl-mobile-root" style={{ height: mobileTimelineHeight, ...lyricFontVar }}>
+        <div
+          className="tl-mobile-root"
+          style={{ height: mobileTimelineHeight, ...lyricFontVar }}
+        >
           <audio
             ref={audioRef}
             src="/audio/the-real-ambassadors.mp3"
@@ -220,7 +275,9 @@ export function TimelineBar({
           />
           {/* "The Real Ambassadors" header — always visible */}
           <div className="tl-mobile-header" style={{ height: headerH }}>
-            <span className="tl-header-title tl-header-title-mobile">The Real Ambassadors</span>
+            <span className="tl-header-title tl-header-title-mobile">
+              The Real Ambassadors
+            </span>
             <button
               onClick={() => {
                 if (soundEnabled) {
@@ -229,7 +286,7 @@ export function TimelineBar({
                 setSoundEnabled(!soundEnabled);
               }}
               className="tl-sound-btn tl-sound-btn-mobile"
-              title={soundEnabled ? 'Sound: On' : 'Sound: Off'}
+              title={soundEnabled ? "Sound: On" : "Sound: Off"}
             >
               <img
                 src="images/sound.svg"
@@ -245,7 +302,10 @@ export function TimelineBar({
           The ENTIRE div captures horizontal scroll — not just the SVG lines.
           overflow-x: auto + touch-action: pan-x gives proper touch sensitivity.
          */}
-          <div ref={scrollRef} className="tl-scroll-surface tl-scroll-surface-mobile">
+          <div
+            ref={scrollRef}
+            className="tl-scroll-surface tl-scroll-surface-mobile"
+          >
             <div
               className="tl-mob-scroll"
               style={
@@ -253,9 +313,9 @@ export function TimelineBar({
                   width: totalWidth,
                   height: svgH,
                   minHeight: svgH,
-                  position: 'relative',
+                  position: "relative",
                   paddingBottom: 24,
-                  scrollbarWidth: 'none',
+                  scrollbarWidth: "none",
                 } as React.CSSProperties
               }
             >
@@ -272,7 +332,7 @@ export function TimelineBar({
                     <line
                       className="tl-role-line"
                       key={rl.id}
-                      x1={0}
+                      x1={roleLineStartOffset}
                       y1={lineY}
                       x2={totalWidth}
                       y2={lineY}
@@ -299,7 +359,7 @@ export function TimelineBar({
                   key={sec.id}
                   onClick={() => handlePillClick(idx)}
                   title={sec.label}
-                  className={`tl-pill ${active ? 'is-active' : ''}`}
+                  className={`tl-pill ${active ? "is-active" : ""}`}
                 />
               );
             })}
@@ -318,7 +378,10 @@ export function TimelineBar({
   const pillH = 28;
   const svgH = timelineHeight - pillH;
   return (
-    <div className="tl-desktop-root" style={{ height: timelineHeight, ...lyricFontVar }}>
+    <div
+      className="tl-desktop-root"
+      style={{ height: timelineHeight, ...lyricFontVar }}
+    >
       <audio
         ref={audioRef}
         src="/audio/the-real-ambassadors.mp3"
@@ -330,17 +393,22 @@ export function TimelineBar({
         The ENTIRE div is the scroll surface — touching anywhere in the navy
         area scrolls the timeline horizontally, independent of main content.
        */}
-      <div ref={scrollRef} className="tl-scroll-surface tl-scroll-surface-desktop">
+      <div
+        ref={scrollRef}
+        className="tl-scroll-surface tl-scroll-surface-desktop"
+      >
         <div
           className="tl-bar-scroll"
           style={{
             width: totalWidth,
             height: svgH,
-            position: 'relative',
+            position: "relative",
           }}
         >
           {/* "The Real Ambassadors" label — sits in the scrolling area */}
-          <span className="tl-header-title tl-header-title-desktop">The Real Ambassadors</span>
+          <span className="tl-header-title tl-header-title-desktop">
+            The Real Ambassadors
+          </span>
 
           <button
             onClick={() => {
@@ -350,7 +418,7 @@ export function TimelineBar({
               setSoundEnabled(!soundEnabled);
             }}
             className="tl-sound-btn tl-sound-btn-desktop"
-            title={soundEnabled ? 'Sound: On' : 'Sound: Off'}
+            title={soundEnabled ? "Sound: On" : "Sound: Off"}
           >
             <img
               src="images/sound.svg"
@@ -373,7 +441,7 @@ export function TimelineBar({
                 <line
                   className="tl-role-line"
                   key={rl.id}
-                  x1={0}
+                  x1={roleLineStartOffset}
                   y1={lineY}
                   x2={totalWidth}
                   y2={lineY}
@@ -400,7 +468,7 @@ export function TimelineBar({
               key={sec.id}
               onClick={() => handlePillClick(idx)}
               title={sec.label}
-              className={`tl-pill ${active ? 'is-active' : ''}`}
+              className={`tl-pill ${active ? "is-active" : ""}`}
             />
           );
         })}

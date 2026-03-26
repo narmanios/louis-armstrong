@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useIsMobile } from "../../hooks/use-mobile";
-import rawCareerTimeline from "../../../data/carrer-timeline.json" with { type: "json" };
+import rawCareerTimeline from "../../../data/career-timeline.json" with { type: "json" };
 import "./SectionCareerTimeline.css";
 
 type Category = "musician" | "vocalist" | "bandleader" | "ambassador" | "film";
@@ -17,6 +17,7 @@ type ArmstrongEvent = {
   dateText: string;
   event: string;
   categories: Category[];
+  image?: string;
   url?: string;
 };
 
@@ -40,6 +41,16 @@ type DotData = {
   cx: number;
   cy: number;
   cat: Category;
+  clusterKey: string;
+  clusterCount: number;
+};
+
+type DotCluster = {
+  key: string;
+  cx: number;
+  cy: number;
+  cat: Category;
+  dots: DotData[];
 };
 
 type TipInfo = {
@@ -81,16 +92,23 @@ const laneY: Record<Category, number> = {
   vocalist: 395,
   ambassador: 500,
 };
+const categoryColors: Record<Category, string> = {
+  film: "#FF6B6B",
+  bandleader: "#F59E0B",
+  musician: "#2563EB",
+  vocalist: "#10B981",
+  ambassador: "#8B5CF6",
+};
 const svgHeight = 560;
 const yearStart = 1923;
 const yearEnd = 1970;
 const marginLeft = 72;
 const marginRight = 20;
-const fallbackDotRadius = 5;
-const fallbackFeaturedDotRadiusOffset = 0.5;
-const fallbackActiveDotRadiusOffset = 2.5;
+const fallbackDotRadius = 3.25;
+const fallbackFeaturedDotRadiusOffset = 0;
+const fallbackActiveDotRadiusOffset = 1.25;
 const decadeDash = "4 4";
-const laneDash = "8 2 2 2";
+const laneStroke = "#B8B1A2";
 const connectorDash = "2 2";
 const featuredLabelLineHeight = 11;
 const featuredLabelConnectorLength = 28;
@@ -186,57 +204,6 @@ function CategoryPill({
   );
 }
 
-function EventDetailCard({
-  event,
-  onClose,
-}: {
-  event: ArmstrongEvent;
-  onClose: () => void;
-}) {
-  const primaryCategory = event.categories[0];
-  const primaryColor = timelineData.categoryColors[primaryCategory];
-  const cardVars = {
-    "--career-primary-color": primaryColor,
-  } as React.CSSProperties;
-
-  return (
-    <div className="mcg-career-event-card" style={cardVars}>
-      <div className="mcg-career-event-card-top">
-        <div className="mcg-career-event-date">{event.dateText}</div>
-        <button onClick={onClose} className="mcg-career-event-close">
-          ✕
-        </button>
-      </div>
-      <p className="mcg-career-event-text">{event.event}</p>
-      <div className="mcg-career-event-tags">
-        {event.categories.map((category) => (
-          <span
-            key={category}
-            style={{
-              backgroundColor: `${timelineData.categoryColors[category]}18`,
-              color: timelineData.categoryColors[category],
-              border: `1px solid ${timelineData.categoryColors[category]}44`,
-            }}
-            className="mcg-career-event-tag"
-          >
-            {timelineData.categoryLabels[category]}
-          </span>
-        ))}
-      </div>
-      {event.url && (
-        <a
-          href={event.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mcg-career-event-link"
-        >
-          ▶ Watch / Listen
-        </a>
-      )}
-    </div>
-  );
-}
-
 function TimelineSVG({
   svgWidth,
   active,
@@ -257,10 +224,11 @@ function TimelineSVG({
   const [hoverKey, setHoverKey] = useState<string | null>(null);
   const [hoverTip, setHoverTip] = useState<TipInfo | null>(null);
   const [pinTip, setPinTip] = useState<TipInfo | null>(null);
+  const [hoverClusterKey, setHoverClusterKey] = useState<string | null>(null);
   const lastHoverPos = useRef<{ x: number; y: number } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
-  const dots = useMemo<DotData[]>(() => {
+  const clusters = useMemo<DotCluster[]>(() => {
     const grouped = new Map<string, ArmstrongEvent[]>();
     timelineData.events.forEach((event) => {
       event.categories.forEach((category) => {
@@ -271,7 +239,7 @@ function TimelineSVG({
       });
     });
 
-    const output: DotData[] = [];
+    const output: DotCluster[] = [];
     grouped.forEach((eventsAtPoint, groupKey) => {
       const separatorIndex = groupKey.indexOf("-");
       const year = parseInt(groupKey.slice(0, separatorIndex), 10);
@@ -280,19 +248,30 @@ function TimelineSVG({
       const cx = xOf(year, svgWidth);
       const count = eventsAtPoint.length;
       const step = count === 1 ? 0 : Math.min(8, 32 / (count - 1));
-      eventsAtPoint.forEach((event, index) => {
+      const dots = eventsAtPoint.map((event, index) => {
         const yOffset = count === 1 ? 0 : (index - (count - 1) / 2) * step;
-        output.push({
+        return {
           key: `${event.id}-${category}`,
           event,
           cx,
           cy: baseY + yOffset,
           cat: category,
-        });
+          clusterKey: groupKey,
+          clusterCount: count,
+        };
+      });
+      output.push({
+        key: groupKey,
+        cx,
+        cy: baseY,
+        cat: category,
+        dots,
       });
     });
-    return output;
+    return output.sort((a, b) => a.cx - b.cx || a.cy - b.cy);
   }, [active, svgWidth]);
+
+  const dots = useMemo(() => clusters.flatMap((cluster) => cluster.dots), [clusters]);
 
   const featuredDots = useMemo(() => {
     const seen = new Set<number>();
@@ -307,9 +286,21 @@ function TimelineSVG({
 
   const displayTip = hoverTip ?? pinTip;
   const isPinned = !hoverTip && !!pinTip;
+  const focusLineX = useMemo(() => {
+    if (hoverTip) {
+      return dots.find((dot) => dot.key === hoverTip.key)?.cx ?? null;
+    }
+    if (pinTip) {
+      return dots.find((dot) => dot.key === pinTip.key)?.cx ?? null;
+    }
+    if (hoverClusterKey) {
+      return clusters.find((cluster) => cluster.key === hoverClusterKey)?.cx ?? null;
+    }
+    return null;
+  }, [clusters, dots, hoverClusterKey, hoverTip, pinTip]);
 
   const onEnter = useCallback(
-    (event: React.MouseEvent<SVGCircleElement>, dot: DotData) => {
+    (event: React.MouseEvent<HTMLElement>, dot: DotData) => {
       const rect = svgRef.current?.getBoundingClientRect();
       if (rect) {
         const x = event.clientX - rect.left;
@@ -318,15 +309,49 @@ function TimelineSVG({
         setHoverTip({ event: dot.event, x, y, key: dot.key, cat: dot.cat });
       }
       setHoverKey(dot.key);
+      setHoverClusterKey(dot.clusterKey);
       setPinTip((prev) => (prev?.key === dot.key ? prev : null));
     },
     [],
   );
 
-  const onLeave = useCallback(() => {
+  const onClusterEnter = useCallback((clusterKey: string) => {
+    setHoverClusterKey(clusterKey);
     setHoverTip(null);
     setHoverKey(null);
   }, []);
+
+  const onClusterLeave = useCallback((cluster: DotCluster) => {
+    setHoverClusterKey((prev) => (prev === cluster.key ? null : prev));
+    setHoverTip((prev) =>
+      prev && cluster.dots.some((dot) => dot.key === prev.key) ? null : prev,
+    );
+    setHoverKey((prev) =>
+      prev && cluster.dots.some((dot) => dot.key === prev) ? null : prev,
+    );
+  }, []);
+
+  const toggleDotSelection = useCallback(
+    (dot: DotData) => {
+      const position = lastHoverPos.current ?? {
+        x: dot.cx + 14,
+        y: dot.cy - 30,
+      };
+      setPinTip((prev) =>
+        prev?.key === dot.key
+          ? null
+          : {
+              event: dot.event,
+              x: position.x,
+              y: position.y,
+              key: dot.key,
+              cat: dot.cat,
+            },
+      );
+      onSelect(selected?.id === dot.event.id ? null : dot.event);
+    },
+    [onSelect, selected],
+  );
 
   const yearTicks: number[] = [];
   for (let year = 1923; year <= 1970; year += 5) yearTicks.push(year);
@@ -339,21 +364,36 @@ function TimelineSVG({
         height={svgHeight}
         className="mcg-career-svg"
       >
+        <rect
+          className="mcg-career-plot-frame"
+          x={marginLeft}
+          y={35}
+          width={svgWidth - marginLeft - marginRight}
+          height={yearAxisY + 6 - 35}
+          rx={14}
+        />
+
         {yearTicks.map((year) => (
           <line
             key={`grid-${year}`}
-            className={
-              year % 10 === 0
-                ? "mcg-career-year-grid-line-decade"
-                : "mcg-career-year-grid-line"
-            }
+            className="mcg-career-year-grid-line"
+            // stroke-opacity="0.9"
             x1={xOf(year, svgWidth)}
             x2={xOf(year, svgWidth)}
             y1={35}
-            y2={yearAxisY - 6}
-            strokeDasharray={year % 10 === 0 ? decadeDash : undefined}
+            y2={yearAxisY + 6}
           />
         ))}
+
+        {focusLineX !== null ? (
+          <line
+            className="mcg-career-focus-line"
+            x1={focusLineX}
+            x2={focusLineX}
+            y1={35}
+            y2={yearAxisY + 6}
+          />
+        ) : null}
 
         {categoryOrder.map((category) =>
           active.has(category) ? (
@@ -363,9 +403,8 @@ function TimelineSVG({
               x2={svgWidth - marginRight}
               y1={laneY[category]}
               y2={laneY[category]}
-              stroke={timelineData.categoryColors[category]}
-              strokeWidth={2}
-              strokeDasharray={laneDash}
+              stroke={laneStroke}
+              strokeWidth={0.8}
             />
           ) : null,
         )}
@@ -373,7 +412,6 @@ function TimelineSVG({
         {featuredDots.map((dot) => {
           if (!active.has(dot.cat)) return null;
           const featured = featuredLabels[dot.event.id];
-          const color = timelineData.categoryColors[dot.cat];
           const offset = dotRadius + 1;
           const y1 =
             featured.dir === "above" ? dot.cy - offset : dot.cy + offset;
@@ -390,7 +428,7 @@ function TimelineSVG({
               y1={y1}
               x2={dot.cx}
               y2={y2}
-              stroke={color}
+              stroke="#8c8679"
               strokeWidth={1}
               strokeDasharray={featured.dashArray ?? connectorDash}
             />
@@ -435,73 +473,8 @@ function TimelineSVG({
           );
         })}
 
-        {dots.map((dot) => {
-          const isSelected = selected?.id === dot.event.id;
-          const isPinned = pinTip?.key === dot.key;
-          const isHovered = hoverKey === dot.key;
-          const featured =
-            featuredLabels[dot.event.id] &&
-            featuredLabels[dot.event.id].cat === dot.cat;
-          const color = timelineData.categoryColors[dot.cat];
-          const radius =
-            isHovered || isSelected || isPinned
-              ? dotRadius + activeDotRadiusOffset
-              : featured
-                ? dotRadius + featuredDotRadiusOffset
-                : dotRadius;
-          const filled = isSelected || isPinned;
-
-          return (
-            <circle
-              key={dot.key}
-              cx={dot.cx}
-              cy={dot.cy}
-              r={radius}
-              fill={filled ? color : "white"}
-              stroke={color}
-              strokeWidth={filled ? 3 : featured ? 2.5 : 1.8}
-              className="mcg-career-dot"
-              onMouseEnter={(event) => onEnter(event, dot)}
-              onMouseLeave={onLeave}
-              onClick={() => {
-                const position = lastHoverPos.current ?? {
-                  x: dot.cx + 14,
-                  y: dot.cy - 30,
-                };
-                setPinTip((prev) =>
-                  prev?.key === dot.key
-                    ? null
-                    : {
-                        event: dot.event,
-                        x: position.x,
-                        y: position.y,
-                        key: dot.key,
-                        cat: dot.cat,
-                      },
-                );
-                onSelect(selected?.id === dot.event.id ? null : dot.event);
-              }}
-            />
-          );
-        })}
-
-        <line
-          x1={marginLeft}
-          x2={svgWidth - marginRight}
-          y1={yearAxisY}
-          y2={yearAxisY}
-          stroke="#E5E7EB"
-          strokeWidth={1}
-        />
         {yearTicks.map((year) => (
           <g key={year}>
-            <line
-              className="mcg-career-year-tick-mark"
-              x1={xOf(year, svgWidth)}
-              x2={xOf(year, svgWidth)}
-              y1={yearAxisY}
-              y2={yearAxisY + 5}
-            />
             <text
               className="mcg-career-year-tick-text"
               x={xOf(year, svgWidth)}
@@ -509,8 +482,7 @@ function TimelineSVG({
               textAnchor="middle"
               style={
                 {
-                  "--career-year-color":
-                    year % 10 === 0 ? "#374151" : "#9CA3AF",
+                  "--career-year-color": "#000000",
                   "--career-year-size": year % 10 === 0 ? "10px" : "9px",
                   "--career-year-weight": year % 10 === 0 ? 700 : 400,
                 } as React.CSSProperties
@@ -521,6 +493,113 @@ function TimelineSVG({
           </g>
         ))}
       </svg>
+
+      <div className="mcg-career-dot-layer">
+        {clusters.map((cluster) => {
+          const spread =
+            cluster.dots.length > 1
+              ? cluster.dots[cluster.dots.length - 1].cy - cluster.dots[0].cy
+              : 0;
+          const maxRadius = dotRadius + activeDotRadiusOffset;
+          const clusterWidth = Math.max(maxRadius * 2 + 20, 44);
+          const clusterHeight = Math.max(spread + maxRadius * 2 + 20, 44);
+          const clusterLeft = cluster.cx - clusterWidth / 2;
+          const clusterTop = cluster.cy - clusterHeight / 2;
+          const pinnedDot = cluster.dots.find((dot) => pinTip?.key === dot.key);
+          const isExpanded =
+            hoverClusterKey === cluster.key || !!pinnedDot;
+
+          return (
+            <div
+              key={cluster.key}
+              className={`mcg-career-cluster ${isExpanded ? "is-expanded" : ""}`}
+              style={{
+                left: clusterLeft,
+                top: clusterTop,
+                width: clusterWidth,
+                height: clusterHeight,
+                zIndex: isExpanded ? 3 : 1,
+              }}
+              onMouseEnter={() => onClusterEnter(cluster.key)}
+              onMouseLeave={() => onClusterLeave(cluster)}
+            >
+              {cluster.dots.map((dot, dotIndex) => {
+                const isSelected = selected?.id === dot.event.id;
+                const isPinned = pinTip?.key === dot.key;
+                const isHovered = hoverKey === dot.key;
+                const featured =
+                  featuredLabels[dot.event.id] &&
+                  featuredLabels[dot.event.id].cat === dot.cat;
+                const color = categoryColors[dot.cat];
+                const radius =
+                  isHovered || isSelected || isPinned
+                    ? dotRadius + activeDotRadiusOffset
+                    : featured
+                      ? dotRadius + featuredDotRadiusOffset
+                      : dotRadius;
+                const diameter = radius * 2;
+                const centerY = isExpanded
+                  ? clusterHeight / 2 + (dot.cy - cluster.cy)
+                  : clusterHeight / 2;
+                const defaultBorderWidth = 0.8;
+                const activeBorderWidth = 1.1;
+
+                return (
+                  <button
+                    key={dot.key}
+                    type="button"
+                    className="mcg-career-dot"
+                    aria-label={dot.event.event}
+                    style={{
+                      left: clusterWidth / 2 - radius,
+                      top: centerY - radius,
+                      width: diameter,
+                      height: diameter,
+                      borderColor: "#4B473F",
+                      borderWidth:
+                        isHovered || isSelected || isPinned
+                          ? activeBorderWidth
+                          : defaultBorderWidth,
+                      backgroundColor: color,
+                      boxShadow:
+                        isHovered || isSelected || isPinned
+                          ? `0 0 0 1.5px ${color}20`
+                          : "none",
+                      transform:
+                        isHovered || isSelected || isPinned
+                          ? "scale(1.12)"
+                          : "scale(1)",
+                      opacity: isExpanded || dotIndex === 0 ? 1 : 0,
+                      pointerEvents: isExpanded || dotIndex === 0 ? "auto" : "none",
+                      zIndex: isExpanded
+                        ? 1 + cluster.dots.length - Math.abs(dot.cy - cluster.cy)
+                        : 1,
+                    }}
+                    onMouseEnter={(event) => {
+                      if (!isExpanded && dot.clusterCount > 1) {
+                        setHoverTip(null);
+                        setHoverKey(null);
+                        setHoverClusterKey(dot.clusterKey);
+                        return;
+                      }
+                      onEnter(event, dot);
+                    }}
+                    onClick={() => {
+                      if (!isExpanded && dot.clusterCount > 1) {
+                        setHoverTip(null);
+                        setHoverKey(null);
+                        setHoverClusterKey(dot.clusterKey);
+                        return;
+                      }
+                      toggleDotSelection(dot);
+                    }}
+                  />
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
 
       {displayTip && (
         <div
@@ -534,12 +613,12 @@ function TimelineSVG({
           <div
             className="mcg-career-tooltip"
             style={{
-              border: `1.5px solid ${timelineData.categoryColors[displayTip.cat]}`,
+              border: `1.5px solid ${categoryColors[displayTip.cat]}`,
             }}
           >
             <div
               className="mcg-career-tooltip-date"
-              style={{ color: timelineData.categoryColors[displayTip.cat] }}
+              style={{ color: categoryColors[displayTip.cat] }}
             >
               {displayTip.event.dateText}
             </div>
@@ -553,8 +632,8 @@ function TimelineSVG({
                 <span
                   key={category}
                   style={{
-                    backgroundColor: `${timelineData.categoryColors[category]}18`,
-                    color: timelineData.categoryColors[category],
+                    backgroundColor: `${categoryColors[category]}18`,
+                    color: categoryColors[category],
                   }}
                   className="mcg-career-tooltip-tag"
                 >
@@ -570,7 +649,7 @@ function TimelineSVG({
                 onClick={(event) => event.stopPropagation()}
                 className="mcg-career-tooltip-link"
                 style={{
-                  color: timelineData.categoryColors[displayTip.cat],
+                  color: categoryColors[displayTip.cat],
                 }}
               >
                 <svg width="14" height="10" viewBox="0 0 24 17" fill="none">
@@ -708,6 +787,7 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
         scrollSnapAlign: isMobile ? undefined : "start",
         position: "relative",
         overflow: "hidden",
+        backgroundColor: "var(--career-chart-bg)",
         ...style,
       }}
     >
@@ -726,7 +806,7 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
               count={categoryCounts[category]}
               onToggle={() => toggleCategory(category)}
               label={timelineData.categoryLabels[category]}
-              color={timelineData.categoryColors[category]}
+              color={categoryColors[category]}
             />
           ))}
           <button
@@ -752,17 +832,6 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
             </div>
           </div>
         </div>
-
-        {selectedEvent ? (
-          <div className="mcg-career-bottom-grid has-selection">
-            <div className="mcg-career-detail-card">
-              <EventDetailCard
-                event={selectedEvent}
-                onClose={() => setSelectedEvent(null)}
-              />
-            </div>
-          </div>
-        ) : null}
       </div>
     </section>
   );

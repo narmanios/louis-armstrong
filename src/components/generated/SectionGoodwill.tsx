@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 interface SectionGoodwillProps {
   textBaseStyle: React.CSSProperties;
 }
-export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({ textBaseStyle }) => {
+export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({
+  textBaseStyle,
+}) => {
   const [_activeHoverId, setActiveHoverId] = useState<string | null>(null);
   return (
     <section
       className="mcg-section"
       style={{
-        backgroundColor: '#E9E6D9',
+        backgroundColor: "#F5F3EA",
       }}
     >
       <h2 className="mcg-section-title mcg-page-title">
@@ -18,50 +20,51 @@ export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({ textBaseStyle 
         className="mcg-goodwill-text"
         style={{
           ...textBaseStyle,
-          color: '#000000',
-          fontSize: '12px',
-          lineHeight: '18px',
-          width: '252px',
-          position: 'absolute',
-          left: '56px',
-          top: '172px',
+          color: "#000000",
+          fontSize: "12px",
+          lineHeight: "18px",
+          width: "252px",
+          position: "absolute",
+          left: "56px",
+          top: "172px",
         }}
       >
-        Ambassador Satch was a 1956 album that helped present Louis Armstrong as a global symbol of
-        jazz and international goodwill. Built from recordings from his 1955 European tour, the
-        album supported the image of Armstrong as "Ambassador Satch," a nickname tied to his growing
-        role as America's musical envoy abroad.
+        Ambassador Satch was a 1956 album that helped present Louis Armstrong as
+        a global symbol of jazz and international goodwill. Built from
+        recordings from his 1955 European tour, the album supported the image of
+        Armstrong as "Ambassador Satch," a nickname tied to his growing role as
+        America's musical envoy abroad.
       </p>
       <img
         src="images/ambassador-satch.png"
         alt="Ambassador Satch Album"
         className="mcg-goodwill-album"
         style={{
-          width: '271px',
-          height: '271px',
-          position: 'absolute',
-          left: '56px',
-          top: '300px',
-          border: '1px solid #E0E0E0',
-          objectFit: 'cover',
+          width: "271px",
+          height: "271px",
+          position: "absolute",
+          left: "56px",
+          top: "300px",
+          border: "1px solid #E0E0E0",
+          objectFit: "cover",
         }}
       />
       <div
         className="mcg-map-wrap"
         style={{
-          position: 'absolute',
-          left: '141px',
-          top: '195px',
-          width: '1122px',
-          height: '480px',
+          position: "absolute",
+          left: "141px",
+          top: "195px",
+          width: "1122px",
+          height: "480px",
         }}
       >
         <img
           src="https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/6f0619f9-7d2b-4be0-9440-4ceb3c4a66b2.svg"
           alt="Map"
           style={{
-            width: '100%',
-            height: '100%',
+            width: "100%",
+            height: "100%",
           }}
         />
         <img
@@ -69,22 +72,22 @@ export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({ textBaseStyle 
           alt="Travels"
           className="mcg-map-travels"
           style={{
-            position: 'absolute',
-            left: '233px',
-            top: '59px',
-            width: '770px',
+            position: "absolute",
+            left: "233px",
+            top: "59px",
+            width: "770px",
           }}
         />
       </div>
       <div
         className="map-marker mcg-chile-tooltip"
         style={{
-          position: 'absolute',
-          left: '492px',
-          top: '508px',
-          width: '292px',
+          position: "absolute",
+          left: "492px",
+          top: "508px",
+          width: "292px",
         }}
-        onMouseEnter={() => setActiveHoverId('chile')}
+        onMouseEnter={() => setActiveHoverId("chile")}
         onMouseLeave={() => setActiveHoverId(null)}
       >
         <img
@@ -93,15 +96,15 @@ export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({ textBaseStyle 
         />
         <div
           style={{
-            position: 'absolute',
-            top: '15px',
-            left: '33px',
-            color: '#FFFFFF',
+            position: "absolute",
+            top: "15px",
+            left: "33px",
+            color: "#FFFFFF",
           }}
         >
           <div
             style={{
-              fontSize: '16px',
+              fontSize: "16px",
               fontWeight: 700,
             }}
           >
@@ -109,7 +112,7 @@ export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({ textBaseStyle 
           </div>
           <div
             style={{
-              fontSize: '12px',
+              fontSize: "12px",
               fontWeight: 700,
             }}
           >
@@ -117,8 +120,8 @@ export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({ textBaseStyle 
           </div>
           <div
             style={{
-              fontSize: '12px',
-              marginTop: '2px',
+              fontSize: "12px",
+              marginTop: "2px",
             }}
           >
             Description
@@ -126,22 +129,22 @@ export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({ textBaseStyle 
         </div>
         <div
           style={{
-            position: 'absolute',
-            top: '87px',
-            left: '30px',
-            width: '243px',
-            height: '1px',
-            backgroundColor: '#FFFFFF',
+            position: "absolute",
+            top: "87px",
+            left: "30px",
+            width: "243px",
+            height: "1px",
+            backgroundColor: "#FFFFFF",
           }}
         />
         <div
           style={{
-            position: 'absolute',
-            top: '94px',
-            left: '29px',
-            width: '239px',
-            color: '#FFFFFF',
-            fontSize: '12px',
+            position: "absolute",
+            top: "94px",
+            left: "29px",
+            width: "239px",
+            color: "#FFFFFF",
+            fontSize: "12px",
           }}
         >
           Description of the song goes here. Description of the song goes here.
