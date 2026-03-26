@@ -30,7 +30,7 @@ export const SectionJourneyToAmbassador: React.FC<
         <div>
           <div className="interactive-card">
             <img
-              src="images/orchestra.png"
+              src="public/images/orchestra.png"
               alt="Orchestra"
               style={{
                 width: "470px",
@@ -52,7 +52,7 @@ export const SectionJourneyToAmbassador: React.FC<
         <div>
           <div className="interactive-card">
             <img
-              src="images/chicago.png"
+              src="public/images/chicago.png"
               alt="Chicago"
               style={{
                 width: "470px",

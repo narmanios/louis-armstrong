@@ -220,7 +220,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             }}
           >
             <img
-              src="images/egypt.png"
+              src="/images/egypt.png"
               alt="Cairo"
               style={{
                 width: "100%",
@@ -266,7 +266,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               }}
             >
               <img
-                src="images/congo.png"
+                src="/images/congo.png"
                 alt="Congo"
                 style={{
                   width: "100%",
@@ -407,7 +407,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             aria-label="Close overlay"
           >
             <img
-              src="images/close.svg"
+              src="/images/close.svg"
               alt="Close"
               style={{
                 width: "30px",
@@ -529,7 +529,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   }}
                 >
                   <img
-                    src="images/egypt.png"
+                    src="/images/egypt.png"
                     alt="Cairo Large"
                     style={{
                       width: "560px",

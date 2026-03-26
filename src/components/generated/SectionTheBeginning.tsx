@@ -28,7 +28,7 @@ export const SectionTheBeginning: React.FC<SectionTheBeginningProps> = ({
         <div>
           <div className="interactive-card">
             <img
-              src="images/waifs-home.png"
+              src="/images/waifs-home.png"
               alt="Waifs home band"
               style={{
                 width: "470px",
@@ -50,7 +50,7 @@ export const SectionTheBeginning: React.FC<SectionTheBeginningProps> = ({
         <div>
           <div className="interactive-card">
             <img
-              src="images/young-louis.png"
+              src="/images/young-louis.png"
               alt="Young Louis"
               style={{
                 width: "470px",

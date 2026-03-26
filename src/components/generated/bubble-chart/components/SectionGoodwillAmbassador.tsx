@@ -513,7 +513,7 @@ export function SectionGoodwillAmbassador({
                 aria-label="Close album overlay"
               >
                 <img
-                  src="images/close.svg"
+                  src="/images/close.svg"
                   alt="Close"
                   style={{
                     width: "30px",

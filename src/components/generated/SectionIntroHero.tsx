@@ -340,7 +340,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({ onScrollNext
               }}
             >
               <img
-                src="images/close.svg"
+                src="/images/close.svg"
                 alt="Close"
                 style={{
                   width: '30px',

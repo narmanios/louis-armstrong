@@ -1,5 +1,4 @@
 import svgPaths from './svg-eq75tquz87';
-import imgTheRealAmbassadors5Bonus1 from '../../images/album.png';
 import { imgGroup, imgGroup1, imgGroup2, imgGroup3, imgGroup4, imgGroup5 } from './svg-7zghe';
 
 function Map({ hideTitle = false }: { hideTitle?: boolean }) {
@@ -6518,7 +6517,7 @@ function Map1({ hideTitle = false }: { hideTitle?: boolean }) {
         <img
           alt=""
           className="absolute inset-0 max-w-none object-cover size-full"
-          src={imgTheRealAmbassadors5Bonus1}
+          src="/images/album.png"
         />
         <div aria-hidden="true" className="absolute border border-[#e0e0e0] border-solid inset-0" />
       </div>

@@ -18,7 +18,7 @@ export function SectionIntro() {
       aria-label="Introduction"
     >
       <img
-        src="images/cover.jpg"
+        src="/images/cover.jpg"
         alt="Historical photo background"
         style={{
           width: '100vw',
@@ -145,7 +145,7 @@ export function SectionIntro() {
         </span>
         <img
           className="intro-louis-img"
-          src="images/louis-intro.png"
+          src="/images/louis-intro.png"
           alt="Louis Armstrong head shot"
           style={{
             width: '22%',
@@ -158,7 +158,7 @@ export function SectionIntro() {
         />
         <img
           className="intro-trumpet-img"
-          src="images/trumpet.png"
+          src="/images/trumpet.png"
           alt="Louis Armstrong's trumpet"
           style={{
             width: '50%',

@@ -27,7 +27,7 @@ export const SectionWonderfulWorld: React.FC<SectionWonderfulWorldProps> = ({
         }}
       >
         <img
-          src="images/wonderful-world.png"
+          src="/images/wonderful-world.png"
           alt="What a Wonderful World album"
           style={{
             width: "470px",

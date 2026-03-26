@@ -103,8 +103,8 @@ async function loadFactsJson(factsUrl: string): Promise<FactItem[]> {
 export function SatchmoLegacy({
   facts,
   factsUrl = "../../../../data/wonderfulworld.json",
-  maskSvgUrl = "../../../../images/louis-silo.svg",
-  creditImageUrl = "../../../../images/photo-by-john-loengard.jpg",
+  maskSvgUrl = "/images/louis-silo.svg",
+  creditImageUrl = "/images/photo-by-john-loengard.jpg",
   title = "What a Wonderful World",
   subtitle = "An interactive odyssey through moments in the life of Louis “Satchmo” Armstrong.",
   className,

@@ -236,7 +236,7 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
             aria-label="Close gallery"
           >
             <img
-              src="images/close.svg"
+              src="/images/close.svg"
               alt="Close"
               style={{
                 width: "30px",

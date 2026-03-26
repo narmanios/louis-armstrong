@@ -69,7 +69,7 @@ export const SectionRealAmbassadors: React.FC<SectionRealAmbassadorsProps> = ({
         }}
       >
         <img
-          src="images/the-real-ambassadors.png"
+          src="public/images/the-real-ambassadors.png"
           alt="The Real Ambassadors Album"
           style={{
             width: "470px",

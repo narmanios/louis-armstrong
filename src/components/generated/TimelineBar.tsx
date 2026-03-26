@@ -289,7 +289,7 @@ export function TimelineBar({
               title={soundEnabled ? "Sound: On" : "Sound: Off"}
             >
               <img
-                src="images/sound.svg"
+                src="/images/sound.svg"
                 alt="Sound toggle"
                 className="tl-sound-icon tl-sound-icon-mobile"
                 style={{ opacity: soundEnabled ? 1 : 0.5 }}
@@ -366,7 +366,7 @@ export function TimelineBar({
           </div>
         </div>
         <img
-          src="images/logo_light.png"
+          src="/images/logo_light.png"
           alt="Strong House Logo"
           className="tl-logo tl-logo-mobile"
         />
@@ -421,7 +421,7 @@ export function TimelineBar({
             title={soundEnabled ? "Sound: On" : "Sound: Off"}
           >
             <img
-              src="images/sound.svg"
+              src="/images/sound.svg"
               alt="Sound toggle"
               className="tl-sound-icon tl-sound-icon-desktop"
               style={{ opacity: soundEnabled ? 1 : 0.5 }}
@@ -474,7 +474,7 @@ export function TimelineBar({
         })}
       </div>
       <img
-        src="images/logo_light.png"
+        src="/images/logo_light.png"
         alt="Strong House Logo"
         className="tl-logo tl-logo-desktop"
       />

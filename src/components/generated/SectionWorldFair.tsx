@@ -28,7 +28,7 @@ export const SectionWorldFair: React.FC<SectionWorldFairProps> = ({
         <div>
           <div className="interactive-card">
             <img
-              src="images/orchestra.png"
+              src="/images/orchestra.png"
               alt="Orchestra"
               style={{
                 width: "470px",
@@ -50,7 +50,7 @@ export const SectionWorldFair: React.FC<SectionWorldFairProps> = ({
         <div>
           <div className="interactive-card">
             <img
-              src="images/chicago.png"
+              src="/images/chicago.png"
               alt="Chicago"
               style={{
                 width: "470px",

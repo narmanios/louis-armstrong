@@ -1,5 +1,4 @@
 import svgPaths from './svg-j11evzkvwo';
-import imgTheRealAmbassadors5Bonus2 from '../../images/album.png';
 
 function Guides() {
   return (
@@ -107,7 +106,7 @@ export default function OverlayAmbassadorSatch() {
         <img
           alt=""
           className="absolute inset-0 max-w-none object-cover size-full"
-          src={imgTheRealAmbassadors5Bonus2}
+          src="/images/album.png"
         />
         <div aria-hidden="true" className="absolute border border-[#e0e0e0] border-solid inset-0" />
       </div>

@@ -36,7 +36,7 @@ export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({
         America's musical envoy abroad.
       </p>
       <img
-        src="images/ambassador-satch.png"
+        src="/images/ambassador-satch.png"
         alt="Ambassador Satch Album"
         className="mcg-goodwill-album"
         style={{
@@ -60,7 +60,7 @@ export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({
         }}
       >
         <img
-          src="https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/6f0619f9-7d2b-4be0-9440-4ceb3c4a66b2.svg"
+          src="/public/images/map.svg"
           alt="Map"
           style={{
             width: "100%",
