@@ -1,9 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useIsMobile } from '../../hooks/use-mobile';
-import rawCareerTimeline from '../../../data/carrer-timeline.json' with { type: 'json' };
-import './SectionCareerTimeline.css';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useIsMobile } from "../../hooks/use-mobile";
+import rawCareerTimeline from "../../../data/carrer-timeline.json" with { type: "json" };
+import "./SectionCareerTimeline.css";
 
-type Category = 'musician' | 'vocalist' | 'bandleader' | 'ambassador' | 'film';
+type Category = "musician" | "vocalist" | "bandleader" | "ambassador" | "film";
 
 type ArmstrongEvent = {
   id: number;
@@ -36,19 +42,37 @@ type DotData = {
   cat: Category;
 };
 
-type TipInfo = { event: ArmstrongEvent; x: number; y: number; key: string; cat: Category };
+type TipInfo = {
+  event: ArmstrongEvent;
+  x: number;
+  y: number;
+  key: string;
+  cat: Category;
+};
 
 type FeaturedCfg = {
   lines: string[];
   cat: Category;
-  dir: 'above' | 'below';
+  dir: "above" | "below";
   connectorLength?: number;
   lineHeight?: number;
   dashArray?: string;
 };
 
-const allCategories: Category[] = ['musician', 'vocalist', 'bandleader', 'ambassador', 'film'];
-const categoryOrder: Category[] = ['film', 'bandleader', 'musician', 'vocalist', 'ambassador'];
+const allCategories: Category[] = [
+  "musician",
+  "vocalist",
+  "bandleader",
+  "ambassador",
+  "film",
+];
+const categoryOrder: Category[] = [
+  "film",
+  "bandleader",
+  "musician",
+  "vocalist",
+  "ambassador",
+];
 
 const laneY: Record<Category, number> = {
   film: 80,
@@ -62,10 +86,12 @@ const yearStart = 1923;
 const yearEnd = 1970;
 const marginLeft = 72;
 const marginRight = 20;
-const dotRadius = 5;
-const decadeDash = '4 4';
-const laneDash = '8 2 2 2';
-const connectorDash = '2 2';
+const fallbackDotRadius = 5;
+const fallbackFeaturedDotRadiusOffset = 0.5;
+const fallbackActiveDotRadiusOffset = 2.5;
+const decadeDash = "4 4";
+const laneDash = "8 2 2 2";
+const connectorDash = "2 2";
 const featuredLabelLineHeight = 11;
 const featuredLabelConnectorLength = 28;
 const featuredLabelAboveOffset = 4;
@@ -73,39 +99,61 @@ const featuredLabelBelowOffset = 3;
 const yearAxisY = 530;
 
 const featuredLabels: Record<number, FeaturedCfg> = {
-  35: { lines: ['A Rhapsody in', 'Black & Blue (1932)'], cat: 'film', dir: 'above' },
-  42: { lines: ['Pennies from', 'Heaven (1936)'], cat: 'film', dir: 'below' },
-  48: { lines: ['Going Places', '(1938)'], cat: 'film', dir: 'above' },
-  72: { lines: ['High Society', '(1956)'], cat: 'film', dir: 'below' },
-  82: { lines: ['The Five Pennies', '(1958)'], cat: 'film', dir: 'above' },
-  93: { lines: ['Hello, Dolly!', 'Film (1968)'], cat: 'film', dir: 'above' },
-  9: { lines: ['Hot Five (1925)'], cat: 'bandleader', dir: 'above' },
+  35: {
+    lines: ["A Rhapsody in", "Black & Blue (1932)"],
+    cat: "film",
+    dir: "above",
+  },
+  42: { lines: ["Pennies from", "Heaven (1936)"], cat: "film", dir: "below" },
+  48: { lines: ["Going Places", "(1938)"], cat: "film", dir: "above" },
+  72: { lines: ["High Society", "(1956)"], cat: "film", dir: "below" },
+  82: { lines: ["The Five Pennies", "(1958)"], cat: "film", dir: "above" },
+  93: { lines: ["Hello, Dolly!", "Film (1968)"], cat: "film", dir: "above" },
+  9: { lines: ["Hot Five (1925)"], cat: "bandleader", dir: "above" },
   10: {
-    lines: ['Heebie Jeebies', '(1926)'],
-    cat: 'bandleader',
-    dir: 'above',
+    lines: ["Heebie Jeebies", "(1926)"],
+    cat: "bandleader",
+    dir: "above",
     connectorLength: 40,
     lineHeight: 14,
-    dashArray: '6 3',
+    dashArray: "6 3",
   },
-  56: { lines: ['Carnegie Hall', '(1947)'], cat: 'bandleader', dir: 'above' },
-  74: { lines: ['Ella and Louis', '(1956)'], cat: 'bandleader', dir: 'below' },
-  91: { lines: ['What a', 'Wonderful World', '(1967)'], cat: 'bandleader', dir: 'above' },
-  1: { lines: ['Chimes Blues', '(1923)'], cat: 'musician', dir: 'below' },
-  18: { lines: ['West End Blues', '(1928)'], cat: 'musician', dir: 'above' },
-  22: { lines: ["Ain't Misbehavin'", '(1929)'], cat: 'musician', dir: 'below' },
-  71: { lines: ['Mack the Knife', '(1955)'], cat: 'musician', dir: 'below' },
-  88: { lines: ['Hello, Dolly!', '(1963)'], cat: 'musician', dir: 'below' },
-  7: { lines: ['St. Louis Blues', 'w/ Bessie Smith', '(1925)'], cat: 'vocalist', dir: 'below' },
-  25: { lines: ["Rockin' Chair", '(1929)'], cat: 'vocalist', dir: 'below' },
-  62: { lines: ['La Vie En Rose', '(1950)'], cat: 'vocalist', dir: 'above' },
-  65: { lines: ['A Kiss to Build', 'a Dream On (1951)'], cat: 'vocalist', dir: 'below' },
-  87: { lines: ['The Real', 'Ambassadors', '(1961)'], cat: 'ambassador', dir: 'above' },
+  56: { lines: ["Carnegie Hall", "(1947)"], cat: "bandleader", dir: "above" },
+  74: { lines: ["Ella and Louis", "(1956)"], cat: "bandleader", dir: "below" },
+  91: {
+    lines: ["What a", "Wonderful World", "(1967)"],
+    cat: "bandleader",
+    dir: "above",
+  },
+  1: { lines: ["Chimes Blues", "(1923)"], cat: "musician", dir: "below" },
+  18: { lines: ["West End Blues", "(1928)"], cat: "musician", dir: "above" },
+  22: { lines: ["Ain't Misbehavin'", "(1929)"], cat: "musician", dir: "below" },
+  71: { lines: ["Mack the Knife", "(1955)"], cat: "musician", dir: "below" },
+  88: { lines: ["Hello, Dolly!", "(1963)"], cat: "musician", dir: "below" },
+  7: {
+    lines: ["St. Louis Blues", "w/ Bessie Smith", "(1925)"],
+    cat: "vocalist",
+    dir: "below",
+  },
+  25: { lines: ["Rockin' Chair", "(1929)"], cat: "vocalist", dir: "below" },
+  62: { lines: ["La Vie En Rose", "(1950)"], cat: "vocalist", dir: "above" },
+  65: {
+    lines: ["A Kiss to Build", "a Dream On (1951)"],
+    cat: "vocalist",
+    dir: "below",
+  },
+  87: {
+    lines: ["The Real", "Ambassadors", "(1961)"],
+    cat: "ambassador",
+    dir: "above",
+  },
 };
 
 function xOf(year: number, width: number) {
   return (
-    marginLeft + ((year - yearStart) / (yearEnd - yearStart)) * (width - marginLeft - marginRight)
+    marginLeft +
+    ((year - yearStart) / (yearEnd - yearStart)) *
+      (width - marginLeft - marginRight)
   );
 }
 
@@ -123,10 +171,10 @@ function CategoryPill({
   color: string;
 }) {
   const pillVars = {
-    '--career-pill-bg': active ? `${color}12` : 'transparent',
-    '--career-pill-dot': active ? color : '#D1D5DB',
-    '--career-pill-label': active ? '#111827' : '#9CA3AF',
-    '--career-pill-count': active ? color : '#D1D5DB',
+    "--career-pill-bg": active ? `${color}12` : "transparent",
+    "--career-pill-dot": active ? color : "#D1D5DB",
+    "--career-pill-label": active ? "#111827" : "#9CA3AF",
+    "--career-pill-count": active ? color : "#D1D5DB",
   } as React.CSSProperties;
 
   return (
@@ -138,11 +186,17 @@ function CategoryPill({
   );
 }
 
-function EventDetailCard({ event, onClose }: { event: ArmstrongEvent; onClose: () => void }) {
+function EventDetailCard({
+  event,
+  onClose,
+}: {
+  event: ArmstrongEvent;
+  onClose: () => void;
+}) {
   const primaryCategory = event.categories[0];
   const primaryColor = timelineData.categoryColors[primaryCategory];
   const cardVars = {
-    '--career-primary-color': primaryColor,
+    "--career-primary-color": primaryColor,
   } as React.CSSProperties;
 
   return (
@@ -155,7 +209,7 @@ function EventDetailCard({ event, onClose }: { event: ArmstrongEvent; onClose: (
       </div>
       <p className="mcg-career-event-text">{event.event}</p>
       <div className="mcg-career-event-tags">
-        {event.categories.map(category => (
+        {event.categories.map((category) => (
           <span
             key={category}
             style={{
@@ -188,11 +242,17 @@ function TimelineSVG({
   active,
   selected,
   onSelect,
+  dotRadius,
+  featuredDotRadiusOffset,
+  activeDotRadiusOffset,
 }: {
   svgWidth: number;
   active: Set<Category>;
   selected: ArmstrongEvent | null;
   onSelect: (event: ArmstrongEvent | null) => void;
+  dotRadius: number;
+  featuredDotRadiusOffset: number;
+  activeDotRadiusOffset: number;
 }) {
   const [hoverKey, setHoverKey] = useState<string | null>(null);
   const [hoverTip, setHoverTip] = useState<TipInfo | null>(null);
@@ -202,8 +262,8 @@ function TimelineSVG({
 
   const dots = useMemo<DotData[]>(() => {
     const grouped = new Map<string, ArmstrongEvent[]>();
-    timelineData.events.forEach(event => {
-      event.categories.forEach(category => {
+    timelineData.events.forEach((event) => {
+      event.categories.forEach((category) => {
         if (!active.has(category)) return;
         const key = `${event.year}-${category}`;
         if (!grouped.has(key)) grouped.set(key, []);
@@ -213,7 +273,7 @@ function TimelineSVG({
 
     const output: DotData[] = [];
     grouped.forEach((eventsAtPoint, groupKey) => {
-      const separatorIndex = groupKey.indexOf('-');
+      const separatorIndex = groupKey.indexOf("-");
       const year = parseInt(groupKey.slice(0, separatorIndex), 10);
       const category = groupKey.slice(separatorIndex + 1) as Category;
       const baseY = laneY[category];
@@ -236,7 +296,7 @@ function TimelineSVG({
 
   const featuredDots = useMemo(() => {
     const seen = new Set<number>();
-    return dots.filter(dot => {
+    return dots.filter((dot) => {
       const featured = featuredLabels[dot.event.id];
       if (!featured || featured.cat !== dot.cat) return false;
       if (seen.has(dot.event.id)) return false;
@@ -248,17 +308,20 @@ function TimelineSVG({
   const displayTip = hoverTip ?? pinTip;
   const isPinned = !hoverTip && !!pinTip;
 
-  const onEnter = useCallback((event: React.MouseEvent<SVGCircleElement>, dot: DotData) => {
-    const rect = svgRef.current?.getBoundingClientRect();
-    if (rect) {
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      lastHoverPos.current = { x, y };
-      setHoverTip({ event: dot.event, x, y, key: dot.key, cat: dot.cat });
-    }
-    setHoverKey(dot.key);
-    setPinTip(prev => (prev?.key === dot.key ? prev : null));
-  }, []);
+  const onEnter = useCallback(
+    (event: React.MouseEvent<SVGCircleElement>, dot: DotData) => {
+      const rect = svgRef.current?.getBoundingClientRect();
+      if (rect) {
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        lastHoverPos.current = { x, y };
+        setHoverTip({ event: dot.event, x, y, key: dot.key, cat: dot.cat });
+      }
+      setHoverKey(dot.key);
+      setPinTip((prev) => (prev?.key === dot.key ? prev : null));
+    },
+    [],
+  );
 
   const onLeave = useCallback(() => {
     setHoverTip(null);
@@ -270,12 +333,19 @@ function TimelineSVG({
 
   return (
     <div className="mcg-career-svg-wrap">
-      <svg ref={svgRef} width={svgWidth} height={svgHeight} className="mcg-career-svg">
-        {yearTicks.map(year => (
+      <svg
+        ref={svgRef}
+        width={svgWidth}
+        height={svgHeight}
+        className="mcg-career-svg"
+      >
+        {yearTicks.map((year) => (
           <line
             key={`grid-${year}`}
             className={
-              year % 10 === 0 ? 'mcg-career-year-grid-line-decade' : 'mcg-career-year-grid-line'
+              year % 10 === 0
+                ? "mcg-career-year-grid-line-decade"
+                : "mcg-career-year-grid-line"
             }
             x1={xOf(year, svgWidth)}
             x2={xOf(year, svgWidth)}
@@ -285,7 +355,7 @@ function TimelineSVG({
           />
         ))}
 
-        {categoryOrder.map(category =>
+        {categoryOrder.map((category) =>
           active.has(category) ? (
             <line
               key={category}
@@ -297,17 +367,22 @@ function TimelineSVG({
               strokeWidth={2}
               strokeDasharray={laneDash}
             />
-          ) : null
+          ) : null,
         )}
 
-        {featuredDots.map(dot => {
+        {featuredDots.map((dot) => {
           if (!active.has(dot.cat)) return null;
           const featured = featuredLabels[dot.event.id];
           const color = timelineData.categoryColors[dot.cat];
           const offset = dotRadius + 1;
-          const y1 = featured.dir === 'above' ? dot.cy - offset : dot.cy + offset;
-          const connectorLength = featured.connectorLength ?? featuredLabelConnectorLength;
-          const y2 = featured.dir === 'above' ? y1 - connectorLength : y1 + connectorLength;
+          const y1 =
+            featured.dir === "above" ? dot.cy - offset : dot.cy + offset;
+          const connectorLength =
+            featured.connectorLength ?? featuredLabelConnectorLength;
+          const y2 =
+            featured.dir === "above"
+              ? y1 - connectorLength
+              : y1 + connectorLength;
           return (
             <line
               key={`conn-${dot.event.id}`}
@@ -322,19 +397,20 @@ function TimelineSVG({
           );
         })}
 
-        {featuredDots.map(dot => {
+        {featuredDots.map((dot) => {
           if (!active.has(dot.cat)) return null;
           const featured = featuredLabels[dot.event.id];
           const offset = dotRadius + 1;
-          const connectorLength = featured.connectorLength ?? featuredLabelConnectorLength;
+          const connectorLength =
+            featured.connectorLength ?? featuredLabelConnectorLength;
           const y2 =
-            featured.dir === 'above'
+            featured.dir === "above"
               ? dot.cy - offset - connectorLength
               : dot.cy + offset + connectorLength;
           const lines = featured.lines.length;
           const lineHeight = featured.lineHeight ?? featuredLabelLineHeight;
           const firstBaseline =
-            featured.dir === 'above'
+            featured.dir === "above"
               ? y2 - featuredLabelAboveOffset - (lines - 1) * lineHeight
               : y2 + lineHeight;
           return (
@@ -346,7 +422,11 @@ function TimelineSVG({
                 textAnchor="middle"
               >
                 {featured.lines.map((line, index) => (
-                  <tspan key={index} x={dot.cx} dy={index === 0 ? 0 : lineHeight}>
+                  <tspan
+                    key={index}
+                    x={dot.cx}
+                    dy={index === 0 ? 0 : lineHeight}
+                  >
                     {line}
                   </tspan>
                 ))}
@@ -355,18 +435,19 @@ function TimelineSVG({
           );
         })}
 
-        {dots.map(dot => {
+        {dots.map((dot) => {
           const isSelected = selected?.id === dot.event.id;
           const isPinned = pinTip?.key === dot.key;
           const isHovered = hoverKey === dot.key;
           const featured =
-            featuredLabels[dot.event.id] && featuredLabels[dot.event.id].cat === dot.cat;
+            featuredLabels[dot.event.id] &&
+            featuredLabels[dot.event.id].cat === dot.cat;
           const color = timelineData.categoryColors[dot.cat];
           const radius =
             isHovered || isSelected || isPinned
-              ? dotRadius + 2.5
+              ? dotRadius + activeDotRadiusOffset
               : featured
-                ? dotRadius + 0.5
+                ? dotRadius + featuredDotRadiusOffset
                 : dotRadius;
           const filled = isSelected || isPinned;
 
@@ -376,18 +457,27 @@ function TimelineSVG({
               cx={dot.cx}
               cy={dot.cy}
               r={radius}
-              fill={filled ? color : 'white'}
+              fill={filled ? color : "white"}
               stroke={color}
               strokeWidth={filled ? 3 : featured ? 2.5 : 1.8}
               className="mcg-career-dot"
-              onMouseEnter={event => onEnter(event, dot)}
+              onMouseEnter={(event) => onEnter(event, dot)}
               onMouseLeave={onLeave}
               onClick={() => {
-                const position = lastHoverPos.current ?? { x: dot.cx + 14, y: dot.cy - 30 };
-                setPinTip(prev =>
+                const position = lastHoverPos.current ?? {
+                  x: dot.cx + 14,
+                  y: dot.cy - 30,
+                };
+                setPinTip((prev) =>
                   prev?.key === dot.key
                     ? null
-                    : { event: dot.event, x: position.x, y: position.y, key: dot.key, cat: dot.cat }
+                    : {
+                        event: dot.event,
+                        x: position.x,
+                        y: position.y,
+                        key: dot.key,
+                        cat: dot.cat,
+                      },
                 );
                 onSelect(selected?.id === dot.event.id ? null : dot.event);
               }}
@@ -403,7 +493,7 @@ function TimelineSVG({
           stroke="#E5E7EB"
           strokeWidth={1}
         />
-        {yearTicks.map(year => (
+        {yearTicks.map((year) => (
           <g key={year}>
             <line
               className="mcg-career-year-tick-mark"
@@ -419,9 +509,10 @@ function TimelineSVG({
               textAnchor="middle"
               style={
                 {
-                  '--career-year-color': year % 10 === 0 ? '#374151' : '#9CA3AF',
-                  '--career-year-size': year % 10 === 0 ? '10px' : '9px',
-                  '--career-year-weight': year % 10 === 0 ? 700 : 400,
+                  "--career-year-color":
+                    year % 10 === 0 ? "#374151" : "#9CA3AF",
+                  "--career-year-size": year % 10 === 0 ? "10px" : "9px",
+                  "--career-year-weight": year % 10 === 0 ? 700 : 400,
                 } as React.CSSProperties
               }
             >
@@ -437,7 +528,7 @@ function TimelineSVG({
           style={{
             left: Math.min(displayTip.x + 16, svgWidth - 260),
             top: Math.max(displayTip.y - 60, 4),
-            pointerEvents: isPinned ? 'auto' : 'none',
+            pointerEvents: isPinned ? "auto" : "none",
           }}
         >
           <div
@@ -458,7 +549,7 @@ function TimelineSVG({
                 : displayTip.event.event}
             </div>
             <div className="mcg-career-tooltip-tags">
-              {displayTip.event.categories.map(category => (
+              {displayTip.event.categories.map((category) => (
                 <span
                   key={category}
                   style={{
@@ -476,7 +567,7 @@ function TimelineSVG({
                 href={displayTip.event.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={event => event.stopPropagation()}
+                onClick={(event) => event.stopPropagation()}
                 className="mcg-career-tooltip-link"
                 style={{
                   color: timelineData.categoryColors[displayTip.cat],
@@ -517,15 +608,52 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   const [svgWidth, setSvgWidth] = useState(1000);
-  const [activeCategories, setActiveCategories] = useState<Set<Category>>(new Set(allCategories));
-  const [selectedEvent, setSelectedEvent] = useState<ArmstrongEvent | null>(null);
+  const [dotRadius, setDotRadius] = useState(fallbackDotRadius);
+  const [featuredDotRadiusOffset, setFeaturedDotRadiusOffset] = useState(
+    fallbackFeaturedDotRadiusOffset,
+  );
+  const [activeDotRadiusOffset, setActiveDotRadiusOffset] = useState(
+    fallbackActiveDotRadiusOffset,
+  );
+  const [activeCategories, setActiveCategories] = useState<Set<Category>>(
+    new Set(allCategories),
+  );
+  const [selectedEvent, setSelectedEvent] = useState<ArmstrongEvent | null>(
+    null,
+  );
 
   useEffect(() => {
     const element = containerRef.current;
     if (!element) return;
-    const updateWidth = () => setSvgWidth(element.clientWidth);
-    updateWidth();
-    const observer = new ResizeObserver(updateWidth);
+    const updateMetrics = () => {
+      setSvgWidth(element.clientWidth);
+      const cssRadius = Number.parseFloat(
+        getComputedStyle(element).getPropertyValue("--career-dot-radius"),
+      );
+      const cssFeaturedRadiusOffset = Number.parseFloat(
+        getComputedStyle(element).getPropertyValue(
+          "--career-dot-featured-radius-offset",
+        ),
+      );
+      const cssActiveRadiusOffset = Number.parseFloat(
+        getComputedStyle(element).getPropertyValue(
+          "--career-dot-active-radius-offset",
+        ),
+      );
+      setDotRadius(Number.isFinite(cssRadius) ? cssRadius : fallbackDotRadius);
+      setFeaturedDotRadiusOffset(
+        Number.isFinite(cssFeaturedRadiusOffset)
+          ? cssFeaturedRadiusOffset
+          : fallbackFeaturedDotRadiusOffset,
+      );
+      setActiveDotRadiusOffset(
+        Number.isFinite(cssActiveRadiusOffset)
+          ? cssActiveRadiusOffset
+          : fallbackActiveDotRadiusOffset,
+      );
+    };
+    updateMetrics();
+    const observer = new ResizeObserver(updateMetrics);
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
@@ -533,14 +661,16 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
   useEffect(() => {
     if (
       selectedEvent &&
-      !selectedEvent.categories.some(category => activeCategories.has(category))
+      !selectedEvent.categories.some((category) =>
+        activeCategories.has(category),
+      )
     ) {
       setSelectedEvent(null);
     }
   }, [activeCategories, selectedEvent]);
 
   const toggleCategory = (category: Category) => {
-    setActiveCategories(prev => {
+    setActiveCategories((prev) => {
       const next = new Set(prev);
       if (next.has(category)) {
         if (next.size > 1) next.delete(category);
@@ -559,8 +689,8 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
       ambassador: 0,
       film: 0,
     };
-    timelineData.events.forEach(event => {
-      event.categories.forEach(category => {
+    timelineData.events.forEach((event) => {
+      event.categories.forEach((category) => {
         counts[category] += 1;
       });
     });
@@ -569,27 +699,27 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
 
   return (
     <section
-      className={`mcg-section mcg-career-section ${className || ''}`}
+      className={`mcg-section mcg-career-section ${className || ""}`}
       style={{
-        width: isMobile ? '100%' : '100vw',
-        minWidth: isMobile ? 0 : '100vw',
-        height: isMobile ? 'auto' : '800px',
+        width: isMobile ? "100%" : "100vw",
+        minWidth: isMobile ? 0 : "100vw",
+        height: isMobile ? "auto" : "800px",
         flexShrink: isMobile ? undefined : 0,
-        scrollSnapAlign: isMobile ? undefined : 'start',
-        position: 'relative',
-        overflow: 'hidden',
+        scrollSnapAlign: isMobile ? undefined : "start",
+        position: "relative",
+        overflow: "hidden",
         ...style,
       }}
     >
       <div className="mcg-career-root">
         <div className="mcg-career-topbar">
-          <h1 className="mcg-career-title" style={textBaseStyle}>
+          <h2 className="mcg-career-title mcg-page-title mcg-page-title--flow">
             Louis Armstrong Career Timeline
-          </h1>
+          </h2>
         </div>
 
         <div className="mcg-career-topbar-right">
-          {allCategories.map(category => (
+          {allCategories.map((category) => (
             <CategoryPill
               key={category}
               active={activeCategories.has(category)}
@@ -615,6 +745,9 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
                 active={activeCategories}
                 selected={selectedEvent}
                 onSelect={setSelectedEvent}
+                dotRadius={dotRadius}
+                featuredDotRadiusOffset={featuredDotRadiusOffset}
+                activeDotRadiusOffset={activeDotRadiusOffset}
               />
             </div>
           </div>
@@ -623,7 +756,10 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
         {selectedEvent ? (
           <div className="mcg-career-bottom-grid has-selection">
             <div className="mcg-career-detail-card">
-              <EventDetailCard event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+              <EventDetailCard
+                event={selectedEvent}
+                onClose={() => setSelectedEvent(null)}
+              />
             </div>
           </div>
         ) : null}

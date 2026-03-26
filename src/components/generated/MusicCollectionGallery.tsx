@@ -1,24 +1,26 @@
-import React, { useRef } from 'react';
-import { useIsMobile } from '../../hooks/use-mobile';
-import { SectionIntroHero } from './SectionIntroHero';
-import { SectionCareerTimeline } from './SectionCareerTimeline.tsx';
-import { SectionTheBeginning } from './SectionTheBeginning';
-import { SectionJourneyToAmbassador } from './SectionJourneyToAmbassador';
-import { SectionGoodwill } from './SectionGoodwill';
-import { SectionJazzAmbassadors } from './SectionJazzAmbassadors';
-import { SectionFBIFiles } from './SectionFBIFiles';
-import { SectionAfricaTour } from './SectionAfricaTour';
-import { SectionRealAmbassadors } from './SectionRealAmbassadors';
-import { SectionWorldFair } from './SectionWorldFair';
-import { SectionWonderfulWorld } from './SectionWonderfulWorld';
-import { TimelineBar } from './TimelineBar';
-import { mobileTimelineHeight, timelineHeight } from './TimelineShared';
-import { SectionGoodwillAmbassador } from './bubble-chart/components/SectionGoodwillAmbassador.tsx';
-import { SatchmoLegacy } from './WonderfulWorld/SatchmoLegacy.tsx';
+import React, { useRef } from "react";
+import { useIsMobile } from "../../hooks/use-mobile";
+import { SectionIntroHero } from "./SectionIntroHero";
+import { SectionCareerTimeline } from "./SectionCareerTimeline.tsx";
+import { SectionTheBeginning } from "./SectionTheBeginning";
+import { SectionJourneyToAmbassador } from "./SectionJourneyToAmbassador";
+import { SectionGoodwill } from "./SectionGoodwill";
+import { SectionJazzAmbassadors } from "./SectionJazzAmbassadors";
+import { SectionFBIFiles } from "./SectionFBIFiles";
+import { SectionAfricaTour } from "./SectionAfricaTour";
+import { SectionRealAmbassadors } from "./SectionRealAmbassadors";
+import { SectionWorldFair } from "./SectionWorldFair";
+import { SectionWonderfulWorld } from "./SectionWonderfulWorld";
+import { TimelineBar } from "./TimelineBar";
+import { mobileTimelineHeight, timelineHeight } from "./TimelineShared";
+import { SectionGoodwillAmbassador } from "./bubble-chart/components/SectionGoodwillAmbassador.tsx";
+import { SatchmoLegacy } from "./WonderfulWorld/SatchmoLegacy.tsx";
 interface MusicCollectionGalleryProps {
   className?: string;
 }
-export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({ className }) => {
+export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
+  className,
+}) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const sectionIndexMap = [0, 1, 3, 4, 5, 6, 8, 10, 11];
@@ -27,7 +29,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({ 
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
         left: 1280,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -37,28 +39,30 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({ 
     if (!container) return;
 
     const targetSectionIdx = sectionIndexMap[timelineIdx] ?? 0;
-    const child = container.children[targetSectionIdx] as HTMLElement | undefined;
+    const child = container.children[targetSectionIdx] as
+      | HTMLElement
+      | undefined;
     if (!child) return;
 
     if (isMobile) {
-      child.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      child.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
 
     container.scrollTo({
       left: child.offsetLeft,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
   const textBaseStyle: React.CSSProperties = {
     fontFamily: '"Helvetica Neue", sans-serif',
     fontWeight: 400,
-    color: '#000000',
+    color: "#000000",
   };
   return (
     <div
-      className={`mcg-root ${className || ''}`}
+      className={`mcg-root ${className || ""}`}
       style={{
         paddingBottom: isMobile ? mobileTimelineHeight : timelineHeight,
       }}
@@ -95,13 +99,39 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({ 
           background: #FFFFFF;
         }
 
-        /* Shared section title styling for all non-hero sections */
-        .mcg-track > .mcg-section > .mcg-section-title {
-          font-size: clamp(18px, 2.4vw, 28px) !important;
+        /* Shared page title styling for all non-hero sections */
+        .mcg-page-title {
+          margin: 0 !important;
+          font-family: "Helvetica Neue", sans-serif !important;
+          font-size: 40px !important;
           font-weight: 800 !important;
-          color: #002768 !important;
-          line-height: 1.2 !important;
+          line-height: 48px !important;
+          color: var(--mcg-page-title-color, #002768) !important;
+        }
+
+        .mcg-track > .mcg-section .mcg-page-title:not(.mcg-page-title--flow) {
+          position: absolute !important;
+          left: 56px !important;
           top: 64px !important;
+          z-index: 5 !important;
+        }
+
+        .mcg-page-title--flow {
+          position: static !important;
+          left: auto !important;
+          top: auto !important;
+        }
+
+        .mcg-page-title--spaced {
+          margin-bottom: 57px !important;
+        }
+
+        .mcg-page-title--light {
+          --mcg-page-title-color: #ffffff;
+        }
+
+        .mcg-page-title--tight {
+          margin: 0 !important;
         }
 
         /* ── MOBILE: vertical stack ── */
@@ -127,7 +157,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({ 
           }
 
           /* Hero section mobile styles are section-scoped in SectionIntroHero.tsx */
-          .mcg-section-title {
+          .mcg-page-title {
             position: static !important;
             left: auto !important;
             top: auto !important;
@@ -327,7 +357,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({ 
         <SectionAfricaTour textBaseStyle={textBaseStyle} />
         <SectionRealAmbassadors textBaseStyle={textBaseStyle} />
         <SectionWorldFair textBaseStyle={textBaseStyle} />
-        <SectionWonderfulWorld textBaseStyle={textBaseStyle} />
+        {/* <SectionWonderfulWorld textBaseStyle={textBaseStyle} /> */}
         <SatchmoLegacy />
       </div>
 

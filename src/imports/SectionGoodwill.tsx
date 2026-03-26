@@ -2,13 +2,15 @@ import svgPaths from './svg-eq75tquz87';
 import imgTheRealAmbassadors5Bonus1 from '../../images/album.png';
 import { imgGroup, imgGroup1, imgGroup2, imgGroup3, imgGroup4, imgGroup5 } from './svg-7zghe';
 
-function Map() {
+function Map({ hideTitle = false }: { hideTitle?: boolean }) {
   return (
     <div className="absolute h-[800px] left-0 top-0 w-[1280.296px]" data-name="Map">
       <div className="absolute bg-[#f5f3ea] h-[800px] left-0 top-0 w-[1280px]" />
-      <p className="absolute font-['Helvetica_Neue:Medium',sans-serif] leading-[normal] left-[56px] not-italic text-[48px] text-black top-[49px] whitespace-nowrap">
-        Goodwill (Unoffical) Ambassador (starts 1948)
-      </p>
+      {!hideTitle ? (
+        <p className="absolute font-['Helvetica_Neue:Medium',sans-serif] leading-[normal] left-[56px] not-italic text-[48px] text-black top-[49px] whitespace-nowrap">
+          Goodwill (Unoffical) Ambassador (starts 1948)
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -6466,12 +6468,14 @@ function EsSpain() {
   );
 }
 
-function Map1() {
+function Map1({ hideTitle = false }: { hideTitle?: boolean }) {
   return (
     <div className="absolute h-[800px] left-0 top-0 w-[1280.296px]" data-name="Map">
-      <p className="absolute font-['Helvetica_Neue:Medium',sans-serif] leading-[normal] left-[56px] not-italic text-[48px] text-black top-[49px] whitespace-nowrap">
-        Goodwill (Unoffical) Ambassador
-      </p>
+      {!hideTitle ? (
+        <p className="absolute font-['Helvetica_Neue:Medium',sans-serif] leading-[normal] left-[56px] not-italic text-[48px] text-black top-[49px] whitespace-nowrap">
+          Goodwill (Unoffical) Ambassador
+        </p>
+      ) : null}
       <Group13 />
       <FrFrance />
       <UsUnitedStates />
@@ -6564,12 +6568,12 @@ function Filters() {
   );
 }
 
-export default function SectionGoodwill() {
+export default function SectionGoodwill({ hideTitle = false }: { hideTitle?: boolean }) {
   return (
     <div className="relative size-full" data-name="SectionGoodwill">
-      <Map />
+      <Map hideTitle={hideTitle} />
       <div className="absolute bg-[#f5f3ea] h-[800px] left-0 top-0 w-[1280px]" />
-      <Map1 />
+      <Map1 hideTitle={hideTitle} />
       <Group14 />
       <Filters />
     </div>

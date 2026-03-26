@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 interface SectionFBIFilesProps {
   textBaseStyle: React.CSSProperties;
 }
@@ -14,17 +14,20 @@ interface FBIFilesJsonItem {
   date: string;
 }
 
-const fbiFilesJsonUrl = new URL('../../../data/fbi-files.json', import.meta.url).href;
+const fbiFilesJsonUrl = new URL("../../../data/fbi-files.json", import.meta.url)
+  .href;
 
 const getCategoryFromYear = (yearValue: string): string => {
   const year = parseInt(yearValue, 10);
-  if (Number.isNaN(year)) return 'Unknown';
+  if (Number.isNaN(year)) return "Unknown";
   return `${Math.floor(year / 10) * 10}s`;
 };
 
-export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({ textBaseStyle }) => {
+export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
+  textBaseStyle,
+}) => {
   const [fileItems, setFileItems] = useState<FileData[]>([]);
-  const [filter, setFilter] = useState<string>('all');
+  const [filter, setFilter] = useState<string>("all");
   const [selectedImage, setSelectedImage] = useState<FileData | null>(null);
   useEffect(() => {
     let isMounted = true;
@@ -33,7 +36,7 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({ textBaseStyle 
       try {
         const response = await fetch(fbiFilesJsonUrl);
         if (!response.ok) {
-          throw new Error('Failed to load FBI files JSON data.');
+          throw new Error("Failed to load FBI files JSON data.");
         }
 
         const data: FBIFilesJsonItem[] = await response.json();
@@ -63,90 +66,74 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({ textBaseStyle 
 
   useEffect(() => {
     if (selectedImage) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     }
   }, [selectedImage]);
   const handleFilterClick = (newFilter: string) => {
-    setFilter(prev => (prev === newFilter ? 'all' : newFilter));
+    setFilter((prev) => (prev === newFilter ? "all" : newFilter));
   };
   return (
     <section
       className="mcg-section mcg-fbi-section"
       style={{
-        width: '100vw',
-        minWidth: '100vw',
+        width: "100vw",
+        minWidth: "100vw",
         flexShrink: 0,
-        scrollSnapAlign: 'start',
-        minHeight: '800px',
-        backgroundColor: 'rgb(0, 0, 0)',
-        position: 'relative',
+        scrollSnapAlign: "start",
+        minHeight: "800px",
+        backgroundColor: "#E9E6D9",
+        position: "relative",
         fontFamily: '"Helvetica Neue", sans-serif',
-        overflowX: 'hidden',
-        boxSizing: 'border-box',
-        padding: '49px 0 60px 0',
+        overflowX: "hidden",
+        boxSizing: "border-box",
+        padding: "49px 0 60px 0",
       }}
     >
       <div
         style={{
-          maxWidth: '1280px',
-          margin: '0 auto',
-          padding: '0 56px',
-          position: 'relative',
+          maxWidth: "1280px",
+          margin: "0 auto",
+          padding: "0 56px",
+          position: "relative",
         }}
       >
         {/* Header Section */}
         <header
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '24px',
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "24px",
           }}
         >
-          <h1
-            style={{
-              margin: 0,
-              color: 'rgba(255, 255, 255, 1)',
-              fontSize: '48px',
-              fontWeight: 500,
-              lineHeight: '58.6px',
-            }}
-          >
+          <h1 className="mcg-page-title mcg-page-title--flow mcg-page-title--tight">
             FBI Files
           </h1>
 
           <nav
             style={{
-              display: 'flex',
-              gap: '12px',
-              alignItems: 'center',
-              marginTop: '20px',
+              display: "flex",
+              gap: "10px",
+              alignItems: "center",
+              padding: "7px 8px 8px 7px",
             }}
           >
-            {['1940s', '1950s', '1960s', '1970s', '1980s'].map(year => (
+            {["1940s", "1950s", "1960s", "1970s", "1980s"].map((year) => (
               <button
                 key={year}
                 onClick={() => handleFilterClick(year)}
                 style={{
-                  background: 'none',
-                  border: 'none',
+                  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+                  fontWeight: "bold",
+                  fontSize: 14,
+                  color: filter === year ? "#000000" : "#aaaaaa",
+                  background: "none",
+                  border: "none",
                   padding: 0,
-                  color: 'rgba(255, 255, 255, 1)',
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  opacity: filter === 'all' || filter === year ? 1 : 0.4,
-                  transition: 'opacity 0.2s ease',
-                  textDecoration: filter === year ? 'underline' : 'none',
-                }}
-                onMouseEnter={e => {
-                  if (filter !== year) e.currentTarget.style.opacity = '0.8';
-                }}
-                onMouseLeave={e => {
-                  if (filter !== year && filter !== 'all') e.currentTarget.style.opacity = '0.4';
-                  else if (filter === 'all' || filter === year) e.currentTarget.style.opacity = '1';
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {year}
@@ -158,54 +145,58 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({ textBaseStyle 
         {/* Grid Container */}
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, 116px)',
-            gap: '11px 12px',
-            width: '100%',
-            marginTop: '34px',
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, 116px)",
+            gap: "11px 12px",
+            width: "100%",
+            marginTop: "34px",
           }}
         >
-          {fileItems.map(item => (
+          {fileItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setSelectedImage(item)}
               style={{
-                width: '116px',
-                height: '150px',
+                width: "116px",
+                height: "150px",
                 padding: 0,
-                border: 'none',
-                background: 'none',
-                cursor: 'pointer',
-                overflow: 'hidden',
-                transition: 'all 0.3s ease',
-                opacity: filter === 'all' || item.category === filter ? 1 : 0.5,
+                border: "none",
+                background: "none",
+                cursor: "pointer",
+                overflow: "hidden",
+                transition: "all 0.3s ease",
+                opacity: filter === "all" || item.category === filter ? 1 : 0.5,
                 transform:
-                  filter === 'all' || item.category === filter ? 'scale(1)' : 'scale(0.95)',
-                position: 'relative',
+                  filter === "all" || item.category === filter
+                    ? "scale(1)"
+                    : "scale(0.95)",
+                position: "relative",
               }}
             >
               <img
                 src={item.src}
                 alt={item.alt}
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
                 }}
               />
               <div
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   inset: 0,
-                  backgroundColor: 'rgba(255, 255, 255, 0)',
-                  transition: 'background-color 0.2s ease',
+                  backgroundColor: "rgba(255, 255, 255, 0)",
+                  transition: "background-color 0.2s ease",
                 }}
-                onMouseEnter={e =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)')
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor =
+                    "rgba(255, 255, 255, 0.1)")
                 }
-                onMouseLeave={e =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0)')
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor =
+                    "rgba(255, 255, 255, 0)")
                 }
               />
             </button>
@@ -217,30 +208,30 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({ textBaseStyle 
       {selectedImage && (
         <div
           style={{
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
             zIndex: 1000,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backdropFilter: 'blur(5px)',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backdropFilter: "blur(5px)",
           }}
           onClick={() => setSelectedImage(null)}
         >
           <button
             onClick={() => setSelectedImage(null)}
             style={{
-              position: 'absolute',
-              top: '40px',
-              right: '40px',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '12px',
+              position: "absolute",
+              top: "40px",
+              right: "40px",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: "12px",
             }}
             aria-label="Close gallery"
           >
@@ -248,41 +239,41 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({ textBaseStyle 
               src="images/close.svg"
               alt="Close"
               style={{
-                width: '30px',
-                height: '30px',
-                filter: 'brightness(0) invert(1)',
+                width: "30px",
+                height: "30px",
+                filter: "brightness(0) invert(1)",
               }}
             />
           </button>
 
           <div
             style={{
-              position: 'relative',
-              maxWidth: '90%',
-              maxHeight: '90%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              position: "relative",
+              maxWidth: "90%",
+              maxHeight: "90%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             <img
               src={selectedImage.src}
               alt={selectedImage.alt}
               style={{
-                width: 'auto',
-                height: 'auto',
-                maxWidth: '100%',
-                maxHeight: '80vh',
-                boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
-                objectFit: 'contain',
+                width: "auto",
+                height: "auto",
+                maxWidth: "100%",
+                maxHeight: "80vh",
+                boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+                objectFit: "contain",
               }}
             />
             <p
               style={{
-                color: 'white',
-                marginTop: '20px',
-                fontSize: '18px',
+                color: "white",
+                marginTop: "20px",
+                fontSize: "18px",
                 fontWeight: 500,
               }}
             >

@@ -1,5 +1,11 @@
-import React, { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
-import './satchmo-legacy.css';
+import React, {
+  CSSProperties,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import "./satchmo-legacy.css";
 
 export type FactItem = {
   text: string;
@@ -42,12 +48,34 @@ export type SatchmoLegacyProps = {
 const R_MIN = 3;
 const R_MAX = 9;
 const PADDING = 2;
+const MASK_CLEARANCE = 2;
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 3;
 const ZOOM_STEP = 0.2;
+const SILHOUETTE_SCALE = 0.85;
+const SVG_ASPECT_RATIO = 1562 / 1401;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
+}
+
+function getSilhouetteBounds(canvasWidth: number, canvasHeight: number) {
+  const canvasAspect = canvasWidth / canvasHeight;
+  const silhouetteFit = 0.75 * SILHOUETTE_SCALE;
+
+  if (SVG_ASPECT_RATIO > canvasAspect) {
+    const drawWidth = canvasWidth * silhouetteFit;
+    return {
+      drawWidth,
+      drawHeight: drawWidth / SVG_ASPECT_RATIO,
+    };
+  }
+
+  const drawHeight = canvasHeight * silhouetteFit;
+  return {
+    drawWidth: drawHeight * SVG_ASPECT_RATIO,
+    drawHeight,
+  };
 }
 
 function collides(existing: PlacedFact[], x: number, y: number, r: number) {
@@ -61,57 +89,69 @@ function collides(existing: PlacedFact[], x: number, y: number, r: number) {
 }
 
 async function loadFactsJson(factsUrl: string): Promise<FactItem[]> {
-  const response = await fetch(factsUrl, { cache: 'no-store' });
+  const response = await fetch(factsUrl, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`facts.json HTTP ${response.status}`);
   }
   const data: unknown = await response.json();
   if (!Array.isArray(data)) {
-    throw new Error('facts.json must be an array');
+    throw new Error("facts.json must be an array");
   }
   return data as FactItem[];
 }
 
 export function SatchmoLegacy({
   facts,
-  factsUrl = '../../../../data/wonderfulworld.json',
-  maskSvgUrl = '../../../../images/louis-silo.svg',
-  creditImageUrl = '../../../../images/photo-by-john-loengard.jpg',
-  title = "SATCHMO'S LEGACY",
-  subtitle = 'An interactive odyssey through moments in the life of Louis “Satchmo” Armstrong.',
+  factsUrl = "../../../../data/wonderfulworld.json",
+  maskSvgUrl = "../../../../images/louis-silo.svg",
+  creditImageUrl = "../../../../images/photo-by-john-loengard.jpg",
+  title = "What a Wonderful World",
+  subtitle = "An interactive odyssey through moments in the life of Louis “Satchmo” Armstrong.",
   className,
-  height = '100vh',
+  height = "100vh",
   initialZoom = 1,
-  canvasWidth = 1400,
-  canvasHeight = 700,
-  searchPlaceholder = 'Search facts...',
+  canvasWidth = 1000,
+  canvasHeight = 500,
+  searchPlaceholder = "Search facts...",
 }: SatchmoLegacyProps) {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<Error | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [zoom, setZoomState] = useState(() => clamp(initialZoom, ZOOM_MIN, ZOOM_MAX));
+  const [searchTerm, setSearchTerm] = useState("");
+  const [zoom, setZoomState] = useState(() =>
+    clamp(initialZoom, ZOOM_MIN, ZOOM_MAX),
+  );
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [placedFacts, setPlacedFacts] = useState<PlacedFact[]>([]);
   const [tooltip, setTooltip] = useState<TooltipState>({
     visible: false,
     x: -9999,
     y: -9999,
-    meta: '',
-    text: '',
-    image: '',
+    meta: "",
+    text: "",
+    image: "",
   });
 
   const maskCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const maskContextRef = useRef<CanvasRenderingContext2D | null>(null);
+  const maskAlphaRef = useRef<Uint8ClampedArray | null>(null);
   const maskReadyRef = useRef(false);
 
-  const setZoom = (next: number) => setZoomState(clamp(next, ZOOM_MIN, ZOOM_MAX));
+  const setZoom = (next: number) =>
+    setZoomState(clamp(next, ZOOM_MIN, ZOOM_MAX));
 
   const hideTooltip = () => {
-    setTooltip(current => ({ ...current, visible: false, x: -9999, y: -9999 }));
+    setTooltip((current) => ({
+      ...current,
+      visible: false,
+      x: -9999,
+      y: -9999,
+    }));
   };
 
-  const showTooltipFor = (event: React.MouseEvent<HTMLDivElement>, fact: PlacedFact) => {
+  const showTooltipFor = (
+    event: React.MouseEvent<HTMLDivElement>,
+    fact: PlacedFact,
+  ) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setTooltip({
       visible: true,
@@ -119,7 +159,7 @@ export function SatchmoLegacy({
       y: rect.top - 16,
       meta: `${fact.year} • ${String(fact.category).toUpperCase()}`,
       text: fact.text,
-      image: fact.image ?? '',
+      image: fact.image ?? "",
     });
   };
 
@@ -127,7 +167,7 @@ export function SatchmoLegacy({
     () => ({
       transform: `translate(${Math.round(tooltip.x)}px, ${Math.round(tooltip.y)}px) translate(-50%, -100%)`,
     }),
-    [tooltip.x, tooltip.y]
+    [tooltip.x, tooltip.y],
   );
 
   const vizStyle = useMemo<CSSProperties>(
@@ -136,13 +176,30 @@ export function SatchmoLegacy({
       height: `${canvasHeight}px`,
       transform: `translate(-50%, -50%) scale(${zoom})`,
     }),
-    [canvasHeight, canvasWidth, zoom]
+    [canvasHeight, canvasWidth, zoom],
+  );
+
+  const silhouetteStyle = useMemo<CSSProperties>(
+    () => {
+      const { drawWidth, drawHeight } = getSilhouetteBounds(
+        canvasWidth,
+        canvasHeight,
+      );
+
+      return {
+        width: `${drawWidth}px`,
+        height: `${drawHeight}px`,
+      };
+    },
+    [canvasHeight, canvasWidth],
   );
 
   const filteredFacts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
     if (!query) return placedFacts;
-    return placedFacts.filter(fact => String(fact.text).toLowerCase().includes(query));
+    return placedFacts.filter((fact) =>
+      String(fact.text).toLowerCase().includes(query),
+    );
   }, [placedFacts, searchTerm]);
 
   const factStyle = (fact: PlacedFact): CSSProperties => ({
@@ -154,15 +211,35 @@ export function SatchmoLegacy({
   });
 
   const isOutsideMask = (x: number, y: number) => {
-    const maskContext = maskContextRef.current;
-    if (!maskReadyRef.current || !maskContext) return true;
+    const maskAlpha = maskAlphaRef.current;
+    if (!maskReadyRef.current || !maskAlpha) return true;
 
     const px = Math.floor(x);
     const py = Math.floor(y);
-    if (px < 0 || py < 0 || px >= canvasWidth || py >= canvasHeight) return true;
+    if (px < 0 || py < 0 || px >= canvasWidth || py >= canvasHeight)
+      return true;
 
-    const data = maskContext.getImageData(px, py, 1, 1).data;
-    return data[3] === 0;
+    const alphaIndex = (py * canvasWidth + px) * 4 + 3;
+    return maskAlpha[alphaIndex] === 0;
+  };
+
+  const overlapsMask = (x: number, y: number, r: number) => {
+    const reach = r + MASK_CLEARANCE;
+    const minX = Math.max(0, Math.floor(x - reach));
+    const maxX = Math.min(canvasWidth - 1, Math.ceil(x + reach));
+    const minY = Math.max(0, Math.floor(y - reach));
+    const maxY = Math.min(canvasHeight - 1, Math.ceil(y + reach));
+
+    for (let py = minY; py <= maxY; py += 1) {
+      for (let px = minX; px <= maxX; px += 1) {
+        const dx = px - x;
+        const dy = py - y;
+        if (dx * dx + dy * dy > reach * reach) continue;
+        if (!isOutsideMask(px, py)) return true;
+      }
+    }
+
+    return false;
   };
 
   const addCoordinates = (jsonFacts: FactItem[]) => {
@@ -176,7 +253,7 @@ export function SatchmoLegacy({
         const y = Math.random() * canvasHeight;
         const r = R_MIN + Math.random() * (R_MAX - R_MIN);
 
-        if (!isOutsideMask(x, y)) continue;
+        if (overlapsMask(x, y, r)) continue;
         if (collides(placed, x, y, r)) continue;
 
         placed.push({
@@ -207,44 +284,39 @@ export function SatchmoLegacy({
       await new Promise<void>((resolve, reject) => {
         const image = new Image();
         image.onload = () => {
-          const maskCanvas = document.createElement('canvas');
+          const maskCanvas = document.createElement("canvas");
           maskCanvas.width = canvasWidth;
           maskCanvas.height = canvasHeight;
-          const context = maskCanvas.getContext('2d', { willReadFrequently: true });
+          const context = maskCanvas.getContext("2d", {
+            willReadFrequently: true,
+          });
 
           if (!context) {
-            reject(new Error('Unable to create canvas context'));
+            reject(new Error("Unable to create canvas context"));
             return;
           }
 
-          const svgAspect = 1562 / 1401;
-          const canvasAspect = canvasWidth / canvasHeight;
-
-          let drawWidth: number;
-          let drawHeight: number;
-          let offsetX: number;
-          let offsetY: number;
-
-          if (svgAspect > canvasAspect) {
-            drawWidth = canvasWidth * 0.75;
-            drawHeight = drawWidth / svgAspect;
-            offsetX = (canvasWidth - drawWidth) / 2;
-            offsetY = (canvasHeight - drawHeight) / 2;
-          } else {
-            drawHeight = canvasHeight * 0.75;
-            drawWidth = drawHeight * svgAspect;
-            offsetX = (canvasWidth - drawWidth) / 2;
-            offsetY = (canvasHeight - drawHeight) / 2;
-          }
+          const { drawWidth, drawHeight } = getSilhouetteBounds(
+            canvasWidth,
+            canvasHeight,
+          );
+          const offsetX = (canvasWidth - drawWidth) / 2;
+          const offsetY = (canvasHeight - drawHeight) / 2;
 
           context.clearRect(0, 0, canvasWidth, canvasHeight);
           context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
           maskCanvasRef.current = maskCanvas;
           maskContextRef.current = context;
+          maskAlphaRef.current = context.getImageData(
+            0,
+            0,
+            canvasWidth,
+            canvasHeight,
+          ).data;
           maskReadyRef.current = true;
           resolve();
         };
-        image.onerror = () => reject(new Error('Failed to load SVG mask'));
+        image.onerror = () => reject(new Error("Failed to load SVG mask"));
         image.src = maskSvgUrl;
       });
     };
@@ -263,7 +335,9 @@ export function SatchmoLegacy({
         }
       } catch (error) {
         if (!cancelled) {
-          setLoadError(error instanceof Error ? error : new Error('Unknown error'));
+          setLoadError(
+            error instanceof Error ? error : new Error("Unknown error"),
+          );
         }
       } finally {
         if (!cancelled) {
@@ -275,13 +349,13 @@ export function SatchmoLegacy({
     initialize();
 
     const hideOnViewportChange = () => hideTooltip();
-    window.addEventListener('scroll', hideOnViewportChange, { passive: true });
-    window.addEventListener('resize', hideOnViewportChange);
+    window.addEventListener("scroll", hideOnViewportChange, { passive: true });
+    window.addEventListener("resize", hideOnViewportChange);
 
     return () => {
       cancelled = true;
-      window.removeEventListener('scroll', hideOnViewportChange);
-      window.removeEventListener('resize', hideOnViewportChange);
+      window.removeEventListener("scroll", hideOnViewportChange);
+      window.removeEventListener("resize", hideOnViewportChange);
     };
   }, [canvasHeight, canvasWidth, facts, factsUrl, initialZoom, maskSvgUrl]);
 
@@ -289,13 +363,19 @@ export function SatchmoLegacy({
     <section
       className="mcg-section mcg-jazz-section"
       style={{
-        backgroundColor: '#F5F3EA',
+        backgroundColor: "#F5F3EA",
       }}
     >
-      <div className={['slg', className].filter(Boolean).join(' ')} style={{ height }}>
+      <div
+        className={["slg", className].filter(Boolean).join(" ")}
+        style={{
+          height,
+          ["--slg-silhouette-scale" as string]: SILHOUETTE_SCALE,
+        }}
+      >
+        <h1 className="mcg-page-title">{title}</h1>
         <header className="slg__header">
           <div className="slg__brand">
-            <h1>{title}</h1>
             <p>{subtitle}</p>
           </div>
 
@@ -306,7 +386,7 @@ export function SatchmoLegacy({
               </span>
               <input
                 value={searchTerm}
-                onChange={event => setSearchTerm(event.target.value)}
+                onChange={(event) => setSearchTerm(event.target.value)}
                 type="text"
                 placeholder={searchPlaceholder}
                 autoComplete="off"
@@ -314,10 +394,18 @@ export function SatchmoLegacy({
             </label>
 
             <div className="slg__zoom-controls" aria-label="Zoom controls">
-              <button type="button" title="Zoom in" onClick={() => setZoom(zoom + ZOOM_STEP)}>
+              <button
+                type="button"
+                title="Zoom in"
+                onClick={() => setZoom(zoom + ZOOM_STEP)}
+              >
                 +
               </button>
-              <button type="button" title="Zoom out" onClick={() => setZoom(zoom - ZOOM_STEP)}>
+              <button
+                type="button"
+                title="Zoom out"
+                onClick={() => setZoom(zoom - ZOOM_STEP)}
+              >
                 −
               </button>
             </div>
@@ -325,15 +413,25 @@ export function SatchmoLegacy({
         </header>
 
         <main className="slg__stage" onMouseDown={hideTooltip}>
-          <img className="slg__silhouette" src={maskSvgUrl} alt="" aria-hidden="true" />
+          <img
+            className="slg__silhouette"
+            src={maskSvgUrl}
+            style={silhouetteStyle}
+            alt=""
+            aria-hidden="true"
+          />
 
-          <div className="slg__viz" style={vizStyle} aria-label="Facts visualization">
-            {filteredFacts.map(fact => (
+          <div
+            className="slg__viz"
+            style={vizStyle}
+            aria-label="Facts visualization"
+          >
+            {filteredFacts.map((fact) => (
               <div
                 key={fact.id}
-                className={`slg__fact${selectedId === fact.id ? ' is-selected' : ''}`}
+                className={`slg__fact${selectedId === fact.id ? " is-selected" : ""}`}
                 style={factStyle(fact)}
-                onMouseEnter={event => showTooltipFor(event, fact)}
+                onMouseEnter={(event) => showTooltipFor(event, fact)}
                 onMouseLeave={hideTooltip}
                 onClick={() => setSelectedId(fact.id)}
               />
@@ -341,14 +439,18 @@ export function SatchmoLegacy({
           </div>
 
           <div
-            className={`slg__tooltip${tooltip.visible ? ' is-visible' : ''}`}
+            className={`slg__tooltip${tooltip.visible ? " is-visible" : ""}`}
             style={tooltipStyle}
             role="status"
             aria-live="polite"
           >
             <div className="slg__tooltip-inner">
               {tooltip.image ? (
-                <img src={tooltip.image} className="slg__tooltip-image" alt="" />
+                <img
+                  src={tooltip.image}
+                  className="slg__tooltip-image"
+                  alt=""
+                />
               ) : null}
               <div className="slg__tooltip-body">
                 <div className="slg__tooltip-meta">{tooltip.meta}</div>
@@ -357,10 +459,13 @@ export function SatchmoLegacy({
             </div>
           </div>
 
-          {loading ? <div className="slg__status slg__status--loading">Loading…</div> : null}
+          {loading ? (
+            <div className="slg__status slg__status--loading">Loading…</div>
+          ) : null}
           {!loading && loadError ? (
             <div className="slg__status slg__status--error">
-              Couldn’t load <code>{facts ? 'facts prop' : factsUrl}</code> or the SVG mask.
+              Couldn’t load <code>{facts ? "facts prop" : factsUrl}</code> or
+              the SVG mask.
             </div>
           ) : null}
         </main>

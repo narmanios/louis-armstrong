@@ -30,19 +30,7 @@ export const SectionJazzAmbassadors: React.FC<SectionJazzAmbassadorsProps> = ({
         backgroundColor: '#F5F3EA',
       }}
     >
-      <h1
-        className="mcg-section-title"
-        style={{
-          ...textBaseStyle,
-          fontSize: '48px',
-          fontWeight: 400,
-          lineHeight: '58.6px',
-          position: 'absolute',
-          left: '56px',
-          top: '49px',
-          color: '#FF0000',
-        }}
-      >
+      <h1 className="mcg-section-title mcg-page-title">
         Jazz Ambassador Diplomacy Program (1956-63)
       </h1>
       <div

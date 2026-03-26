@@ -10,18 +10,7 @@ export const SectionWorldFair: React.FC<SectionWorldFairProps> = ({ textBaseStyl
         backgroundColor: '#E9E6D9',
       }}
     >
-      <h2
-        className="mcg-section-title"
-        style={{
-          ...textBaseStyle,
-          fontSize: '48px',
-          fontWeight: 500,
-          lineHeight: '58.6px',
-          position: 'absolute',
-          left: '56px',
-          top: '49px',
-        }}
-      >
+      <h2 className="mcg-section-title mcg-page-title">
         World Fair + Berlin
       </h2>
       <div

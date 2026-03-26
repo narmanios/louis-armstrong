@@ -10,19 +10,7 @@ export const SectionWonderfulWorld: React.FC<SectionWonderfulWorldProps> = ({ te
         backgroundColor: '#F5F3EA',
       }}
     >
-      <h2
-        className="mcg-section-title"
-        style={{
-          ...textBaseStyle,
-          fontSize: '48px',
-          fontWeight: 500,
-          lineHeight: '58.6px',
-          position: 'absolute',
-          left: '56px',
-          top: '49px',
-          color: '#000000',
-        }}
-      >
+      <h2 className="mcg-section-title mcg-page-title">
         What a Wonderful World 1967
       </h2>
       <div

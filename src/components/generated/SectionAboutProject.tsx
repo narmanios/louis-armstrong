@@ -10,19 +10,7 @@ export const SectionAboutProject: React.FC<SectionAboutProjectProps> = ({ textBa
         backgroundColor: '#ffffff',
       }}
     >
-      <h2
-        className="mcg-section-title"
-        style={{
-          ...textBaseStyle,
-          fontSize: '48px',
-          fontWeight: 500,
-          lineHeight: '58.6px',
-          position: 'absolute',
-          left: '56px',
-          top: '49px',
-          color: '#000000',
-        }}
-      >
+      <h2 className="mcg-section-title mcg-page-title">
         About this Project
       </h2>
       <div

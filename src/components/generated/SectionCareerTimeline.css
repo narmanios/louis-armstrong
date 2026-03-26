@@ -1,17 +1,23 @@
 .mcg-career-section {
   --career-chart-bg: #f8f9fa;
+  --career-dot-radius: 4px;
+  --career-dot-featured-radius-offset: 0.5px;
+  --career-dot-active-radius-offset: 2.5px;
+  --career-pill-dot-size: 12px;
+  --career-pill-dot-border-width: 2px;
   background-color: var(--career-chart-bg);
 }
 
 .mcg-career-root {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 12px 28px 22px;
+  padding: 64px 56px 22px;
   box-sizing: border-box;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   display: grid;
   grid-template-columns: 100px minmax(0, 1fr);
   column-gap: 6px;
+  row-gap: 52px;
   align-items: start;
 }
 
@@ -24,12 +30,6 @@
 
 .mcg-career-title {
   grid-column: 1 / -1;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 800;
-  font-size: clamp(18px, 2.4vw, 28px);
-  color: #002768;
-  margin: 0;
-  line-height: 1.2;
 }
 
 .mcg-career-topbar-right {
@@ -39,7 +39,7 @@
   gap: 8px;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-top: 64px;
+  margin-top: 0;
 }
 
 .mcg-career-timeline-card {
@@ -72,7 +72,7 @@
 .mcg-career-pill {
   border: none;
   /* background-color: var(--career-pill-bg); */
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 4px 10px;
   display: inline-flex;
   align-items: center;
@@ -88,11 +88,11 @@
 }
 
 .mcg-career-pill-dot {
-  width: 12px;
-  height: 12px;
+  width: var(--career-pill-dot-size);
+  height: var(--career-pill-dot-size);
   border-radius: 50%;
   background-color: transparent;
-  border: 2px solid var(--career-pill-dot);
+  border: var(--career-pill-dot-border-width) solid var(--career-pill-dot);
 
   display: inline-block;
   flex-shrink: 0;
@@ -118,7 +118,7 @@
   border-radius: 99px;
   padding: 4px 10px;
   cursor: pointer;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .mcg-career-event-card {
@@ -147,7 +147,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .mcg-career-event-close {
@@ -166,7 +166,7 @@
 
 .mcg-career-event-text {
   color: #111827;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.65;
   flex: 1;
@@ -184,7 +184,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 3px 8px;
   border-radius: 99px;
 }
@@ -201,7 +201,7 @@
   color: #fff;
   font-size: 11px;
   font-weight: 700;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-decoration: none;
   transition: opacity 0.2s ease;
 }
@@ -227,7 +227,7 @@
 .mcg-career-featured-text {
   /* fill: #393939; */
   font-size: 9px;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
 }
 
@@ -249,7 +249,7 @@
 .mcg-career-year-tick-text {
   fill: var(--career-year-color, #9ca3af);
   font-size: var(--career-year-size, 9px);
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: var(--career-year-weight, 400);
 }
 
@@ -264,7 +264,7 @@
   border-radius: 10px;
   padding: 10px 13px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.11);
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .mcg-career-tooltip-date {
@@ -307,7 +307,7 @@
   border-top: 1px solid #f3f4f6;
   padding-top: 7px;
   cursor: pointer;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .mcg-career-tooltip-pin-hint {

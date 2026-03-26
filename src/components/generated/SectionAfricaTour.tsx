@@ -122,16 +122,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({ className,
           position: 'relative',
         }}
       >
-        <h1
-          style={{
-            fontSize: isMobile ? '28px' : '48px',
-            fontWeight: 400,
-            lineHeight: isMobile ? '1.2' : '58.6px',
-            color: '#000000',
-            margin: isMobile ? '0 0 20px 0' : '0 0 57px 0',
-            textAlign: 'left',
-          }}
-        >
+        <h1 className="mcg-page-title mcg-page-title--flow mcg-page-title--spaced">
           Africa 1960-1961
         </h1>
 

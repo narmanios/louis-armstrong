@@ -18664,119 +18664,6 @@
     ]
   },
   {
-    "id": "scotland",
-    "name": "Scotland",
-    "cx": 941,
-    "cy": 637,
-    "r": 31,
-    "numLeft": 934,
-    "numTop": 642,
-    "numFontSize": 16,
-    "counts": {
-      "all": 6,
-      "1940s": 0,
-      "1950s": 3,
-      "1960s": 2,
-      "1970s": 1
-    },
-    "events": [
-      {
-        "year": "1932",
-        "international": "[concert] 1932-08-15 to 1932-08-20 — Glasgow — Glasgow Empire. Glasgow, Scotland, Glasgow Empire Context: While in Glasgow, Franklin D. Roosevelt is elected president (1932) amid demands for economic relief.",
-        "usContext": "In 1932, the Tuskegee syphilis study begins, reflecting deep medical racism in U.S. institutions."
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-08-21 to 1933-08-26 — Glasgow — Glasgow Empire. Glasgow, Scotland, Glasgow Empire Context: While in Glasgow, FDR launches New Deal programs (1933) to address the Depression.",
-        "usContext": "In 1933, New Deal programs begin; many early programs exclude or disadvantage Black workers through local control and occupational exclusions."
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-27 to 1933-12-02 — Edinburgh — Edinburgh Empire. Edinburgh, Scotland, Edinburgh Empire Context: While in Edinburgh, Hitler becomes Chancellor of Germany (1933), accelerating Europe’s slide toward war.",
-        "usContext": "In 1933, segregation remains law in much of the U.S., even as federal power expands."
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-30 — Edinburgh — Fountainbridge Palais. Edinburgh, Scotland, Fountainbridge Palais, an Edinburgh Borderer's Rugby Club dance after the evening's Edinburgh Empire show Context: While in Edinburgh, Hitler becomes Chancellor of Germany (1933), accelerating Europe’s slide toward war.",
-        "usContext": "In 1933, segregation remains law in much of the U.S., even as federal power expands."
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-12-01 — Dundee — New Palais. Dundee, Scotland, New Palais, South Tay Street; after the evening's Edinburgh Empire show Louis Armstrong played at a dance date acc. by Harry Smead and His Band Context: While in Dundee, FDR launches New Deal programs (1933) to address the Depression.",
-        "usContext": "In 1933, New Deal programs begin; many early programs exclude or disadvantage Black workers through local control and occupational exclusions."
-      },
-      {
-        "year": "1956",
-        "international": "Armstrong plays the Edinburgh International Festival, bringing jazz to one of Europe's great cultural celebrations.",
-        "usContext": "The Southern Christian Leadership Conference forms with King as its leader. Resistance to Brown v. Board intensifies."
-      },
-      {
-        "year": "1956",
-        "international": "[concert] 1956-05-15 — Glasgow — Kelvin Hall. Glasgow, Scotland, Kelvin Hall, 2 shows. Context: While in Glasgow, The Suez Crisis (1956) exposes Cold War fault lines and decolonization pressures.",
-        "usContext": "In 1956, the Southern Manifesto signals organized political resistance to school desegregation."
-      }
-    ]
-  },
-  {
-    "id": "drc",
-    "name": "Democratic Republic of Congo",
-    "cx": 1068,
-    "cy": 637,
-    "r": 31,
-    "numLeft": 1065,
-    "numTop": 642,
-    "numFontSize": 16,
-    "counts": {
-      "all": 6,
-      "1940s": 0,
-      "1950s": 3,
-      "1960s": 3,
-      "1970s": 0
-    },
-    "events": [
-      {
-        "year": "1956",
-        "international": "Armstrong visits Léopoldville (now Kinshasa), as the Congo approaches independence from Belgium. His music resonates deeply with local audiences.",
-        "usContext": "\"Massive resistance\" to desegregation grows in the American South. Citizens Councils form across the region."
-      },
-      {
-        "year": "1960",
-        "international": "The Congo gains independence; Armstrong's visit underscores Pan-African cultural connections and America's cultural diplomacy.",
-        "usContext": "The Civil Rights Act of 1960 is signed, though activists argue it lacks sufficient enforcement mechanisms."
-      },
-      {
-        "year": "1960",
-        "international": "[concert] 1960-10-28 — Kinshasa. Kinshasa, Democratic Republic of the Congo (DRC). Thirteen performances. (LAHA) Notes: 1) The number of performances seems incredible, but that figure is given. 2) Kinshasa, DRC was in 1960 Léopoldville. Context: While in Kinshasa, A wave of African independence reshapes global politics in the 'Year of Africa' (1960).",
-        "usContext": "In 1960, the Greensboro sit-ins spark a wave of student-led direct action; SNCC is formed to coordinate activism."
-      },
-      {
-        "year": "1960",
-        "international": "[concert] 1960-10-30 — Kinshasa — DRC – Bujumbura. Travel; Kinshasa, DRC – Bujumbura, Burundi – Entebbe, Uganda. (LAHA) Note: Bujumbura, Burundi was in 1960 Usumbura, Ruanda-Urundi. (October 30, 1960) * Los Angeles, CA, CBS-TV, \"An Hour With Danny Kaye\", pre-taped, possibly during the Crescendo Club engagement September 29-October 9, 1960. Context: While in Kinshasa, The U.S. civil-rights movement grows through sit-ins and mass organizing.",
-        "usContext": "In 1960, sit-ins and boycotts spread across U.S. cities, challenging segregation in everyday spaces."
-      },
-      {
-        "year": "1960",
-        "international": "[concert] 1960-11-20 — Lubumbashi. Lubumbashi, DRC,arrival. (LAHA) Note: Lubumbashi, DCR was in 1960 Elisabethville, Katanga, Belgian Congo. (LAHA) and Lubumbashi, DRC, Theatre de la Ville, gala performance at 20.30 (LAHA; Concert program regarding location, date and gala performance) Context: While in Lubumbashi, The U.S. civil-rights movement grows through sit-ins and mass organizing.",
-        "usContext": "In 1960, sit-ins and boycotts spread across U.S. cities, challenging segregation in everyday spaces."
-      },
-      {
-        "year": "1960",
-        "international": "[concert] 1960-11-21 — Lubumbashi. Lubumbashi, DRC, three performances. (LAHA) At the concert at 19.00 president Tshombe in attendance. (LAHA) Context: While in Lubumbashi, A wave of African independence reshapes global politics in the 'Year of Africa' (1960).",
-        "usContext": "In 1960, the Greensboro sit-ins spark a wave of student-led direct action; SNCC is formed to coordinate activism."
-      },
-      {
-        "year": "1960",
-        "international": "[concert] 1960-11-22 — Lubumbashi. Lubumbashi, DRC, concert(-s?) (Concert program regarding location and date) Context: While in Lubumbashi, The U-2 incident (1960) heightens U.S.–Soviet tensions.",
-        "usContext": "In 1960, the Civil Rights Act of 1960 is enacted, strengthening federal oversight of voting rights."
-      },
-      {
-        "year": "1960",
-        "international": "[concert] 1960-11-23 — Lubumbashi — DRC – Kinshasa. Travel; Lubumbashi, DRC – Kinshasa, DRC. (LAHA) and possibly Kinshasa, DRC, performance(-s). Context: While in Lubumbashi, The U.S. civil-rights movement grows through sit-ins and mass organizing.",
-        "usContext": "In 1960, sit-ins and boycotts spread across U.S. cities, challenging segregation in everyday spaces."
-      }
-    ]
-  },
-  {
     "id": "sweden",
     "name": "Sweden",
     "cx": 1210,
@@ -19157,124 +19044,6 @@
     ]
   },
   {
-    "id": "netherlands",
-    "name": "Netherlands",
-    "cx": 1087,
-    "cy": 246,
-    "r": 20,
-    "numLeft": -1,
-    "numTop": -1,
-    "numFontSize": 14,
-    "counts": {
-      "all": 17,
-      "1930s": 11,
-      "1940s": 2,
-      "1950s": 4
-    },
-    "events": [
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-09 — Amsterdam — Carlton Hotel (two concerts each day) (part of a November 9 concert was recorded)",
-        "usContext": ""
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-10 — Amsterdam — Carlton Hotel (two concerts each day) (part of a November 9 concert was recorded)",
-        "usContext": ""
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-11 — Amsterdam — Carlton Hotel (two concerts each day) (part of a November 9 concert was recorded)",
-        "usContext": ""
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-12 — The Hague — Dierentuin (Zoo) concert hall (one concert), and",
-        "usContext": ""
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-12 — The Hague — Dierentuin (Zoo) concert hall, broadcast",
-        "usContext": ""
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-12 — The Hague — The Netherlands. Ditto (one concert) and The Hague, The Netherlands, Dierentuin (Zoo) concert hall (one concert), and The Hague, The Netherlands, Dierentuin (Zoo) concert hall, broadcast Context: While in The Hague, Hitler becomes Chancellor of Germany (1933), accelerating Europe’s slide toward war.",
-        "usContext": "In 1933, segregation remains law in much of the U.S., even as federal power expands."
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-13 — Rotterdam — Doelenzaal (Doelen concert hall) (one concert)",
-        "usContext": ""
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-14 to 1933-11-15 — The Hague — The Netherlands. The Hague, The Netherlands, Twee Steden Palace (one concert each day) Context: While in The Hague, Prohibition ends in the U.S. (1933), transforming nightlife and legal alcohol sales.",
-        "usContext": "In 1933, Black organizations press for fair access to relief and jobs amid the Depression."
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-14 — The Hague — Twee Steden Palace (one concert each day)",
-        "usContext": ""
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-15 — The Hague — Twee Steden Palace (one concert each day)",
-        "usContext": ""
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-18 — Arnheim — Music Sacrum (two concerts)",
-        "usContext": ""
-      },
-      {
-        "year": "1933",
-        "international": "[concert] 1933-11-19 — Rotterdam — Doelenzaal (Doelen concert hall)",
-        "usContext": ""
-      },
-      {
-        "year": "1934",
-        "international": "[concert] 1934-11-11 — Concert tour through Belgium — Switzerland, France",
-        "usContext": ""
-      },
-      {
-        "year": "1949",
-        "international": "[concert] 1949-10-20 — Hilversum — concert",
-        "usContext": ""
-      },
-      {
-        "year": "1949",
-        "international": "[concert] 1949-10-20 — Rotterdam — Parkhotel, midnight concert. (Stratemann p.610)",
-        "usContext": ""
-      },
-      {
-        "year": "1952",
-        "international": "[concert] 1952-11-02 — Amsterdam — Concertgebouw, 2 concerts. (Stratemann p.612)",
-        "usContext": ""
-      },
-      {
-        "year": "1954",
-        "international": "[concert] 1954-10-29 — The Hague — The Netherlands. The Hague, The Netherlands, Houtrusthalle, concert – evening, and Amsterdam, The Netherlands, Concertgebouw, 1 concert – midnight. This concert was recorded by Philips/Columbia. Context: While in The Hague, Brown v. Board of Education (1954) rules school segregation unconstitutional in the U.S.",
-        "usContext": "In 1954, Brown v. Board of Education rules segregated public schools unconstitutional, a turning point in the civil-rights movement."
-      },
-      {
-        "year": "1955",
-        "international": "[concert] 1955-10-29 — Amsterdam — Concertgebouw, 1 concert – midnight. This concert was recorded by Philips/Columbia. (Stratemann p.613)",
-        "usContext": ""
-      },
-      {
-        "year": "1955",
-        "international": "[concert] 1955-10-29 — The Hague — Houtrusthalle, concert – evening, and",
-        "usContext": ""
-      },
-      {
-        "year": "1959",
-        "international": "[concert] 1959-02-07 — *Amsterdam — Concertgebouw (1 concert, telecast by AVRO-TV-see also",
-        "usContext": ""
-      }
-    ]
-  },
-  {
     "id": "uganda",
     "name": "Uganda",
     "cx": 1180,
@@ -19567,103 +19336,6 @@
     ]
   },
   {
-    "id": "tanzania",
-    "name": "Tanzania",
-    "cx": 1072,
-    "cy": 744,
-    "r": 20,
-    "numLeft": -1,
-    "numTop": -1,
-    "numFontSize": 14,
-    "counts": {
-      "all": 2,
-      "1940s": 0,
-      "1950s": 1,
-      "1960s": 1,
-      "1970s": 0
-    },
-    "events": [
-      {
-        "year": "1956",
-        "international": "Armstrong performs in Dar es Salaam (then Tanganyika), drawing enthusiastic East African crowds to an outdoor concert.",
-        "usContext": "The civil rights movement grows, with school desegregation battles continuing across the American South."
-      },
-      {
-        "year": "1960",
-        "international": "[concert] 1960-11-11 — Dar-Es-Salaam. Travel; Zanzibar Town, Zanzibar, Tanzania – Dar-Es-Salaam, Tanzania. (LAHA) Context: While in Dar-Es-Salaam, The U.S. civil-rights movement grows through sit-ins and mass organizing.",
-        "usContext": "In 1960, sit-ins and boycotts spread across U.S. cities, challenging segregation in everyday spaces."
-      },
-      {
-        "year": "1960",
-        "international": "[concert] 1960-11-12 — Dar-Es-Salaam. Dar-Es-Salaam, Tanzania, two performances. (LAHA) Context: While in Dar-Es-Salaam, A wave of African independence reshapes global politics in the 'Year of Africa' (1960).",
-        "usContext": "In 1960, the Greensboro sit-ins spark a wave of student-led direct action; SNCC is formed to coordinate activism."
-      }
-    ]
-  },
-  {
-    "id": "portugal",
-    "name": "Portugal",
-    "cx": 674,
-    "cy": 751,
-    "r": 20,
-    "numLeft": -1,
-    "numTop": -1,
-    "numFontSize": 14,
-    "counts": {
-      "all": 3,
-      "1940s": 0,
-      "1950s": 1,
-      "1960s": 2,
-      "1970s": 0
-    },
-    "events": [
-      {
-        "year": "1955",
-        "international": "Armstrong performs in Lisbon, then under the Salazar dictatorship. The concert is one of the few open cultural exchanges the regime permits.",
-        "usContext": "The U.S. maintains strategic relations with Portugal despite its authoritarian government due to access to the Azores military bases."
-      },
-      {
-        "year": "1961",
-        "international": "[concert] 1961-02-28 — Lisbon. Lisbon, Portugal. (LAHA) Context: While in Lisbon, The Berlin Wall begins to rise (1961), symbolizing Cold War division.",
-        "usContext": "In 1961, civil-rights activism escalates as federal officials are pressured to enforce desegregation rulings."
-      },
-      {
-        "year": "1961",
-        "international": "[concert] 1961-03-02 — Lisbon. Lisbon, Portugal. (LAHA) Context: While in Lisbon, Yuri Gagarin becomes the first human in space (1961), intensifying the Space Race.",
-        "usContext": "In 1961, Freedom Riders challenge segregation in interstate bus travel, drawing national attention and violence."
-      }
-    ]
-  },
-  {
-    "id": "austria",
-    "name": "Austria",
-    "cx": 805,
-    "cy": 762,
-    "r": 20,
-    "numLeft": -1,
-    "numTop": -1,
-    "numFontSize": 14,
-    "counts": {
-      "all": 4,
-      "1940s": 0,
-      "1950s": 2,
-      "1960s": 2,
-      "1970s": 0
-    },
-    "events": [
-      {
-        "year": "1954",
-        "international": "[concert] 1954-12-28 — Wien. Wien, Austria, Konzerthaus. Context: While in Wien, Brown v. Board of Education (1954) rules school segregation unconstitutional in the U.S.",
-        "usContext": "In 1954, Brown v. Board of Education rules segregated public schools unconstitutional, a turning point in the civil-rights movement."
-      },
-      {
-        "year": "1955",
-        "international": "Armstrong plays Vienna shortly after Austria regains full sovereignty following Allied occupation. The concert feels like a celebration of freedom.",
-        "usContext": "The Vienna State Treaty restores Austrian independence. Austria declares permanent neutrality in the Cold War."
-      }
-    ]
-  },
-  {
     "id": "ireland",
     "name": "Ireland",
     "cx": 516,
@@ -19727,40 +19399,6 @@
         "year": "1962",
         "international": "[concert] 1962-12-14 — Guantanamo Naval Base. Guantanamo Naval Base, Cuba, CBS-TV, \"Ed Sullivan Show\" Note: Stratemann and some other sources say December 23, 1962. Possibly the show was pretaped December 14 and telecast December 23, 1962. Context: While in Guantanamo Naval Base, The Cuban Missile Crisis (1962) brings the world close to nuclear war.",
         "usContext": "In 1962, James Meredith integrates the University of Mississippi amid riots and federal intervention, spotlighting the battle over desegregation."
-      }
-    ]
-  },
-  {
-    "id": "mexico",
-    "name": "Mexico",
-    "cx": 1015,
-    "cy": 284,
-    "r": 20,
-    "numLeft": -1,
-    "numTop": -1,
-    "numFontSize": 14,
-    "counts": {
-      "all": 5,
-      "1940s": 1,
-      "1950s": 2,
-      "1960s": 2,
-      "1970s": 0
-    },
-    "events": [
-      {
-        "year": "1946",
-        "international": "[concert] 1946-12-01 — Juarex. Juarex, Mexico Note: possibly a non-playing visit after the preceding nights performance?) Context: While in Juarex, Reconstruction and demobilization reshape societies after World War II.",
-        "usContext": "In 1946, President Truman creates the President’s Committee on Civil Rights, signaling growing federal attention to civil rights."
-      },
-      {
-        "year": "1948",
-        "international": "Armstrong performs in Mexico City, drawing packed audiences of Mexican and American jazz fans. The Mexican press calls him \"the king of music.\"",
-        "usContext": "Truman desegregates the military. The Universal Declaration of Human Rights is signed at the UN."
-      },
-      {
-        "year": "1960",
-        "international": "Armstrong returns to Mexico City, now a jazz capital of Latin America, connecting with a new generation of Mexican musicians.",
-        "usContext": "The Civil Rights movement intensifies with lunch counter sit-ins across the South."
       }
     ]
   },
@@ -19930,6 +19568,124 @@
       {
         "year": "1963",
         "international": "[concert] 1963-04-21 — Seoul — Walker Hill Resort, Clover Club. (DB March 14, 1963; LAHA; Darensbourg p.181-182; Joepchen) Note: DB: “two weeks”, Darensbourg: “9 days”",
+        "usContext": ""
+      }
+    ]
+  },
+  {
+    "id": "thenetherlands",
+    "name": "The Netherlands",
+    "cx": -1,
+    "cy": -1,
+    "r": 20,
+    "numLeft": -1,
+    "numTop": -1,
+    "numFontSize": 14,
+    "counts": {
+      "all": 17,
+      "1930s": 11,
+      "1940s": 2,
+      "1950s": 4
+    },
+    "events": [
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-09 — Amsterdam — Carlton Hotel (two concerts each day) (part of a November 9 concert was recorded)",
+        "usContext": ""
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-10 — Amsterdam — Carlton Hotel (two concerts each day) (part of a November 9 concert was recorded)",
+        "usContext": ""
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-11 — Amsterdam — Carlton Hotel (two concerts each day) (part of a November 9 concert was recorded)",
+        "usContext": ""
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-12 — The Hague — Dierentuin (Zoo) concert hall (one concert), and",
+        "usContext": ""
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-12 — The Hague — Dierentuin (Zoo) concert hall, broadcast",
+        "usContext": ""
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-12 — The Hague — The Netherlands. Ditto (one concert) and The Hague, The Netherlands, Dierentuin (Zoo) concert hall (one concert), and The Hague, The Netherlands, Dierentuin (Zoo) concert hall, broadcast Context: While in The Hague, Hitler becomes Chancellor of Germany (1933), accelerating Europe’s slide toward war.",
+        "usContext": "In 1933, segregation remains law in much of the U.S., even as federal power expands."
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-13 — Rotterdam — Doelenzaal (Doelen concert hall) (one concert)",
+        "usContext": ""
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-14 to 1933-11-15 — The Hague — The Netherlands. The Hague, The Netherlands, Twee Steden Palace (one concert each day) Context: While in The Hague, Prohibition ends in the U.S. (1933), transforming nightlife and legal alcohol sales.",
+        "usContext": "In 1933, Black organizations press for fair access to relief and jobs amid the Depression."
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-14 — The Hague — Twee Steden Palace (one concert each day)",
+        "usContext": ""
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-15 — The Hague — Twee Steden Palace (one concert each day)",
+        "usContext": ""
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-18 — Arnheim — Music Sacrum (two concerts)",
+        "usContext": ""
+      },
+      {
+        "year": "1933",
+        "international": "[concert] 1933-11-19 — Rotterdam — Doelenzaal (Doelen concert hall)",
+        "usContext": ""
+      },
+      {
+        "year": "1934",
+        "international": "[concert] 1934-11-11 — Concert tour through Belgium — Switzerland, France",
+        "usContext": ""
+      },
+      {
+        "year": "1949",
+        "international": "[concert] 1949-10-20 — Hilversum — concert",
+        "usContext": ""
+      },
+      {
+        "year": "1949",
+        "international": "[concert] 1949-10-20 — Rotterdam — Parkhotel, midnight concert. (Stratemann p.610)",
+        "usContext": ""
+      },
+      {
+        "year": "1952",
+        "international": "[concert] 1952-11-02 — Amsterdam — Concertgebouw, 2 concerts. (Stratemann p.612)",
+        "usContext": ""
+      },
+      {
+        "year": "1954",
+        "international": "[concert] 1954-10-29 — The Hague — The Netherlands. The Hague, The Netherlands, Houtrusthalle, concert – evening, and Amsterdam, The Netherlands, Concertgebouw, 1 concert – midnight. This concert was recorded by Philips/Columbia. Context: While in The Hague, Brown v. Board of Education (1954) rules school segregation unconstitutional in the U.S.",
+        "usContext": "In 1954, Brown v. Board of Education rules segregated public schools unconstitutional, a turning point in the civil-rights movement."
+      },
+      {
+        "year": "1955",
+        "international": "[concert] 1955-10-29 — Amsterdam — Concertgebouw, 1 concert – midnight. This concert was recorded by Philips/Columbia. (Stratemann p.613)",
+        "usContext": ""
+      },
+      {
+        "year": "1955",
+        "international": "[concert] 1955-10-29 — The Hague — Houtrusthalle, concert – evening, and",
+        "usContext": ""
+      },
+      {
+        "year": "1959",
+        "international": "[concert] 1959-02-07 — *Amsterdam — Concertgebouw (1 concert, telecast by AVRO-TV-see also",
         "usContext": ""
       }
     ]

@@ -12,18 +12,7 @@ export const SectionJourneyToAmbassador: React.FC<SectionJourneyToAmbassadorProp
         backgroundColor: '#F5F3EA',
       }}
     >
-      <h2
-        className="mcg-section-title"
-        style={{
-          ...textBaseStyle,
-          fontSize: '48px',
-          fontWeight: 500,
-          lineHeight: '58.6px',
-          position: 'absolute',
-          left: '56px',
-          top: '49px',
-        }}
-      >
+      <h2 className="mcg-section-title mcg-page-title">
         Journey to Ambassador 1930-1948
       </h2>
       <div

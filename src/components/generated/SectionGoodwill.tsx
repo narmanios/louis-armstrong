@@ -11,19 +11,7 @@ export const SectionGoodwill: React.FC<SectionGoodwillProps> = ({ textBaseStyle 
         backgroundColor: '#E9E6D9',
       }}
     >
-      <h2
-        className="mcg-section-title"
-        style={{
-          ...textBaseStyle,
-          fontSize: '48px',
-          fontWeight: 500,
-          lineHeight: '58.6px',
-          position: 'absolute',
-          left: '56px',
-          top: '49px',
-          color: '#000000',
-        }}
-      >
+      <h2 className="mcg-section-title mcg-page-title">
         Goodwill (Unoffical) Ambassador (starts 1948)
       </h2>
       <p
