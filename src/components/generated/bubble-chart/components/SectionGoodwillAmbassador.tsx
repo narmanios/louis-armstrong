@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import SectionGoodwill from "../../../../imports/SectionGoodwill";
+import GoodwillStageArtwork from "./GoodwillStageArtwork";
 import { X } from "lucide-react";
 import countriesData from "../../../../../data/goodwillCountries.json";
 
@@ -55,6 +55,9 @@ const CANVAS_WIDTH = 1280;
 const CANVAS_HEIGHT = 800;
 const BOTTOM_EMPTY_SPACE = 150;
 const MOBILE_BREAKPOINT = 768;
+const DESKTOP_STAGE_SCALE_BOOST = 1.14;
+const DESKTOP_CHART_OFFSET_Y = -36;
+const MOBILE_CHART_OFFSET_Y = -96;
 
 const MAP_GROUP_LEFT = 110;
 const MAP_GROUP_TOP = 136;
@@ -155,6 +158,8 @@ const COUNT_COUNTRY_ORDER: string[] = [
 ];
 
 const UI_FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+const GOODWILL_BUBBLE_FILL = "rgba(255, 255, 255, 0.38)";
+const GOODWILL_BUBBLE_ACTIVE_FILL = "rgba(255, 255, 255, 0.76)";
 
 export function SectionGoodwillAmbassador({
   textBaseStyle,
@@ -165,6 +170,7 @@ export function SectionGoodwillAmbassador({
   const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(
     null,
   );
+  const [hoveredCountryId, setHoveredCountryId] = useState<string | null>(null);
 
   const sectionRootRef = useRef<HTMLDivElement>(null);
   const stageOuterRef = useRef<HTMLDivElement>(null);
@@ -227,10 +233,13 @@ export function SectionGoodwillAmbassador({
     const updateScale = () => {
       const width = stageOuterRef.current?.clientWidth ?? window.innerWidth;
       const baseScale = Math.min(width / CANVAS_WIDTH, 1);
-      const nextScale = baseScale;
+      const mobileView = window.innerWidth <= MOBILE_BREAKPOINT;
+      const nextScale = mobileView
+        ? baseScale
+        : Math.min(baseScale * DESKTOP_STAGE_SCALE_BOOST, 1);
 
       setStageScale(nextScale);
-      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+      setIsMobile(mobileView);
     };
 
     updateScale();
@@ -376,6 +385,13 @@ export function SectionGoodwillAmbassador({
         if (circleEl) {
           circleEl.setAttribute("cx", `${randomized.cx - MAP_GROUP_LEFT}`);
           circleEl.setAttribute("cy", `${randomized.cy - MAP_GROUP_TOP}`);
+          circleEl.setAttribute(
+            "fill",
+            selectedCountry?.id === country.id || hoveredCountryId === country.id
+              ? GOODWILL_BUBBLE_ACTIVE_FILL
+              : GOODWILL_BUBBLE_FILL,
+          );
+          circleEl.style.transition = "fill 0.15s ease";
         }
       }
     });
@@ -401,7 +417,7 @@ export function SectionGoodwillAmbassador({
           : getDecadeCount(country, selectedDecade)
       }`;
     });
-  }, [bubblePositions, countriesById, selectedDecade]);
+  }, [bubblePositions, countriesById, hoveredCountryId, selectedCountry, selectedDecade]);
 
   const handleBubbleClick = (country: CountryData) => {
     setSelectedCountry((prev) => (prev?.id === country.id ? null : country));
@@ -417,33 +433,44 @@ export function SectionGoodwillAmbassador({
   // Shift the imported artwork left to counter its built-in whitespace.
   // On mobile, add the live bubble-field centering adjustment on top.
   const chartOffsetX = isMobile ? -110 + mobileBubbleOffsetX : -110;
-  const chartOffsetY = -96;
+  const chartOffsetY = isMobile ? MOBILE_CHART_OFFSET_Y : DESKTOP_CHART_OFFSET_Y;
 
   return (
     <section
       className="mcg-section mcg-jazz-section"
       style={{
-        backgroundColor: "#F5F3EA",
+        backgroundColor: "#f9e4d2",
         position: "relative",
       }}
     >
       <style>{`
+.mcg-jazz-section {
+  --goodwill-bubble-fill: ${GOODWILL_BUBBLE_FILL};
+  background: #f9e4d2 !important;
+}
+
 .goodwill-section-header {
   position: relative;
   z-index: 25;
   max-width: 1280px;
-  margin: 0 auto 4px;
+  margin: 0 auto 0;
   padding: 64px 56px 0;
   box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
+  display: block;
+  background: #f9e4d2;
 }
 
         .goodwill-title {
           margin: 0;
-          flex: 1;
+        }
+
+        .goodwill-filters {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+          margin-top: 12px;
         }
 
         .goodwill-stage-shell {
@@ -451,8 +478,9 @@ export function SectionGoodwillAmbassador({
           width: 100%;
           max-width: ${CANVAS_WIDTH}px;
           min-width: 0;
-          margin: 0 auto;
+          margin: -1px auto 0;
           overflow: visible;
+          background: #f9e4d2;
         }
 
         .goodwill-stage-frame {
@@ -467,17 +495,7 @@ export function SectionGoodwillAmbassador({
           height: ${CANVAS_HEIGHT}px;
           transform-origin: top left;
           overflow: hidden;
-          background: #f5f3ea;
-        }
-
-        .goodwill-filters {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-          height: 100%;
-          flex-wrap: wrap;
-          justify-content: flex-end;
-          flex-shrink: 0;
+          background: #f9e4d2;
         }
 
         .goodwill-filter-button {
@@ -497,7 +515,7 @@ export function SectionGoodwillAmbassador({
           font-weight: 700;
           font-size: 14px;
           color: #000000;
-          background: #f5f3ea;
+          background: rgba(255, 255, 255, 0.6);
           border: 1px solid #c8c2b3;
           border-radius: 6px;
           padding: 9px 12px;
@@ -707,7 +725,7 @@ export function SectionGoodwillAmbassador({
                 ref={sectionRootRef}
                 style={{ position: "absolute", inset: 0 }}
               >
-                <SectionGoodwill hideTitle hideFilters />
+                <GoodwillStageArtwork hideTitle hideFilters />
               </div>
 
               <div
@@ -738,22 +756,27 @@ export function SectionGoodwillAmbassador({
                         borderRadius: "50%",
                         background:
                           selectedCountry?.id === country.id
-                            ? "rgba(0,0,0,0.07)"
+                            ? "rgba(255,255,255,0.12)"
                             : "transparent",
                         border:
                           selectedCountry?.id === country.id
-                            ? "2px solid rgba(0,0,0,0.15)"
+                            ? "2px solid rgba(255,255,255,0.26)"
                             : "none",
                         cursor: "pointer",
                         pointerEvents: "auto",
                         transition: "background 0.15s ease",
                       }}
                       onMouseEnter={(e) => {
+                        setHoveredCountryId(country.id);
                         if (!isMobile && selectedCountry?.id !== country.id) {
-                          e.currentTarget.style.background = "rgba(0,0,0,0.04)";
+                          e.currentTarget.style.background =
+                            "rgba(255,255,255,0.08)";
                         }
                       }}
                       onMouseLeave={(e) => {
+                        setHoveredCountryId((prev) =>
+                          prev === country.id ? null : prev,
+                        );
                         if (!isMobile && selectedCountry?.id !== country.id) {
                           e.currentTarget.style.background = "transparent";
                         }

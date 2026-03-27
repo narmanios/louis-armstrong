@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useIsMobile } from "../../hooks/use-mobile";
-interface SectionFBIFilesProps {
-  textBaseStyle: React.CSSProperties;
-}
 interface FileData {
   id: string;
   src: string;
@@ -24,9 +21,7 @@ const getCategoryFromYear = (yearValue: string): string => {
   return `${Math.floor(year / 10) * 10}s`;
 };
 
-export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
-  textBaseStyle,
-}) => {
+export const SectionFBIFiles: React.FC = () => {
   const isMobile = useIsMobile();
   const [fileItems, setFileItems] = useState<FileData[]>([]);
   const [filter, setFilter] = useState<string>("all");
@@ -88,7 +83,7 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
         flexShrink: 0,
         scrollSnapAlign: "start",
         minHeight: "800px",
-        backgroundColor: "#F5F3EA",
+        backgroundColor: "#000000",
         position: "relative",
         fontFamily: '"Helvetica Neue", sans-serif',
         overflowX: "hidden",
@@ -107,9 +102,7 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
         {/* Header Section */}
         <header
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            display: "block",
             marginBottom: "24px",
           }}
         >
@@ -122,7 +115,10 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
               display: "flex",
               gap: "10px",
               alignItems: "center",
+              flexWrap: "wrap",
+              justifyContent: "flex-start",
               padding: "7px 8px 8px 7px",
+              marginTop: "12px",
             }}
           >
             {["1940s", "1950s", "1960s", "1970s", "1980s"].map((year) => (
@@ -151,10 +147,11 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, 116px)",
+            gridTemplateColumns: "repeat(auto-fit, 116px)",
             gap: "11px 12px",
             width: "100%",
             marginTop: "34px",
+            justifyContent: "center",
           }}
         >
           {fileItems.map((item) =>
@@ -347,17 +344,37 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
               </div>
             </div>
           ) : (
-            <>
+            <div
+              style={{
+                position: "relative",
+                width: "min(62vw, 620px)",
+                minHeight: "min(74vh, 620px)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "24px 0 0",
+                boxSizing: "border-box",
+                transform: "translateX(-96px)",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 onClick={() => setSelectedImage(null)}
                 style={{
-                  position: "absolute",
-                  top: "40px",
-                  right: "40px",
+                  position: "fixed",
+                  top: "20px",
+                  right: "20px",
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  padding: "12px",
+                  padding: 0,
+                  width: "64px",
+                  height: "64px",
+                  zIndex: 3000,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
                 aria-label="Close gallery"
               >
@@ -365,8 +382,9 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
                   src="/images/close.svg"
                   alt="Close"
                   style={{
-                    width: "30px",
-                    height: "30px",
+                    width: "28px",
+                    height: "28px",
+                    display: "block",
                     filter: "brightness(0) invert(1)",
                   }}
                 />
@@ -374,14 +392,15 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
 
               <div
                 style={{
-                  position: "relative",
-                  maxWidth: "90%",
-                  maxHeight: "90%",
+                  width: "100%",
+                  flex: "1 1 auto",
                   display: "flex",
-                  flexDirection: "column",
                   alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: 0,
+                  padding: "8px 160px 0 0",
+                  boxSizing: "border-box",
                 }}
-                onClick={(e) => e.stopPropagation()}
               >
                 <img
                   src={selectedImage.src}
@@ -390,26 +409,24 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
                     width: "auto",
                     height: "auto",
                     maxWidth: "100%",
-                    maxHeight: "80vh",
+                    maxHeight: "68vh",
                     boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
                     objectFit: "contain",
                   }}
                 />
-                <p
-                  style={{
-                    color: "#000000",
-                    marginTop: "20px",
-                    fontSize: "18px",
-                    fontWeight: 500,
-                    backgroundColor: "#FFFFFF",
-                    padding: "10px 16px",
-                    borderRadius: "999px",
-                  }}
-                >
-                  {selectedImage.alt} ({selectedImage.category})
-                </p>
               </div>
-            </>
+              <p
+                style={{
+                  color: "#FFFFFF",
+                  margin: "14px 0 0 0",
+                  fontSize: "16px",
+                  fontWeight: 500,
+                  textAlign: "center",
+                }}
+              >
+                {selectedImage.alt} ({selectedImage.category})
+              </p>
+            </div>
           )}
         </div>
       )}

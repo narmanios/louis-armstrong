@@ -1,7 +1,4 @@
 import React from "react";
-interface SectionJazzAmbassadorsProps {
-  textBaseStyle: React.CSSProperties;
-}
 const ambassadorData = [
   {
     color: "#2DAA00",
@@ -20,9 +17,7 @@ const ambassadorData = [
     name: "Duke Ellington 1963",
   },
 ] as any[];
-export const SectionJazzAmbassadors: React.FC<SectionJazzAmbassadorsProps> = ({
-  textBaseStyle,
-}) => {
+export const SectionJazzAmbassadors: React.FC = () => {
   return (
     <section
       className="mcg-section mcg-jazz-section"

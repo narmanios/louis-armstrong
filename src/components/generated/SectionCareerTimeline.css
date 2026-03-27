@@ -1,6 +1,7 @@
 /* Chart-level controls */
-.career-timeline-section {
-  --career-chart-bg: #f5f3ea;
+.career-timeline-section,
+.mcg-group-page--history .career-timeline-section {
+  --career-surface-bg: #f9e4d2;
   --career-dot-radius: 3.25px;
   --career-dot-featured-radius-offset: 0px;
   --career-dot-active-radius-offset: 1.25px;
@@ -8,65 +9,99 @@
   --career-lane-stroke-width: 0.5px;
   --career-pill-dot-size: 8px;
   --career-pill-dot-border-width: 2px;
-  background-color: var(--career-chart-bg);
+  background-color: var(--career-surface-bg) !important;
 }
 
 /* Section layout */
 .career-timeline-layout {
-  max-width: 1440px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 64px 56px 22px;
+  padding: 0;
   box-sizing: border-box;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   display: grid;
-  grid-template-columns: 100px minmax(0, 1fr);
-  column-gap: 6px;
-  row-gap: 32px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  row-gap: 0;
   align-items: start;
+  height: 100%;
+}
+
+.career-timeline-surface {
+  grid-column: 1 / -1;
+  min-height: 100%;
+  height: 100%;
+  background: var(--career-surface-bg);
+  padding: 64px 0 22px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .career-timeline-header {
-  grid-column: 1 / -1;
-  padding: 0;
+  padding: 0 56px;
   margin: 0;
   display: block;
+  box-sizing: border-box;
 }
 
-.career-timeline-title {
+.career-timeline-section .career-timeline-title.mcg-page-title {
   grid-column: 1 / -1;
+  color: #002768 !important;
 }
 
 /* Legend / category filters */
 .career-timeline-legend-panel {
-  grid-column: 1;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
   justify-content: flex-start;
   margin-top: 0;
 }
 
 /* Chart frame */
 .career-timeline-chart-card {
-  grid-column: 2;
+  flex: 1 1 auto;
+  height: 100%;
   padding-top: 0;
-  overflow: hidden;
-  /* padding: 18px 18px 10px; */
+  overflow: visible;
+  background: transparent;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* .career-timeline-scroll-area {
+.career-timeline-chart-surface {
+  flex: 1 1 auto;
+  padding: 0 56px 12px;
+  box-sizing: border-box;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.career-timeline-scroll-area {
+  flex: 1 1 auto;
   width: 100%;
   overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: thick;
+  background: transparent;
 }
 
 .career-timeline-scroll-inner {
-  min-width: 700px;
-} */
+  width: max-content;
+  min-width: 100%;
+  background: transparent;
+}
+
+.career-timeline-chart-card .career-timeline-legend-panel {
+  margin-bottom: 12px;
+}
 
 .career-timeline-legend-filter {
   border: none;
-  /* background-color: var(--career-pill-bg); */
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 4px 10px;
   display: inline-flex;
@@ -76,6 +111,7 @@
   transition: all 0.2s ease;
   cursor: pointer;
   width: fit-content;
+  flex: 0 0 auto;
 }
 
 .career-timeline-legend-filter:hover {
@@ -93,27 +129,16 @@
   flex-shrink: 0;
 }
 
-.career-timeline-legend-label {
+.career-timeline-chart-card .career-timeline-legend-label {
   font-size: 10px;
   font-weight: 400;
-  color: var(--career-pill-label);
+  color: #000000 !important;
 }
 
-.career-timeline-legend-count {
+.career-timeline-chart-card .career-timeline-legend-count {
   font-size: 9px;
   font-weight: 700;
-  color: var(--career-pill-count);
-}
-
-.career-timeline-all-button {
-  font-size: 9px;
-  color: #9ca3af;
-  background: #fff;
-  border: none;
-  border-radius: 99px;
-  padding: 4px 10px;
-  cursor: pointer;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #000000 !important;
 }
 
 /* SVG chart */
@@ -124,6 +149,7 @@
 .career-timeline-chart-svg {
   display: block;
   overflow: visible;
+  background: var(--career-surface-bg);
 }
 
 .career-timeline-plot-frame {
@@ -169,10 +195,6 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
   letter-spacing: 0.02em;
-  paint-order: stroke;
-  stroke: #f5f3ea;
-  stroke-width: 3px;
-  stroke-linejoin: round;
 }
 
 /* Axis and guide lines */
@@ -274,6 +296,12 @@
   .career-timeline-layout {
     padding: 10px 12px 20px;
     display: block;
+    height: auto;
+  }
+
+  .career-timeline-surface {
+    min-height: 0;
+    padding-top: 0;
   }
 
   .career-timeline-header {
@@ -292,5 +320,12 @@
 
   .career-timeline-chart-card {
     grid-column: auto;
+    padding: 0;
+  }
+
+  .career-timeline-chart-surface {
+    padding: 12px;
+    min-height: 0;
+    display: block;
   }
 }

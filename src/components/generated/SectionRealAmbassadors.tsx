@@ -1,7 +1,4 @@
 import React from "react";
-interface SectionRealAmbassadorsProps {
-  textBaseStyle: React.CSSProperties;
-}
 const trackList = [
   {
     id: "track-1",
@@ -45,14 +42,12 @@ const trackList = [
   },
 ] as any[];
 const lyricsExtended = `The diplomatic corps has been analyzed and criticized by NBC and CBS\nSenators and congressmen are so concerned, they can't recess\nState Department stands in awe your coup d'etat\nHas met success and caused this great uproar\nWho′s the real ambassador?\n\nI′m the real ambassador\nIt is evident I was sent by government to take your place\nAll I do is play the blues and meet the people face to face\nI'll explain and make it plain, I represent\nThe human race, and don't pretend no more`;
-export const SectionRealAmbassadors: React.FC<SectionRealAmbassadorsProps> = ({
-  textBaseStyle,
-}) => {
+export const SectionRealAmbassadors: React.FC = () => {
   return (
     <section
       className="mcg-section"
       style={{
-        backgroundColor: "#F5F3EA",
+        backgroundColor: "#000000",
       }}
     >
       <h2 className="mcg-section-title mcg-page-title">
@@ -69,7 +64,7 @@ export const SectionRealAmbassadors: React.FC<SectionRealAmbassadorsProps> = ({
         }}
       >
         <img
-          src="public/images/the-real-ambassadors.png"
+          src="/images/the-real-ambassadors.png"
           alt="The Real Ambassadors Album"
           style={{
             width: "470px",

@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { SectionAboutProject } from "./SectionAboutProject";
 
 interface SectionIntroHeroProps {
-  onScrollNext: () => void;
+  onNavigateHistory: () => void;
+  onNavigateMusician: () => void;
+  onNavigateAmbassador: () => void;
+  sectionRef?: React.Ref<HTMLElement>;
 }
 
 const heroForegroundScale = 0.78;
@@ -10,7 +13,10 @@ const scalePx = (value: number) =>
   `${Math.round(value * heroForegroundScale)}px`;
 
 export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
-  onScrollNext,
+  onNavigateHistory,
+  onNavigateMusician,
+  onNavigateAmbassador,
+  sectionRef,
 }) => {
   const [isAboutOverlayOpen, setIsAboutOverlayOpen] = useState(false);
 
@@ -22,29 +28,31 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
   return (
     <section
+      ref={sectionRef}
       className="mcg-section mcg-hero-wrap hero-intro-section hero-intro"
       style={{
-        backgroundColor: "#CF6B4C",
+        backgroundColor: "#f9e4d2",
         position: "relative",
       }}
     >
       <style>{`
         .hero-intro {
           position: relative;
-          background: #A09C6B;
+          background: #ffffff;
         }
 
         .hero-intro-title-line {
           margin: 0;
-          font-family: "Helvetica Neue", sans-serif;
+          font-family: "Andale Mono", "Andale Mono WT", monospace;
           font-weight: 700;
           line-height: 0.9;
-          color: #f3f1ea;
+          color: #cf6b4c;
           letter-spacing: -0.03em;
         }
 
         .hero-intro-kicker {
-          position: absolute;
+          position: static;
+          display: block;
           font-family: "Helvetica Neue", sans-serif;
           font-weight: 700;
           color: #000000;
@@ -73,14 +81,36 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
         .hero-intro-title-block {
           position: absolute;
-          left: 415px;
-          top: 210px;
+          left: 72px;
+          top: 72px;
           z-index: 5;
         }
 
+        .hero-intro-title-row {
+          display: flex;
+          align-items: flex-start;
+          gap: 18px;
+        }
+
+        .hero-intro-nav,
         .hero-intro-explore-button,
         .hero-intro-about-button {
           position: absolute;
+          z-index: 10;
+        }
+
+        .hero-intro-nav {
+          right: 56px;
+          bottom: 24px;
+          display: flex;
+          flex-direction: row;
+          align-items: flex-end;
+          gap: 12px;
+        }
+
+        .hero-intro-nav-link,
+        .hero-intro-explore-button,
+        .hero-intro-about-button {
           background: none;
           border: none;
           cursor: pointer;
@@ -89,7 +119,48 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           font-size: 16px;
           font-weight: 400;
           font-family: "Helvetica Neue", sans-serif;
-          z-index: 10;
+        }
+
+        .hero-intro-nav-link {
+          position: relative;
+          width: 86px;
+          height: 320px;
+          display: block;
+        }
+
+        .hero-intro-nav-link-label {
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          display: block;
+          transform: rotate(-90deg);
+          transform-origin: left bottom;
+          white-space: nowrap;
+          font-size: 80px;
+          line-height: 0.82;
+          letter-spacing: -0.06em;
+          font-weight: 700;
+          font-family: "Andale Mono", "Andale Mono WT", monospace;
+          color: #000000;
+          opacity: 0.28;
+          transition: opacity 0.18s ease;
+        }
+
+        .hero-intro-nav-link--history .hero-intro-nav-link-label {
+          color: #cf6b4c;
+        }
+
+        .hero-intro-nav-link--musician .hero-intro-nav-link-label {
+          color: #6b7b4a;
+        }
+
+        .hero-intro-nav-link--ambassador .hero-intro-nav-link-label {
+          color: #4f6f9a;
+        }
+
+        .hero-intro-nav-link:hover .hero-intro-nav-link-label,
+        .hero-intro-nav-link:focus-visible .hero-intro-nav-link-label {
+          opacity: 1;
         }
 
         .hero-intro-explore-button {
@@ -99,7 +170,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
         .hero-intro-about-button {
           right: ${scalePx(150)};
-          bottom: ${scalePx(70)};
+          bottom: ${scalePx(46)};
         }
 
         .hero-intro-about-overlay {
@@ -168,6 +239,10 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             max-width: 320px;
           }
 
+          .hero-intro-title-row {
+            display: block;
+          }
+
           .hero-intro-title-line {
             text-align: center;
           }
@@ -182,10 +257,35 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             max-width: none;
           }
 
+          .hero-intro-nav {
+            right: 24px;
+            bottom: 90px;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+          }
+
+          .hero-intro-nav-link,
           .hero-intro-explore-button,
           .hero-intro-about-button {
-            right: 24px;
             font-size: 14px;
+          }
+
+          .hero-intro-nav-link {
+            width: auto;
+            height: auto;
+          }
+
+          .hero-intro-nav-link-label {
+            position: static;
+            transform: none;
+            font-size: 14px;
+            line-height: 1;
+            letter-spacing: 0.02em;
+            font-weight: 400;
+            font-family: "Andale Mono", "Andale Mono WT", monospace;
+            color: #000000;
+            opacity: 1;
           }
 
           .hero-intro-explore-button {
@@ -193,7 +293,8 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           }
 
           .hero-intro-about-button {
-            bottom: 46px;
+            right: 24px;
+            bottom: 38px;
           }
 
           /* tablet/smaller desktop overlay stays modal */
@@ -202,13 +303,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             align-items: center;
             justify-content: center;
           }
-
-          // .hero-intro-about-overlay-content {
-          //   width: calc(100vw - 24px);
-          //   max-width: calc(100vw - 24px);
-          //   max-height: calc(100dvh - 24px);
-          //   border-radius: 8px;
-          // }
 
           .hero-intro-about-overlay-content {
             width: 100vw !important;
@@ -254,6 +348,10 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             max-width: 320px;
           }
 
+          .hero-intro-title-row {
+            display: block;
+          }
+
           .hero-intro-title-line {
             line-height: 0.92;
             text-align: center;
@@ -269,10 +367,35 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             max-width: none;
           }
 
+          .hero-intro-nav {
+            right: 18px;
+            bottom: 78px;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+          }
+
+          .hero-intro-nav-link,
           .hero-intro-explore-button,
           .hero-intro-about-button {
-            right: 18px;
             font-size: 13px;
+          }
+
+          .hero-intro-nav-link {
+            width: auto;
+            height: auto;
+          }
+
+          .hero-intro-nav-link-label {
+            position: static;
+            transform: none;
+            font-size: 13px;
+            line-height: 1;
+            letter-spacing: 0.02em;
+            font-weight: 400;
+            font-family: "Andale Mono", "Andale Mono WT", monospace;
+            color: #000000;
+            opacity: 1;
           }
 
           .hero-intro-explore-button {
@@ -280,7 +403,8 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           }
 
           .hero-intro-about-button {
-            bottom: 38px;
+            right: 18px;
+            bottom: 30px;
           }
 
           /* phone overlay becomes full-screen */
@@ -325,14 +449,26 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
       />
 
       <div className="mcg-hero-title hero-intro-title-block">
-        <p
-          className="hero-intro-title-line"
-          style={{
-            fontSize: "clamp(56px, 8vw, 118px)",
-          }}
-        >
-          Louis
-        </p>
+        <div className="hero-intro-title-row">
+          <p
+            className="hero-intro-title-line"
+            style={{
+              fontSize: "clamp(56px, 8vw, 118px)",
+            }}
+          >
+            Louis
+          </p>
+
+          <p
+            className="hero-intro-kicker"
+            style={{
+              fontSize: "clamp(14px, 2.2vw, 38px)",
+              margin: "14px 0 0 6px",
+            }}
+          >
+            A Musical Ambassador
+          </p>
+        </div>
 
         <p
           className="hero-intro-title-line"
@@ -342,25 +478,28 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         >
           Armstrong
         </p>
-
-        <p
-          className="hero-intro-kicker"
-          style={{
-            left: "350px",
-            top: "64px",
-            fontSize: "clamp(14px, 2.2vw, 38px)",
-          }}
-        >
-          A Musical Ambassador
-        </p>
       </div>
 
-      <button
-        onClick={onScrollNext}
-        className="explore-btn mcg-hero-explore hero-intro-explore-button"
-      >
-        Explore
-      </button>
+      <div className="hero-intro-nav">
+        <button
+          onClick={onNavigateHistory}
+          className="hero-intro-nav-link hero-intro-nav-link--history"
+        >
+          <span className="hero-intro-nav-link-label">History</span>
+        </button>
+        <button
+          onClick={onNavigateMusician}
+          className="hero-intro-nav-link hero-intro-nav-link--musician"
+        >
+          <span className="hero-intro-nav-link-label">Musician</span>
+        </button>
+        <button
+          onClick={onNavigateAmbassador}
+          className="hero-intro-nav-link hero-intro-nav-link--ambassador"
+        >
+          <span className="hero-intro-nav-link-label">Ambassador</span>
+        </button>
+      </div>
 
       <button
         onClick={() => setIsAboutOverlayOpen(true)}

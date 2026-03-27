@@ -108,7 +108,7 @@ export function SatchmoLegacy({
   title = "What a Wonderful World",
   subtitle = "An interactive odyssey through moments in the life of Louis “Satchmo” Armstrong.",
   className,
-  height = "100vh",
+  height = "100%",
   initialZoom = 1,
   canvasWidth = 1000,
   canvasHeight = 500,
@@ -363,7 +363,7 @@ export function SatchmoLegacy({
     <section
       className="mcg-section mcg-jazz-section"
       style={{
-        backgroundColor: "#F5F3EA",
+        backgroundColor: "#000000",
       }}
     >
       <div

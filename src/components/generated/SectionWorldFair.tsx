@@ -9,7 +9,7 @@ export const SectionWorldFair: React.FC<SectionWorldFairProps> = ({
     <section
       className="mcg-section"
       style={{
-        backgroundColor: "#F5F3EA",
+        backgroundColor: "#000000",
       }}
     >
       <h2 className="mcg-section-title mcg-page-title">World Fair + Berlin</h2>

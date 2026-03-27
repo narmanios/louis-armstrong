@@ -34,7 +34,6 @@ const dataYearMax = timelineData.events.reduce(
 );
 
 interface SectionCareerTimelineProps {
-  textBaseStyle: React.CSSProperties;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -103,11 +102,11 @@ const categoryColors: Record<Category, string> = {
   vocalist: "#10B981",
   ambassador: "#8B5CF6",
 };
-const svgHeight = 560;
+const svgHeight = 620;
 const yearStart = 1923;
 const yearEnd = Math.max(1973, dataYearMax);
-const marginLeft = 72;
-const marginRight = 20;
+const marginLeft = 40;
+const marginRight = 40;
 const fallbackDotRadius = 3.25;
 const fallbackFeaturedDotRadiusOffset = 0;
 const fallbackActiveDotRadiusOffset = 1.25;
@@ -284,7 +283,10 @@ function TimelineSVG({
     return output.sort((a, b) => a.cx - b.cx || a.cy - b.cy);
   }, [active, svgWidth]);
 
-  const dots = useMemo(() => clusters.flatMap((cluster) => cluster.dots), [clusters]);
+  const dots = useMemo(
+    () => clusters.flatMap((cluster) => cluster.dots),
+    [clusters],
+  );
 
   const featuredDots = useMemo(() => {
     const seen = new Set<number>();
@@ -307,7 +309,9 @@ function TimelineSVG({
       return dots.find((dot) => dot.key === pinTip.key)?.cx ?? null;
     }
     if (hoverClusterKey) {
-      return clusters.find((cluster) => cluster.key === hoverClusterKey)?.cx ?? null;
+      return (
+        clusters.find((cluster) => cluster.key === hoverClusterKey)?.cx ?? null
+      );
     }
     return null;
   }, [clusters, dots, hoverClusterKey, hoverTip, pinTip]);
@@ -587,9 +591,12 @@ function TimelineSVG({
                           ? "scale(1.12)"
                           : "scale(1)",
                       opacity: isExpanded || dotIndex === 0 ? 1 : 0,
-                      pointerEvents: isExpanded || dotIndex === 0 ? "auto" : "none",
+                      pointerEvents:
+                        isExpanded || dotIndex === 0 ? "auto" : "none",
                       zIndex: isExpanded
-                        ? 1 + cluster.dots.length - Math.abs(dot.cy - cluster.cy)
+                        ? 1 +
+                          cluster.dots.length -
+                          Math.abs(dot.cy - cluster.cy)
                         : 1,
                     }}
                     onMouseEnter={(event) => {
@@ -697,7 +704,6 @@ function TimelineSVG({
 }
 
 export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
-  textBaseStyle,
   className,
   style,
 }) => {
@@ -744,7 +750,9 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
         .getPropertyValue("--career-lane-stroke")
         .trim();
       const cssLaneStrokeWidth = Number.parseFloat(
-        getComputedStyle(element).getPropertyValue("--career-lane-stroke-width"),
+        getComputedStyle(element).getPropertyValue(
+          "--career-lane-stroke-width",
+        ),
       );
       setDotRadius(Number.isFinite(cssRadius) ? cssRadius : fallbackDotRadius);
       setFeaturedDotRadiusOffset(
@@ -820,50 +828,47 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
         scrollSnapAlign: isMobile ? undefined : "start",
         position: "relative",
         overflow: "hidden",
-        backgroundColor: "var(--career-chart-bg)",
+        backgroundColor: "var(--career-surface-bg)",
         ...style,
       }}
     >
       <div className="career-timeline-layout">
-        <div className="career-timeline-header">
-          <h2 className="career-timeline-title mcg-page-title mcg-page-title--flow">
-            Louis Armstrong Career Timeline
-          </h2>
-        </div>
+        <div className="career-timeline-surface">
+          <div className="career-timeline-header">
+            <h2 className="career-timeline-title mcg-page-title mcg-page-title--flow">
+              Career Highlights
+            </h2>
+          </div>
 
-        <div className="career-timeline-legend-panel">
-          {allCategories.map((category) => (
-            <CategoryPill
-              key={category}
-              active={activeCategories.has(category)}
-              count={categoryCounts[category]}
-              onToggle={() => toggleCategory(category)}
-              label={timelineData.categoryLabels[category]}
-              color={categoryColors[category]}
-            />
-          ))}
-          <button
-            onClick={() => setActiveCategories(new Set(allCategories))}
-            className="career-timeline-all-button"
-          >
-            All
-          </button>
-        </div>
-
-        <div className="career-timeline-chart-card">
-          <div ref={containerRef} className="career-timeline-scroll-area">
-            <div className="career-timeline-scroll-inner">
-              <TimelineSVG
-                svgWidth={Math.max(svgWidth, 1000)}
-                active={activeCategories}
-                selected={selectedEvent}
-                onSelect={setSelectedEvent}
-                dotRadius={dotRadius}
-                featuredDotRadiusOffset={featuredDotRadiusOffset}
-                activeDotRadiusOffset={activeDotRadiusOffset}
-                laneStroke={laneStroke}
-                laneStrokeWidth={laneStrokeWidth}
-              />
+          <div className="career-timeline-chart-card">
+            <div className="career-timeline-chart-surface">
+              <div className="career-timeline-legend-panel">
+                {allCategories.map((category) => (
+                  <CategoryPill
+                    key={category}
+                    active={activeCategories.has(category)}
+                    count={categoryCounts[category]}
+                    onToggle={() => toggleCategory(category)}
+                    label={timelineData.categoryLabels[category]}
+                    color={categoryColors[category]}
+                  />
+                ))}
+              </div>
+              <div ref={containerRef} className="career-timeline-scroll-area">
+                <div className="career-timeline-scroll-inner">
+                  <TimelineSVG
+                    svgWidth={Math.max(svgWidth, 1320)}
+                    active={activeCategories}
+                    selected={selectedEvent}
+                    onSelect={setSelectedEvent}
+                    dotRadius={dotRadius}
+                    featuredDotRadiusOffset={featuredDotRadiusOffset}
+                    activeDotRadiusOffset={activeDotRadiusOffset}
+                    laneStroke={laneStroke}
+                    laneStrokeWidth={laneStrokeWidth}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

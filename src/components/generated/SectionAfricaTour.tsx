@@ -2,14 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useIsMobile } from "../../hooks/use-mobile";
 
 interface SectionAfricaTourProps {
-  textBaseStyle: React.CSSProperties;
   className?: string;
   style?: React.CSSProperties;
 }
-// interface TextOverlaySectionProps {
-//   className?: string;
-//   style?: React.CSSProperties;
-// }
 interface GalleryImage {
   id: string;
   src: string;
@@ -118,7 +113,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
         height: isMobile ? "auto" : "800px",
         flexShrink: isMobile ? undefined : 0,
         scrollSnapAlign: isMobile ? undefined : "start",
-        backgroundColor: "#F5F3EA",
+        backgroundColor: "#000000",
         position: "relative",
         overflow: isMobile ? "visible" : "hidden",
         fontFamily: '"Helvetica Neue", sans-serif',
@@ -274,17 +269,6 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   objectFit: "cover",
                 }}
               />
-              {/* <img
-                src="https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/fb993a99-813b-4492-86c4-7edf45ccaf7d.svg"
-                alt="Map Vector"
-                style={{
-                  position: 'absolute',
-                  left: '54.65px',
-                  top: '34px',
-                  width: '182px',
-                  height: '201px',
-                }}
-              /> */}
               <div
                 style={{
                   position: "absolute",

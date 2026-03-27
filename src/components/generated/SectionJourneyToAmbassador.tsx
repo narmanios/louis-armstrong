@@ -9,7 +9,7 @@ export const SectionJourneyToAmbassador: React.FC<
     <section
       className="mcg-section"
       style={{
-        backgroundColor: "#F5F3EA",
+        backgroundColor: "#000000",
       }}
     >
       <h2 className="mcg-section-title mcg-page-title">
@@ -30,7 +30,7 @@ export const SectionJourneyToAmbassador: React.FC<
         <div>
           <div className="interactive-card">
             <img
-              src="public/images/orchestra.png"
+              src="/images/orchestra.png"
               alt="Orchestra"
               style={{
                 width: "470px",
@@ -52,7 +52,7 @@ export const SectionJourneyToAmbassador: React.FC<
         <div>
           <div className="interactive-card">
             <img
-              src="public/images/chicago.png"
+              src="/images/chicago.png"
               alt="Chicago"
               style={{
                 width: "470px",

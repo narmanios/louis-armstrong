@@ -9,7 +9,7 @@ export const SectionTheBeginning: React.FC<SectionTheBeginningProps> = ({
     <section
       className="mcg-section"
       style={{
-        backgroundColor: "#F5F3EA",
+        backgroundColor: "#000000",
       }}
     >
       <h2 className="mcg-section-title mcg-page-title">The Beginning</h2>
@@ -28,7 +28,7 @@ export const SectionTheBeginning: React.FC<SectionTheBeginningProps> = ({
         <div>
           <div className="interactive-card">
             <img
-              src="/images/waifs-home.png"
+              src="images/waifs-home.png"
               alt="Waifs home band"
               style={{
                 width: "470px",
@@ -50,7 +50,7 @@ export const SectionTheBeginning: React.FC<SectionTheBeginningProps> = ({
         <div>
           <div className="interactive-card">
             <img
-              src="/images/young-louis.png"
+              src="images/young-louis.png"
               alt="Young Louis"
               style={{
                 width: "470px",
