@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useIsMobile } from "../../hooks/use-mobile";
 interface SectionFBIFilesProps {
   textBaseStyle: React.CSSProperties;
 }
@@ -26,6 +27,7 @@ const getCategoryFromYear = (yearValue: string): string => {
 export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
   textBaseStyle,
 }) => {
+  const isMobile = useIsMobile();
   const [fileItems, setFileItems] = useState<FileData[]>([]);
   const [filter, setFilter] = useState<string>("all");
   const [selectedImage, setSelectedImage] = useState<FileData | null>(null);
@@ -70,6 +72,9 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
     } else {
       document.body.style.overflow = "auto";
     }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [selectedImage]);
   const handleFilterClick = (newFilter: string) => {
     setFilter((prev) => (prev === newFilter ? "all" : newFilter));
@@ -152,55 +157,65 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
             marginTop: "34px",
           }}
         >
-          {fileItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setSelectedImage(item)}
-              style={{
-                width: "116px",
-                height: "150px",
-                padding: 0,
-                border: "none",
-                background: "none",
-                cursor: "pointer",
-                overflow: "hidden",
-                transition: "all 0.3s ease",
-                opacity: filter === "all" || item.category === filter ? 1 : 0.5,
-                transform:
-                  filter === "all" || item.category === filter
-                    ? "scale(1)"
-                    : "scale(0.95)",
-                position: "relative",
-              }}
-            >
-              <img
-                src={item.src}
-                alt={item.alt}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  backgroundColor: "rgba(255, 255, 255, 0)",
-                  transition: "background-color 0.2s ease",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor =
-                    "rgba(255, 255, 255, 0.1)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor =
-                    "rgba(255, 255, 255, 0)")
-                }
-              />
-            </button>
-          ))}
+          {fileItems.map((item) =>
+            (() => {
+              const isMatchingFilter =
+                filter === "all" || item.category === filter;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setSelectedImage(item)}
+                  style={{
+                    width: "116px",
+                    height: "150px",
+                    padding: 0,
+                    border: "none",
+                    background: "none",
+                    cursor: "pointer",
+                    overflow: "hidden",
+                    transition: "all 0.3s ease",
+                    opacity: isMatchingFilter ? 1 : 0.28,
+                    transform: isMatchingFilter ? "scale(1)" : "scale(0.93)",
+                    filter: isMatchingFilter
+                      ? "grayscale(0%)"
+                      : "grayscale(40%)",
+                    position: "relative",
+                  }}
+                >
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      backgroundColor: isMatchingFilter
+                        ? "rgba(255, 255, 255, 0)"
+                        : "rgba(245, 243, 234, 0.44)",
+                      transition: "background-color 0.2s ease",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.backgroundColor = isMatchingFilter
+                        ? "rgba(255, 255, 255, 0.1)"
+                        : "rgba(245, 243, 234, 0.54)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.backgroundColor = isMatchingFilter
+                        ? "rgba(255, 255, 255, 0)"
+                        : "rgba(245, 243, 234, 0.44)")
+                    }
+                  />
+                </button>
+              );
+            })(),
+          )}
         </div>
       </div>
 
@@ -209,77 +224,193 @@ export const SectionFBIFiles: React.FC<SectionFBIFilesProps> = ({
         <div
           style={{
             position: "fixed",
-            top: 0,
-            left: 0,
+            inset: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
             zIndex: 1000,
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backdropFilter: "blur(5px)",
+            alignItems: isMobile ? "stretch" : "center",
+            justifyContent: isMobile ? "stretch" : "center",
+            padding: isMobile ? "0" : "24px",
+            boxSizing: "border-box",
+            backdropFilter: isMobile ? "none" : "blur(5px)",
           }}
           onClick={() => setSelectedImage(null)}
         >
-          <button
-            onClick={() => setSelectedImage(null)}
-            style={{
-              position: "absolute",
-              top: "40px",
-              right: "40px",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: "12px",
-            }}
-            aria-label="Close gallery"
-          >
-            <img
-              src="/images/close.svg"
-              alt="Close"
+          {isMobile ? (
+            <div
               style={{
-                width: "30px",
-                height: "30px",
-                filter: "brightness(0) invert(1)",
+                position: "relative",
+                width: "100vw",
+                height: "100dvh",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "stretch",
+                backgroundColor: "#FFFFFF",
+                borderRadius: 0,
+                boxShadow: "none",
+                overflow: "hidden",
               }}
-            />
-          </button>
-
-          <div
-            style={{
-              position: "relative",
-              maxWidth: "90%",
-              maxHeight: "90%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={selectedImage.src}
-              alt={selectedImage.alt}
-              style={{
-                width: "auto",
-                height: "auto",
-                maxWidth: "100%",
-                maxHeight: "80vh",
-                boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-                objectFit: "contain",
-              }}
-            />
-            <p
-              style={{
-                color: "white",
-                marginTop: "20px",
-                fontSize: "18px",
-                fontWeight: 500,
-              }}
+              onClick={(e) => e.stopPropagation()}
             >
-              {selectedImage.alt} ({selectedImage.category})
-            </p>
-          </div>
+              <button
+                onClick={() => setSelectedImage(null)}
+                style={{
+                  position: "absolute",
+                  top: isMobile ? "12px" : "24px",
+                  right: isMobile ? "12px" : "24px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  width: isMobile ? "28px" : "32px",
+                  height: isMobile ? "28px" : "32px",
+                  zIndex: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                aria-label="Close gallery"
+              >
+                <img
+                  src="/images/close.svg"
+                  alt="Close"
+                  style={{
+                    width: isMobile ? "24px" : "28px",
+                    height: isMobile ? "24px" : "28px",
+                    filter: "brightness(0)",
+                  }}
+                />
+              </button>
+
+              <div
+                style={{
+                  flex: isMobile ? "0 0 auto" : "1 1 auto",
+                  minHeight: isMobile ? "0" : "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: isMobile ? "56px 20px 20px" : "64px 40px",
+                  boxSizing: "border-box",
+                  backgroundColor: "#FFFFFF",
+                }}
+              >
+                <img
+                  src={selectedImage.src}
+                  alt={selectedImage.alt}
+                  style={{
+                    width: "auto",
+                    height: "auto",
+                    maxWidth: "100%",
+                    maxHeight: isMobile ? "54vh" : "100%",
+                    boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
+              <div
+                style={{
+                  width: isMobile ? "100%" : "320px",
+                  height: isMobile ? "auto" : "100%",
+                  flex: isMobile ? "1 1 auto" : "0 0 320px",
+                  borderLeft: isMobile ? "none" : "1px solid rgba(0,0,0,0.08)",
+                  borderTop: isMobile ? "1px solid rgba(0,0,0,0.08)" : "none",
+                  backgroundColor: "#FFFFFF",
+                  padding: isMobile ? "24px 20px 32px" : "88px 32px 32px",
+                  boxSizing: "border-box",
+                }}
+              >
+                <p
+                  style={{
+                    color: "rgba(0,0,0,0.45)",
+                    margin: "0 0 12px 0",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  FBI Files
+                </p>
+                <p
+                  style={{
+                    color: "#000000",
+                    margin: 0,
+                    fontSize: "14px",
+                    lineHeight: "22px",
+                    fontWeight: 400,
+                  }}
+                >
+                  {selectedImage.alt} ({selectedImage.category})
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              <button
+                onClick={() => setSelectedImage(null)}
+                style={{
+                  position: "absolute",
+                  top: "40px",
+                  right: "40px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "12px",
+                }}
+                aria-label="Close gallery"
+              >
+                <img
+                  src="/images/close.svg"
+                  alt="Close"
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    filter: "brightness(0) invert(1)",
+                  }}
+                />
+              </button>
+
+              <div
+                style={{
+                  position: "relative",
+                  maxWidth: "90%",
+                  maxHeight: "90%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img
+                  src={selectedImage.src}
+                  alt={selectedImage.alt}
+                  style={{
+                    width: "auto",
+                    height: "auto",
+                    maxWidth: "100%",
+                    maxHeight: "80vh",
+                    boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+                    objectFit: "contain",
+                  }}
+                />
+                <p
+                  style={{
+                    color: "#000000",
+                    marginTop: "20px",
+                    fontSize: "18px",
+                    fontWeight: 500,
+                    backgroundColor: "#FFFFFF",
+                    padding: "10px 16px",
+                    borderRadius: "999px",
+                  }}
+                >
+                  {selectedImage.alt} ({selectedImage.category})
+                </p>
+              </div>
+            </>
+          )}
         </div>
       )}
 

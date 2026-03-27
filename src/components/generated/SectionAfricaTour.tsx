@@ -375,75 +375,90 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
         <div
           style={{
             position: "fixed",
-            top: 0,
-            left: 0,
+            inset: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
             zIndex: 1000,
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: isMobile ? "stretch" : "center",
+            justifyContent: isMobile ? "stretch" : "center",
+            padding: isMobile ? "0" : "24px",
+            boxSizing: "border-box",
           }}
         >
-          {/* Close button — moved down slightly so it's fully visible */}
-          <button
-            onClick={handleClose}
-            style={{
-              position: "fixed",
-              right: "32px",
-              top: "48px",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              zIndex: 1002,
-              width: "32px",
-              height: "32px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 0,
-            }}
-            aria-label="Close overlay"
-          >
-            <img
-              src="/images/close.svg"
-              alt="Close"
-              style={{
-                width: "30px",
-                height: "30px",
-                opacity: 0.7,
-              }}
-            />
-          </button>
           <div
             style={{
-              width: "1220px",
-              height: "740px",
+              width: isMobile ? "100vw" : "min(1220px, calc(100vw - 48px))",
+              height: isMobile ? "100dvh" : "min(740px, calc(100vh - 48px))",
               display: "flex",
+              flexDirection: isMobile ? "column" : "row",
               position: "relative",
+              backgroundColor: "#FFFFFF",
+              borderRadius: isMobile ? 0 : "10px",
+              boxShadow: isMobile
+                ? "none"
+                : "0 18px 48px rgba(0, 0, 0, 0.32)",
+              overflow: "hidden",
             }}
           >
+            <button
+              onClick={handleClose}
+              style={{
+                position: "absolute",
+                right: isMobile ? "12px" : "24px",
+                top: isMobile ? "12px" : "24px",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                zIndex: 1002,
+                width: isMobile ? "28px" : "32px",
+                height: isMobile ? "28px" : "32px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 0,
+              }}
+              aria-label="Close overlay"
+            >
+              <img
+                src="/images/close.svg"
+                alt="Close"
+                style={{
+                  width: isMobile ? "24px" : "28px",
+                  height: isMobile ? "24px" : "28px",
+                  filter: "brightness(0)",
+                }}
+              />
+            </button>
+
             {/* Left panel */}
             <div
               style={{
-                width: "812px",
-                height: "100%",
-                backgroundColor: "rgba(0, 39, 104, 1)",
+                width: isMobile ? "100%" : "812px",
+                flex: isMobile ? "0 0 auto" : "0 0 812px",
+                minHeight: isMobile
+                  ? activeOverlay === "tour"
+                    ? "420px"
+                    : "360px"
+                  : "100%",
+                backgroundColor: "#FFFFFF",
                 position: "relative",
-                overflow: "hidden",
+                overflow: isMobile ? "visible" : "hidden",
+                paddingTop: isMobile ? "56px" : 0,
               }}
             >
               <h2
                 style={{
-                  position: "absolute",
-                  left: "40px",
-                  top: "42px",
-                  color: "#FFFFFF",
-                  fontSize: "24px",
+                  position: isMobile ? "relative" : "absolute",
+                  left: isMobile ? "auto" : "40px",
+                  top: isMobile ? "auto" : "42px",
+                  padding: isMobile ? "0 20px" : 0,
+                  color: "#000000",
+                  fontSize: isMobile ? "22px" : "24px",
                   fontFamily: '"Helvetica Neue", sans-serif',
                   fontWeight: 700,
-                  margin: 0,
+                  margin: isMobile ? "0 0 16px 0" : 0,
                   zIndex: 2,
                 }}
               >
@@ -458,21 +473,25 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   data-dismiss="true"
                   onClick={handleDismissSelected}
                   style={{
-                    position: "absolute",
-                    left: "52px",
-                    top: "100px",
-                    width: "712px",
-                    bottom: "20px",
-                    overflowY: "auto",
+                    position: isMobile ? "relative" : "absolute",
+                    left: isMobile ? "auto" : "52px",
+                    top: isMobile ? "auto" : "100px",
+                    width: isMobile ? "100%" : "712px",
+                    bottom: isMobile ? "auto" : "20px",
+                    padding: isMobile ? "0 20px 24px" : 0,
+                    boxSizing: "border-box",
+                    overflowY: isMobile ? "visible" : "auto",
                     scrollbarWidth: "thin",
-                    scrollbarColor: "rgba(255,255,255,0.25) transparent",
+                    scrollbarColor: "rgba(0,0,0,0.18) transparent",
                   }}
                 >
                   {/* Scrollable thumbnail grid */}
                   <div
                     style={{
                       display: "grid",
-                      gridTemplateColumns: "repeat(6, 1fr)",
+                      gridTemplateColumns: isMobile
+                        ? "repeat(3, minmax(0, 1fr))"
+                        : "repeat(6, 1fr)",
                       gap: "6px",
                       paddingBottom: "16px",
                     }}
@@ -498,7 +517,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                               : "scale(1)",
                           outline:
                             selectedImageId === img.id
-                              ? "2px solid rgba(255,255,255,0.9)"
+                              ? "2px solid rgba(0,0,0,0.9)"
                               : "none",
                         }}
                       >
@@ -507,7 +526,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                           alt={img.caption}
                           style={{
                             width: "100%",
-                            height: "90px",
+                            height: isMobile ? "104px" : "90px",
                             objectFit: "cover",
                             display: "block",
                           }}
@@ -521,19 +540,21 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               {activeOverlay === "egypt" && (
                 <div
                   style={{
-                    position: "absolute",
-                    left: "52px",
-                    top: "129px",
-                    width: "560px",
-                    height: "530px",
+                    position: isMobile ? "relative" : "absolute",
+                    left: isMobile ? "auto" : "52px",
+                    top: isMobile ? "auto" : "129px",
+                    width: isMobile ? "100%" : "560px",
+                    height: isMobile ? "auto" : "530px",
+                    padding: isMobile ? "0 20px 24px" : 0,
+                    boxSizing: "border-box",
                   }}
                 >
                   <img
                     src="/images/egypt.png"
                     alt="Cairo Large"
                     style={{
-                      width: "560px",
-                      height: "530px",
+                      width: "100%",
+                      height: isMobile ? "320px" : "530px",
                       objectFit: "cover",
                     }}
                   />
@@ -543,11 +564,13 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               {activeOverlay === "congo" && (
                 <div
                   style={{
-                    position: "absolute",
-                    left: "52px",
-                    top: "129px",
-                    width: "560px",
-                    height: "530px",
+                    position: isMobile ? "relative" : "absolute",
+                    left: isMobile ? "auto" : "52px",
+                    top: isMobile ? "auto" : "129px",
+                    width: isMobile ? "100%" : "560px",
+                    height: isMobile ? "auto" : "530px",
+                    padding: isMobile ? "0 20px 24px" : 0,
+                    boxSizing: "border-box",
                   }}
                 >
                   <video
@@ -559,8 +582,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                     playsInline
                     controls
                     style={{
-                      width: "560px",
-                      height: "530px",
+                      width: "100%",
+                      height: isMobile ? "320px" : "530px",
                       objectFit: "cover",
                     }}
                   />
@@ -583,6 +606,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                     justifyContent: "center",
                     zIndex: 10,
                     pointerEvents: "none",
+                    background: "rgba(245, 243, 234, 0.84)",
                   }}
                 >
                   <div
@@ -594,21 +618,21 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                       gap: "12px",
                       marginTop: "60px",
                     }}
-                  >
-                    <img
-                      src={selectedImage.src}
-                      alt={selectedImage.caption}
-                      style={{
-                        maxWidth: "380px",
-                        maxHeight: "520px",
-                        objectFit: "contain",
-                        boxShadow: "0 8px 40px rgba(0,0,0,0.55)",
-                        display: "block",
+                    >
+                      <img
+                        src={selectedImage.src}
+                        alt={selectedImage.caption}
+                        style={{
+                          maxWidth: isMobile ? "calc(100vw - 72px)" : "380px",
+                          maxHeight: isMobile ? "52vh" : "520px",
+                          objectFit: "contain",
+                          boxShadow: "0 8px 40px rgba(0,0,0,0.55)",
+                          display: "block",
                       }}
                     />
                     <span
                       style={{
-                        color: "rgba(255,255,255,0.85)",
+                        color: "rgba(0,0,0,0.72)",
                         fontSize: "11px",
                         fontFamily: '"Helvetica Neue", sans-serif',
                         letterSpacing: "0.04em",
@@ -625,14 +649,17 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             {/* Right panel */}
             <div
               style={{
-                width: "406px",
-                height: "100%",
-                backgroundColor: "rgba(3, 66, 172, 1)",
-                padding: "124px 64px 0 65px",
+                width: isMobile ? "100%" : "406px",
+                height: isMobile ? "auto" : "100%",
+                backgroundColor: "#FFFFFF",
+                borderLeft: isMobile ? "none" : "1px solid rgba(0,0,0,0.08)",
+                borderTop: isMobile ? "1px solid rgba(0,0,0,0.08)" : "none",
+                padding: isMobile ? "24px 20px 32px" : "124px 64px 0 65px",
                 boxSizing: "border-box",
                 display: "flex",
                 flexDirection: "column",
                 gap: "20px",
+                overflowY: isMobile ? "auto" : "visible",
               }}
             >
               {activeOverlay === "tour" && selectedImage ? (
@@ -643,7 +670,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                 >
                   <p
                     style={{
-                      color: "rgba(255,255,255,0.5)",
+                      color: "rgba(0,0,0,0.45)",
                       fontSize: "12px",
                       fontFamily: '"Helvetica Neue", sans-serif',
                       letterSpacing: "0.1em",
@@ -655,7 +682,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   </p>
                   <h3
                     style={{
-                      color: "#FFFFFF",
+                      color: "#000000",
                       fontSize: "14px",
                       fontFamily: '"Helvetica Neue", sans-serif',
                       fontWeight: 400,
@@ -670,8 +697,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                     style={{
                       marginTop: "28px",
                       background: "none",
-                      border: "1px solid rgba(255,255,255,0.35)",
-                      color: "rgba(255,255,255,0.7)",
+                      border: "1px solid rgba(0,0,0,0.2)",
+                      color: "#000000",
                       fontSize: "12px",
                       fontFamily: '"Helvetica Neue", sans-serif',
                       letterSpacing: "0.08em",
@@ -687,7 +714,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               ) : (
                 <p
                   style={{
-                    color: "#FFFFFF",
+                    color: "#000000",
                     fontSize: "12px",
                     fontFamily: '"Helvetica Neue", sans-serif',
                     lineHeight: "22px",

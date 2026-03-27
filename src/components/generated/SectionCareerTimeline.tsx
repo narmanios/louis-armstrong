@@ -28,6 +28,10 @@ type CareerTimelineData = {
 };
 
 const timelineData = rawCareerTimeline as CareerTimelineData;
+const dataYearMax = timelineData.events.reduce(
+  (max, event) => Math.max(max, event.year),
+  0,
+);
 
 interface SectionCareerTimelineProps {
   textBaseStyle: React.CSSProperties;
@@ -101,14 +105,15 @@ const categoryColors: Record<Category, string> = {
 };
 const svgHeight = 560;
 const yearStart = 1923;
-const yearEnd = 1970;
+const yearEnd = Math.max(1973, dataYearMax);
 const marginLeft = 72;
 const marginRight = 20;
 const fallbackDotRadius = 3.25;
 const fallbackFeaturedDotRadiusOffset = 0;
 const fallbackActiveDotRadiusOffset = 1.25;
+const fallbackLaneStroke = "#B8B1A2";
+const fallbackLaneStrokeWidth = 0.8;
 const decadeDash = "4 4";
-const laneStroke = "#B8B1A2";
 const connectorDash = "2 2";
 const featuredLabelLineHeight = 11;
 const featuredLabelConnectorLength = 28;
@@ -190,16 +195,20 @@ function CategoryPill({
 }) {
   const pillVars = {
     "--career-pill-bg": active ? `${color}12` : "transparent",
-    "--career-pill-dot": active ? color : "#D1D5DB",
+    "--career-pill-dot": color,
     "--career-pill-label": active ? "#111827" : "#9CA3AF",
-    "--career-pill-count": active ? color : "#D1D5DB",
+    "--career-pill-count": active ? color : "#9CA3AF",
   } as React.CSSProperties;
 
   return (
-    <button onClick={onToggle} style={pillVars} className="mcg-career-pill">
-      <span className="mcg-career-pill-dot" />
-      <span className="mcg-career-pill-label">{label}</span>
-      <span className="mcg-career-pill-count">{count}</span>
+    <button
+      onClick={onToggle}
+      style={pillVars}
+      className="career-timeline-legend-filter"
+    >
+      <span className="career-timeline-legend-dot" />
+      <span className="career-timeline-legend-label">{label}</span>
+      <span className="career-timeline-legend-count">{count}</span>
     </button>
   );
 }
@@ -212,6 +221,8 @@ function TimelineSVG({
   dotRadius,
   featuredDotRadiusOffset,
   activeDotRadiusOffset,
+  laneStroke,
+  laneStrokeWidth,
 }: {
   svgWidth: number;
   active: Set<Category>;
@@ -220,6 +231,8 @@ function TimelineSVG({
   dotRadius: number;
   featuredDotRadiusOffset: number;
   activeDotRadiusOffset: number;
+  laneStroke: string;
+  laneStrokeWidth: number;
 }) {
   const [hoverKey, setHoverKey] = useState<string | null>(null);
   const [hoverTip, setHoverTip] = useState<TipInfo | null>(null);
@@ -354,18 +367,19 @@ function TimelineSVG({
   );
 
   const yearTicks: number[] = [];
-  for (let year = 1923; year <= 1970; year += 5) yearTicks.push(year);
+  for (let year = yearStart; year <= yearEnd; year += 5) yearTicks.push(year);
+  if (yearTicks[yearTicks.length - 1] !== yearEnd) yearTicks.push(yearEnd);
 
   return (
-    <div className="mcg-career-svg-wrap">
+    <div className="career-timeline-chart-wrap">
       <svg
         ref={svgRef}
         width={svgWidth}
         height={svgHeight}
-        className="mcg-career-svg"
+        className="career-timeline-chart-svg"
       >
         <rect
-          className="mcg-career-plot-frame"
+          className="career-timeline-plot-frame"
           x={marginLeft}
           y={35}
           width={svgWidth - marginLeft - marginRight}
@@ -376,7 +390,7 @@ function TimelineSVG({
         {yearTicks.map((year) => (
           <line
             key={`grid-${year}`}
-            className="mcg-career-year-grid-line"
+            className="career-timeline-year-grid-line"
             // stroke-opacity="0.9"
             x1={xOf(year, svgWidth)}
             x2={xOf(year, svgWidth)}
@@ -387,7 +401,7 @@ function TimelineSVG({
 
         {focusLineX !== null ? (
           <line
-            className="mcg-career-focus-line"
+            className="career-timeline-focus-line"
             x1={focusLineX}
             x2={focusLineX}
             y1={35}
@@ -404,7 +418,7 @@ function TimelineSVG({
               y1={laneY[category]}
               y2={laneY[category]}
               stroke={laneStroke}
-              strokeWidth={0.8}
+              strokeWidth={laneStrokeWidth}
             />
           ) : null,
         )}
@@ -454,7 +468,7 @@ function TimelineSVG({
           return (
             <g key={`lbl-${dot.event.id}`}>
               <text
-                className="mcg-career-featured-text"
+                className="career-timeline-featured-label"
                 x={dot.cx}
                 y={firstBaseline}
                 textAnchor="middle"
@@ -476,7 +490,7 @@ function TimelineSVG({
         {yearTicks.map((year) => (
           <g key={year}>
             <text
-              className="mcg-career-year-tick-text"
+              className="career-timeline-year-label"
               x={xOf(year, svgWidth)}
               y={yearAxisY + 16}
               textAnchor="middle"
@@ -494,7 +508,7 @@ function TimelineSVG({
         ))}
       </svg>
 
-      <div className="mcg-career-dot-layer">
+      <div className="career-timeline-dot-layer">
         {clusters.map((cluster) => {
           const spread =
             cluster.dots.length > 1
@@ -506,19 +520,22 @@ function TimelineSVG({
           const clusterLeft = cluster.cx - clusterWidth / 2;
           const clusterTop = cluster.cy - clusterHeight / 2;
           const pinnedDot = cluster.dots.find((dot) => pinTip?.key === dot.key);
+          const selectedDot = cluster.dots.find(
+            (dot) => selected?.id === dot.event.id,
+          );
           const isExpanded =
-            hoverClusterKey === cluster.key || !!pinnedDot;
+            hoverClusterKey === cluster.key || !!pinnedDot || !!selectedDot;
 
           return (
             <div
               key={cluster.key}
-              className={`mcg-career-cluster ${isExpanded ? "is-expanded" : ""}`}
+              className={`career-timeline-dot-cluster ${isExpanded ? "is-expanded" : ""}`}
               style={{
                 left: clusterLeft,
                 top: clusterTop,
                 width: clusterWidth,
                 height: clusterHeight,
-                zIndex: isExpanded ? 3 : 1,
+                zIndex: isExpanded ? 3 : selectedDot ? 2 : 1,
               }}
               onMouseEnter={() => onClusterEnter(cluster.key)}
               onMouseLeave={() => onClusterLeave(cluster)}
@@ -548,7 +565,7 @@ function TimelineSVG({
                   <button
                     key={dot.key}
                     type="button"
-                    className="mcg-career-dot"
+                    className="career-timeline-event-dot"
                     aria-label={dot.event.event}
                     style={{
                       left: clusterWidth / 2 - radius,
@@ -603,7 +620,7 @@ function TimelineSVG({
 
       {displayTip && (
         <div
-          className="mcg-career-tooltip-wrap"
+          className="career-timeline-tooltip-wrap"
           style={{
             left: Math.min(displayTip.x + 16, svgWidth - 260),
             top: Math.max(displayTip.y - 60, 4),
@@ -611,23 +628,23 @@ function TimelineSVG({
           }}
         >
           <div
-            className="mcg-career-tooltip"
+            className="career-timeline-tooltip"
             style={{
               border: `1.5px solid ${categoryColors[displayTip.cat]}`,
             }}
           >
             <div
-              className="mcg-career-tooltip-date"
+              className="career-timeline-tooltip-date"
               style={{ color: categoryColors[displayTip.cat] }}
             >
               {displayTip.event.dateText}
             </div>
-            <div className="mcg-career-tooltip-text">
+            <div className="career-timeline-tooltip-text">
               {displayTip.event.event.length > 90
                 ? `${displayTip.event.event.slice(0, 90)}…`
                 : displayTip.event.event}
             </div>
-            <div className="mcg-career-tooltip-tags">
+            <div className="career-timeline-tooltip-tags">
               {displayTip.event.categories.map((category) => (
                 <span
                   key={category}
@@ -635,7 +652,7 @@ function TimelineSVG({
                     backgroundColor: `${categoryColors[category]}18`,
                     color: categoryColors[category],
                   }}
-                  className="mcg-career-tooltip-tag"
+                  className="career-timeline-tooltip-tag"
                 >
                   {timelineData.categoryLabels[category]}
                 </span>
@@ -647,7 +664,7 @@ function TimelineSVG({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(event) => event.stopPropagation()}
-                className="mcg-career-tooltip-link"
+                className="career-timeline-tooltip-link"
                 style={{
                   color: categoryColors[displayTip.cat],
                 }}
@@ -664,7 +681,7 @@ function TimelineSVG({
             )}
             {isPinned && (
               <div
-                className="mcg-career-tooltip-pin-hint"
+                className="career-timeline-tooltip-pin-hint"
                 style={{
                   marginTop: displayTip.event.url ? 5 : 8,
                 }}
@@ -694,6 +711,10 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
   const [activeDotRadiusOffset, setActiveDotRadiusOffset] = useState(
     fallbackActiveDotRadiusOffset,
   );
+  const [laneStroke, setLaneStroke] = useState(fallbackLaneStroke);
+  const [laneStrokeWidth, setLaneStrokeWidth] = useState(
+    fallbackLaneStrokeWidth,
+  );
   const [activeCategories, setActiveCategories] = useState<Set<Category>>(
     new Set(allCategories),
   );
@@ -719,6 +740,12 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
           "--career-dot-active-radius-offset",
         ),
       );
+      const cssLaneStroke = getComputedStyle(element)
+        .getPropertyValue("--career-lane-stroke")
+        .trim();
+      const cssLaneStrokeWidth = Number.parseFloat(
+        getComputedStyle(element).getPropertyValue("--career-lane-stroke-width"),
+      );
       setDotRadius(Number.isFinite(cssRadius) ? cssRadius : fallbackDotRadius);
       setFeaturedDotRadiusOffset(
         Number.isFinite(cssFeaturedRadiusOffset)
@@ -729,6 +756,12 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
         Number.isFinite(cssActiveRadiusOffset)
           ? cssActiveRadiusOffset
           : fallbackActiveDotRadiusOffset,
+      );
+      setLaneStroke(cssLaneStroke || fallbackLaneStroke);
+      setLaneStrokeWidth(
+        Number.isFinite(cssLaneStrokeWidth)
+          ? cssLaneStrokeWidth
+          : fallbackLaneStrokeWidth,
       );
     };
     updateMetrics();
@@ -778,7 +811,7 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
 
   return (
     <section
-      className={`mcg-section mcg-career-section ${className || ""}`}
+      className={`mcg-section career-timeline-section ${className || ""}`}
       style={{
         width: isMobile ? "100%" : "100vw",
         minWidth: isMobile ? 0 : "100vw",
@@ -791,14 +824,14 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
         ...style,
       }}
     >
-      <div className="mcg-career-root">
-        <div className="mcg-career-topbar">
-          <h2 className="mcg-career-title mcg-page-title mcg-page-title--flow">
+      <div className="career-timeline-layout">
+        <div className="career-timeline-header">
+          <h2 className="career-timeline-title mcg-page-title mcg-page-title--flow">
             Louis Armstrong Career Timeline
           </h2>
         </div>
 
-        <div className="mcg-career-topbar-right">
+        <div className="career-timeline-legend-panel">
           {allCategories.map((category) => (
             <CategoryPill
               key={category}
@@ -811,15 +844,15 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
           ))}
           <button
             onClick={() => setActiveCategories(new Set(allCategories))}
-            className="mcg-career-all-btn"
+            className="career-timeline-all-button"
           >
             All
           </button>
         </div>
 
-        <div className="mcg-career-timeline-card">
-          <div ref={containerRef} className="mcg-career-scroll">
-            <div className="mcg-career-scroll-inner">
+        <div className="career-timeline-chart-card">
+          <div ref={containerRef} className="career-timeline-scroll-area">
+            <div className="career-timeline-scroll-inner">
               <TimelineSVG
                 svgWidth={Math.max(svgWidth, 1000)}
                 active={activeCategories}
@@ -828,6 +861,8 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
                 dotRadius={dotRadius}
                 featuredDotRadiusOffset={featuredDotRadiusOffset}
                 activeDotRadiusOffset={activeDotRadiusOffset}
+                laneStroke={laneStroke}
+                laneStrokeWidth={laneStrokeWidth}
               />
             </div>
           </div>

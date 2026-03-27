@@ -6510,17 +6510,6 @@ function Map1({ hideTitle = false }: { hideTitle?: boolean }) {
       <CuCuba />
       <MxMexico />
       <EsSpain />
-      <div
-        className="-translate-x-1/2 absolute left-[calc(50%-476.65px)] pointer-events-none size-[271px] top-[504px]"
-        data-name="the-real-ambassadors-5-bonus 1"
-      >
-        <img
-          alt=""
-          className="absolute inset-0 max-w-none object-cover size-full"
-          src="/images/album.png"
-        />
-        <div aria-hidden="true" className="absolute border border-[#e0e0e0] border-solid inset-0" />
-      </div>
     </div>
   );
 }
@@ -6567,14 +6556,20 @@ function Filters() {
   );
 }
 
-export default function SectionGoodwill({ hideTitle = false }: { hideTitle?: boolean }) {
+export default function SectionGoodwill({
+  hideTitle = false,
+  hideFilters = false,
+}: {
+  hideTitle?: boolean;
+  hideFilters?: boolean;
+}) {
   return (
     <div className="relative size-full" data-name="SectionGoodwill">
       <Map hideTitle={hideTitle} />
       <div className="absolute bg-[#f5f3ea] h-[800px] left-0 top-0 w-[1280px]" />
       <Map1 hideTitle={hideTitle} />
       <Group14 />
-      <Filters />
+      {!hideFilters ? <Filters /> : null}
     </div>
   );
 }

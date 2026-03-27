@@ -10,7 +10,6 @@ import { SectionFBIFiles } from "./SectionFBIFiles";
 import { SectionAfricaTour } from "./SectionAfricaTour";
 import { SectionRealAmbassadors } from "./SectionRealAmbassadors";
 import { SectionWorldFair } from "./SectionWorldFair";
-import { SectionWonderfulWorld } from "./SectionWonderfulWorld";
 import { TimelineBar } from "./TimelineBar";
 import { mobileTimelineHeight, timelineHeight } from "./TimelineShared";
 import { SectionGoodwillAmbassador } from "./bubble-chart/components/SectionGoodwillAmbassador.tsx";
@@ -148,7 +147,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
             min-width: 0;
             width: 100vw;
             height: auto;
-            position: static;
+            position: relative;
             overflow: visible;
             flex-shrink: unset;
             scroll-snap-align: none;
@@ -224,7 +223,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
           /* Jazz ambassadors */
           .mcg-jazz-section {
             position: relative !important;
-            min-height: 800px !important;
+            // min-height: 800px !important;
             overflow: hidden !important;
           }
           .mcg-jazz-section .mcg-map-wrap {
@@ -347,17 +346,14 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
         <SectionIntroHero onScrollNext={scrollToNext} />
         <SectionCareerTimeline textBaseStyle={textBaseStyle} />
         <SectionRealAmbassadors textBaseStyle={textBaseStyle} />
-
         <SectionTheBeginning textBaseStyle={textBaseStyle} />
         <SectionJourneyToAmbassador textBaseStyle={textBaseStyle} />
-        {/* <SectionGoodwill textBaseStyle={textBaseStyle} /> */}
         <SectionGoodwillAmbassador textBaseStyle={textBaseStyle} />
         <SectionJazzAmbassadors textBaseStyle={textBaseStyle} />
         <SectionFBIFiles textBaseStyle={textBaseStyle} />
         <SectionAfricaTour textBaseStyle={textBaseStyle} />
         <SectionRealAmbassadors textBaseStyle={textBaseStyle} />
         <SectionWorldFair textBaseStyle={textBaseStyle} />
-        {/* <SectionWonderfulWorld textBaseStyle={textBaseStyle} /> */}
         <SatchmoLegacy />
       </div>
 

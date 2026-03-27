@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import SectionGoodwill from "../../../../imports/SectionGoodwill";
-import OverlayAmbassadorSatch from "../../../../imports/OverlayAmbassadorSatch";
 import { X } from "lucide-react";
 import countriesData from "../../../../../data/goodwillCountries.json";
 
@@ -18,7 +17,6 @@ interface CountryData {
   cx: number;
   cy: number;
   r: number;
-  // -1 means no number label in original design (very small bubbles)
   numLeft: number;
   numTop: number;
   numFontSize: number;
@@ -27,20 +25,6 @@ interface CountryData {
   } & Partial<Record<Exclude<Decade, "all">, number>>;
   events: CountryEvent[];
 }
-
-const COUNTRIES: CountryData[] = countriesData as CountryData[];
-
-const DECADES: Decade[] = [
-  "1920s",
-  "1930s",
-  "1940s",
-  "1950s",
-  "1960s",
-  "1970s",
-];
-const CANVAS_WIDTH = 1280;
-const CANVAS_HEIGHT = 800;
-const BOTTOM_EMPTY_SPACE = 150;
 
 interface BubblePosition {
   cx: number;
@@ -56,9 +40,24 @@ interface BubbleNode {
   vy: number;
 }
 
+const COUNTRIES: CountryData[] = countriesData as CountryData[];
+
+const DECADES: Decade[] = [
+  "1920s",
+  "1930s",
+  "1940s",
+  "1950s",
+  "1960s",
+  "1970s",
+];
+
+const CANVAS_WIDTH = 1280;
+const CANVAS_HEIGHT = 800;
+const BOTTOM_EMPTY_SPACE = 150;
+const MOBILE_BREAKPOINT = 768;
+
 const MAP_GROUP_LEFT = 110;
 const MAP_GROUP_TOP = 136;
-const FLAG_SCALE = 0.92;
 
 const COUNTRY_TO_FLAG_DATA_NAME: Record<string, string> = {
   usa: "us united-states",
@@ -155,6 +154,8 @@ const COUNT_COUNTRY_ORDER: string[] = [
   "uk",
 ];
 
+const UI_FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+
 export function SectionGoodwillAmbassador({
   textBaseStyle,
 }: {
@@ -164,16 +165,28 @@ export function SectionGoodwillAmbassador({
   const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(
     null,
   );
-  const [showAlbumOverlay, setShowAlbumOverlay] = useState(false);
+
   const sectionRootRef = useRef<HTMLDivElement>(null);
+  const stageOuterRef = useRef<HTMLDivElement>(null);
+
+  const [isMobile, setIsMobile] = useState(false);
+  const [stageScale, setStageScale] = useState(1);
+
   const [bubblePositions, setBubblePositions] = useState<
     Record<string, BubblePosition>
-  >(() => {
-    return COUNTRIES.reduce<Record<string, BubblePosition>>((acc, country) => {
+  >(() =>
+    COUNTRIES.reduce<Record<string, BubblePosition>>((acc, country) => {
       acc[country.id] = { cx: country.cx, cy: country.cy };
       return acc;
+    }, {}),
+  );
+
+  const countriesById = useMemo(() => {
+    return COUNTRIES.reduce<Record<string, CountryData>>((acc, country) => {
+      acc[country.id] = country;
+      return acc;
     }, {});
-  });
+  }, []);
 
   const getDecadeCount = (
     country: CountryData,
@@ -182,14 +195,64 @@ export function SectionGoodwillAmbassador({
     return country.counts[decade] ?? 0;
   };
 
+  const getCount = (country: CountryData): number => {
+    if (selectedDecade === "all") return country.counts.all;
+    return getDecadeCount(country, selectedDecade);
+  };
+
+  const mobileBubbleOffsetX = useMemo(() => {
+    const bubbleBounds = COUNTRIES.reduce(
+      (acc, country) => {
+        const pos = bubblePositions[country.id];
+        if (!pos) return acc;
+        acc.minX = Math.min(acc.minX, pos.cx - country.r);
+        acc.maxX = Math.max(acc.maxX, pos.cx + country.r);
+        return acc;
+      },
+      { minX: Number.POSITIVE_INFINITY, maxX: Number.NEGATIVE_INFINITY },
+    );
+
+    if (
+      !Number.isFinite(bubbleBounds.minX) ||
+      !Number.isFinite(bubbleBounds.maxX)
+    ) {
+      return 0;
+    }
+
+    const bubbleCenterX = (bubbleBounds.minX + bubbleBounds.maxX) / 2;
+    return CANVAS_WIDTH / 2 - bubbleCenterX;
+  }, [bubblePositions]);
+
+  useEffect(() => {
+    const updateScale = () => {
+      const width = stageOuterRef.current?.clientWidth ?? window.innerWidth;
+      const baseScale = Math.min(width / CANVAS_WIDTH, 1);
+      const nextScale = baseScale;
+
+      setStageScale(nextScale);
+      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+    };
+
+    updateScale();
+
+    const resizeObserver = new ResizeObserver(updateScale);
+    if (stageOuterRef.current) resizeObserver.observe(stageOuterRef.current);
+    window.addEventListener("resize", updateScale);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateScale);
+    };
+  }, []);
+
   useEffect(() => {
     const edgePadding = 2;
     const minX = edgePadding;
     const minY = 145;
     const maxX = CANVAS_WIDTH - edgePadding;
     const maxY = CANVAS_HEIGHT - BOTTOM_EMPTY_SPACE - edgePadding;
-    const gap = 1.5;
-    const ticks = 140;
+    const gap = 4;
+    const ticks = 240;
     const centerX = CANVAS_WIDTH * 0.52;
     const centerY = minY + (maxY - minY) * 0.5;
 
@@ -208,7 +271,6 @@ export function SectionGoodwillAmbassador({
     const step = () => {
       currentTick += 1;
 
-      // Pull nodes inward to produce the clustered force-layout look.
       nodes.forEach((node) => {
         node.vx += (centerX - node.x) * 0.0024;
         node.vy += (centerY - node.y) * 0.0024;
@@ -284,13 +346,6 @@ export function SectionGoodwillAmbassador({
     };
   }, []);
 
-  const countriesById = useMemo(() => {
-    return COUNTRIES.reduce<Record<string, CountryData>>((acc, country) => {
-      acc[country.id] = country;
-      return acc;
-    }, {});
-  }, []);
-
   useEffect(() => {
     const root = sectionRootRef.current;
     if (!root) return;
@@ -308,8 +363,8 @@ export function SectionGoodwillAmbassador({
           `[data-name="${flagDataName}"]`,
         );
         if (flagEl) {
-          flagEl.style.transform = `translate(${dx}px, ${dy}px) scale(${FLAG_SCALE})`;
-          flagEl.style.transformOrigin = "center center";
+          flagEl.style.transform = `translate(${dx}px, ${dy}px)`;
+          flagEl.style.transformOrigin = "top left";
         }
       }
 
@@ -328,6 +383,7 @@ export function SectionGoodwillAmbassador({
     const countNodes = root.querySelectorAll<HTMLElement>(
       '[data-name="BubbleCounts"] p',
     );
+
     COUNT_COUNTRY_ORDER.forEach((countryId, index) => {
       const node = countNodes[index];
       const country = countriesById[countryId];
@@ -347,347 +403,548 @@ export function SectionGoodwillAmbassador({
     });
   }, [bubblePositions, countriesById, selectedDecade]);
 
-  const getCount = (country: CountryData): number => {
-    if (selectedDecade === "all") return country.counts.all;
-    return getDecadeCount(country, selectedDecade);
-  };
-
   const handleBubbleClick = (country: CountryData) => {
-    if (selectedCountry?.id === country.id) {
-      setSelectedCountry(null);
-    } else {
-      setSelectedCountry(country);
-    }
+    setSelectedCountry((prev) => (prev?.id === country.id ? null : country));
   };
 
   const handleDecadeClick = (decade: Decade) => {
     setSelectedDecade((prev) => (prev === decade ? "all" : decade));
   };
 
+  const stageHeight = CANVAS_HEIGHT * stageScale;
+  const stageWidth = CANVAS_WIDTH * stageScale;
+
+  // Shift the imported artwork left to counter its built-in whitespace.
+  // On mobile, add the live bubble-field centering adjustment on top.
+  const chartOffsetX = isMobile ? -110 + mobileBubbleOffsetX : -110;
+  const chartOffsetY = -96;
+
   return (
     <section
       className="mcg-section mcg-jazz-section"
       style={{
         backgroundColor: "#F5F3EA",
+        position: "relative",
       }}
     >
-      <h2 className="mcg-page-title">Goodwill (Unoffical) Ambassador</h2>
-      <div
-      // style={{
-      //   position: 'relative',
-      //   width: 1280,
-      //   height: 800,
-      //   overflow: 'hidden',
-      //   flexShrink: 0,
-      // }}
-      >
-        {/* Base Figma visualization */}
-        <div ref={sectionRootRef} style={{ position: "absolute", inset: 0 }}>
-          <SectionGoodwill hideTitle />
-        </div>
+      <style>{`
+.goodwill-section-header {
+  position: relative;
+  z-index: 25;
+  max-width: 1280px;
+  margin: 0 auto 4px;
+  padding: 64px 56px 0;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
 
-        {/* Interactive overlay layer */}
-        <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-          {/* Interactive decade filter buttons – covers static ones from SectionGoodwill */}
-          <div
-            style={{
-              position: "absolute",
-              left: 956,
-              top: 62,
-              display: "flex",
-              gap: 10,
-              background: "#f5f3ea",
-              padding: "7px 8px 8px 7px",
-              pointerEvents: "auto",
-            }}
-          >
+        .goodwill-title {
+          margin: 0;
+          flex: 1;
+        }
+
+        .goodwill-stage-shell {
+          position: relative;
+          width: 100%;
+          max-width: ${CANVAS_WIDTH}px;
+          min-width: 0;
+          margin: 0 auto;
+          overflow: visible;
+        }
+
+        .goodwill-stage-frame {
+          position: relative;
+          margin: 0 auto;
+          overflow: visible;
+        }
+
+        .goodwill-stage {
+          position: relative;
+          width: ${CANVAS_WIDTH}px;
+          height: ${CANVAS_HEIGHT}px;
+          transform-origin: top left;
+          overflow: hidden;
+          background: #f5f3ea;
+        }
+
+        .goodwill-filters {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          height: 100%;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          flex-shrink: 0;
+        }
+
+        .goodwill-filter-button {
+          font-family: ${UI_FONT};
+          font-weight: 700;
+          font-size: 14px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          white-space: nowrap;
+        }
+
+        .goodwill-mobile-filter {
+          display: none;
+          font-family: ${UI_FONT};
+          font-weight: 700;
+          font-size: 14px;
+          color: #000000;
+          background: #f5f3ea;
+          border: 1px solid #c8c2b3;
+          border-radius: 6px;
+          padding: 9px 12px;
+        }
+
+        .goodwill-desktop-panel {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 340px;
+          height: 800px;
+          background: #111111;
+          transform: translateX(100%);
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 320;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .goodwill-desktop-panel.is-open {
+          transform: translateX(0);
+        }
+
+        .goodwill-mobile-panel,
+        .goodwill-mobile-backdrop {
+          display: none;
+        }
+
+        .goodwill-panel-inner {
+          padding: 0;
+          color: white;
+          min-height: 100%;
+          box-sizing: border-box;
+        }
+
+        .goodwill-panel-header {
+          position: sticky;
+          top: 0;
+          z-index: 5;
+          background: #111111;
+          border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .goodwill-panel-header-inner {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          padding: 40px 32px 16px;
+        }
+
+        .goodwill-panel-body {
+          padding: 24px 32px 40px;
+        }
+
+        .goodwill-panel-close {
+          background: none;
+          border: 1px solid rgba(255,255,255,0.6);
+          color: white;
+          cursor: pointer;
+          padding: 5px 7px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+
+        .goodwill-chip {
+          font-family: ${UI_FONT};
+          font-size: 12px;
+          padding: 3px 8px;
+          border-radius: 2px;
+        }
+
+        @media (max-width: ${MOBILE_BREAKPOINT}px) {
+          .goodwill-section-header {
+            padding: 24px 12px 0;
+            margin-bottom: 0;
+            display: block;
+          }
+
+          .goodwill-title {
+            margin-bottom: 14px;
+          }
+
+          .goodwill-filters {
+            display: none;
+            
+          }
+
+          .goodwill-mobile-filter {
+            display: block;
+            width: 100%;
+            max-width: 320px;
+          }
+
+          .goodwill-desktop-panel {
+            display: none;
+          }
+
+          .goodwill-mobile-backdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.42);
+            z-index: 9998;
+          }
+
+          .goodwill-mobile-panel {
+            display: block;
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: #111111;
+            z-index: 9999;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          .goodwill-panel-header-inner {
+            padding: 24px 20px 16px;
+          }
+
+          .goodwill-panel-body {
+            padding: 24px 20px 28px;
+          }
+
+          .goodwill-chip {
+            font-size: 11px;
+          }
+
+          .goodwill-stage {
+            overflow: visible;
+          }
+        }
+      `}</style>
+
+      <div className="goodwill-section-header">
+        <h2 className="mcg-page-title mcg-page-title--flow goodwill-title">
+          Goodwill Ambassador
+        </h2>
+        {!isMobile ? (
+          <div className="goodwill-filters">
+            <button
+              onClick={() => setSelectedDecade("all")}
+              className="goodwill-filter-button"
+              style={{
+                color: selectedDecade === "all" ? "#000000" : "#aaaaaa",
+              }}
+            >
+              All
+            </button>
             {DECADES.map((decade) => (
               <button
                 key={decade}
                 onClick={() => handleDecadeClick(decade)}
+                className="goodwill-filter-button"
                 style={{
-                  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                  fontWeight: "bold",
-                  fontSize: 14,
                   color: selectedDecade === decade ? "#000000" : "#aaaaaa",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 0,
-                  whiteSpace: "nowrap",
                 }}
               >
                 {decade}
               </button>
             ))}
           </div>
+        ) : (
+          <select
+            aria-label="Filter events by decade"
+            className="goodwill-mobile-filter"
+            value={selectedDecade}
+            onChange={(event) =>
+              setSelectedDecade(event.target.value as Decade)
+            }
+          >
+            <option value="all">All</option>
+            {DECADES.map((decade) => (
+              <option key={decade} value={decade}>
+                {decade}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
 
-          {/* Clickable circular overlays on each flag bubble */}
-          {COUNTRIES.map((country) => (
-            <button
-              key={country.id}
-              onClick={() => handleBubbleClick(country)}
-              title={country.name}
+      <div
+        ref={stageOuterRef}
+        className="goodwill-stage-shell"
+        style={{ height: stageHeight }}
+      >
+        <div
+          className="goodwill-stage-frame"
+          style={{ width: stageWidth, height: stageHeight }}
+        >
+          <div
+            className="goodwill-stage"
+            style={{ transform: `scale(${stageScale})` }}
+          >
+            <div
               style={{
                 position: "absolute",
-                left: bubblePositions[country.id].cx - country.r,
-                top: bubblePositions[country.id].cy - country.r,
-                width: country.r * 2,
-                height: country.r * 2,
-                borderRadius: "50%",
-                background:
-                  selectedCountry?.id === country.id
-                    ? "rgba(0,0,0,0.07)"
-                    : "transparent",
-                border:
-                  selectedCountry?.id === country.id
-                    ? "2px solid rgba(0,0,0,0.15)"
-                    : "none",
-                cursor: "pointer",
-                pointerEvents: "auto",
-                transition: "background 0.15s ease",
+                inset: 0,
+                transform: `translate(${chartOffsetX}px, ${chartOffsetY}px)`,
               }}
-              onMouseEnter={(e) => {
-                if (selectedCountry?.id !== country.id) {
-                  (e.currentTarget as HTMLButtonElement).style.background =
-                    "rgba(0,0,0,0.04)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (selectedCountry?.id !== country.id) {
-                  (e.currentTarget as HTMLButtonElement).style.background =
-                    "transparent";
-                }
-              }}
-            />
-          ))}
-
-          {/* Clickable album cover – the album image has pointer-events-none in the original */}
-          <button
-            onClick={() => setShowAlbumOverlay(true)}
-            title="Ambassador Satch"
-            style={{
-              position: "absolute",
-              // The album image: left=calc(50%-476.65px) with -translate-x-1/2
-              // 50% of 1280 = 640, minus 476.65 = 163.35, then translateX(-50% of 271) = -135.5 → ~28px
-              left: 28,
-              top: 504,
-              width: 271,
-              height: 271,
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              pointerEvents: "auto",
-            }}
-          />
-        </div>
-
-        {/* Album overlay */}
-        {showAlbumOverlay && (
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              zIndex: 50,
-            }}
-          >
-            {/* OverlayAmbassadorSatch fills the full 1280×800 canvas */}
-            <div
-              style={{ position: "relative", width: "100%", height: "100%" }}
             >
-              <OverlayAmbassadorSatch />
-              {/* Transparent close button positioned over the X icon in the Figma component */}
-              {/* Close inset: top=7.38%×800=59px, right=5.65%×1280=72px → left=1178px, size≈30×30px */}
-              <button
-                onClick={() => setShowAlbumOverlay(false)}
+              <div
+                ref={sectionRootRef}
+                style={{ position: "absolute", inset: 0 }}
+              >
+                <SectionGoodwill hideTitle hideFilters />
+              </div>
+
+              <div
                 style={{
                   position: "absolute",
-                  left: 1178,
-                  top: 59,
-                  width: 30,
-                  height: 30,
-                  background: "transparent",
-                  border: "none",
-                  cursor: "pointer",
+                  inset: 0,
+                  pointerEvents: "none",
                 }}
-                aria-label="Close album overlay"
               >
-                <img
-                  src="/images/close.svg"
-                  alt="Close"
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    opacity: 0.7,
-                  }}
-                />
-              </button>
+                {COUNTRIES.map((country) => {
+                  const pos = bubblePositions[country.id];
+                  const tapSize = isMobile
+                    ? Math.max(country.r * 3, 52)
+                    : country.r * 2;
+                  const offset = (tapSize - country.r * 2) / 2;
+
+                  return (
+                    <button
+                      key={country.id}
+                      onClick={() => handleBubbleClick(country)}
+                      title={country.name}
+                      style={{
+                        position: "absolute",
+                        left: pos.cx - country.r - offset,
+                        top: pos.cy - country.r - offset,
+                        width: tapSize,
+                        height: tapSize,
+                        borderRadius: "50%",
+                        background:
+                          selectedCountry?.id === country.id
+                            ? "rgba(0,0,0,0.07)"
+                            : "transparent",
+                        border:
+                          selectedCountry?.id === country.id
+                            ? "2px solid rgba(0,0,0,0.15)"
+                            : "none",
+                        cursor: "pointer",
+                        pointerEvents: "auto",
+                        transition: "background 0.15s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isMobile && selectedCountry?.id !== country.id) {
+                          e.currentTarget.style.background = "rgba(0,0,0,0.04)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isMobile && selectedCountry?.id !== country.id) {
+                          e.currentTarget.style.background = "transparent";
+                        }
+                      }}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
-        )}
-
-        {/* Right-side country detail panel */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            width: 340,
-            height: "100%",
-            background: "#111111",
-            transform: selectedCountry ? "translateX(0)" : "translateX(100%)",
-            transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-            zIndex: 30,
-            overflowY: "auto",
-          }}
-        >
-          {selectedCountry && (
-            <div style={{ padding: "40px 32px 40px 32px", color: "white" }}>
-              {/* Header row */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  marginBottom: 28,
-                }}
-              >
-                <h2
-                  style={{
-                    fontFamily:
-                      "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                    fontSize: 26,
-                    fontWeight: "bold",
-                    color: "white",
-                    margin: 0,
-                    lineHeight: 1.2,
-                    paddingRight: 16,
-                    flex: 1,
-                  }}
-                >
-                  {selectedCountry.name}
-                </h2>
-                <button
-                  onClick={() => setSelectedCountry(null)}
-                  style={{
-                    background: "none",
-                    border: "1px solid rgba(255,255,255,0.6)",
-                    color: "white",
-                    cursor: "pointer",
-                    padding: "5px 7px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                    marginTop: 2,
-                  }}
-                >
-                  <X size={13} />
-                </button>
-              </div>
-
-              {/* Visit count summary */}
-              <div
-                style={{
-                  marginBottom: 28,
-                  paddingBottom: 20,
-                  borderBottom: "1px solid rgba(255,255,255,0.12)",
-                  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.55)",
-                  lineHeight: 1.5,
-                }}
-              >
-                {selectedDecade === "all"
-                  ? `${selectedCountry.counts.all} total visits across all decades`
-                  : `${getCount(selectedCountry)} visits in ${selectedDecade} · ${selectedCountry.counts.all} total`}
-              </div>
-
-              {/* Decade breakdown */}
-              <div style={{ marginBottom: 32 }}>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                  {DECADES.map((d) => (
-                    <div
-                      key={d}
-                      style={{
-                        fontFamily:
-                          "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                        fontSize: 12,
-                        color:
-                          selectedDecade === d
-                            ? "white"
-                            : "rgba(255,255,255,0.4)",
-                        background:
-                          selectedDecade === d
-                            ? "rgba(255,255,255,0.12)"
-                            : "rgba(255,255,255,0.05)",
-                        padding: "3px 8px",
-                        borderRadius: 2,
-                      }}
-                    >
-                      {d}: {selectedCountry.counts[d] ?? 0}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Historical events */}
-              {selectedCountry.events.map((event, i) => (
-                <div
-                  key={i}
-                  style={{
-                    marginBottom:
-                      i < selectedCountry.events.length - 1 ? 32 : 0,
-                  }}
-                >
-                  <h3
-                    style={{
-                      fontFamily:
-                        "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                      fontSize: 18,
-                      fontWeight: "bold",
-                      color: "white",
-                      marginBottom: 10,
-                      marginTop: 0,
-                    }}
-                  >
-                    {event.year}
-                  </h3>
-                  <h2
-                    style={{
-                      fontFamily:
-                        "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                      fontSize: 14,
-                      color: "rgba(255,255,255,0.85)",
-                      lineHeight: 1.65,
-                      marginBottom: event.usContext ? 12 : 0,
-                      marginTop: 0,
-                    }}
-                  >
-                    {event.international}
-                  </h2>
-                  {event.usContext && (
-                    <p
-                      style={{
-                        fontFamily:
-                          "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                        fontSize: 14,
-                        color: "rgba(255,255,255,0.85)",
-                        lineHeight: 1.65,
-                        marginTop: 0,
-                        marginBottom: 0,
-                      }}
-                    >
-                      <strong style={{ color: "white" }}>In the U.S.:</strong>{" "}
-                      {event.usContext}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
+
+      {!isMobile && (
+        <div
+          className={`goodwill-desktop-panel${
+            selectedCountry ? " is-open" : ""
+          }`}
+        >
+          {selectedCountry && (
+            <CountryPanelContent
+              country={selectedCountry}
+              selectedDecade={selectedDecade}
+              decades={DECADES}
+              getCount={getCount}
+              onClose={() => setSelectedCountry(null)}
+              textBaseStyle={textBaseStyle}
+              isMobile={false}
+            />
+          )}
+        </div>
+      )}
+
+      {isMobile && selectedCountry && (
+        <>
+          <button
+            className="goodwill-mobile-backdrop"
+            aria-label="Close country detail panel"
+            onClick={() => setSelectedCountry(null)}
+          />
+          <div className="goodwill-mobile-panel">
+            <CountryPanelContent
+              country={selectedCountry}
+              selectedDecade={selectedDecade}
+              decades={DECADES}
+              getCount={getCount}
+              onClose={() => setSelectedCountry(null)}
+              textBaseStyle={textBaseStyle}
+              isMobile
+            />
+          </div>
+        </>
+      )}
     </section>
+  );
+}
+
+function CountryPanelContent({
+  country,
+  selectedDecade,
+  decades,
+  getCount,
+  onClose,
+  textBaseStyle,
+  isMobile,
+}: {
+  country: CountryData;
+  selectedDecade: Decade;
+  decades: Decade[];
+  getCount: (country: CountryData) => number;
+  onClose: () => void;
+  textBaseStyle: React.CSSProperties;
+  isMobile: boolean;
+}) {
+  return (
+    <div className="goodwill-panel-inner">
+      <div className="goodwill-panel-header">
+        <div className="goodwill-panel-header-inner">
+          <h2
+            style={{
+              fontFamily: UI_FONT,
+              fontSize: isMobile ? 24 : 26,
+              fontWeight: 700,
+              color: "white",
+              margin: 0,
+              lineHeight: 1.2,
+              paddingRight: 16,
+              flex: 1,
+            }}
+          >
+            {country.name}
+          </h2>
+
+          <button
+            onClick={onClose}
+            className="goodwill-panel-close"
+            aria-label="Close country panel"
+          >
+            <X size={13} />
+          </button>
+        </div>
+      </div>
+
+      <div className="goodwill-panel-body">
+        <div
+          style={{
+            marginBottom: 28,
+            paddingBottom: 20,
+            borderBottom: "1px solid rgba(255,255,255,0.12)",
+            fontFamily: UI_FONT,
+            fontSize: 13,
+            color: "rgba(255,255,255,0.55)",
+            lineHeight: 1.5,
+          }}
+        >
+          {selectedDecade === "all"
+            ? `${country.counts.all} total visits across all decades`
+            : `${getCount(country)} visits in ${selectedDecade} · ${country.counts.all} total`}
+        </div>
+
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {decades.map((d) => (
+              <div
+                key={d}
+                className="goodwill-chip"
+                style={{
+                  color:
+                    selectedDecade === d ? "white" : "rgba(255,255,255,0.4)",
+                  background:
+                    selectedDecade === d
+                      ? "rgba(255,255,255,0.12)"
+                      : "rgba(255,255,255,0.05)",
+                }}
+              >
+                {d}: {country.counts[d] ?? 0}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {country.events.map((event, i) => (
+          <div
+            key={`${country.id}-${event.year}-${i}`}
+            style={{
+              marginBottom: i < country.events.length - 1 ? 32 : 0,
+            }}
+          >
+            <h3
+              style={{
+                fontFamily: UI_FONT,
+                fontSize: 18,
+                fontWeight: 700,
+                color: "white",
+                margin: "0 0 10px 0",
+              }}
+            >
+              {event.year}
+            </h3>
+
+            <h2
+              style={{
+                fontFamily: UI_FONT,
+                fontSize: 14,
+                fontWeight: 400,
+                color: "rgba(255,255,255,0.85)",
+                lineHeight: 1.65,
+                margin: `0 0 ${event.usContext ? 12 : 0}px 0`,
+              }}
+            >
+              {event.international}
+            </h2>
+
+            {event.usContext && (
+              <p
+                style={{
+                  ...textBaseStyle,
+                  fontFamily: UI_FONT,
+                  fontSize: 14,
+                  color: "rgba(255,255,255,0.85)",
+                  lineHeight: 1.65,
+                  margin: 0,
+                }}
+              >
+                <strong style={{ color: "white" }}>In the U.S.:</strong>{" "}
+                {event.usContext}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

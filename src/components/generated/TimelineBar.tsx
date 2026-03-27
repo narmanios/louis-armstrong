@@ -24,6 +24,9 @@ const lineDefaultColor = "rgb(0, 0, 0)";
 const lineDefaultOpacity = 1;
 const roleLineStartOffset = 40;
 const lyricLabelStartOffset = 60;
+const desktopTimelineRightGutter = 40;
+const mobileTimelineLeftGutter = 18;
+const mobileTimelineRightGutter = 18;
 const lyricHoverBackground = "#F5F3EA";
 const mobileLyricLetterSpacing = 0.08;
 const desktopLyricLetterSpacing = 0.1;
@@ -34,14 +37,14 @@ const lyricFont = "Georgia, 'Times New Roman', serif";
 // Vibrant colors from the role dots — used randomly on lyric hover
 const hoverColors = [
   "rgb(0, 0, 0)",
-  // actor blue
-  "rgb(104, 96, 18)",
-  // musician orange
-  "rgb(0, 0, 0)",
-  // bandleader pink
-  "rgb(71, 69, 44)",
-  // vocalist green
-  "rgb(158, 158, 109)", // ambassador purple
+  // // actor blue
+  // "rgb(104, 96, 18)",
+  // // musician orange
+  // "rgb(0, 0, 0)",
+  // // bandleader pink
+  // "rgb(71, 69, 44)",
+  // // vocalist green
+  // "rgb(158, 158, 109)", // ambassador purple
 ];
 function hashStringToInt(str: string): number {
   let hash = 0;
@@ -194,7 +197,7 @@ export function TimelineBar({
       const hoverColor = isInSamePhrase
         ? phraseGroupColorMap[hoveredPhraseGroup]
         : lyricColorMap[lyr.id];
-      const fontSize = isActive ? 13 : 9;
+      const fontSize = isActive ? 11 : 9;
       const textX = lyr.x + lyricLabelStartOffset;
       const textWidth = estimateLyricWidth(lyr.text, fontSize, letterSpacingEm);
       const backgroundHeight = fontSize + 6;
@@ -303,51 +306,63 @@ export function TimelineBar({
           overflow-x: auto + touch-action: pan-x gives proper touch sensitivity.
          */}
           <div
-            ref={scrollRef}
-            className="tl-scroll-surface tl-scroll-surface-mobile"
+            className="tl-mobile-viewport"
+            style={
+              {
+                "--tl-mobile-left-gutter": `${mobileTimelineLeftGutter}px`,
+                "--tl-mobile-right-gutter": `${mobileTimelineRightGutter}px`,
+              } as React.CSSProperties
+            }
           >
             <div
-              className="tl-mob-scroll"
-              style={
-                {
-                  width: totalWidth,
-                  height: svgH,
-                  minHeight: svgH,
-                  position: "relative",
-                  paddingBottom: 24,
-                  scrollbarWidth: "none",
-                } as React.CSSProperties
-              }
+              ref={scrollRef}
+              className="tl-scroll-surface tl-scroll-surface-mobile"
             >
-              <svg
-                width={totalWidth}
-                height={svgH}
-                viewBox={`0 0 ${totalWidth} ${svgH}`}
-                className="tl-svg"
+              <div
+                className="tl-mob-scroll"
+                style={
+                  {
+                    width: totalWidth,
+                    height: svgH,
+                    minHeight: svgH,
+                    position: "relative",
+                    paddingBottom: 24,
+                    scrollbarWidth: "none",
+                  } as React.CSSProperties
+                }
               >
-                {/* 5 horizontal role lines */}
-                {roleLines.map((rl, i) => {
-                  const lineY = timelineTopPad + i * timelineLineSpacing;
-                  return (
-                    <line
-                      className="tl-role-line"
-                      key={rl.id}
-                      x1={roleLineStartOffset}
-                      y1={lineY}
-                      x2={totalWidth}
-                      y2={lineY}
-                      stroke={lineDefaultColor}
-                      strokeWidth={0.5}
-                      opacity={lineDefaultOpacity}
-                      shapeRendering="crispEdges"
-                    />
-                  );
-                })}
+                <svg
+                  width={totalWidth}
+                  height={svgH}
+                  viewBox={`0 0 ${totalWidth} ${svgH}`}
+                  className="tl-svg"
+                >
+                  {/* 5 horizontal role lines */}
+                  {roleLines.map((rl, i) => {
+                    const lineY = timelineTopPad + i * timelineLineSpacing;
+                    return (
+                      <line
+                        className="tl-role-line"
+                        key={rl.id}
+                        x1={roleLineStartOffset}
+                        y1={lineY}
+                        x2={totalWidth}
+                        y2={lineY}
+                        stroke={lineDefaultColor}
+                        strokeWidth={0.5}
+                        opacity={lineDefaultOpacity}
+                        shapeRendering="crispEdges"
+                      />
+                    );
+                  })}
 
-                {/* Lyric labels — placed ON the lines */}
-                {renderLyricLabels(true)}
-              </svg>
+                  {/* Lyric labels — placed ON the lines */}
+                  {renderLyricLabels(true)}
+                </svg>
+              </div>
             </div>
+            <div className="tl-mobile-left-mask" aria-hidden="true" />
+            <div className="tl-mobile-right-mask" aria-hidden="true" />
           </div>
 
           {/* Section navigation pill dots */}
@@ -394,69 +409,79 @@ export function TimelineBar({
         area scrolls the timeline horizontally, independent of main content.
        */}
       <div
-        ref={scrollRef}
-        className="tl-scroll-surface tl-scroll-surface-desktop"
+        className="tl-desktop-viewport"
+        style={
+          {
+            "--tl-desktop-right-gutter": `${desktopTimelineRightGutter}px`,
+          } as React.CSSProperties
+        }
       >
         <div
-          className="tl-bar-scroll"
-          style={{
-            width: totalWidth,
-            height: svgH,
-            position: "relative",
-          }}
+          ref={scrollRef}
+          className="tl-scroll-surface tl-scroll-surface-desktop"
         >
-          {/* "The Real Ambassadors" label — sits in the scrolling area */}
-          <span className="tl-header-title tl-header-title-desktop">
-            The Real Ambassadors
-          </span>
-
-          <button
-            onClick={() => {
-              if (soundEnabled) {
-                stopAudio(true);
-              }
-              setSoundEnabled(!soundEnabled);
+          <div
+            className="tl-bar-scroll"
+            style={{
+              width: totalWidth,
+              height: svgH,
+              position: "relative",
             }}
-            className="tl-sound-btn tl-sound-btn-desktop"
-            title={soundEnabled ? "Sound: On" : "Sound: Off"}
           >
-            <img
-              src="/images/sound.svg"
-              alt="Sound toggle"
-              className="tl-sound-icon tl-sound-icon-desktop"
-              style={{ opacity: soundEnabled ? 1 : 0.5 }}
-            />
-          </button>
+            {/* "The Real Ambassadors" label — sits in the scrolling area */}
+            <span className="tl-header-title tl-header-title-desktop">
+              The Real Ambassadors
+            </span>
 
-          <svg
-            width={totalWidth}
-            height={svgH}
-            viewBox={`0 0 ${totalWidth} ${svgH}`}
-            className="tl-svg"
-          >
-            {/* 5 horizontal role lines — uniform pale grey, thin and crisp */}
-            {roleLines.map((rl, i) => {
-              const lineY = timelineTopPad + i * timelineLineSpacing;
-              return (
-                <line
-                  className="tl-role-line"
-                  key={rl.id}
-                  x1={roleLineStartOffset}
-                  y1={lineY}
-                  x2={totalWidth}
-                  y2={lineY}
-                  stroke={lineDefaultColor}
-                  strokeWidth={0.3}
-                  opacity={lineDefaultOpacity}
-                  shapeRendering="crispEdges"
-                />
-              );
-            })}
+            <button
+              onClick={() => {
+                if (soundEnabled) {
+                  stopAudio(true);
+                }
+                setSoundEnabled(!soundEnabled);
+              }}
+              className="tl-sound-btn tl-sound-btn-desktop"
+              title={soundEnabled ? "Sound: On" : "Sound: Off"}
+            >
+              <img
+                src="/images/sound.svg"
+                alt="Sound toggle"
+                className="tl-sound-icon tl-sound-icon-desktop"
+                style={{ opacity: soundEnabled ? 1 : 0.5 }}
+              />
+            </button>
 
-            {/* Lyric labels — placed directly ON the lines */}
-            {renderLyricLabels(false)}
-          </svg>
+            <svg
+              width={totalWidth}
+              height={svgH}
+              viewBox={`0 0 ${totalWidth} ${svgH}`}
+              className="tl-svg"
+            >
+              {/* 5 horizontal role lines — uniform pale grey, thin and crisp */}
+              {roleLines.map((rl, i) => {
+                const lineY = timelineTopPad + i * timelineLineSpacing;
+                return (
+                  <line
+                    className="tl-role-line"
+                    key={rl.id}
+                    x1={roleLineStartOffset}
+                    y1={lineY}
+                    x2={totalWidth}
+                    y2={lineY}
+                    stroke={lineDefaultColor}
+                    strokeWidth={0.3}
+                    opacity={lineDefaultOpacity}
+                    shapeRendering="crispEdges"
+                  />
+                );
+              })}
+
+              {/* Lyric labels — placed directly ON the lines */}
+              {renderLyricLabels(false)}
+            </svg>
+          </div>
         </div>
+        <div className="tl-desktop-right-mask" aria-hidden="true" />
       </div>
 
       {/* Section navigation pill dots — always visible at bottom */}
