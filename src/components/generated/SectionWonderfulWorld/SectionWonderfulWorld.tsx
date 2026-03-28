@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import "./satchmo-legacy.css";
+import "./SectionWonderfulWorld.css";
 
 export type FactItem = {
   text: string;
@@ -30,7 +30,7 @@ type TooltipState = {
   image: string;
 };
 
-export type SatchmoLegacyProps = {
+export type SectionWonderfulWorldProps = {
   facts?: FactItem[];
   factsUrl?: string;
   maskSvgUrl?: string;
@@ -100,7 +100,7 @@ async function loadFactsJson(factsUrl: string): Promise<FactItem[]> {
   return data as FactItem[];
 }
 
-export function SatchmoLegacy({
+export function SectionWonderfulWorld({
   facts,
   factsUrl = "../../../../data/wonderfulworld.json",
   maskSvgUrl = "/images/louis-silo.svg",
@@ -113,7 +113,7 @@ export function SatchmoLegacy({
   canvasWidth = 1000,
   canvasHeight = 500,
   searchPlaceholder = "Search facts...",
-}: SatchmoLegacyProps) {
+}: SectionWonderfulWorldProps) {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<Error | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -179,20 +179,17 @@ export function SatchmoLegacy({
     [canvasHeight, canvasWidth, zoom],
   );
 
-  const silhouetteStyle = useMemo<CSSProperties>(
-    () => {
-      const { drawWidth, drawHeight } = getSilhouetteBounds(
-        canvasWidth,
-        canvasHeight,
-      );
+  const silhouetteStyle = useMemo<CSSProperties>(() => {
+    const { drawWidth, drawHeight } = getSilhouetteBounds(
+      canvasWidth,
+      canvasHeight,
+    );
 
-      return {
-        width: `${drawWidth}px`,
-        height: `${drawHeight}px`,
-      };
-    },
-    [canvasHeight, canvasWidth],
-  );
+    return {
+      width: `${drawWidth}px`,
+      height: `${drawHeight}px`,
+    };
+  }, [canvasHeight, canvasWidth]);
 
   const filteredFacts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();

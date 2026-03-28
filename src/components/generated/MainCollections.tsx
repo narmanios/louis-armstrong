@@ -9,9 +9,9 @@ import { SectionFBIFiles } from "./SectionFBIFiles";
 import { SectionAfricaTour } from "./SectionAfricaTour";
 import { SectionRealAmbassadors } from "./SectionRealAmbassadors";
 import { SectionWorldFair } from "./SectionWorldFair";
-import { SectionGoodwillAmbassador } from "./bubble-chart/components/SectionGoodwillAmbassador.tsx";
-import { SatchmoLegacy } from "./WonderfulWorld/SatchmoLegacy.tsx";
-interface MusicCollectionGalleryProps {
+import { SectionGoodwillAmbassador } from "./SectionGoodwill/SectionGoodwillAmbassador.tsx";
+import { SectionWonderfulWorld } from "./SectionWonderfulWorld/SectionWonderfulWorld.tsx";
+interface MainCollectionsProps {
   className?: string;
 }
 
@@ -20,7 +20,7 @@ type TimelineJumpTarget =
   | { kind: "intro" }
   | { kind: "section"; groupId: GroupId; sectionIdx: number };
 
-export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
+export const MainCollections: React.FC<MainCollectionsProps> = ({
   className,
 }) => {
   const desktopGroupPeek = 104;
@@ -47,11 +47,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
     { id: "musician", label: "legacy" },
   ];
   const groupSectionItems: Record<GroupId, string[]> = {
-    history: [
-      "Career Highlights",
-      "The Beginning",
-      "Journey to Ambassador",
-    ],
+    history: ["Career Highlights", "The Beginning", "Journey to Ambassador"],
     ambassador: [
       "Goodwill Ambassador",
       "FBI Files",
@@ -191,7 +187,8 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
           ? index
           : closestIndex;
       }, 0);
-      const nextSection = sections[Math.min(currentIndex + 1, sections.length - 1)];
+      const nextSection =
+        sections[Math.min(currentIndex + 1, sections.length - 1)];
       nextSection?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
@@ -218,7 +215,10 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
         const rect = introSection.getBoundingClientRect();
         setShowFixedGroupNav(rect.bottom <= 140);
 
-        const mobilePages: Array<{ id: GroupId; element: HTMLDivElement | null }> = [
+        const mobilePages: Array<{
+          id: GroupId;
+          element: HTMLDivElement | null;
+        }> = [
           { id: "history", element: historyPageRef.current },
           { id: "ambassador", element: ambassadorPageRef.current },
           { id: "musician", element: musicianPageRef.current },
@@ -245,7 +245,10 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
 
       const container = scrollContainerRef.current;
       const historyPage = historyPageRef.current;
-      const desktopPages: Array<{ id: GroupId; element: HTMLDivElement | null }> = [
+      const desktopPages: Array<{
+        id: GroupId;
+        element: HTMLDivElement | null;
+      }> = [
         { id: "history", element: historyPageRef.current },
         { id: "ambassador", element: ambassadorPageRef.current },
         { id: "musician", element: musicianPageRef.current },
@@ -307,9 +310,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
     color: "#000000",
   };
   return (
-    <div
-      className={`mcg-root ${className || ""}`}
-    >
+    <div className={`mcg-root ${className || ""}`}>
       <style>{`
         /* ── SHARED ── */
         .mcg-root {
@@ -1080,7 +1081,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
                 className="mcg-group-section"
               >
                 <div className="mcg-group-section-inner">
-                  <SatchmoLegacy />
+                  <SectionWonderfulWorld />
                 </div>
               </div>
             </div>
@@ -1094,7 +1095,6 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
           </div>
         </div>
       </div>
-
     </div>
   );
 };

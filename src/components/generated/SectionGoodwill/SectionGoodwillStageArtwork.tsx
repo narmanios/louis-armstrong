@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import svgPaths from "./goodwill-svg-paths";
+import svgPaths from "./SectionGoodwillSvgPaths";
 import {
   imgGroup,
   imgGroup1,
@@ -7,7 +7,7 @@ import {
   imgGroup3,
   imgGroup4,
   imgGroup5,
-} from "./goodwill-svg-masks";
+} from "./SectionGoodwillSvgMasks";
 
 function Map({ hideTitle = false }: { hideTitle?: boolean }) {
   return (
@@ -10209,7 +10209,7 @@ function Filters() {
   );
 }
 
-export default function GoodwillStageArtwork({
+export default function SectionGoodwillStageArtwork({
   hideTitle = false,
   hideFilters = false,
   bubbleFill = "255, 255, 255, 1",
@@ -10219,7 +10219,7 @@ export default function GoodwillStageArtwork({
   bubbleFill?: string;
 }) {
   return (
-    <div className="relative size-full" data-name="GoodwillStageArtwork">
+    <div className="relative size-full" data-name="SectionGoodwillStageArtwork">
       <Map hideTitle={hideTitle} />
       <div className="absolute bg-[#f9e4d2] h-[800px] left-0 top-0 w-[1280px]" />
       <Map1 hideTitle={hideTitle} bubbleFill={bubbleFill} />

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import GoodwillStageArtwork from "./GoodwillStageArtwork";
+import SectionGoodwillStageArtwork from "./SectionGoodwillStageArtwork";
 import { X } from "lucide-react";
-import countriesData from "../../../../../data/goodwillCountries.json";
+import countriesData from "../../../../data/goodwillCountries.json";
 
 type Decade = "all" | "1920s" | "1930s" | "1940s" | "1950s" | "1960s" | "1970s";
 
@@ -387,7 +387,8 @@ export function SectionGoodwillAmbassador({
           circleEl.setAttribute("cy", `${randomized.cy - MAP_GROUP_TOP}`);
           circleEl.setAttribute(
             "fill",
-            selectedCountry?.id === country.id || hoveredCountryId === country.id
+            selectedCountry?.id === country.id ||
+              hoveredCountryId === country.id
               ? GOODWILL_BUBBLE_ACTIVE_FILL
               : GOODWILL_BUBBLE_FILL,
           );
@@ -417,7 +418,13 @@ export function SectionGoodwillAmbassador({
           : getDecadeCount(country, selectedDecade)
       }`;
     });
-  }, [bubblePositions, countriesById, hoveredCountryId, selectedCountry, selectedDecade]);
+  }, [
+    bubblePositions,
+    countriesById,
+    hoveredCountryId,
+    selectedCountry,
+    selectedDecade,
+  ]);
 
   const handleBubbleClick = (country: CountryData) => {
     setSelectedCountry((prev) => (prev?.id === country.id ? null : country));
@@ -433,7 +440,9 @@ export function SectionGoodwillAmbassador({
   // Shift the imported artwork left to counter its built-in whitespace.
   // On mobile, add the live bubble-field centering adjustment on top.
   const chartOffsetX = isMobile ? -110 + mobileBubbleOffsetX : -110;
-  const chartOffsetY = isMobile ? MOBILE_CHART_OFFSET_Y : DESKTOP_CHART_OFFSET_Y;
+  const chartOffsetY = isMobile
+    ? MOBILE_CHART_OFFSET_Y
+    : DESKTOP_CHART_OFFSET_Y;
 
   return (
     <section
@@ -725,7 +734,7 @@ export function SectionGoodwillAmbassador({
                 ref={sectionRootRef}
                 style={{ position: "absolute", inset: 0 }}
               >
-                <GoodwillStageArtwork hideTitle hideFilters />
+                <SectionGoodwillStageArtwork hideTitle hideFilters />
               </div>
 
               <div
