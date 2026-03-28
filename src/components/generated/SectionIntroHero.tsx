@@ -73,6 +73,14 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           pointer-events: none;
         }
 
+        .hero-intro-logo {
+          position: absolute;
+          left: 32px;
+          bottom: 24px;
+          width: 110px;
+          z-index: 6;
+        }
+
         .hero-intro-title-block {
           position: absolute;
           left: 72px;
@@ -236,6 +244,12 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             bottom: 0;
           }
 
+          .hero-intro-logo {
+            left: 20px;
+            bottom: 20px;
+            width: 88px;
+          }
+
           .hero-intro-title-block {
             left: 50%;
             top: 90px;
@@ -345,6 +359,12 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             width: 220px;
           }
 
+          .hero-intro-logo {
+            left: 16px;
+            bottom: 16px;
+            width: 78px;
+          }
+
           .hero-intro-title-block {
             left: 50%;
             top: 78px;
@@ -452,6 +472,12 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         src="/images/louis-intro3.png"
         alt="Louis Armstrong"
         className="mcg-hero-overlay2 hero-intro-portrait"
+      />
+
+      <img
+        src="/images/logo_dark.png"
+        alt="Project logo"
+        className="hero-intro-logo"
       />
 
       <div className="mcg-hero-title hero-intro-title-block">
