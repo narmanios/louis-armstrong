@@ -1,113 +1,131 @@
 import React from "react";
-interface SectionJourneyToAmbassadorProps {
-  textBaseStyle: React.CSSProperties;
-}
-export const SectionJourneyToAmbassador: React.FC<
-  SectionJourneyToAmbassadorProps
-> = ({ textBaseStyle }) => {
+
+export const SectionJourneyToAmbassador: React.FC = () => {
   return (
-    <section
-      className="mcg-section"
-      style={{
-        backgroundColor: "#000000",
-      }}
-    >
+    <section className="mcg-section journey-section">
+      <style>{`
+        .journey-section {
+          background: #000000;
+        }
+
+        .journey-section .mcg-page-title {
+          color: #ffffff;
+        }
+
+        .journey-entry-grid {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+          gap: 56px;
+          position: absolute;
+          left: 56px;
+          top: 164px;
+        }
+
+        .journey-entry {
+          width: min(340px, calc((100vw - 280px) / 2));
+        }
+
+        .journey-media-image {
+          width: 100%;
+          aspect-ratio: 470 / 360;
+          height: auto;
+          object-fit: cover;
+          display: block;
+        }
+
+        .journey-caption,
+        .journey-copy {
+          margin: 0;
+          font-family: "Helvetica Neue", sans-serif;
+          font-size: 12px;
+          color: #ffffff;
+        }
+
+        .journey-caption {
+          margin-top: 12px;
+        }
+
+        .journey-copy {
+          width: 100%;
+          line-height: 20px;
+          margin-top: 16px;
+        }
+
+        @media (max-width: 767px) {
+          .journey-section {
+            height: auto;
+            min-height: 0;
+            overflow: visible;
+            padding: 24px 20px 32px;
+            box-sizing: border-box;
+          }
+
+          .journey-section .mcg-page-title {
+            position: static !important;
+            margin: 0 0 20px 0 !important;
+          }
+
+          .journey-entry-grid {
+            position: static;
+            left: auto;
+            top: auto;
+            flex-direction: column;
+            gap: 20px;
+          }
+
+          .journey-entry,
+          .journey-copy {
+            width: 100%;
+          }
+
+          .journey-media-image {
+            width: 100%;
+            height: 220px;
+          }
+        }
+      `}</style>
+
       <h2 className="mcg-section-title mcg-page-title">
         Journey to Ambassador 1930-1948
       </h2>
-      <div
-        className="mcg-image-row"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: "56px",
-          position: "absolute",
-          left: "56px",
-          top: "164px",
-        }}
-      >
-        <div>
+
+      <div className="journey-entry-grid">
+        <div className="journey-entry">
           <div className="interactive-card">
             <img
               src="/images/orchestra.png"
               alt="Orchestra"
-              style={{
-                width: "470px",
-                height: "360px",
-                objectFit: "cover",
-              }}
+              className="journey-media-image"
             />
           </div>
-          <p
-            style={{
-              ...textBaseStyle,
-              fontSize: "12px",
-              marginTop: "12px",
-            }}
-          >
+          <p className="journey-caption">
             Louis Armstrong and his Orchestra (1929)
           </p>
+          <p className="journey-copy">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
+            ullamcorper erat tortor, at accumsan sapien molestie et. Sed
+            hendrerit velit vel neque molestie eleifend. Ut sodales lorem vel
+            mauris malesuada maximus.
+          </p>
         </div>
-        <div>
+
+        <div className="journey-entry">
           <div className="interactive-card">
             <img
               src="/images/chicago.png"
               alt="Chicago"
-              style={{
-                width: "470px",
-                height: "360px",
-                objectFit: "cover",
-              }}
+              className="journey-media-image"
             />
           </div>
-          <p
-            style={{
-              ...textBaseStyle,
-              fontSize: "12px",
-              marginTop: "12px",
-            }}
-          >
-            Chicago
+          <p className="journey-caption">Chicago</p>
+          <p className="journey-copy">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
+            ullamcorper erat tortor, at accumsan sapien molestie et. Sed
+            hendrerit velit vel neque molestie eleifend. Ut sodales lorem vel
+            mauris malesuada maximus.
           </p>
         </div>
-      </div>
-      <div
-        className="mcg-text-row"
-        style={{
-          position: "absolute",
-          left: "56px",
-          top: "566px",
-          display: "flex",
-          gap: "142px",
-        }}
-      >
-        <p
-          style={{
-            ...textBaseStyle,
-            fontSize: "12px",
-            lineHeight: "20px",
-            width: "383px",
-          }}
-        >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-          ullamcorper erat tortor, at accumsan sapien molestie et. Sed hendrerit
-          velit vel neque molestie eleifend. Ut sodales lorem vel mauris
-          malesuada maximus.
-        </p>
-        <p
-          style={{
-            ...textBaseStyle,
-            fontSize: "12px",
-            lineHeight: "20px",
-            width: "383px",
-          }}
-        >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-          ullamcorper erat tortor, at accumsan sapien molestie et. Sed hendrerit
-          velit vel neque molestie eleifend. Ut sodales lorem vel mauris
-          malesuada maximus.
-        </p>
       </div>
     </section>
   );

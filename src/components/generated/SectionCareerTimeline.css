@@ -2,7 +2,7 @@
 .career-timeline-section,
 .mcg-group-page--history .career-timeline-section {
   --career-surface-bg: #f9e4d2;
-  --career-dot-radius: 3.25px;
+  --career-dot-radius: 5px;
   --career-dot-featured-radius-offset: 0px;
   --career-dot-active-radius-offset: 1.25px;
   --career-lane-stroke: #7a7669;

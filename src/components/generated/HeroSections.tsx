@@ -7,11 +7,9 @@ import { SectionJourneyToAmbassador } from "./SectionJourneyToAmbassador";
 import { SectionJazzAmbassadors } from "./SectionJazzAmbassadors";
 import { SectionFBIFiles } from "./SectionFBIFiles";
 interface HeroSectionsProps {
-  textBaseStyle: React.CSSProperties;
   onScrollNext: () => void;
 }
 export const HeroSections: React.FC<HeroSectionsProps> = ({
-  textBaseStyle,
   onScrollNext,
 }) => {
   return (
@@ -21,9 +19,9 @@ export const HeroSections: React.FC<HeroSectionsProps> = ({
         onNavigateMusician={() => {}}
         onNavigateAmbassador={() => {}}
       />
-      <SectionAboutProject textBaseStyle={textBaseStyle} />
-      <SectionTheBeginning textBaseStyle={textBaseStyle} />
-      <SectionJourneyToAmbassador textBaseStyle={textBaseStyle} />
+      <SectionAboutProject />
+      <SectionTheBeginning />
+      <SectionJourneyToAmbassador />
       <SectionJazzAmbassadors />
       <SectionFBIFiles />
     </React.Fragment>

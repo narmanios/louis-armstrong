@@ -9,8 +9,6 @@ import { SectionFBIFiles } from "./SectionFBIFiles";
 import { SectionAfricaTour } from "./SectionAfricaTour";
 import { SectionRealAmbassadors } from "./SectionRealAmbassadors";
 import { SectionWorldFair } from "./SectionWorldFair";
-import { TimelineBar } from "./TimelineBar";
-import { mobileTimelineHeight, timelineHeight } from "./TimelineShared";
 import { SectionGoodwillAmbassador } from "./bubble-chart/components/SectionGoodwillAmbassador.tsx";
 import { SatchmoLegacy } from "./WonderfulWorld/SatchmoLegacy.tsx";
 interface MusicCollectionGalleryProps {
@@ -27,6 +25,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
 }) => {
   const desktopGroupPeek = 104;
   const desktopGroupGap = 28;
+  const desktopGroupTransitionMs = 460;
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const introSectionRef = useRef<HTMLElement>(null);
   const historyPageRef = useRef<HTMLDivElement>(null);
@@ -38,13 +37,31 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
   const historySectionRefs = useRef<Array<HTMLDivElement | null>>([]);
   const musicianSectionRefs = useRef<Array<HTMLDivElement | null>>([]);
   const ambassadorSectionRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const sectionJumpTimeoutRef = useRef<number | null>(null);
   const isMobile = useIsMobile();
   const [showFixedGroupNav, setShowFixedGroupNav] = useState(false);
+  const [currentGroupId, setCurrentGroupId] = useState<GroupId>("history");
   const groupNavItems: Array<{ id: GroupId; label: string }> = [
     { id: "history", label: "history" },
-    { id: "musician", label: "musician" },
     { id: "ambassador", label: "ambassador" },
+    { id: "musician", label: "legacy" },
   ];
+  const groupSectionItems: Record<GroupId, string[]> = {
+    history: [
+      "Career Highlights",
+      "The Beginning",
+      "Journey to Ambassador",
+    ],
+    ambassador: [
+      "Goodwill Ambassador",
+      "FBI Files",
+      "Jazz Ambassadors",
+      "Africa Tour",
+      "World Fair + Berlin",
+      "The Real Ambassadors",
+    ],
+    musician: ["What a Wonderful World"],
+  };
   const timelineTargetMap: TimelineJumpTarget[] = [
     { kind: "intro" },
     { kind: "section", groupId: "history", sectionIdx: 0 },
@@ -99,6 +116,9 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
     const page = getGroupPageElement(groupId);
     const scroller = getGroupScroller(groupId);
     const section = getGroupSectionElements(groupId)[sectionIdx] ?? null;
+    const targetTop = section?.offsetTop ?? 0;
+
+    setCurrentGroupId(groupId);
 
     if (isMobile) {
       (section ?? page)?.scrollIntoView({
@@ -108,6 +128,8 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
       return;
     }
 
+    const isChangingGroup = currentGroupId !== groupId;
+
     if (page) {
       scrollContainerRef.current?.scrollTo({
         left: Math.max(page.offsetLeft - desktopGroupPeek, 0),
@@ -115,10 +137,27 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
       });
     }
 
-    scroller?.scrollTo({
-      top: section?.offsetTop ?? 0,
-      behavior: "smooth",
-    });
+    if (sectionJumpTimeoutRef.current !== null) {
+      window.clearTimeout(sectionJumpTimeoutRef.current);
+      sectionJumpTimeoutRef.current = null;
+    }
+
+    const scrollSectionIntoView = () => {
+      scroller?.scrollTo({
+        top: targetTop,
+        behavior: "smooth",
+      });
+    };
+
+    if (isChangingGroup) {
+      sectionJumpTimeoutRef.current = window.setTimeout(() => {
+        scrollSectionIntoView();
+        sectionJumpTimeoutRef.current = null;
+      }, desktopGroupTransitionMs);
+      return;
+    }
+
+    scrollSectionIntoView();
   };
 
   const scrollToTimelineSection = (timelineIdx: number) => {
@@ -135,6 +174,42 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
     scrollToGroupSection(groupId, 0);
   };
 
+  const scrollGroupDown = (groupId: GroupId) => {
+    const sections = getGroupSectionElements(groupId).filter(
+      (section): section is HTMLDivElement => !!section,
+    );
+    if (sections.length === 0) return;
+
+    if (isMobile) {
+      const viewportAnchor = window.innerHeight * 0.25;
+      const currentIndex = sections.reduce((closestIndex, section, index) => {
+        const rect = section.getBoundingClientRect();
+        const closestRect =
+          sections[closestIndex]?.getBoundingClientRect() ?? rect;
+        return Math.abs(rect.top - viewportAnchor) <
+          Math.abs(closestRect.top - viewportAnchor)
+          ? index
+          : closestIndex;
+      }, 0);
+      const nextSection = sections[Math.min(currentIndex + 1, sections.length - 1)];
+      nextSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    const scroller = getGroupScroller(groupId);
+    if (!scroller) return;
+
+    const threshold = scroller.scrollTop + 24;
+    const nextSection =
+      sections.find((section) => section.offsetTop > threshold) ??
+      sections[sections.length - 1];
+
+    scroller.scrollTo({
+      top: nextSection.offsetTop,
+      behavior: "smooth",
+    });
+  };
+
   useEffect(() => {
     const updateNavVisibility = () => {
       if (isMobile) {
@@ -142,13 +217,58 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
         if (!introSection) return;
         const rect = introSection.getBoundingClientRect();
         setShowFixedGroupNav(rect.bottom <= 140);
+
+        const mobilePages: Array<{ id: GroupId; element: HTMLDivElement | null }> = [
+          { id: "history", element: historyPageRef.current },
+          { id: "ambassador", element: ambassadorPageRef.current },
+          { id: "musician", element: musicianPageRef.current },
+        ];
+        const viewportCenter = window.innerHeight * 0.35;
+        const closestMobilePage = mobilePages.reduce<{
+          id: GroupId;
+          distance: number;
+        } | null>((closest, page) => {
+          if (!page.element) return closest;
+          const pageRect = page.element.getBoundingClientRect();
+          const distance = Math.abs(pageRect.top - viewportCenter);
+          if (!closest || distance < closest.distance) {
+            return { id: page.id, distance };
+          }
+          return closest;
+        }, null);
+
+        if (closestMobilePage) {
+          setCurrentGroupId(closestMobilePage.id);
+        }
         return;
       }
 
       const container = scrollContainerRef.current;
       const historyPage = historyPageRef.current;
+      const desktopPages: Array<{ id: GroupId; element: HTMLDivElement | null }> = [
+        { id: "history", element: historyPageRef.current },
+        { id: "ambassador", element: ambassadorPageRef.current },
+        { id: "musician", element: musicianPageRef.current },
+      ];
       if (!container || !historyPage) return;
       setShowFixedGroupNav(container.scrollLeft >= historyPage.offsetLeft / 2);
+
+      const viewportAnchor = container.scrollLeft + desktopGroupPeek;
+      const closestDesktopPage = desktopPages.reduce<{
+        id: GroupId;
+        distance: number;
+      } | null>((closest, page) => {
+        if (!page.element) return closest;
+        const distance = Math.abs(page.element.offsetLeft - viewportAnchor);
+        if (!closest || distance < closest.distance) {
+          return { id: page.id, distance };
+        }
+        return closest;
+      }, null);
+
+      if (closestDesktopPage) {
+        setCurrentGroupId(closestDesktopPage.id);
+      }
     };
 
     updateNavVisibility();
@@ -173,6 +293,14 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
     };
   }, [isMobile]);
 
+  useEffect(() => {
+    return () => {
+      if (sectionJumpTimeoutRef.current !== null) {
+        window.clearTimeout(sectionJumpTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const textBaseStyle: React.CSSProperties = {
     fontFamily: '"Helvetica Neue", sans-serif',
     fontWeight: 400,
@@ -181,9 +309,6 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
   return (
     <div
       className={`mcg-root ${className || ""}`}
-      style={{
-        paddingBottom: isMobile ? mobileTimelineHeight : timelineHeight,
-      }}
     >
       <style>{`
         /* ── SHARED ── */
@@ -198,8 +323,14 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
           right: 56px;
           z-index: 140;
           display: flex;
-          align-items: center;
+          flex-direction: row;
+          align-items: flex-start;
           gap: 16px;
+        }
+
+        .mcg-group-nav-item {
+          position: relative;
+          display: block;
         }
 
         .mcg-group-nav-button {
@@ -212,13 +343,51 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.04em;
-          color: #fff;
+          color: #ffffff;
+          text-align: left;
           opacity: 0.72;
           transition: opacity 0.18s ease;
         }
 
+        .mcg-group-nav-button.is-active {
+          opacity: 1;
+        }
+
         .mcg-group-nav-button:hover {
           opacity: 1;
+        }
+
+        .mcg-group-nav-dropdown {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          display: none;
+          min-width: 180px;
+          padding-top: 6px;
+          z-index: 141;
+        }
+
+        .mcg-group-nav-item:hover .mcg-group-nav-dropdown {
+          display: block;
+        }
+
+        .mcg-group-nav-dropdown-button {
+          display: block;
+          width: 100%;
+          border: 1px solid rgba(255, 255, 255, 0.22);
+          background: #ffffff;
+          color: #000000;
+          padding: 6px 10px;
+          font-family: "Helvetica Neue", sans-serif;
+          font-size: 12px;
+          font-weight: 400;
+          letter-spacing: 0;
+          cursor: pointer;
+          text-align: left;
+        }
+
+        .mcg-group-nav-dropdown-button + .mcg-group-nav-dropdown-button {
+          border-top: none;
         }
 
         /* ── DESKTOP: horizontal scroll ── */
@@ -281,6 +450,37 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
           box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
           position: relative;
           z-index: 1;
+        }
+
+        .mcg-group-scroll-arrow {
+          position: absolute;
+          right: 20px;
+          bottom: 20px;
+          width: 44px;
+          height: 44px;
+          border: none;
+          background: transparent;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 12;
+          opacity: 0.88;
+          transition:
+            transform 0.18s ease,
+            opacity 0.18s ease;
+        }
+
+        .mcg-group-scroll-arrow:hover {
+          transform: translateY(2px);
+          opacity: 1;
+        }
+
+        .mcg-group-scroll-arrow img {
+          width: 28px;
+          height: 28px;
+          display: block;
         }
 
         .mcg-group-page--history .mcg-group-label {
@@ -431,6 +631,11 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
             font-size: 10px;
           }
 
+          .mcg-group-nav-dropdown-button {
+            font-size: 10px;
+            padding: 5px 8px;
+          }
+
           .mcg-track {
             height: auto;
             overflow-x: visible;
@@ -460,6 +665,13 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
             padding-top: 20px;
             box-sizing: border-box;
             box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+          }
+
+          .mcg-group-scroll-arrow {
+            position: sticky;
+            bottom: 16px;
+            left: calc(100% - 60px);
+            margin-top: -60px;
           }
 
           .mcg-group-scroll {
@@ -686,13 +898,30 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
       {showFixedGroupNav ? (
         <nav className="mcg-group-nav" aria-label="Section groups">
           {groupNavItems.map((item) => (
-            <button
-              key={item.id}
-              className="mcg-group-nav-button"
-              onClick={() => scrollToGroup(item.id)}
-            >
-              {item.label}
-            </button>
+            <div key={item.id} className="mcg-group-nav-item">
+              <button
+                className={`mcg-group-nav-button${
+                  currentGroupId === item.id ? " is-active" : ""
+                }`}
+                onClick={() => scrollToGroup(item.id)}
+              >
+                {item.label}
+              </button>
+              <div
+                className="mcg-group-nav-dropdown"
+                aria-label={`${item.label} sections`}
+              >
+                {groupSectionItems[item.id].map((label, index) => (
+                  <button
+                    key={`${item.id}-${label}`}
+                    className="mcg-group-nav-dropdown-button"
+                    onClick={() => scrollToGroupSection(item.id, index)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </nav>
       ) : null}
@@ -730,7 +959,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
                 className="mcg-group-section"
               >
                 <div className="mcg-group-section-inner">
-                  <SectionTheBeginning textBaseStyle={textBaseStyle} />
+                  <SectionTheBeginning />
                 </div>
               </div>
               <div
@@ -740,32 +969,17 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
                 className="mcg-group-section"
               >
                 <div className="mcg-group-section-inner">
-                  <SectionJourneyToAmbassador textBaseStyle={textBaseStyle} />
+                  <SectionJourneyToAmbassador />
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div
-          ref={musicianPageRef}
-          className="mcg-group-page mcg-group-page--musician"
-        >
-          <div className="mcg-group-label" aria-hidden="true">
-            musician
-          </div>
-          <div className="mcg-group-frame">
-            <div ref={musicianScrollRef} className="mcg-group-scroll">
-              <div
-                ref={(element) => {
-                  musicianSectionRefs.current[0] = element;
-                }}
-                className="mcg-group-section"
-              >
-                <div className="mcg-group-section-inner">
-                  <SatchmoLegacy />
-                </div>
-              </div>
-            </div>
+            <button
+              className="mcg-group-scroll-arrow"
+              onClick={() => scrollGroupDown("history")}
+              aria-label="Scroll down in history"
+            >
+              <img src="/images/arrow.svg" alt="" aria-hidden="true" />
+            </button>
           </div>
         </div>
         <div
@@ -824,7 +1038,7 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
                 className="mcg-group-section"
               >
                 <div className="mcg-group-section-inner">
-                  <SectionWorldFair textBaseStyle={textBaseStyle} />
+                  <SectionWorldFair />
                 </div>
               </div>
               <div
@@ -834,15 +1048,53 @@ export const MusicCollectionGallery: React.FC<MusicCollectionGalleryProps> = ({
                 className="mcg-group-section"
               >
                 <div className="mcg-group-section-inner">
-                  <SectionRealAmbassadors />
+                  <SectionRealAmbassadors
+                    onTimelineJump={scrollToTimelineSection}
+                    isMobile={isMobile}
+                  />
                 </div>
               </div>
             </div>
+            <button
+              className="mcg-group-scroll-arrow"
+              onClick={() => scrollGroupDown("ambassador")}
+              aria-label="Scroll down in ambassador"
+            >
+              <img src="/images/arrow.svg" alt="" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+        <div
+          ref={musicianPageRef}
+          className="mcg-group-page mcg-group-page--musician"
+        >
+          <div className="mcg-group-label" aria-hidden="true">
+            legacy
+          </div>
+          <div className="mcg-group-frame">
+            <div ref={musicianScrollRef} className="mcg-group-scroll">
+              <div
+                ref={(element) => {
+                  musicianSectionRefs.current[0] = element;
+                }}
+                className="mcg-group-section"
+              >
+                <div className="mcg-group-section-inner">
+                  <SatchmoLegacy />
+                </div>
+              </div>
+            </div>
+            <button
+              className="mcg-group-scroll-arrow"
+              onClick={() => scrollGroupDown("musician")}
+              aria-label="Scroll down in legacy"
+            >
+              <img src="/images/arrow.svg" alt="" aria-hidden="true" />
+            </button>
           </div>
         </div>
       </div>
 
-      <TimelineBar onDotClick={scrollToTimelineSection} isMobile={isMobile} />
     </div>
   );
 };

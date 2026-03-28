@@ -118,6 +118,10 @@ const featuredLabelLineHeight = 11;
 const featuredLabelConnectorLength = 28;
 const featuredLabelAboveOffset = 4;
 const featuredLabelBelowOffset = 3;
+const tooltipWidth = 248;
+const tooltipEstimatedHeight = 148;
+const tooltipGap = 18;
+const tooltipEdgePadding = 8;
 const yearAxisY = 530;
 
 const featuredLabels: Record<number, FeaturedCfg> = {
@@ -237,6 +241,7 @@ function TimelineSVG({
   const [hoverTip, setHoverTip] = useState<TipInfo | null>(null);
   const [pinTip, setPinTip] = useState<TipInfo | null>(null);
   const [hoverClusterKey, setHoverClusterKey] = useState<string | null>(null);
+  const [selectionFocusEnabled, setSelectionFocusEnabled] = useState(false);
   const lastHoverPos = useRef<{ x: number; y: number } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -301,6 +306,10 @@ function TimelineSVG({
 
   const displayTip = hoverTip ?? pinTip;
   const isPinned = !hoverTip && !!pinTip;
+  const displayDot = useMemo(() => {
+    if (!displayTip) return null;
+    return dots.find((dot) => dot.key === displayTip.key) ?? null;
+  }, [displayTip, dots]);
   const focusLineX = useMemo(() => {
     if (hoverTip) {
       return dots.find((dot) => dot.key === hoverTip.key)?.cx ?? null;
@@ -316,6 +325,35 @@ function TimelineSVG({
     return null;
   }, [clusters, dots, hoverClusterKey, hoverTip, pinTip]);
 
+  const tooltipPosition = useMemo(() => {
+    if (!displayTip || !displayDot) return null;
+
+    const rightLeft = displayDot.cx + tooltipGap;
+    const leftLeft = displayDot.cx - tooltipGap - tooltipWidth;
+    const hasRoomOnRight =
+      rightLeft + tooltipWidth <= svgWidth - tooltipEdgePadding;
+    const hasRoomOnLeft = leftLeft >= tooltipEdgePadding;
+
+    const left = hasRoomOnRight
+      ? rightLeft
+      : hasRoomOnLeft
+        ? leftLeft
+        : Math.min(
+            Math.max(displayDot.cx - tooltipWidth / 2, tooltipEdgePadding),
+            svgWidth - tooltipWidth - tooltipEdgePadding,
+          );
+
+    const top = Math.min(
+      Math.max(
+        displayDot.cy - tooltipEstimatedHeight / 2,
+        tooltipEdgePadding,
+      ),
+      svgHeight - tooltipEstimatedHeight - tooltipEdgePadding,
+    );
+
+    return { left, top };
+  }, [displayDot, displayTip, svgWidth]);
+
   const onEnter = useCallback(
     (event: React.MouseEvent<HTMLElement>, dot: DotData) => {
       const rect = svgRef.current?.getBoundingClientRect();
@@ -325,6 +363,7 @@ function TimelineSVG({
         lastHoverPos.current = { x, y };
         setHoverTip({ event: dot.event, x, y, key: dot.key, cat: dot.cat });
       }
+      setSelectionFocusEnabled(false);
       setHoverKey(dot.key);
       setHoverClusterKey(dot.clusterKey);
       setPinTip((prev) => (prev?.key === dot.key ? prev : null));
@@ -333,6 +372,7 @@ function TimelineSVG({
   );
 
   const onClusterEnter = useCallback((clusterKey: string) => {
+    setSelectionFocusEnabled(false);
     setHoverClusterKey(clusterKey);
     setHoverTip(null);
     setHoverKey(null);
@@ -350,10 +390,15 @@ function TimelineSVG({
 
   const toggleDotSelection = useCallback(
     (dot: DotData) => {
+      const isSameSelection = selected?.id === dot.event.id;
       const position = lastHoverPos.current ?? {
         x: dot.cx + 14,
         y: dot.cy - 30,
       };
+      setSelectionFocusEnabled(!isSameSelection);
+      setHoverTip(null);
+      setHoverKey(null);
+      setHoverClusterKey(null);
       setPinTip((prev) =>
         prev?.key === dot.key
           ? null
@@ -365,7 +410,7 @@ function TimelineSVG({
               cat: dot.cat,
             },
       );
-      onSelect(selected?.id === dot.event.id ? null : dot.event);
+      onSelect(isSameSelection ? null : dot.event);
     },
     [onSelect, selected],
   );
@@ -529,6 +574,7 @@ function TimelineSVG({
           );
           const isExpanded =
             hoverClusterKey === cluster.key || !!pinnedDot || !!selectedDot;
+          const shouldDimOthers = selectionFocusEnabled && !!selected;
 
           return (
             <div
@@ -552,6 +598,7 @@ function TimelineSVG({
                   featuredLabels[dot.event.id] &&
                   featuredLabels[dot.event.id].cat === dot.cat;
                 const color = categoryColors[dot.cat];
+                const isDimmed = shouldDimOthers && !isSelected;
                 const radius =
                   isHovered || isSelected || isPinned
                     ? dotRadius + activeDotRadiusOffset
@@ -576,12 +623,12 @@ function TimelineSVG({
                       top: centerY - radius,
                       width: diameter,
                       height: diameter,
-                      borderColor: "#4B473F",
+                      borderColor: isDimmed ? "#8f8a7d" : "#4B473F",
                       borderWidth:
                         isHovered || isSelected || isPinned
                           ? activeBorderWidth
                           : defaultBorderWidth,
-                      backgroundColor: color,
+                      backgroundColor: isDimmed ? "#bcb5a7" : color,
                       boxShadow:
                         isHovered || isSelected || isPinned
                           ? `0 0 0 1.5px ${color}20`
@@ -590,7 +637,12 @@ function TimelineSVG({
                         isHovered || isSelected || isPinned
                           ? "scale(1.12)"
                           : "scale(1)",
-                      opacity: isExpanded || dotIndex === 0 ? 1 : 0,
+                      opacity:
+                        isExpanded || dotIndex === 0
+                          ? isDimmed
+                            ? 0.58
+                            : 1
+                          : 0,
                       pointerEvents:
                         isExpanded || dotIndex === 0 ? "auto" : "none",
                       zIndex: isExpanded
@@ -629,8 +681,8 @@ function TimelineSVG({
         <div
           className="career-timeline-tooltip-wrap"
           style={{
-            left: Math.min(displayTip.x + 16, svgWidth - 260),
-            top: Math.max(displayTip.y - 60, 4),
+            left: tooltipPosition?.left ?? tooltipEdgePadding,
+            top: tooltipPosition?.top ?? tooltipEdgePadding,
             pointerEvents: isPinned ? "auto" : "none",
           }}
         >
@@ -775,7 +827,18 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
     updateMetrics();
     const observer = new ResizeObserver(updateMetrics);
     observer.observe(element);
-    return () => observer.disconnect();
+    const headObserver = new MutationObserver(updateMetrics);
+    if (document.head) {
+      headObserver.observe(document.head, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
+    }
+    return () => {
+      observer.disconnect();
+      headObserver.disconnect();
+    };
   }, []);
 
   useEffect(() => {

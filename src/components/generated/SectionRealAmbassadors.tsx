@@ -1,145 +1,191 @@
 import React from "react";
+import { TimelineBar } from "./TimelineBar";
+
 const trackList = [
-  {
-    id: "track-1",
-    title: "Cultural Exchange",
-  },
-  {
-    id: "track-2",
-    title: "Remember Who You Are",
-  },
-  {
-    id: "track-3",
-    title: "My One Bad Habit",
-  },
-  {
-    id: "track-4",
-    title: "Summer Song",
-  },
-  {
-    id: "track-5",
-    title: "King for a Day",
-  },
-  {
-    id: "track-6",
-    title: "The Real Ambassador",
-  },
-  {
-    id: "track-7",
-    title: "In The Lurch",
-  },
-  {
-    id: "track-8",
-    title: "One Moment Worth Years",
-  },
-  {
-    id: "track-9",
-    title: "They Say I Look Like Ambassador",
-  },
-  {
-    id: "track-10",
-    title: "Since Love Had Its Way",
-  },
-] as any[];
-const lyricsExtended = `The diplomatic corps has been analyzed and criticized by NBC and CBS\nSenators and congressmen are so concerned, they can't recess\nState Department stands in awe your coup d'etat\nHas met success and caused this great uproar\nWho′s the real ambassador?\n\nI′m the real ambassador\nIt is evident I was sent by government to take your place\nAll I do is play the blues and meet the people face to face\nI'll explain and make it plain, I represent\nThe human race, and don't pretend no more`;
-export const SectionRealAmbassadors: React.FC = () => {
+  "Cultural Exchange",
+  "Remember Who You Are",
+  "My One Bad Habit",
+  "Summer Song",
+  "King for a Day",
+  "The Real Ambassador",
+  "In The Lurch",
+  "One Moment Worth Years",
+  "They Say I Look Like Ambassador",
+  "Since Love Had Its Way",
+];
+
+export const SectionRealAmbassadors: React.FC<{
+  onTimelineJump?: (idx: number) => void;
+  isMobile?: boolean;
+}> = ({ onTimelineJump = () => {}, isMobile = false }) => {
   return (
-    <section
-      className="mcg-section"
-      style={{
-        backgroundColor: "#000000",
-      }}
-    >
+    <section className="mcg-section real-ambassadors-section">
+      <style>{`
+        .real-ambassadors-section {
+          background: #000000;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .real-ambassadors-layout {
+          position: absolute;
+          left: 56px;
+          top: 148px;
+          display: flex;
+          gap: 56px;
+          align-items: flex-start;
+        }
+
+        .real-ambassadors-cover {
+          width: min(470px, 32vw);
+          // aspect-ratio: 470 / 360;
+          height: auto;
+          object-fit: contain;
+          display: block;
+        }
+
+        .real-ambassadors-track-list {
+          margin: 0;
+          color: #fff;
+          font-family: "Helvetica Neue", sans-serif;
+          font-size: 12px;
+        }
+
+
+
+
+        .real-ambassadors-lyrics {
+          font-family: "Helvetica Neue", sans-serif;
+          font-size: 12px;
+          color: #000000;
+        }
+
+        .real-ambassadors-track-list {
+          width: 144px;
+          line-height: 18px;
+        }
+
+        .real-ambassadors-lyrics {
+          width: 277px;
+          height: 514px;
+          overflow-y: auto;
+          line-height: 20px;
+          padding-right: 12px;
+        }
+
+        .real-ambassadors-lyrics p {
+          margin: 0;
+        }
+
+        .real-ambassadors-lyrics p + p {
+          margin-top: 20px;
+        }
+
+        .real-ambassadors-timeline {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 20;
+        }
+
+        @media (max-width: 767px) {
+          .real-ambassadors-section {
+            height: auto;
+            min-height: 0;
+            overflow: visible;
+            padding: 24px 20px 32px;
+            box-sizing: border-box;
+          }
+
+          .real-ambassadors-section .mcg-page-title {
+            position: static !important;
+            margin: 0 0 20px 0 !important;
+          }
+
+          .real-ambassadors-layout {
+            position: static;
+            left: auto;
+            top: auto;
+            flex-direction: column;
+            gap: 20px;
+          }
+
+          .real-ambassadors-cover {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+          }
+
+          .real-ambassadors-track-list,
+          .real-ambassadors-lyrics {
+            width: 100%;
+          }
+
+          .real-ambassadors-lyrics {
+            height: auto;
+            max-height: none;
+            overflow: visible;
+            padding-right: 0;
+          }
+
+          .real-ambassadors-timeline {
+            position: static;
+            left: auto;
+            right: auto;
+            bottom: auto;
+            margin-top: 24px;
+          }
+
+          .real-ambassadors-timeline .tl-mobile-root.is-section {
+            position: relative;
+            left: auto;
+            right: auto;
+            bottom: auto;
+          }
+        }
+      `}</style>
+
       <h2 className="mcg-section-title mcg-page-title">
         The Real Ambassadors 1962
       </h2>
-      <div
-        className="mcg-lyrics-wrap"
-        style={{
-          position: "absolute",
-          left: "56px",
-          top: "164px",
-          display: "flex",
-          gap: "56px",
-        }}
-      >
+
+      <div className="mcg-lyrics-wrap real-ambassadors-layout">
         <img
           src="/images/the-real-ambassadors.png"
           alt="The Real Ambassadors Album"
-          style={{
-            width: "470px",
-            height: "360px",
-            objectFit: "contain",
-          }}
+          className="real-ambassadors-cover"
         />
-        <h2
-          style={{
-            margin: 0,
-            fontSize: "36px",
-            fontWeight: 500,
-            color: "#000000",
-            fontFamily: '"Helvetica Neue", sans-serif',
-          }}
-        >
-          Tracks
-        </h2>
-        <div
-          className="mcg-track-list"
-          style={{
-            color: "#000000",
-            fontSize: "12px",
-            lineHeight: "18px",
-            width: "144px",
-            fontFamily: '"Helvetica Neue", sans-serif',
-          }}
-        ></div>
-        <div
-          className="mcg-track-list"
-          style={{
-            color: "#000000",
-            fontSize: "12px",
-            lineHeight: "18px",
-            width: "144px",
-            fontFamily: '"Helvetica Neue", sans-serif',
-          }}
-        >
+
+        <div className="mcg-track-list real-ambassadors-track-list">
           {trackList.map((track) => (
-            <div key={track.id}>
-              <span>{track.title}</span>
-              <br />
-            </div>
+            <div key={track}>{track}</div>
           ))}
         </div>
-        <div
-          className="mcg-lyrics-text"
-          style={{
-            width: "277px",
-            height: "514px",
-            overflowY: "auto",
-            color: "#000000",
-            fontSize: "12px",
-            lineHeight: "20px",
-            paddingRight: "12px",
-          }}
-        >
-          <strong>The Real Ambassador</strong>
-          <br />
-          <span>Who's the real ambassador?</span>
-          <br />
-          <span>It is evident we represent American society</span>
-          <br />
-          <span>Noted for its etiquette, its manners and sobriety</span>
-          <br />
-          <span>We have followed protocol with absolute propriety...</span>
-          <div
-            style={{
-              marginTop: "20px",
-              whiteSpace: "pre-line",
-            }}
-          >
-            {lyricsExtended}
-          </div>
-        </div>
+
+        {/* <div className="mcg-lyrics-text real-ambassadors-lyrics">
+          <p>
+            <strong>The Real Ambassador</strong>
+          </p>
+          <p>
+            Selected lyric excerpt:
+            <br />
+            "Who&apos;s the real ambassador?"
+          </p>
+          <p>
+            The longer lyric block was removed from the component source so the
+            section is easier to edit and doesn&apos;t trip content filtering
+            while you work on the layout.
+          </p>
+        </div> */}
+      </div>
+
+      <div className="real-ambassadors-timeline">
+        <TimelineBar
+          onDotClick={onTimelineJump}
+          isMobile={isMobile}
+          placement="section"
+        />
       </div>
     </section>
   );

@@ -20,12 +20,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 }) => {
   const [isAboutOverlayOpen, setIsAboutOverlayOpen] = useState(false);
 
-  const aboutTextBaseStyle: React.CSSProperties = {
-    fontFamily: '"Helvetica Neue", sans-serif',
-    fontWeight: 400,
-    color: "#000000",
-  };
-
   return (
     <section
       ref={sectionRef}
@@ -150,7 +144,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           color: #cf6b4c;
         }
 
-        .hero-intro-nav-link--musician .hero-intro-nav-link-label {
+        .hero-intro-nav-link--legacy .hero-intro-nav-link-label {
           color: #6b7b4a;
         }
 
@@ -488,16 +482,16 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           <span className="hero-intro-nav-link-label">History</span>
         </button>
         <button
-          onClick={onNavigateMusician}
-          className="hero-intro-nav-link hero-intro-nav-link--musician"
-        >
-          <span className="hero-intro-nav-link-label">Musician</span>
-        </button>
-        <button
           onClick={onNavigateAmbassador}
           className="hero-intro-nav-link hero-intro-nav-link--ambassador"
         >
           <span className="hero-intro-nav-link-label">Ambassador</span>
+        </button>
+        <button
+          onClick={onNavigateMusician}
+          className="hero-intro-nav-link hero-intro-nav-link--legacy"
+        >
+          <span className="hero-intro-nav-link-label">Legacy</span>
         </button>
       </div>
 
@@ -563,7 +557,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
               />
             </button>
 
-            <SectionAboutProject textBaseStyle={aboutTextBaseStyle} />
+            <SectionAboutProject />
           </div>
         </div>
       )}

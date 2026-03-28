@@ -1,75 +1,98 @@
 import React from "react";
-interface SectionAboutProjectProps {
-  textBaseStyle: React.CSSProperties;
-}
-export const SectionAboutProject: React.FC<SectionAboutProjectProps> = ({
-  textBaseStyle,
-}) => {
+
+export const SectionAboutProject: React.FC = () => {
   return (
-    <section
-      className="mcg-section"
-      style={{
-        backgroundColor: "#ffffff",
-      }}
-    >
+    <section className="mcg-section about-project-section">
+      <style>{`
+        .about-project-section {
+          background: #ffffff;
+        }
+
+        .about-project-layout {
+          position: absolute;
+          left: 56px;
+          top: 164px;
+          display: flex;
+          gap: 142px;
+          align-items: flex-start;
+        }
+
+        .about-project-copy {
+          width: 383px;
+          margin: 0;
+          color: #000000;
+          font-family: "Helvetica Neue", sans-serif;
+          font-size: 12px;
+          line-height: 22px;
+        }
+
+        .about-project-figure {
+          margin: 0;
+          width: 420px;
+        }
+
+        .about-project-image {
+          width: 420px;
+          height: 526px;
+          object-fit: cover;
+          display: block;
+        }
+
+        .about-project-caption {
+          margin: 8px 0 0;
+          color: #000000;
+          font-family: "Helvetica Neue", sans-serif;
+          font-size: 12px;
+        }
+
+        @media (max-width: 767px) {
+          .about-project-layout {
+            position: static;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+          }
+
+          .about-project-copy,
+          .about-project-figure {
+            width: 100%;
+          }
+
+          .about-project-image {
+            width: 100%;
+            height: auto;
+            max-height: 420px;
+          }
+        }
+      `}</style>
+
       <h2 className="mcg-section-title mcg-page-title">About this Project</h2>
-      <div
-        className="mcg-about-text"
-        style={{
-          position: "absolute",
-          left: "56.4px",
-          top: "164px",
-        }}
-      >
-        <p
-          style={{
-            ...textBaseStyle,
-            color: "#000000",
-            width: "383px",
-            lineHeight: "22px",
-            fontSize: "12px",
-          }}
-        >
+
+      <div className="about-project-layout">
+        <p className="about-project-copy">
           This project, Louis Armstrong: The Real Ambassador, examines how
-          Armstrong's career illuminates the intersections of music, race,
-          politics, and U.S. cultural diplomacy in the mid-twentieth century. By
-          tracing his international tours, the circulation and reinterpretation
-          of his songs, and the political contexts surrounding his performances,
-          the project shows how Armstrong became more than a jazz icon: he
-          emerged as a powerful, if sometimes conflicted, symbol of American
-          ambassadorship. At the same time, it asks how that role was shaped not
-          only by official diplomacy, but also by the afterlife of his music,
-          which continued to carry ideas of goodwill, freedom, and connection
-          across borders long after his travels ended.
+          Armstrong&apos;s career illuminates the intersections of music, race,
+          politics, and U.S. cultural diplomacy in the mid-twentieth century.
+          By tracing his international tours, the circulation and
+          reinterpretation of his songs, and the political contexts surrounding
+          his performances, the project shows how Armstrong became more than a
+          jazz icon: he emerged as a powerful, if sometimes conflicted, symbol
+          of American ambassadorship. At the same time, it asks how that role
+          was shaped not only by official diplomacy, but also by the afterlife
+          of his music, which continued to carry ideas of goodwill, freedom, and
+          connection across borders long after his travels ended.
         </p>
-      </div>
-      <div
-        className="mcg-about-img-wrap"
-        style={{
-          position: "absolute",
-          left: "582px",
-          top: "164px",
-        }}
-      >
-        <img
-          src="/images/about-this-project.png"
-          alt="Louis Armstrong 1929"
-          style={{
-            width: "420px",
-            height: "526px",
-            objectFit: "cover",
-          }}
-        />
-        <p
-          style={{
-            ...textBaseStyle,
-            color: "#000000",
-            fontSize: "12px",
-            marginTop: "8px",
-          }}
-        >
-          Louis Armstrong and his Orchestra (1929)
-        </p>
+
+        <figure className="about-project-figure">
+          <img
+            src="/images/about-this-project.png"
+            alt="Louis Armstrong 1929"
+            className="about-project-image"
+          />
+          <figcaption className="about-project-caption">
+            Louis Armstrong and his Orchestra (1929)
+          </figcaption>
+        </figure>
       </div>
     </section>
   );

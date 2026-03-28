@@ -12,10 +12,8 @@ import {
   timelineLineSpacing,
   mobileTimelineHeight,
   roleLines,
-  sectionsMeta,
   lyricLabels,
   rawLyrics,
-  getSectionWidth,
 } from "./TimelineShared";
 import "./TimelineBar.css";
 
@@ -30,6 +28,13 @@ const mobileTimelineRightGutter = 18;
 const lyricHoverBackground = "#F5F3EA";
 const mobileLyricLetterSpacing = 0.08;
 const desktopLyricLetterSpacing = 0.1;
+const scrollbarHeight = 18;
+const mobileScrollbarThumbBoost = 8;
+const desktopScrollbarThumbBoost = 20;
+const soundIconOffFilter =
+  "brightness(0) saturate(100%) invert(23%) sepia(91%) saturate(2862%) hue-rotate(349deg) brightness(93%) contrast(96%)";
+const soundIconOnFilter =
+  "brightness(0) saturate(100%) invert(25%) sepia(96%) saturate(1717%) hue-rotate(206deg) brightness(101%) contrast(96%)";
 
 // Musical font for lyrics
 const lyricFont = "Georgia, 'Times New Roman', serif";
@@ -68,14 +73,21 @@ function estimateLyricWidth(
 }
 
 export function TimelineBar({
-  onDotClick,
+  onDotClick: _onDotClick,
   isMobile,
+  placement = "fixed",
 }: {
   onDotClick: (idx: number) => void;
   isMobile: boolean;
+  placement?: "fixed" | "section";
 }) {
   const [hoveredLyricId, setHoveredLyricId] = useState<string | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const [scrollMetrics, setScrollMetrics] = useState({
+    left: 0,
+    viewportWidth: 1,
+    contentWidth: totalWidth,
+  });
   const audioRef = useRef<HTMLAudioElement>(null);
   const lyricFontVar = { "--tl-lyric-font": lyricFont } as React.CSSProperties;
 
@@ -126,50 +138,103 @@ export function TimelineBar({
     return map;
   }, []);
 
-  // Independent scroll state for the timeline bar itself
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [tlScrollLeft, setTlScrollLeft] = useState(0);
+
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const onScroll = () => setTlScrollLeft(el.scrollLeft);
-    el.addEventListener("scroll", onScroll, {
-      passive: true,
-    });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
 
-  // Calculate section positions based on dynamic widths
-  const sectionPositions = useMemo(() => {
-    let x = 0;
-    const positions = sectionsMeta.map((sec) => {
-      const startX = x;
-      const width = getSectionWidth(sec.startYear, sec.endYear);
-      x += width;
-      return { start: startX, width };
-    });
-    return positions;
-  }, []);
+    const updateMetrics = () => {
+      setScrollMetrics({
+        left: el.scrollLeft,
+        viewportWidth: el.clientWidth,
+        contentWidth: el.scrollWidth,
+      });
+    };
 
-  // Determine active section based on scroll position
-  const activeIdx = useMemo(() => {
-    for (let i = 0; i < sectionPositions.length; i++) {
-      const nextPos = sectionPositions[i + 1];
-      if (nextPos && tlScrollLeft < nextPos.start) return i;
-    }
-    return Math.min(sectionsMeta.length - 1, sectionPositions.length - 1);
-  }, [tlScrollLeft, sectionPositions]);
+    updateMetrics();
+    el.addEventListener("scroll", updateMetrics, { passive: true });
+    window.addEventListener("resize", updateMetrics);
+    return () => {
+      el.removeEventListener("scroll", updateMetrics);
+      window.removeEventListener("resize", updateMetrics);
+    };
+  }, [isMobile, placement]);
 
-  // When a nav pill is clicked, scroll the timeline bar to that section
-  const handlePillClick = (idx: number) => {
-    const el = scrollRef.current;
-    if (el) {
+  const handleScrollbarTrackClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const el = scrollRef.current;
+      if (!el) return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const ratio = (event.clientX - rect.left) / rect.width;
+      const maxScroll = Math.max(el.scrollWidth - el.clientWidth, 0);
       el.scrollTo({
-        left: sectionPositions[idx]?.start || 0,
+        left: ratio * maxScroll,
         behavior: "smooth",
       });
-    }
-    onDotClick(idx);
+    },
+    [],
+  );
+
+  const handleScrollSurfaceWheel = useCallback(
+    (event: React.WheelEvent<HTMLDivElement>) => {
+      const el = scrollRef.current;
+      if (!el) return;
+
+      const dominantDelta =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? event.deltaX
+          : event.deltaY;
+      const maxScroll = Math.max(el.scrollWidth - el.clientWidth, 0);
+
+      if (maxScroll <= 0 || dominantDelta === 0) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const nextLeft = Math.min(
+        Math.max(el.scrollLeft + dominantDelta * 1.35, 0),
+        maxScroll,
+      );
+
+      el.scrollLeft = nextLeft;
+    },
+    [],
+  );
+
+  const renderScrollBar = () => {
+    const { left, viewportWidth, contentWidth } = scrollMetrics;
+    const maxScroll = Math.max(contentWidth - viewportWidth, 0);
+    const baseThumbWidthPercent = (viewportWidth / contentWidth) * 100;
+    const boostedThumbWidthPercent =
+      baseThumbWidthPercent +
+      (isMobile ? mobileScrollbarThumbBoost : desktopScrollbarThumbBoost);
+    const thumbWidthPercent = Math.min(
+      Math.max(boostedThumbWidthPercent, isMobile ? 18 : 22),
+      100,
+    );
+    const maxThumbLeftPercent = Math.max(100 - thumbWidthPercent, 0);
+    const thumbLeftPercent =
+      maxScroll > 0 ? (left / maxScroll) * maxThumbLeftPercent : 0;
+
+    return (
+      <div className="tl-custom-scrollbar" aria-hidden="true">
+        <div
+          className="tl-custom-scrollbar-track"
+          onClick={handleScrollbarTrackClick}
+        >
+          <div
+            className="tl-custom-scrollbar-thumb"
+            style={{
+              width: `${thumbWidthPercent}%`,
+              left: `${thumbLeftPercent}%`,
+            }}
+          />
+        </div>
+      </div>
+    );
   };
 
   const renderLyricLabels = (isMobileView: boolean) => {
@@ -260,14 +325,12 @@ export function TimelineBar({
 
   // ── MOBILE LAYOUT ─────────────────────────────────────────────────────────
   if (isMobile) {
-    // SVG height: total bar minus header row minus pill dots row
     const headerH = 32;
-    const pillH = 28;
-    const svgH = mobileTimelineHeight - headerH - pillH;
+    const svgH = mobileTimelineHeight - headerH - scrollbarHeight;
     return (
       <>
         <div
-          className="tl-mobile-root"
+          className={`tl-mobile-root${placement === "section" ? " is-section" : ""}`}
           style={{ height: mobileTimelineHeight, ...lyricFontVar }}
         >
           <audio
@@ -278,9 +341,9 @@ export function TimelineBar({
           />
           {/* "The Real Ambassadors" header — always visible */}
           <div className="tl-mobile-header" style={{ height: headerH }}>
-            <span className="tl-header-title tl-header-title-mobile">
+            <div className="tl-header-title tl-header-title-mobile">
               The Real Ambassadors
-            </span>
+            </div>
             <button
               onClick={() => {
                 if (soundEnabled) {
@@ -295,7 +358,10 @@ export function TimelineBar({
                 src="/images/sound.svg"
                 alt="Sound toggle"
                 className="tl-sound-icon tl-sound-icon-mobile"
-                style={{ opacity: soundEnabled ? 1 : 0.5 }}
+                style={{
+                  opacity: 1,
+                  filter: soundEnabled ? soundIconOnFilter : soundIconOffFilter,
+                }}
               />
             </button>
           </div>
@@ -317,6 +383,7 @@ export function TimelineBar({
             <div
               ref={scrollRef}
               className="tl-scroll-surface tl-scroll-surface-mobile"
+              onWheel={handleScrollSurfaceWheel}
             >
               <div
                 className="tl-mob-scroll"
@@ -326,8 +393,6 @@ export function TimelineBar({
                     height: svgH,
                     minHeight: svgH,
                     position: "relative",
-                    paddingBottom: 24,
-                    scrollbarWidth: "none",
                   } as React.CSSProperties
                 }
               >
@@ -364,37 +429,24 @@ export function TimelineBar({
             <div className="tl-mobile-left-mask" aria-hidden="true" />
             <div className="tl-mobile-right-mask" aria-hidden="true" />
           </div>
-
-          {/* Section navigation pill dots */}
-          <div className="tl-pill-row" style={{ height: pillH }}>
-            {sectionsMeta.map((sec, idx) => {
-              const active = activeIdx === idx;
-              return (
-                <button
-                  key={sec.id}
-                  onClick={() => handlePillClick(idx)}
-                  title={sec.label}
-                  className={`tl-pill ${active ? "is-active" : ""}`}
-                />
-              );
-            })}
-          </div>
+          {renderScrollBar()}
         </div>
-        <img
-          src="/images/logo_light.png"
-          alt="Strong House Logo"
-          className="tl-logo tl-logo-mobile"
-        />
+        {placement === "fixed" ? (
+          <img
+            src="/images/logo_light.png"
+            alt="Strong House Logo"
+            className="tl-logo tl-logo-mobile"
+          />
+        ) : null}
       </>
     );
   }
 
   // ── DESKTOP LAYOUT ────────────────────────────────────────────────────────
-  const pillH = 28;
-  const svgH = timelineHeight - pillH;
+  const svgH = timelineHeight - scrollbarHeight;
   return (
     <div
-      className="tl-desktop-root"
+      className={`tl-desktop-root${placement === "section" ? " is-section" : ""}`}
       style={{ height: timelineHeight, ...lyricFontVar }}
     >
       <audio
@@ -419,6 +471,7 @@ export function TimelineBar({
         <div
           ref={scrollRef}
           className="tl-scroll-surface tl-scroll-surface-desktop"
+          onWheel={handleScrollSurfaceWheel}
         >
           <div
             className="tl-bar-scroll"
@@ -429,9 +482,9 @@ export function TimelineBar({
             }}
           >
             {/* "The Real Ambassadors" label — sits in the scrolling area */}
-            <span className="tl-header-title tl-header-title-desktop">
+            <div className="tl-header-title tl-header-title-desktop">
               The Real Ambassadors
-            </span>
+            </div>
 
             <button
               onClick={() => {
@@ -447,7 +500,10 @@ export function TimelineBar({
                 src="/images/sound.svg"
                 alt="Sound toggle"
                 className="tl-sound-icon tl-sound-icon-desktop"
-                style={{ opacity: soundEnabled ? 1 : 0.5 }}
+                style={{
+                  opacity: 1,
+                  filter: soundEnabled ? soundIconOnFilter : soundIconOffFilter,
+                }}
               />
             </button>
 
@@ -483,26 +539,14 @@ export function TimelineBar({
         </div>
         <div className="tl-desktop-right-mask" aria-hidden="true" />
       </div>
-
-      {/* Section navigation pill dots — always visible at bottom */}
-      <div className="tl-pill-row" style={{ height: pillH }}>
-        {sectionsMeta.map((sec, idx) => {
-          const active = activeIdx === idx;
-          return (
-            <button
-              key={sec.id}
-              onClick={() => handlePillClick(idx)}
-              title={sec.label}
-              className={`tl-pill ${active ? "is-active" : ""}`}
-            />
-          );
-        })}
-      </div>
-      <img
-        src="/images/logo_light.png"
-        alt="Strong House Logo"
-        className="tl-logo tl-logo-desktop"
-      />
+      {renderScrollBar()}
+      {placement === "fixed" ? (
+        <img
+          src="/images/logo_light.png"
+          alt="Strong House Logo"
+          className="tl-logo tl-logo-desktop"
+        />
+      ) : null}
     </div>
   );
 }
