@@ -11,6 +11,7 @@ import { SectionRealAmbassadors } from "./SectionRealAmbassadors";
 import { SectionWorldFair } from "./SectionWorldFair";
 import { SectionGoodwillAmbassador } from "./SectionGoodwill/SectionGoodwillAmbassador.tsx";
 import { SectionWonderfulWorld } from "./SectionWonderfulWorld/SectionWonderfulWorld.tsx";
+import { SectionVinyl } from "./SectionVinyl.tsx";
 interface MainCollectionsProps {
   className?: string;
 }
@@ -56,7 +57,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       "World Fair + Berlin",
       "The Real Ambassadors",
     ],
-    musician: ["What a Wonderful World"],
+    musician: ["What a Wonderful World", "More Covers"],
   };
   const timelineTargetMap: TimelineJumpTarget[] = [
     { kind: "intro" },
@@ -64,6 +65,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     { kind: "section", groupId: "history", sectionIdx: 1 },
     { kind: "section", groupId: "history", sectionIdx: 2 },
     { kind: "section", groupId: "musician", sectionIdx: 0 },
+    { kind: "section", groupId: "musician", sectionIdx: 1 },
+    { kind: "section", groupId: "musician", sectionIdx: 1 },
     { kind: "section", groupId: "ambassador", sectionIdx: 0 },
     { kind: "section", groupId: "ambassador", sectionIdx: 3 },
     { kind: "section", groupId: "ambassador", sectionIdx: 4 },
@@ -1082,6 +1085,20 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               >
                 <div className="mcg-group-section-inner">
                   <SectionWonderfulWorld />
+                </div>
+              </div>
+              <div
+                ref={(element) => {
+                  musicianSectionRefs.current[1] = element;
+                }}
+                className="mcg-group-section"
+              >
+                <div className="mcg-group-section-inner">
+                  <SectionVinyl
+                    className="mcg-section"
+                    height="100%"
+                    minHeight="100%"
+                  />
                 </div>
               </div>
             </div>

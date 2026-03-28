@@ -86,9 +86,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           gap: 18px;
         }
 
-        .hero-intro-nav,
-        .hero-intro-explore-button,
-        .hero-intro-about-button {
+        .hero-intro-nav{
           position: absolute;
           z-index: 10;
         }
@@ -102,18 +100,35 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           gap: 12px;
         }
 
-        .hero-intro-nav-link,
-        .hero-intro-explore-button,
+        // .hero-intro-nav-link,
+        // .hero-intro-explore-button,
+        // .hero-intro-about-button {
+        //   background: none;
+        //   border: none;
+        //   cursor: pointer;
+        //   padding: 0;
+        //   color: #ffd000;
+        //   font-size: 16px;
+        //   font-weight: 400;
+        //   font-family: "Helvetica Neue", sans-serif;
+        // }
+
         .hero-intro-about-button {
+          position: relative;
+          width: 26px;
+          height: 320px;
+          display: block;
           background: none;
           border: none;
           cursor: pointer;
           padding: 0;
-          color: #ffd000;
-          font-size: 16px;
-          font-weight: 400;
-          font-family: "Helvetica Neue", sans-serif;
         }
+
+        .hero-intro-about-button .hero-intro-nav-link-label {
+          font-size: 16px;
+          color: #000000;
+        }
+
 
         .hero-intro-nav-link {
           position: relative;
@@ -140,6 +155,8 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           transition: opacity 0.18s ease;
         }
 
+        
+
         .hero-intro-nav-link--history .hero-intro-nav-link-label {
           color: #cf6b4c;
         }
@@ -160,11 +177,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         .hero-intro-explore-button {
           right: ${scalePx(150)};
           bottom: ${scalePx(110)};
-        }
-
-        .hero-intro-about-button {
-          right: ${scalePx(150)};
-          bottom: ${scalePx(46)};
         }
 
         .hero-intro-about-overlay {
@@ -270,6 +282,11 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             height: auto;
           }
 
+          .hero-intro-about-button {
+            width: auto;
+            height: auto;
+          }
+
           .hero-intro-nav-link-label {
             position: static;
             transform: none;
@@ -284,11 +301,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
           .hero-intro-explore-button {
             bottom: 78px;
-          }
-
-          .hero-intro-about-button {
-            right: 24px;
-            bottom: 38px;
           }
 
           /* tablet/smaller desktop overlay stays modal */
@@ -380,6 +392,11 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             height: auto;
           }
 
+          .hero-intro-about-button {
+            width: auto;
+            height: auto;
+          }
+
           .hero-intro-nav-link-label {
             position: static;
             transform: none;
@@ -394,11 +411,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
           .hero-intro-explore-button {
             bottom: 68px;
-          }
-
-          .hero-intro-about-button {
-            right: 18px;
-            bottom: 30px;
           }
 
           /* phone overlay becomes full-screen */
@@ -493,14 +505,13 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         >
           <span className="hero-intro-nav-link-label">Legacy</span>
         </button>
+        <button
+          onClick={() => setIsAboutOverlayOpen(true)}
+          className="hero-intro-nav-link hero-intro-about-button"
+        >
+          <span className="hero-intro-nav-link-label">About this project</span>
+        </button>
       </div>
-
-      <button
-        onClick={() => setIsAboutOverlayOpen(true)}
-        className="about-btn mcg-hero-about hero-intro-about-button"
-      >
-        About this project
-      </button>
 
       {isAboutOverlayOpen && (
         <div
