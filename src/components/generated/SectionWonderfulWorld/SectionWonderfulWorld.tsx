@@ -59,6 +59,19 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
+function normalizeImagePath(imagePath?: string) {
+  if (!imagePath) return "";
+  if (
+    imagePath.startsWith("/") ||
+    imagePath.startsWith("http://") ||
+    imagePath.startsWith("https://") ||
+    imagePath.startsWith("data:")
+  ) {
+    return imagePath;
+  }
+  return `/${imagePath}`;
+}
+
 function getSilhouetteBounds(canvasWidth: number, canvasHeight: number) {
   const canvasAspect = canvasWidth / canvasHeight;
   const silhouetteFit = 0.75 * SILHOUETTE_SCALE;
@@ -204,7 +217,9 @@ export function SectionWonderfulWorld({
     top: `${fact.y - fact.r}px`,
     width: `${fact.r * 2}px`,
     height: `${fact.r * 2}px`,
-    ...(fact.image ? { backgroundImage: `url("${fact.image}")` } : {}),
+    ...(fact.image
+      ? { backgroundImage: `url("${normalizeImagePath(fact.image)}")` }
+      : {}),
   });
 
   const isOutsideMask = (x: number, y: number) => {
