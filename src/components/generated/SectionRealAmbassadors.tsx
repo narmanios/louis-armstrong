@@ -25,15 +25,17 @@ export const SectionRealAmbassadors: React.FC<{
           background: #000000;
           position: relative;
           overflow: hidden;
+          min-height: 800px;
+          padding: 49px 56px 60px;
+          box-sizing: border-box;
         }
 
         .real-ambassadors-layout {
-          position: absolute;
-          left: 56px;
-          top: 148px;
+          position: static;
           display: flex;
           gap: 56px;
           align-items: flex-start;
+          margin-top: 24px;
         }
 
         .real-ambassadors-cover {
@@ -82,14 +84,12 @@ export const SectionRealAmbassadors: React.FC<{
         }
 
         .real-ambassadors-timeline {
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 0;
+          position: static;
           z-index: 20;
+          margin-top: 24px;
         }
 
-        @media (max-width: 767px) {
+        @media (max-width: 768px) {
           .real-ambassadors-section {
             height: auto;
             min-height: 0;
@@ -100,7 +100,9 @@ export const SectionRealAmbassadors: React.FC<{
 
           .real-ambassadors-section .mcg-page-title {
             position: static !important;
-            margin: 0 0 20px 0 !important;
+            display: block !important;
+            width: calc(100% - 40px);
+            margin: 0 auto 24px !important;
           }
 
           .real-ambassadors-layout {
@@ -109,6 +111,7 @@ export const SectionRealAmbassadors: React.FC<{
             top: auto;
             flex-direction: column;
             gap: 20px;
+            margin-top: 0;
           }
 
           .real-ambassadors-cover {
@@ -146,7 +149,7 @@ export const SectionRealAmbassadors: React.FC<{
         }
       `}</style>
 
-      <h2 className="mcg-section-title mcg-page-title">
+      <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">
         The Real Ambassadors 1962
       </h2>
 

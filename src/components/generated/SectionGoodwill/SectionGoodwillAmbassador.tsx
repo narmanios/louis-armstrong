@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import SectionGoodwillStageArtwork from "./SectionGoodwillStageArtwork";
 import { X } from "lucide-react";
-import countriesData from "../../../../data/goodwillCountries.json";
+import countriesData from "../../../../public/images/data/goodwillCountries.json";
 
 type Decade = "all" | "1920s" | "1930s" | "1940s" | "1950s" | "1960s" | "1970s";
 
@@ -58,6 +58,7 @@ const MOBILE_BREAKPOINT = 768;
 const DESKTOP_STAGE_SCALE_BOOST = 1.14;
 const DESKTOP_CHART_OFFSET_Y = -36;
 const MOBILE_CHART_OFFSET_Y = -96;
+const MOBILE_CHART_OFFSET_X = -72;
 
 const MAP_GROUP_LEFT = 110;
 const MAP_GROUP_TOP = 136;
@@ -439,7 +440,9 @@ export function SectionGoodwillAmbassador({
 
   // Shift the imported artwork left to counter its built-in whitespace.
   // On mobile, add the live bubble-field centering adjustment on top.
-  const chartOffsetX = isMobile ? -110 + mobileBubbleOffsetX : -110;
+  const chartOffsetX = isMobile
+    ? MOBILE_CHART_OFFSET_X + mobileBubbleOffsetX
+    : -110;
   const chartOffsetY = isMobile
     ? MOBILE_CHART_OFFSET_Y
     : DESKTOP_CHART_OFFSET_Y;
@@ -590,6 +593,9 @@ export function SectionGoodwillAmbassador({
           justify-content: center;
           flex-shrink: 0;
           margin-top: 2px;
+          position: relative;
+          z-index: 6;
+          touch-action: manipulation;
         }
 
         .goodwill-chip {
@@ -601,7 +607,9 @@ export function SectionGoodwillAmbassador({
 
         @media (max-width: ${MOBILE_BREAKPOINT}px) {
           .goodwill-section-header {
-            padding: 24px 12px 0;
+            width: calc(100% - 40px);
+            padding: 24px 0 0;
+            margin: 0 auto;
             margin-bottom: 0;
             display: block;
           }
@@ -617,8 +625,9 @@ export function SectionGoodwillAmbassador({
 
           .goodwill-mobile-filter {
             display: block;
-            width: 100%;
-            max-width: 320px;
+            width: 40%;
+            max-width: none;
+            margin: 40px 16px auto;
           }
 
           .goodwill-desktop-panel {
@@ -628,7 +637,7 @@ export function SectionGoodwillAmbassador({
           .goodwill-mobile-backdrop {
             display: block;
             position: fixed;
-            inset: 0;
+            inset: var(--mcg-mobile-nav-offset, 0px) 0 0 0;
             background: rgba(0, 0, 0, 0.42);
             z-index: 9998;
           }
@@ -636,9 +645,9 @@ export function SectionGoodwillAmbassador({
           .goodwill-mobile-panel {
             display: block;
             position: fixed;
-            inset: 0;
+            inset: var(--mcg-mobile-nav-offset, 0px) 0 0 0;
             width: 100vw;
-            height: 100dvh;
+            height: calc(100dvh - var(--mcg-mobile-nav-offset, 0px));
             background: #111111;
             z-index: 9999;
             overflow-y: auto;
@@ -655,6 +664,20 @@ export function SectionGoodwillAmbassador({
 
           .goodwill-chip {
             font-size: 11px;
+          }
+
+          .goodwill-stage-shell {
+            width: calc(100% - 40px);
+            max-width: none;
+            margin: -1px auto 0;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+          }
+
+          .goodwill-stage-frame {
+            margin: 0 auto;
+            max-width: 100%;
           }
 
           .goodwill-stage {

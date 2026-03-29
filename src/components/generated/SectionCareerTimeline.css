@@ -292,7 +292,7 @@
   font-style: italic;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .career-timeline-layout {
     padding: 10px 12px 20px;
     display: block;

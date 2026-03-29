@@ -17,10 +17,7 @@ interface AfricaTourJsonImage {
   image_link: string;
 }
 
-const africaTourJsonUrl = new URL(
-  "../../../data/africa-tour.json",
-  import.meta.url,
-).href;
+const africaTourJsonUrl = "/images/data/africa-tour.json";
 
 export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
   className,
@@ -95,6 +92,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
     "Description of image goes here. Description of image goes here. Description of image goes here. Description of image goes here. Description of image goes here. Description of image goes here. Description of image goes here. Description of image goes here.";
   const activeTourImage =
     africaTourImageData[tourActiveIndex] ?? africaTourImageData[0] ?? null;
+  const representativeTourImage = africaTourImageData[0] ?? null;
+  const mobileTourCardImageSrc = "/images/africa.png";
   const desktopCardWidth = "min(280px, calc((100vw - 320px) / 3))";
   const desktopTourCardWidth = "min(280px, calc((100vw - 320px) / 3))";
   const desktopCardHeight = "min(214px, calc((100vw - 320px) / 3 * 0.766))";
@@ -122,7 +121,17 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
           position: "relative",
         }}
       >
-        <h1 className="mcg-page-title mcg-page-title--flow mcg-page-title--spaced">
+        <h1
+          className="mcg-page-title mcg-page-title--flow mcg-page-title--spaced"
+          style={
+            isMobile
+              ? {
+                  width: "calc(100% - 40px)",
+                  margin: "0 auto 24px",
+                }
+              : undefined
+          }
+        >
           Africa 1960-1961
         </h1>
 
@@ -130,8 +139,9 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
           style={{
             display: "flex",
             flexDirection: isMobile ? "column" : "row",
-            gap: isMobile ? "20px" : "56px",
+            gap: isMobile ? "32px" : "56px",
             alignItems: "flex-start",
+            justifyContent: isMobile ? "center" : "flex-start",
             marginBottom: isMobile ? "20px" : "27px",
           }}
         >
@@ -146,7 +156,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               padding: 0,
               cursor: "pointer",
               textAlign: "left",
-              width: isMobile ? "100%" : desktopTourCardWidth,
+              width: isMobile ? "calc(100% - 56px)" : desktopTourCardWidth,
+              margin: isMobile ? "0 0 0 20px" : 0,
               transition: "transform 0.25s ease",
               transform: hoveredCard === "tour" ? "scale(1.03)" : "scale(1)",
               transformOrigin: "center center",
@@ -154,32 +165,45 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
           >
             <div
               style={{
-                width: isMobile ? "100%" : desktopTourCardWidth,
+                width: "100%",
                 height: isMobile ? "auto" : desktopCardHeight,
+                aspectRatio: isMobile ? "5 / 4" : undefined,
                 backgroundColor: "#F5F3EA",
-                padding: "7px 5px",
+                padding: isMobile ? 0 : "7px 5px",
                 boxSizing: "border-box",
-                display: "grid",
-                gridTemplateColumns: isMobile
-                  ? "repeat(4, 1fr)"
-                  : "repeat(7, 1fr)",
-                gap: "5px",
+                display: isMobile ? "block" : "grid",
+                gridTemplateColumns: isMobile ? undefined : "repeat(7, 1fr)",
+                gap: isMobile ? undefined : "5px",
                 marginBottom: "9px",
+                overflow: "hidden",
               }}
             >
-              {africaTourImageData.slice(0, 28).map((img) => (
+              {isMobile ? (
                 <img
-                  key={img.id}
-                  src={img.src}
-                  alt=""
+                  src={mobileTourCardImageSrc}
+                  alt="Africa Tour"
                   style={{
                     width: "100%",
-                    aspectRatio: "3 / 4",
-                    height: "auto",
+                    height: "100%",
                     objectFit: "cover",
+                    display: "block",
                   }}
                 />
-              ))}
+              ) : (
+                africaTourImageData.slice(0, 28).map((img) => (
+                  <img
+                    key={img.id}
+                    src={img.src}
+                    alt=""
+                    style={{
+                      width: "100%",
+                      aspectRatio: "3 / 4",
+                      height: "auto",
+                      objectFit: "cover",
+                    }}
+                  />
+                ))
+              )}
             </div>
             <span
               style={{
@@ -190,6 +214,18 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             >
               Africa Tour
             </span>
+            {isMobile ? (
+              <p
+                style={{
+                  fontSize: "12px",
+                  lineHeight: "18px",
+                  color: "#010000",
+                  margin: "12px 0 0 0",
+                }}
+              >
+                {loremText}
+              </p>
+            ) : null}
           </button>
 
           {/* Card 2: Cairo */}
@@ -203,7 +239,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               padding: 0,
               cursor: "pointer",
               textAlign: "left",
-              width: isMobile ? "100%" : desktopCardWidth,
+              width: isMobile ? "calc(100% - 56px)" : desktopCardWidth,
+              margin: isMobile ? "0 0 0 20px" : 0,
               transition: "transform 0.25s ease",
               transform: hoveredCard === "egypt" ? "scale(1.03)" : "scale(1)",
               transformOrigin: "center center",
@@ -214,7 +251,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               alt="Cairo"
               style={{
                 width: "100%",
-                height: isMobile ? "220px" : desktopCardHeight,
+                height: isMobile ? "auto" : desktopCardHeight,
+                aspectRatio: isMobile ? "5 / 4" : undefined,
                 objectFit: "cover",
                 marginBottom: "9px",
               }}
@@ -228,6 +266,18 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             >
               Cairo, Egypt
             </span>
+            {isMobile ? (
+              <p
+                style={{
+                  fontSize: "12px",
+                  lineHeight: "18px",
+                  color: "#010000",
+                  margin: "12px 0 0 0",
+                }}
+              >
+                {loremText}
+              </p>
+            ) : null}
           </button>
 
           {/* Card 3: Congo */}
@@ -241,7 +291,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               padding: 0,
               cursor: "pointer",
               textAlign: "left",
-              width: isMobile ? "100%" : desktopCardWidth,
+              width: isMobile ? "calc(100% - 56px)" : desktopCardWidth,
+              margin: isMobile ? "0 0 0 20px" : 0,
               transition: "transform 0.25s ease",
               transform: hoveredCard === "congo" ? "scale(1.03)" : "scale(1)",
               transformOrigin: "center center",
@@ -250,7 +301,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             <div
               style={{
                 width: "100%",
-                height: isMobile ? "220px" : desktopCardHeight,
+                height: isMobile ? "auto" : desktopCardHeight,
+                aspectRatio: isMobile ? "5 / 4" : undefined,
                 position: "relative",
                 marginBottom: "9px",
               }}
@@ -260,7 +312,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                 alt="Congo"
                 style={{
                   width: "100%",
-                  height: isMobile ? "220px" : desktopCardHeight,
+                  height: "100%",
                   objectFit: "cover",
                 }}
               />
@@ -302,51 +354,65 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             >
               Congo
             </span>
+            {isMobile ? (
+              <p
+                style={{
+                  fontSize: "12px",
+                  lineHeight: "18px",
+                  color: "#010000",
+                  margin: "12px 0 0 0",
+                }}
+              >
+                {loremText}
+              </p>
+            ) : null}
           </button>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            gap: isMobile ? "12px" : "105px",
-            width: "100%",
-          }}
-        >
-          <p
+        {!isMobile ? (
+          <div
             style={{
-              width: isMobile ? "100%" : "291px",
-              fontSize: "12px",
-              lineHeight: "18px",
-              color: "#010000",
-              margin: 0,
+              display: "flex",
+              flexDirection: "row",
+              gap: "105px",
+              width: "100%",
             }}
           >
-            {loremText}
-          </p>
-          <p
-            style={{
-              width: isMobile ? "100%" : "291px",
-              fontSize: "12px",
-              lineHeight: "18px",
-              color: "#010000",
-              margin: 0,
-            }}
-          >
-            {loremText}
-          </p>
-          <p
-            style={{
-              width: isMobile ? "100%" : "291px",
-              fontSize: "12px",
-              lineHeight: "18px",
-              color: "#010000",
-              margin: 0,
-            }}
-          >
-            {loremText}
-          </p>
-        </div>
+            <p
+              style={{
+                width: "291px",
+                fontSize: "12px",
+                lineHeight: "18px",
+                color: "#010000",
+                margin: 0,
+              }}
+            >
+              {loremText}
+            </p>
+            <p
+              style={{
+                width: "291px",
+                fontSize: "12px",
+                lineHeight: "18px",
+                color: "#010000",
+                margin: 0,
+              }}
+            >
+              {loremText}
+            </p>
+            <p
+              style={{
+                width: "291px",
+                fontSize: "12px",
+                lineHeight: "18px",
+                color: "#010000",
+                margin: 0,
+              }}
+            >
+              {loremText}
+            </p>
+          </div>
+        ) : null}
       </div>
 
       {/* ── OVERLAY ── */}
@@ -354,9 +420,11 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
         <div
           style={{
             position: "fixed",
-            inset: 0,
+            inset: isMobile ? "var(--mcg-mobile-nav-offset, 0px) 0 0 0" : 0,
             width: "100vw",
-            height: "100vh",
+            height: isMobile
+              ? "calc(100dvh - var(--mcg-mobile-nav-offset, 0px))"
+              : "100vh",
             backgroundColor: "rgba(0, 0, 0, 0.6)",
             zIndex: 1000,
             display: "flex",
@@ -373,22 +441,24 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               style={{
                 position: "relative",
                 width: "100vw",
-                height: "100dvh",
+                height: "calc(100dvh - var(--mcg-mobile-nav-offset, 0px))",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "stretch",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "#000000",
                 borderRadius: 0,
                 boxShadow: "none",
-                overflow: "hidden",
+                overflowY: "auto",
+                overflowX: "hidden",
+                scrollbarWidth: "thin",
               }}
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={handleClose}
                 style={{
-                  position: "absolute",
-                  top: "12px",
+                  position: "fixed",
+                  top: "calc(var(--mcg-mobile-nav-offset, 0px) + 12px)",
                   right: "12px",
                   background: "none",
                   border: "none",
@@ -396,10 +466,11 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   padding: 0,
                   width: "28px",
                   height: "28px",
-                  zIndex: 2,
+                  zIndex: 1002,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  touchAction: "manipulation",
                 }}
                 aria-label="Close overlay"
               >
@@ -409,7 +480,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   style={{
                     width: "24px",
                     height: "24px",
-                    filter: "brightness(0)",
+                    filter: "brightness(0) invert(1)",
                   }}
                 />
               </button>
@@ -423,7 +494,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   justifyContent: "center",
                   padding: "56px 20px 20px",
                   boxSizing: "border-box",
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "#000000",
                 }}
               >
                 {activeOverlay === "tour" ? (
@@ -499,20 +570,20 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               </div>
               <div
                 style={{
-                  width: "100%",
-                  flex: "1 1 auto",
-                  borderTop: "1px solid rgba(0,0,0,0.08)",
-                  backgroundColor: "#FFFFFF",
-                  padding: "24px 20px 32px",
-                  boxSizing: "border-box",
-                }}
-              >
-                <p
-                  style={{
-                    color: "rgba(0,0,0,0.45)",
-                    margin: "0 0 12px 0",
-                    fontSize: "12px",
-                    fontWeight: 500,
+                    width: "100%",
+                    flex: "1 1 auto",
+                    borderTop: "1px solid rgba(255,255,255,0.12)",
+                    backgroundColor: "#000000",
+                    padding: "24px 20px 32px",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <p
+                    style={{
+                      color: "rgba(255,255,255,0.45)",
+                      margin: "0 0 12px 0",
+                      fontSize: "12px",
+                      fontWeight: 500,
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
                   }}
@@ -523,12 +594,12 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                       ? "Cairo, Egypt"
                       : "Congo"}
                 </p>
-                <p
-                  style={{
-                    color: "#000000",
-                    margin: 0,
-                    fontSize: "14px",
-                    lineHeight: "22px",
+                  <p
+                    style={{
+                      color: "#FFFFFF",
+                      margin: 0,
+                      fontSize: "14px",
+                      lineHeight: "22px",
                     fontWeight: 400,
                   }}
                 >
@@ -548,6 +619,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                     ? "min(76vw, 980px)"
                     : "min(62vw, 620px)",
                 minHeight: "min(74vh, 620px)",
+                maxHeight: "90vh",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -555,6 +627,10 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                 padding: "24px 0 0",
                 boxSizing: "border-box",
                 transform: "translateX(-128px)",
+                overflowY: "auto",
+                overflowX: "hidden",
+                scrollbarWidth: "thin",
+                backgroundColor: "#000000",
               }}
               onClick={(e) => e.stopPropagation()}
             >

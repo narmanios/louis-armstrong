@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useIsMobile } from "../../hooks/use-mobile";
 interface FileData {
   id: string;
@@ -12,8 +12,7 @@ interface FBIFilesJsonItem {
   date: string;
 }
 
-const fbiFilesJsonUrl = new URL("../../../data/fbi-files.json", import.meta.url)
-  .href;
+const fbiFilesJsonUrl = "/images/data/fbi-files.json";
 
 const getCategoryFromYear = (yearValue: string): string => {
   const year = parseInt(yearValue, 10);
@@ -25,7 +24,11 @@ export const SectionFBIFiles: React.FC = () => {
   const isMobile = useIsMobile();
   const [fileItems, setFileItems] = useState<FileData[]>([]);
   const [filter, setFilter] = useState<string>("all");
-  const [selectedImage, setSelectedImage] = useState<FileData | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+    null,
+  );
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const galleryRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let isMounted = true;
 
@@ -62,7 +65,7 @@ export const SectionFBIFiles: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedImage) {
+    if (selectedImageIndex !== null) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
@@ -70,10 +73,32 @@ export const SectionFBIFiles: React.FC = () => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [selectedImage]);
+  }, [selectedImageIndex]);
+
+  useEffect(() => {
+    if (selectedImageIndex === null || !galleryRef.current) return;
+
+    requestAnimationFrame(() => {
+      const gallery = galleryRef.current;
+      if (!gallery) return;
+
+      gallery.scrollTo({
+        left: selectedImageIndex * gallery.clientWidth,
+        behavior: "auto",
+      });
+    });
+  }, [selectedImageIndex]);
+
   const handleFilterClick = (newFilter: string) => {
     setFilter((prev) => (prev === newFilter ? "all" : newFilter));
   };
+  const handleOpenImage = (index: number) => {
+    setSelectedImageIndex(index);
+    setActiveImageIndex(index);
+  };
+  const activeImage =
+    fileItems[activeImageIndex] ??
+    (selectedImageIndex !== null ? fileItems[selectedImageIndex] : null);
   return (
     <section
       className="mcg-section mcg-fbi-section"
@@ -95,7 +120,7 @@ export const SectionFBIFiles: React.FC = () => {
         style={{
           maxWidth: "1280px",
           margin: "0 auto",
-          padding: "0 56px",
+          padding: isMobile ? "0 20px" : "0 56px",
           position: "relative",
         }}
       >
@@ -104,6 +129,9 @@ export const SectionFBIFiles: React.FC = () => {
           style={{
             display: "block",
             marginBottom: "24px",
+            width: isMobile ? "calc(100% - 40px)" : "100%",
+            marginLeft: isMobile ? "auto" : undefined,
+            marginRight: isMobile ? "auto" : undefined,
           }}
         >
           <h1 className="mcg-page-title mcg-page-title--flow mcg-page-title--tight">
@@ -149,19 +177,21 @@ export const SectionFBIFiles: React.FC = () => {
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, 116px)",
             gap: "11px 12px",
-            width: "100%",
+            width: isMobile ? "calc(100% - 40px)" : "100%",
             marginTop: "34px",
+            marginLeft: isMobile ? "auto" : undefined,
+            marginRight: isMobile ? "auto" : undefined,
             justifyContent: "center",
           }}
         >
-          {fileItems.map((item) =>
+          {fileItems.map((item, index) =>
             (() => {
               const isMatchingFilter =
                 filter === "all" || item.category === filter;
               return (
                 <button
                   key={item.id}
-                  onClick={() => setSelectedImage(item)}
+                  onClick={() => handleOpenImage(index)}
                   style={{
                     width: "116px",
                     height: "150px",
@@ -217,13 +247,15 @@ export const SectionFBIFiles: React.FC = () => {
       </div>
 
       {/* Gallery Modal Overlay */}
-      {selectedImage && (
+      {selectedImageIndex !== null && activeImage && (
         <div
           style={{
             position: "fixed",
-            inset: 0,
+            inset: isMobile ? "var(--mcg-mobile-nav-offset, 0px) 0 0 0" : 0,
             width: "100vw",
-            height: "100vh",
+            height: isMobile
+              ? "calc(100dvh - var(--mcg-mobile-nav-offset, 0px))"
+              : "100vh",
             backgroundColor: "rgba(0, 0, 0, 0.6)",
             zIndex: 1000,
             display: "flex",
@@ -233,18 +265,18 @@ export const SectionFBIFiles: React.FC = () => {
             boxSizing: "border-box",
             backdropFilter: isMobile ? "none" : "blur(5px)",
           }}
-          onClick={() => setSelectedImage(null)}
+          onClick={() => setSelectedImageIndex(null)}
         >
           {isMobile ? (
             <div
               style={{
                 position: "relative",
                 width: "100vw",
-                height: "100dvh",
+                height: "calc(100dvh - var(--mcg-mobile-nav-offset, 0px))",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "stretch",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "#000000",
                 borderRadius: 0,
                 boxShadow: "none",
                 overflow: "hidden",
@@ -252,10 +284,12 @@ export const SectionFBIFiles: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                onClick={() => setSelectedImage(null)}
+                onClick={() => setSelectedImageIndex(null)}
                 style={{
-                  position: "absolute",
-                  top: isMobile ? "12px" : "24px",
+                  position: isMobile ? "fixed" : "absolute",
+                  top: isMobile
+                    ? "calc(var(--mcg-mobile-nav-offset, 0px) + 12px)"
+                    : "24px",
                   right: isMobile ? "12px" : "24px",
                   background: "none",
                   border: "none",
@@ -263,10 +297,11 @@ export const SectionFBIFiles: React.FC = () => {
                   padding: 0,
                   width: isMobile ? "28px" : "32px",
                   height: isMobile ? "28px" : "32px",
-                  zIndex: 2,
+                  zIndex: isMobile ? 1002 : 2,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  touchAction: "manipulation",
                 }}
                 aria-label="Close gallery"
               >
@@ -276,7 +311,7 @@ export const SectionFBIFiles: React.FC = () => {
                   style={{
                     width: isMobile ? "24px" : "28px",
                     height: isMobile ? "24px" : "28px",
-                    filter: "brightness(0)",
+                    filter: "brightness(0) invert(1)",
                   }}
                 />
               </button>
@@ -290,21 +325,52 @@ export const SectionFBIFiles: React.FC = () => {
                   justifyContent: "center",
                   padding: isMobile ? "56px 20px 20px" : "64px 40px",
                   boxSizing: "border-box",
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "#000000",
                 }}
               >
-                <img
-                  src={selectedImage.src}
-                  alt={selectedImage.alt}
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                    maxWidth: "100%",
-                    maxHeight: isMobile ? "54vh" : "100%",
-                    boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-                    objectFit: "contain",
+                <div
+                  ref={galleryRef}
+                  onScroll={(event) => {
+                    const target = event.currentTarget;
+                    const index = Math.round(
+                      target.scrollLeft / target.clientWidth,
+                    );
+                    setActiveImageIndex(index);
                   }}
-                />
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    overflowX: "auto",
+                    scrollSnapType: "x mandatory",
+                    scrollbarWidth: "none",
+                    msOverflowStyle: "none",
+                  }}
+                >
+                  {fileItems.map((item) => (
+                    <div
+                      key={item.id}
+                      style={{
+                        flex: "0 0 100%",
+                        scrollSnapAlign: "start",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        src={item.src}
+                        alt={item.alt}
+                        style={{
+                          width: "auto",
+                          height: "auto",
+                          maxWidth: "100%",
+                          maxHeight: isMobile ? "54vh" : "100%",
+                          boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
               <div
                 style={{
@@ -312,15 +378,17 @@ export const SectionFBIFiles: React.FC = () => {
                   height: isMobile ? "auto" : "100%",
                   flex: isMobile ? "1 1 auto" : "0 0 320px",
                   borderLeft: isMobile ? "none" : "1px solid rgba(0,0,0,0.08)",
-                  borderTop: isMobile ? "1px solid rgba(0,0,0,0.08)" : "none",
-                  backgroundColor: "#FFFFFF",
+                  borderTop: isMobile
+                    ? "1px solid rgba(255,255,255,0.12)"
+                    : "none",
+                  backgroundColor: "#000000",
                   padding: isMobile ? "24px 20px 32px" : "88px 32px 32px",
                   boxSizing: "border-box",
                 }}
               >
                 <p
                   style={{
-                    color: "rgba(0,0,0,0.45)",
+                    color: "rgba(255,255,255,0.45)",
                     margin: "0 0 12px 0",
                     fontSize: "12px",
                     fontWeight: 500,
@@ -332,14 +400,14 @@ export const SectionFBIFiles: React.FC = () => {
                 </p>
                 <p
                   style={{
-                    color: "#000000",
+                    color: "#FFFFFF",
                     margin: 0,
                     fontSize: "14px",
                     lineHeight: "22px",
                     fontWeight: 400,
                   }}
                 >
-                  {selectedImage.alt} ({selectedImage.category})
+                  {activeImage.alt} ({activeImage.category})
                 </p>
               </div>
             </div>
@@ -360,7 +428,7 @@ export const SectionFBIFiles: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                onClick={() => setSelectedImage(null)}
+                onClick={() => setSelectedImageIndex(null)}
                 style={{
                   position: "fixed",
                   top: "20px",
@@ -402,18 +470,49 @@ export const SectionFBIFiles: React.FC = () => {
                   boxSizing: "border-box",
                 }}
               >
-                <img
-                  src={selectedImage.src}
-                  alt={selectedImage.alt}
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                    maxWidth: "100%",
-                    maxHeight: "68vh",
-                    boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-                    objectFit: "contain",
+                <div
+                  ref={galleryRef}
+                  onScroll={(event) => {
+                    const target = event.currentTarget;
+                    const index = Math.round(
+                      target.scrollLeft / target.clientWidth,
+                    );
+                    setActiveImageIndex(index);
                   }}
-                />
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    overflowX: "auto",
+                    scrollSnapType: "x mandatory",
+                    scrollbarWidth: "none",
+                    msOverflowStyle: "none",
+                  }}
+                >
+                  {fileItems.map((item) => (
+                    <div
+                      key={item.id}
+                      style={{
+                        flex: "0 0 100%",
+                        scrollSnapAlign: "start",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        src={item.src}
+                        alt={item.alt}
+                        style={{
+                          width: "auto",
+                          height: "auto",
+                          maxWidth: "100%",
+                          maxHeight: "68vh",
+                          boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
               <p
                 style={{
@@ -424,7 +523,7 @@ export const SectionFBIFiles: React.FC = () => {
                   textAlign: "center",
                 }}
               >
-                {selectedImage.alt} ({selectedImage.category})
+                {activeImage.alt} ({activeImage.category})
               </p>
             </div>
           )}

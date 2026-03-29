@@ -23,21 +23,33 @@ export const SectionJazzAmbassadors: React.FC = () => {
       className="mcg-section mcg-jazz-section"
       style={{
         backgroundColor: "#F5F3EA",
+        minHeight: "800px",
+        padding: "49px 56px 60px",
+        boxSizing: "border-box",
       }}
     >
-      <h1 className="mcg-section-title mcg-page-title">
+      <h1 className="mcg-section-title mcg-page-title mcg-page-title--flow">
         Jazz Ambassador Diplomacy Program (1956-63)
       </h1>
       <div
-        className="mcg-jazz-collage"
+        className="mcg-jazz-stage"
         style={{
-          position: "absolute",
-          left: "60px",
-          top: "373px",
-          width: "270px",
-          height: "184px",
+          position: "relative",
+          width: "100%",
+          minHeight: "560px",
+          marginTop: "24px",
         }}
       >
+        <div
+          className="mcg-jazz-collage"
+          style={{
+            position: "absolute",
+            left: "4px",
+            top: "201px",
+            width: "270px",
+            height: "184px",
+          }}
+        >
         <img
           src="/images/jazz-ambassadors-louis.png"
           alt="Person 1"
@@ -98,17 +110,17 @@ export const SectionJazzAmbassadors: React.FC = () => {
             objectFit: "cover",
           }}
         />
-      </div>
-      <div
-        className="mcg-map-wrap"
-        style={{
-          position: "absolute",
-          left: "141px",
-          top: "195px",
-          width: "1122px",
-          height: "480px",
-        }}
-      >
+        </div>
+        <div
+          className="mcg-map-wrap"
+          style={{
+            position: "absolute",
+            left: "85px",
+            top: "23px",
+            width: "1122px",
+            height: "480px",
+          }}
+        >
         <img
           src="https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/54a6b55c-1685-41bf-b0c3-19ee02eb6bf3.svg"
           alt="Map light"
@@ -128,19 +140,19 @@ export const SectionJazzAmbassadors: React.FC = () => {
             width: "627px",
           }}
         />
-      </div>
-      <div
-        className="mcg-jazz-legend"
-        style={{
-          position: "absolute",
-          left: "56px",
-          top: "172px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-          color: "#000000",
-        }}
-      >
+        </div>
+        <div
+          className="mcg-jazz-legend"
+          style={{
+            position: "absolute",
+            left: "0",
+            top: "0",
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+            color: "#000000",
+          }}
+        >
         <div
           style={{
             display: "flex",
@@ -207,16 +219,16 @@ export const SectionJazzAmbassadors: React.FC = () => {
             </div>
           ))}
         </div>
-      </div>
-      <div
-        className="map-marker mcg-india-tooltip"
-        style={{
-          position: "absolute",
-          left: "948px",
-          top: "336px",
-          width: "292px",
-        }}
-      >
+        </div>
+        <div
+          className="map-marker mcg-india-tooltip"
+          style={{
+            position: "absolute",
+            left: "892px",
+            top: "164px",
+            width: "292px",
+          }}
+        >
         <img
           src="https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/b2950c4d-bdde-4691-85f0-60e5e545fadf.svg"
           alt="Tooltip India"
@@ -266,6 +278,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
         >
           Description of the song goes here. Description of the song goes here.
         </div>
+      </div>
       </div>
     </section>
   );

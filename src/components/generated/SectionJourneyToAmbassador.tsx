@@ -6,6 +6,9 @@ export const SectionJourneyToAmbassador: React.FC = () => {
       <style>{`
         .journey-section {
           background: #000000;
+          min-height: 800px;
+          padding: 49px 56px 60px;
+          box-sizing: border-box;
         }
 
         .journey-section .mcg-page-title {
@@ -17,13 +20,12 @@ export const SectionJourneyToAmbassador: React.FC = () => {
           flex-direction: row;
           align-items: flex-start;
           gap: 56px;
-          position: absolute;
-          left: 56px;
-          top: 164px;
+          position: static;
+          margin-top: 24px;
         }
 
         .journey-entry {
-          width: min(340px, calc((100vw - 280px) / 2));
+          width: min(340px, calc((100% - 56px) / 2));
         }
 
         .journey-media-image {
@@ -52,7 +54,7 @@ export const SectionJourneyToAmbassador: React.FC = () => {
           margin-top: 16px;
         }
 
-        @media (max-width: 767px) {
+        @media (max-width: 768px) {
           .journey-section {
             height: auto;
             min-height: 0;
@@ -63,7 +65,9 @@ export const SectionJourneyToAmbassador: React.FC = () => {
 
           .journey-section .mcg-page-title {
             position: static !important;
-            margin: 0 0 20px 0 !important;
+            display: block !important;
+            width: calc(100% - 40px);
+            margin: 0 auto 24px !important;
           }
 
           .journey-entry-grid {
@@ -71,7 +75,8 @@ export const SectionJourneyToAmbassador: React.FC = () => {
             left: auto;
             top: auto;
             flex-direction: column;
-            gap: 20px;
+            gap: 32px;
+            margin-top: 0;
           }
 
           .journey-entry,
@@ -79,14 +84,20 @@ export const SectionJourneyToAmbassador: React.FC = () => {
             width: 100%;
           }
 
+          .journey-entry {
+            width: calc(100% - 56px);
+            margin: 0 0 0 20px;
+          }
+
           .journey-media-image {
             width: 100%;
-            height: 220px;
+            aspect-ratio: 5 / 4;
+            height: auto;
           }
         }
       `}</style>
 
-      <h2 className="mcg-section-title mcg-page-title">
+      <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">
         Journey to Ambassador 1930-1948
       </h2>
 

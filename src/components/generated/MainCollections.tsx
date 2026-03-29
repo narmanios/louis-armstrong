@@ -29,6 +29,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   const desktopGroupTransitionMs = 460;
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const introSectionRef = useRef<HTMLElement>(null);
+  const mobileNavBarRef = useRef<HTMLDivElement>(null);
   const historyPageRef = useRef<HTMLDivElement>(null);
   const musicianPageRef = useRef<HTMLDivElement>(null);
   const ambassadorPageRef = useRef<HTMLDivElement>(null);
@@ -42,6 +43,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   const isMobile = useIsMobile();
   const [showFixedGroupNav, setShowFixedGroupNav] = useState(false);
   const [currentGroupId, setCurrentGroupId] = useState<GroupId>("history");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const groupNavItems: Array<{ id: GroupId; label: string }> = [
     { id: "history", label: "history" },
     { id: "ambassador", label: "ambassador" },
@@ -73,6 +75,24 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     { kind: "section", groupId: "ambassador", sectionIdx: 5 },
   ];
 
+  const getMobileNavOffset = () => {
+    if (!isMobile || !showFixedGroupNav) return 0;
+    return mobileNavBarRef.current?.offsetHeight ?? 61;
+  };
+
+  const scrollMobileElementIntoView = (target: HTMLElement | null) => {
+    if (!target) return;
+
+    const mobileOffset = getMobileNavOffset();
+    const targetTop =
+      window.scrollY + target.getBoundingClientRect().top - mobileOffset - 12;
+
+    window.scrollTo({
+      top: Math.max(targetTop, 0),
+      behavior: "smooth",
+    });
+  };
+
   const scrollToTrackChild = (targetSectionIdx: number) => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -83,7 +103,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     if (!child) return;
 
     if (isMobile) {
-      child.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollMobileElementIntoView(child);
       return;
     }
 
@@ -118,12 +138,12 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     const targetTop = section?.offsetTop ?? 0;
 
     setCurrentGroupId(groupId);
+    if (isMobile) {
+      setIsMobileMenuOpen(false);
+    }
 
     if (isMobile) {
-      (section ?? page)?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      scrollMobileElementIntoView(section ?? page);
       return;
     }
 
@@ -192,7 +212,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       }, 0);
       const nextSection =
         sections[Math.min(currentIndex + 1, sections.length - 1)];
-      nextSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollMobileElementIntoView(nextSection);
       return;
     }
 
@@ -216,7 +236,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         const introSection = introSectionRef.current;
         if (!introSection) return;
         const rect = introSection.getBoundingClientRect();
-        setShowFixedGroupNav(rect.bottom <= 140);
+        setShowFixedGroupNav(rect.bottom <= 0);
 
         const mobilePages: Array<{
           id: GroupId;
@@ -300,6 +320,23 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   }, [isMobile]);
 
   useEffect(() => {
+    if (!isMobile || !showFixedGroupNav) {
+      setIsMobileMenuOpen(false);
+    }
+  }, [isMobile, showFixedGroupNav]);
+
+  useEffect(() => {
+    if (!(isMobile && isMobileMenuOpen)) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMobile, isMobileMenuOpen]);
+
+  useEffect(() => {
     return () => {
       if (sectionJumpTimeoutRef.current !== null) {
         window.clearTimeout(sectionJumpTimeoutRef.current);
@@ -307,11 +344,108 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    const updateNavOffset = () => {
+      const navOffset = isMobile && showFixedGroupNav ? `${getMobileNavOffset()}px` : "0px";
+      root.style.setProperty("--mcg-mobile-nav-offset", navOffset);
+    };
+
+    updateNavOffset();
+    window.addEventListener("resize", updateNavOffset);
+
+    return () => {
+      window.removeEventListener("resize", updateNavOffset);
+      root.style.setProperty("--mcg-mobile-nav-offset", "0px");
+    };
+  }, [isMobile, showFixedGroupNav, isMobileMenuOpen]);
+
   const textBaseStyle: React.CSSProperties = {
     fontFamily: '"Helvetica Neue", sans-serif',
     fontWeight: 400,
     color: "#000000",
   };
+  const renderGroupNav = (className = "") => (
+    <nav className={`mcg-group-nav ${className}`.trim()} aria-label="Section groups">
+      {groupNavItems.map((item) => (
+        <div
+          key={item.id}
+          className={`mcg-group-nav-item mcg-group-nav-item--${item.id}`}
+        >
+          <button
+            className={`mcg-group-nav-button${
+              currentGroupId === item.id ? " is-active" : ""
+            }`}
+            onClick={() => scrollToGroup(item.id)}
+          >
+            {item.label}
+          </button>
+          <div
+            className="mcg-group-nav-dropdown"
+            aria-label={`${item.label} sections`}
+          >
+            {groupSectionItems[item.id].map((label, index) => (
+              <button
+                key={`${item.id}-${label}`}
+                className="mcg-group-nav-dropdown-button"
+                onClick={() => scrollToGroupSection(item.id, index)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </nav>
+  );
+  const renderMobileMenu = () => (
+      <div className="mcg-mobile-nav-shell">
+      <div className="mcg-mobile-nav-bar" ref={mobileNavBarRef}>
+        <button
+          type="button"
+          className={`mcg-mobile-menu-button${
+            isMobileMenuOpen ? " is-open" : ""
+          }`}
+          aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMobileMenuOpen}
+          onClick={() => setIsMobileMenuOpen((open) => !open)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </div>
+      {isMobileMenuOpen ? (
+        <div className="mcg-mobile-menu-panel" aria-label="Section groups">
+          {groupNavItems.map((item) => (
+            <div key={item.id} className="mcg-mobile-menu-group">
+              <button
+                type="button"
+                className={`mcg-mobile-menu-group-button${
+                  currentGroupId === item.id ? " is-active" : ""
+                }`}
+                onClick={() => scrollToGroup(item.id)}
+              >
+                {item.label}
+              </button>
+              <div className="mcg-mobile-menu-section-list">
+                {groupSectionItems[item.id].map((label, index) => (
+                  <button
+                    key={`${item.id}-${label}`}
+                    type="button"
+                    className="mcg-mobile-menu-section-button"
+                    onClick={() => scrollToGroupSection(item.id, index)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
   return (
     <div className={`mcg-root ${className || ""}`}>
       <style>{`
@@ -371,8 +505,19 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           z-index: 141;
         }
 
+        .mcg-group-nav-item--musician .mcg-group-nav-dropdown {
+          left: auto;
+          right: 0;
+        }
+
         .mcg-group-nav-item:hover .mcg-group-nav-dropdown {
           display: block;
+        }
+
+        .mcg-mobile-nav-shell,
+        .mcg-mobile-nav-bar,
+        .mcg-mobile-menu-panel {
+          display: none;
         }
 
         .mcg-group-nav-dropdown-button {
@@ -624,11 +769,130 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
 
         /* ── MOBILE: vertical stack ── */
-        @media (max-width: 767px) {
+        @media (max-width: 768px) {
           .mcg-group-nav {
-            top: 16px;
-            right: 16px;
+            display: none;
+          }
+
+          .mcg-mobile-nav-shell {
+            display: block;
+            position: sticky;
+            top: 0;
+            left: 0;
+            z-index: 145;
+            width: 100%;
+            margin: 0;
+            box-sizing: border-box;
+          }
+
+          .mcg-mobile-nav-bar {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            margin: 0;
+            padding: 12px 16px;
+            box-sizing: border-box;
+            background: rgba(22, 22, 22, 0.94);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 147;
+          }
+
+          .mcg-mobile-menu-button {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            padding: 0;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+          }
+
+          .mcg-mobile-menu-button span {
+            display: block;
+            width: 15px;
+            height: 1.5px;
+            background: #ffffff;
+            transition: transform 0.18s ease, opacity 0.18s ease;
+          }
+
+          .mcg-mobile-menu-button.is-open span:nth-child(1) {
+            transform: translateY(5.5px) rotate(45deg);
+          }
+
+          .mcg-mobile-menu-button.is-open span:nth-child(2) {
+            opacity: 0;
+          }
+
+          .mcg-mobile-menu-button.is-open span:nth-child(3) {
+            transform: translateY(-5.5px) rotate(-45deg);
+          }
+
+          .mcg-mobile-menu-panel {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            width: 100vw;
+            margin: 0;
+            box-sizing: border-box;
+            overflow-y: auto;
+            background: rgba(22, 22, 22, 0.985);
+            padding: 76px 20px 28px;
+            z-index: 146;
+          }
+
+          .mcg-mobile-menu-group + .mcg-mobile-menu-group {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 22px;
+          }
+
+          .mcg-mobile-menu-group-button {
+            width: 100%;
+            display: block;
+            background: none;
+            border: none;
+            color: #ffffff;
+            padding: 0 0 12px;
+            font-family: "Andale Mono", "Andale Mono WT", monospace;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            text-transform: lowercase;
+            text-align: left;
+            cursor: pointer;
+            opacity: 0.78;
+          }
+
+          .mcg-mobile-menu-group-button.is-active {
+            opacity: 1;
+          }
+
+          .mcg-mobile-menu-section-list {
+            display: flex;
+            flex-direction: column;
             gap: 10px;
+            padding: 0;
+          }
+
+          .mcg-mobile-menu-section-button {
+            width: 100%;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.74);
+            padding: 0;
+            font-family: "Helvetica Neue", sans-serif;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.45;
+            text-align: left;
+            cursor: pointer;
           }
 
           .mcg-group-nav-button {
@@ -655,7 +919,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             overflow: visible;
             padding: 0 0 28px;
             box-sizing: border-box;
-            background: #161616;
+            background: transparent;
           }
 
           .mcg-group-label {
@@ -668,14 +932,12 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             overflow: hidden;
             padding-top: 20px;
             box-sizing: border-box;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+            box-shadow: none;
+            background: transparent !important;
           }
 
           .mcg-group-scroll-arrow {
-            position: sticky;
-            bottom: 16px;
-            left: calc(100% - 60px);
-            margin-top: -60px;
+            display: none;
           }
 
           .mcg-group-scroll {
@@ -688,6 +950,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             scroll-snap-align: none;
             min-height: 0;
             overflow: visible;
+            scroll-margin-top: calc(var(--mcg-mobile-nav-offset, 0px) + 12px);
           }
 
           .mcg-group-section-inner {
@@ -710,7 +973,16 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           .mcg-group-page .mcg-section {
             width: 100% !important;
             min-width: 0 !important;
-            background: #000000 !important;
+            background: transparent !important;
+          }
+
+          .mcg-group-page--history .mcg-group-frame,
+          .mcg-group-page--history .mcg-section,
+          .mcg-group-page--musician .mcg-group-frame,
+          .mcg-group-page--musician .mcg-section,
+          .mcg-group-page--ambassador .mcg-group-frame,
+          .mcg-group-page--ambassador .mcg-section {
+            background: transparent !important;
           }
 
           /* Hero section mobile styles are section-scoped in SectionIntroHero.tsx */
@@ -720,7 +992,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             top: auto !important;
             font-size: 28px !important;
             line-height: 1.2 !important;
-            margin: 0 0 20px 0 !important;
+            width: calc(100% - 40px);
+            margin: 0 auto 20px !important;
           }
 
           /* Two-image card sections (Beginning, Journey, World Fair) */
@@ -733,8 +1006,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             margin-bottom: 20px !important;
           }
           .mcg-image-row .interactive-card img {
-            width: 100% !important;
+            width: calc(100% - 40px) !important;
             height: 220px !important;
+            margin: 0 auto !important;
           }
           .mcg-text-row {
             position: static !important;
@@ -767,9 +1041,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             margin-bottom: 16px !important;
           }
           .mcg-map-wrap img {
-            width: 100% !important;
+            width: calc(100% - 40px) !important;
             height: auto !important;
             position: static !important;
+            margin: 0 auto !important;
           }
           .mcg-map-travels {
             display: none !important;
@@ -781,34 +1056,51 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           /* Jazz ambassadors */
           .mcg-jazz-section {
             position: relative !important;
-            overflow: hidden !important;
+            overflow: visible !important;
+            padding: 24px 20px 32px !important;
+            box-sizing: border-box !important;
+          }
+          .mcg-jazz-section .mcg-page-title {
+            position: static !important;
+            display: block !important;
+            width: calc(100% - 40px);
+            margin: 0 auto 24px !important;
+          }
+          .mcg-jazz-section .mcg-jazz-stage {
+            min-height: 0 !important;
+            margin-top: 0 !important;
           }
           .mcg-jazz-section .mcg-map-wrap {
-            position: absolute !important;
-            left: 141px !important;
-            top: 195px !important;
-            width: 1122px !important;
-            height: 480px !important;
+            position: static !important;
+            width: 100% !important;
+            height: auto !important;
+            margin: 0 0 20px 0 !important;
+          }
+          .mcg-jazz-section .mcg-map-wrap > img:first-child {
+            width: calc(100% - 40px) !important;
+            height: auto !important;
+            display: block !important;
+            margin: 0 auto !important;
           }
           .mcg-jazz-section .mcg-map-travels {
-            display: block !important;
+            display: none !important;
           }
           .mcg-jazz-section .mcg-jazz-legend {
-            position: absolute !important;
-            left: 56px !important;
-            top: 172px !important;
-            margin-bottom: 0 !important;
+            position: static !important;
+            left: auto !important;
+            top: auto !important;
+            margin-bottom: 20px !important;
           }
           .mcg-jazz-section .mcg-jazz-collage {
-            position: absolute !important;
-            left: 60px !important;
-            top: 373px !important;
+            position: relative !important;
+            left: auto !important;
+            top: auto !important;
             width: 270px !important;
             height: 184px !important;
-            margin-bottom: 0 !important;
+            margin: 0 auto 20px !important;
           }
           .mcg-jazz-section .mcg-india-tooltip {
-            display: block !important;
+            display: none !important;
           }
 
           /* FBI files */
@@ -852,9 +1144,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             gap: 20px !important;
           }
           .mcg-lyrics-wrap img {
-            width: 100% !important;
+            width: calc(100% - 40px) !important;
             height: auto !important;
             max-height: 280px !important;
+            margin: 0 auto !important;
           }
           .mcg-track-list {
             width: 100% !important;
@@ -872,9 +1165,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             gap: 20px !important;
           }
           .mcg-wonderful-wrap img {
-            width: 100% !important;
+            width: calc(100% - 40px) !important;
             height: auto !important;
             max-height: 280px !important;
+            margin: 0 auto !important;
           }
           .mcg-wonderful-text {
             width: 100% !important;
@@ -883,8 +1177,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
           /* World fair placeholder boxes */
           .mcg-placeholder {
-            width: 100% !important;
+            width: calc(100% - 40px) !important;
             height: 200px !important;
+            margin: 0 auto !important;
           }
         }
 
@@ -899,36 +1194,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         .fbi-doc:hover { transform: scale(1.1); z-index: 10; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
       `}</style>
 
-      {showFixedGroupNav ? (
-        <nav className="mcg-group-nav" aria-label="Section groups">
-          {groupNavItems.map((item) => (
-            <div key={item.id} className="mcg-group-nav-item">
-              <button
-                className={`mcg-group-nav-button${
-                  currentGroupId === item.id ? " is-active" : ""
-                }`}
-                onClick={() => scrollToGroup(item.id)}
-              >
-                {item.label}
-              </button>
-              <div
-                className="mcg-group-nav-dropdown"
-                aria-label={`${item.label} sections`}
-              >
-                {groupSectionItems[item.id].map((label, index) => (
-                  <button
-                    key={`${item.id}-${label}`}
-                    className="mcg-group-nav-dropdown-button"
-                    onClick={() => scrollToGroupSection(item.id, index)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-        </nav>
-      ) : null}
+      {!isMobile && showFixedGroupNav ? renderGroupNav() : null}
 
       <div className="mcg-track" ref={scrollContainerRef}>
         <SectionIntroHero
@@ -937,6 +1203,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           onNavigateMusician={() => scrollToGroup("musician")}
           onNavigateAmbassador={() => scrollToGroup("ambassador")}
         />
+        {isMobile && showFixedGroupNav ? renderMobileMenu() : null}
         <div
           ref={historyPageRef}
           className="mcg-group-page mcg-group-page--history"

@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useIsMobile } from "../../../hooks/use-mobile";
 import "./SectionWonderfulWorld.css";
 
 export type FactItem = {
@@ -115,7 +116,7 @@ async function loadFactsJson(factsUrl: string): Promise<FactItem[]> {
 
 export function SectionWonderfulWorld({
   facts,
-  factsUrl = "../../../../data/wonderfulworld.json",
+  factsUrl = "/images/data/wonderfulworld.json",
   maskSvgUrl = "/images/louis-silo.svg",
   creditImageUrl = "/images/photo-by-john-loengard.jpg",
   title = "What a Wonderful World",
@@ -148,6 +149,9 @@ export function SectionWonderfulWorld({
   const maskContextRef = useRef<CanvasRenderingContext2D | null>(null);
   const maskAlphaRef = useRef<Uint8ClampedArray | null>(null);
   const maskReadyRef = useRef(false);
+  const stageOuterRef = useRef<HTMLDivElement | null>(null);
+  const isMobile = useIsMobile();
+  const [mobileStageScale, setMobileStageScale] = useState(1);
 
   const setZoom = (next: number) =>
     setZoomState(clamp(next, ZOOM_MIN, ZOOM_MAX));
@@ -168,12 +172,26 @@ export function SectionWonderfulWorld({
     const rect = event.currentTarget.getBoundingClientRect();
     setTooltip({
       visible: true,
-      x: rect.left + rect.width / 2,
-      y: rect.top - 16,
+      x: isMobile ? window.innerWidth / 2 : rect.left + rect.width / 2,
+      y: isMobile ? window.innerHeight - 24 : rect.top - 16,
       meta: `${fact.year} • ${String(fact.category).toUpperCase()}`,
       text: fact.text,
       image: fact.image ?? "",
     });
+  };
+
+  const handleFactClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    fact: PlacedFact,
+  ) => {
+    if (isMobile && selectedId === fact.id && tooltip.visible) {
+      setSelectedId(null);
+      hideTooltip();
+      return;
+    }
+
+    setSelectedId(fact.id);
+    showTooltipFor(event, fact);
   };
 
   const tooltipStyle = useMemo<CSSProperties>(
@@ -190,6 +208,38 @@ export function SectionWonderfulWorld({
       transform: `translate(-50%, -50%) scale(${zoom})`,
     }),
     [canvasHeight, canvasWidth, zoom],
+  );
+
+  const stageFrameStyle = useMemo<CSSProperties>(
+    () =>
+      isMobile
+        ? {
+            width: `${canvasWidth * mobileStageScale}px`,
+            height: `${canvasHeight * mobileStageScale}px`,
+          }
+        : {
+            width: `${canvasWidth * 0.88}px`,
+            height: `${canvasHeight * 0.88}px`,
+          },
+    [canvasHeight, canvasWidth, isMobile, mobileStageScale],
+  );
+
+  const stageScaleStyle = useMemo<CSSProperties>(
+    () =>
+      isMobile
+        ? {
+            width: `${canvasWidth}px`,
+            height: `${canvasHeight}px`,
+            transform: `scale(${mobileStageScale})`,
+            transformOrigin: "top left",
+          }
+        : {
+            width: `${canvasWidth}px`,
+            height: `${canvasHeight}px`,
+            transform: "scale(0.88)",
+            transformOrigin: "top left",
+          },
+    [canvasHeight, canvasWidth, isMobile, mobileStageScale],
   );
 
   const silhouetteStyle = useMemo<CSSProperties>(() => {
@@ -371,6 +421,32 @@ export function SectionWonderfulWorld({
     };
   }, [canvasHeight, canvasWidth, facts, factsUrl, initialZoom, maskSvgUrl]);
 
+  useEffect(() => {
+    const updateScale = () => {
+      if (!isMobile) {
+        setMobileStageScale(1);
+        return;
+      }
+
+      const outerWidth = stageOuterRef.current?.clientWidth ?? window.innerWidth;
+      const availableWidth = Math.max(outerWidth - 40, 280);
+      setMobileStageScale(Math.min(availableWidth / canvasWidth, 1));
+    };
+
+    updateScale();
+
+    const resizeObserver = new ResizeObserver(updateScale);
+    if (stageOuterRef.current) {
+      resizeObserver.observe(stageOuterRef.current);
+    }
+    window.addEventListener("resize", updateScale);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateScale);
+    };
+  }, [canvasWidth, isMobile]);
+
   return (
     <section
       className="mcg-section mcg-jazz-section"
@@ -385,69 +461,81 @@ export function SectionWonderfulWorld({
           ["--slg-silhouette-scale" as string]: SILHOUETTE_SCALE,
         }}
       >
-        <h1 className="mcg-page-title">{title}</h1>
-        <header className="slg__header">
-          <div className="slg__brand">
-            <p>{subtitle}</p>
-          </div>
-
-          <div className="slg__controls">
-            <label className="slg__search">
-              <span className="slg__search-icon" aria-hidden="true">
-                ⌕
-              </span>
-              <input
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                type="text"
-                placeholder={searchPlaceholder}
-                autoComplete="off"
-              />
-            </label>
-
-            <div className="slg__zoom-controls" aria-label="Zoom controls">
-              <button
-                type="button"
-                title="Zoom in"
-                onClick={() => setZoom(zoom + ZOOM_STEP)}
-              >
-                +
-              </button>
-              <button
-                type="button"
-                title="Zoom out"
-                onClick={() => setZoom(zoom - ZOOM_STEP)}
-              >
-                −
-              </button>
+        <div className="slg__header-block">
+          <h1 className="mcg-page-title mcg-page-title--flow slg__title">
+            {title}
+          </h1>
+          <header className="slg__header">
+            <div className="slg__brand">
+              <p>{subtitle}</p>
             </div>
-          </div>
-        </header>
+
+            <div className="slg__controls">
+              <label className="slg__search">
+                <span className="slg__search-icon" aria-hidden="true">
+                  ⌕
+                </span>
+                <input
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  type="text"
+                  placeholder={searchPlaceholder}
+                  autoComplete="off"
+                />
+              </label>
+
+              <div className="slg__zoom-controls" aria-label="Zoom controls">
+                <button
+                  type="button"
+                  title="Zoom in"
+                  onClick={() => setZoom(zoom + ZOOM_STEP)}
+                >
+                  +
+                </button>
+                <button
+                  type="button"
+                  title="Zoom out"
+                  onClick={() => setZoom(zoom - ZOOM_STEP)}
+                >
+                  −
+                </button>
+              </div>
+            </div>
+          </header>
+        </div>
 
         <main className="slg__stage" onMouseDown={hideTooltip}>
-          <img
-            className="slg__silhouette"
-            src={maskSvgUrl}
-            style={silhouetteStyle}
-            alt=""
-            aria-hidden="true"
-          />
+          <div className="slg__stage-shell" ref={stageOuterRef}>
+            <div className="slg__stage-frame" style={stageFrameStyle}>
+              <div className="slg__stage-scale" style={stageScaleStyle}>
+                <img
+                  className="slg__silhouette"
+                  src={maskSvgUrl}
+                  style={silhouetteStyle}
+                  alt=""
+                  aria-hidden="true"
+                />
 
-          <div
-            className="slg__viz"
-            style={vizStyle}
-            aria-label="Facts visualization"
-          >
-            {filteredFacts.map((fact) => (
-              <div
-                key={fact.id}
-                className={`slg__fact${selectedId === fact.id ? " is-selected" : ""}`}
-                style={factStyle(fact)}
-                onMouseEnter={(event) => showTooltipFor(event, fact)}
-                onMouseLeave={hideTooltip}
-                onClick={() => setSelectedId(fact.id)}
-              />
-            ))}
+                <div
+                  className="slg__viz"
+                  style={vizStyle}
+                  aria-label="Facts visualization"
+                >
+                  {filteredFacts.map((fact) => (
+                    <div
+                      key={fact.id}
+                      className={`slg__fact${selectedId === fact.id ? " is-selected" : ""}`}
+                      style={factStyle(fact)}
+                      onMouseEnter={
+                        isMobile ? undefined : (event) => showTooltipFor(event, fact)
+                      }
+                      onMouseLeave={isMobile ? undefined : hideTooltip}
+                      onClick={(event) => handleFactClick(event, fact)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
           <div

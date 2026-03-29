@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { SectionAboutProject } from "./SectionAboutProject";
+import { useIsMobile } from "../../hooks/use-mobile";
 
 interface SectionIntroHeroProps {
   onNavigateHistory: () => void;
@@ -19,6 +20,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
   sectionRef,
 }) => {
   const [isAboutOverlayOpen, setIsAboutOverlayOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <section
@@ -94,12 +96,9 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           gap: 18px;
         }
 
-        .hero-intro-nav{
+        .hero-intro-nav {
           position: absolute;
           z-index: 10;
-        }
-
-        .hero-intro-nav {
           right: 56px;
           bottom: 24px;
           display: flex;
@@ -107,19 +106,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           align-items: flex-end;
           gap: 12px;
         }
-
-        // .hero-intro-nav-link,
-        // .hero-intro-explore-button,
-        // .hero-intro-about-button {
-        //   background: none;
-        //   border: none;
-        //   cursor: pointer;
-        //   padding: 0;
-        //   color: #ffd000;
-        //   font-size: 16px;
-        //   font-weight: 400;
-        //   font-family: "Helvetica Neue", sans-serif;
-        // }
 
         .hero-intro-about-button {
           position: relative;
@@ -133,7 +119,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         }
 
         .hero-intro-about-button .hero-intro-nav-link-label {
-          font-size: 16px;
+          font-size: 20px;
           color: #000000;
         }
 
@@ -180,52 +166,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         .hero-intro-nav-link:hover .hero-intro-nav-link-label,
         .hero-intro-nav-link:focus-visible .hero-intro-nav-link-label {
           opacity: 1;
-        }
-
-        .hero-intro-explore-button {
-          right: ${scalePx(150)};
-          bottom: ${scalePx(110)};
-        }
-
-        .hero-intro-about-overlay {
-          position: fixed;
-          inset: 0;
-          z-index: 999;
-          background: rgba(0, 0, 0, 0.6);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 24px;
-          box-sizing: border-box;
-        }
-
-        .hero-intro-about-overlay-content {
-          position: relative;
-          width: min(100vw, 1280px);
-          max-height: 90vh;
-          overflow-y: auto;
-          overflow-x: hidden;
-          border-radius: 10px;
-          background-color: #ffffff;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
-          -webkit-overflow-scrolling: touch;
-        }
-
-        .hero-intro-about-close-button {
-          position: absolute;
-          top: 40px;
-          right: 40px;
-          z-index: 5;
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 10px;
-        }
-
-        .hero-intro-about-close-icon {
-          width: 30px;
-          height: 30px;
-          filter: brightness(0);
         }
 
         /* Responsive hero styles */
@@ -283,39 +223,31 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             flex-direction: column;
             align-items: flex-end;
             gap: 6px;
+            max-width: calc(100vw - 48px);
           }
 
           .hero-intro-nav-link,
-          .hero-intro-explore-button,
-          .hero-intro-about-button {
-            font-size: 14px;
-          }
-
-          .hero-intro-nav-link {
-            width: auto;
-            height: auto;
-          }
-
           .hero-intro-about-button {
             width: auto;
             height: auto;
+            flex: 0 0 auto;
           }
 
           .hero-intro-nav-link-label {
             position: static;
             transform: none;
-            font-size: 14px;
+            font-size: 24px;
             line-height: 1;
             letter-spacing: 0.02em;
             font-weight: 400;
             font-family: "Andale Mono", "Andale Mono WT", monospace;
             color: #000000;
             opacity: 1;
+            max-width: calc(100vw - 48px);
+            text-align: right;
+            white-space: nowrap;
           }
 
-          .hero-intro-explore-button {
-            bottom: 78px;
-          }
 
           /* tablet/smaller desktop overlay stays modal */
           .hero-intro-about-overlay {
@@ -333,19 +265,9 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             overflow-x: hidden !important;
             border-radius: 0 !important;
           }
-
-          .hero-intro-about-close-button {
-            top: 16px;
-            right: 16px;
-          }
-
-          .hero-intro-about-close-icon {
-            width: 24px;
-            height: 24px;
-          }
         }
 
-        @media (max-width: 560px) {
+        @media (max-width: 568px) {
           .hero-intro {
             min-height: 700px;
           }
@@ -399,38 +321,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             flex-direction: column;
             align-items: flex-end;
             gap: 5px;
-          }
-
-          .hero-intro-nav-link,
-          .hero-intro-explore-button,
-          .hero-intro-about-button {
-            font-size: 13px;
-          }
-
-          .hero-intro-nav-link {
-            width: auto;
-            height: auto;
-          }
-
-          .hero-intro-about-button {
-            width: auto;
-            height: auto;
-          }
-
-          .hero-intro-nav-link-label {
-            position: static;
-            transform: none;
-            font-size: 13px;
-            line-height: 1;
-            letter-spacing: 0.02em;
-            font-weight: 400;
-            font-family: "Andale Mono", "Andale Mono WT", monospace;
-            color: #000000;
-            opacity: 1;
-          }
-
-          .hero-intro-explore-button {
-            bottom: 68px;
           }
 
           /* phone overlay becomes full-screen */
@@ -544,13 +434,13 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           className="mcg-about-overlay hero-intro-about-overlay"
           style={{
             position: "fixed",
-            inset: 0,
+            inset: isMobile ? "var(--mcg-mobile-nav-offset, 0px) 0 0 0" : 0,
             zIndex: 999,
             backgroundColor: "rgba(0, 0, 0, 0.6)",
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "24px",
+            justifyContent: isMobile ? "stretch" : "center",
+            alignItems: isMobile ? "stretch" : "center",
+            padding: isMobile ? "0" : "24px",
             boxSizing: "border-box",
           }}
         >
@@ -558,13 +448,17 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             className="mcg-about-overlay-content hero-intro-about-overlay-content"
             style={{
               position: "relative",
-              width: "min(100vw, 1280px)",
-              maxHeight: "90vh",
+              width: isMobile ? "100vw" : "min(100vw, 1280px)",
+              maxWidth: isMobile ? "100vw" : undefined,
+              height: isMobile
+                ? "calc(100dvh - var(--mcg-mobile-nav-offset, 0px))"
+                : undefined,
+              maxHeight: isMobile ? "none" : "90vh",
               overflowY: "auto",
               overflowX: "hidden",
-              borderRadius: "10px",
-              backgroundColor: "#ffffff",
-              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.35)",
+              borderRadius: isMobile ? "0" : "10px",
+              backgroundColor: isMobile ? "#ffffff" : "#000000",
+              boxShadow: isMobile ? "none" : "0 10px 40px rgba(0, 0, 0, 0.35)",
             }}
           >
             <button
@@ -572,14 +466,17 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
               onClick={() => setIsAboutOverlayOpen(false)}
               className="hero-intro-about-close-button"
               style={{
-                position: "absolute",
-                top: "40px",
-                right: "40px",
-                zIndex: 5,
+                position: isMobile ? "fixed" : "absolute",
+                top: isMobile
+                  ? "calc(var(--mcg-mobile-nav-offset, 0px) + 12px)"
+                  : "40px",
+                right: isMobile ? "12px" : "40px",
+                zIndex: isMobile ? 1001 : 5,
                 background: "none",
                 border: "none",
                 cursor: "pointer",
                 padding: "10px",
+                touchAction: "manipulation",
               }}
             >
               <img

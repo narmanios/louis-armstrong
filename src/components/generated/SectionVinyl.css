@@ -300,7 +300,7 @@
     transform 180ms ease;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
   .vre {
     grid-template-columns: 1fr;
     gap: 24px;

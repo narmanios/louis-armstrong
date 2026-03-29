@@ -31,7 +31,7 @@ export function SectionIntro() {
         }}
       />
       <style>{`
-        @media (max-width: 767px) {
+        @media (max-width: 768px) {
           .intro-content { transform: scale(1); transform-origin: top left; }
           .intro-l {
             width: 15% !important;

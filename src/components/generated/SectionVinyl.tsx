@@ -52,7 +52,7 @@ export interface VinylRecordExplorerProps {
 }
 
 const DEFAULT_CENTER_IMAGE = "/images/louis-record-center.jpg";
-const DEFAULT_SONGS_URL = "/data/songs.json";
+const DEFAULT_SONGS_URL = "/images/data/songs.json";
 const DEFAULT_EMPTY_TEXT =
   "Hover over the rings to explore covers of Louis Armstrong's songs";
 

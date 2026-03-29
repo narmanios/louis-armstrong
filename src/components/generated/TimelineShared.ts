@@ -1,4 +1,4 @@
-import rawCareerTimeline from "../../../data/career-timeline.json" with { type: "json" };
+import rawCareerTimeline from "../../../public/images/data/career-timeline.json" with { type: "json" };
 
 // ─── SHARED CONSTANTS & TYPES ────────────────────────────────────────────────
 

@@ -335,7 +335,7 @@ export function TimelineBar({
         >
           <audio
             ref={audioRef}
-            src="/audio/the-real-ambassadors.mp3"
+            src="/images/audio/the-real-ambassadors.mp3"
             preload="auto"
             crossOrigin="anonymous"
           />
@@ -451,7 +451,7 @@ export function TimelineBar({
     >
       <audio
         ref={audioRef}
-        src="/audio/the-real-ambassadors.mp3"
+        src="/images/audio/the-real-ambassadors.mp3"
         preload="auto"
         crossOrigin="anonymous"
       />
