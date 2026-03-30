@@ -19798,8 +19798,8 @@
   {
     "id": "brazil",
     "name": "Brazil",
-    "cx": -1,
-    "cy": -1,
+    "cx": 748,
+    "cy": 686,
     "r": 20,
     "numLeft": -1,
     "numTop": -1,
@@ -19819,8 +19819,8 @@
   {
     "id": "jamaica",
     "name": "Jamaica",
-    "cx": -1,
-    "cy": -1,
+    "cx": 967,
+    "cy": 660,
     "r": 20,
     "numLeft": -1,
     "numTop": -1,
@@ -19851,8 +19851,8 @@
   {
     "id": "southkorea",
     "name": "South Korea",
-    "cx": -1,
-    "cy": -1,
+    "cx": 1124,
+    "cy": 180,
     "r": 20,
     "numLeft": -1,
     "numTop": -1,
@@ -19937,8 +19937,8 @@
   {
     "id": "venezuela",
     "name": "Venezuela",
-    "cx": -1,
-    "cy": -1,
+    "cx": 950,
+    "cy": 248,
     "r": 20,
     "numLeft": -1,
     "numTop": -1,

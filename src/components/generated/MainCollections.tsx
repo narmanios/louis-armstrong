@@ -1249,7 +1249,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               onClick={() => scrollGroupDown("history")}
               aria-label="Scroll down in history"
             >
-              <img src="/images/arrow.svg" alt="" aria-hidden="true" />
+              <img src="/assets/arrow.svg" alt="" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -1331,7 +1331,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               onClick={() => scrollGroupDown("ambassador")}
               aria-label="Scroll down in ambassador"
             >
-              <img src="/images/arrow.svg" alt="" aria-hidden="true" />
+              <img src="/assets/arrow.svg" alt="" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -1374,7 +1374,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               onClick={() => scrollGroupDown("musician")}
               aria-label="Scroll down in legacy"
             >
-              <img src="/images/arrow.svg" alt="" aria-hidden="true" />
+              <img src="/assets/arrow.svg" alt="" aria-hidden="true" />
             </button>
           </div>
         </div>

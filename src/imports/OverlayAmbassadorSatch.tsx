@@ -106,7 +106,7 @@ export default function OverlayAmbassadorSatch() {
         <img
           alt=""
           className="absolute inset-0 max-w-none object-cover size-full"
-          src="/images/album.png"
+          src="/assets/album.png"
         />
         <div aria-hidden="true" className="absolute border border-[#e0e0e0] border-solid inset-0" />
       </div>

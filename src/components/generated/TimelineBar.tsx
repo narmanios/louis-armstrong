@@ -335,7 +335,7 @@ export function TimelineBar({
         >
           <audio
             ref={audioRef}
-            src="/images/audio/the-real-ambassadors.mp3"
+            src="/assets/audio/the-real-ambassadors.mp3"
             preload="auto"
             crossOrigin="anonymous"
           />
@@ -355,7 +355,7 @@ export function TimelineBar({
               title={soundEnabled ? "Sound: On" : "Sound: Off"}
             >
               <img
-                src="/images/sound.svg"
+                src="/assets/sound.svg"
                 alt="Sound toggle"
                 className="tl-sound-icon tl-sound-icon-mobile"
                 style={{
@@ -433,7 +433,7 @@ export function TimelineBar({
         </div>
         {placement === "fixed" ? (
           <img
-            src="/images/logo_light.png"
+            src="/assets/logo_light.png"
             alt="Strong House Logo"
             className="tl-logo tl-logo-mobile"
           />
@@ -451,7 +451,7 @@ export function TimelineBar({
     >
       <audio
         ref={audioRef}
-        src="/images/audio/the-real-ambassadors.mp3"
+        src="/assets/audio/the-real-ambassadors.mp3"
         preload="auto"
         crossOrigin="anonymous"
       />
@@ -497,7 +497,7 @@ export function TimelineBar({
               title={soundEnabled ? "Sound: On" : "Sound: Off"}
             >
               <img
-                src="/images/sound.svg"
+                src="/assets/sound.svg"
                 alt="Sound toggle"
                 className="tl-sound-icon tl-sound-icon-desktop"
                 style={{
@@ -542,7 +542,7 @@ export function TimelineBar({
       {renderScrollBar()}
       {placement === "fixed" ? (
         <img
-          src="/images/logo_light.png"
+          src="/assets/logo_light.png"
           alt="Strong House Logo"
           className="tl-logo tl-logo-desktop"
         />

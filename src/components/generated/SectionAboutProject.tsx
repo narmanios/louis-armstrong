@@ -105,7 +105,7 @@ export const SectionAboutProject: React.FC = () => {
 
         <figure className="about-project-figure">
           <img
-            src="/images/about-this-project.png"
+            src="/assets/about-this-project.png"
             alt="Louis Armstrong 1929"
             className="about-project-image"
           />

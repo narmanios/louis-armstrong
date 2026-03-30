@@ -59,8 +59,7 @@ const DESKTOP_STAGE_SCALE_BOOST = 1.14;
 const DESKTOP_CHART_OFFSET_Y = -36;
 const MOBILE_CHART_OFFSET_Y = -96;
 const MOBILE_CHART_OFFSET_X = -72;
-const MIN_DYNAMIC_BUBBLE_RADIUS = 22;
-const ZERO_COUNT_BUBBLE_RADIUS = 14;
+const MIN_DYNAMIC_BUBBLE_RADIUS = 26;
 
 const MAP_GROUP_LEFT = 110;
 const MAP_GROUP_TOP = 136;
@@ -100,12 +99,6 @@ const COUNTRY_TO_FLAG_DATA_NAME: Record<string, string> = {
   cuba: "cu cuba",
   mexico: "mx mexico",
   spain: "es spain",
-  brazil: "br brazil",
-  venezuela: "ve venezuela",
-  southkorea: "kr south-korea",
-  "south-korea": "kr south-korea",
-  south_korea: "kr south-korea",
-  jamaica: "jm jamaica",
 };
 
 const COUNTRY_TO_ELLIPSE_ID: Record<string, string> = {
@@ -143,12 +136,6 @@ const COUNTRY_TO_ELLIPSE_ID: Record<string, string> = {
   cuba: "Ellipse 113",
   mexico: "Ellipse 114",
   spain: "Ellipse 115",
-  brazil: "Ellipse 116",
-  venezuela: "Ellipse 117",
-  southkorea: "Ellipse 118",
-  "south-korea": "Ellipse 118",
-  south_korea: "Ellipse 118",
-  jamaica: "Ellipse 119",
 };
 
 const UI_FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
@@ -161,7 +148,6 @@ export function SectionGoodwillAmbassador({
   textBaseStyle: React.CSSProperties;
 }) {
   const [selectedDecade, setSelectedDecade] = useState<Decade>("all");
-  const [hideUsBubble, setHideUsBubble] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(
     null,
   );
@@ -194,56 +180,41 @@ export function SectionGoodwillAmbassador({
     return getDecadeCount(country, selectedDecade);
   };
 
-  const visibleCountries = useMemo(
-    () =>
-      COUNTRIES.filter((country) => !(hideUsBubble && country.id === "usa")),
-    [hideUsBubble],
-  );
-
-  const maxNonUsFilteredCount = useMemo(() => {
-    return visibleCountries.reduce((maxCount, country) => {
-      if (country.id === "usa") return maxCount;
+  const maxFilteredCount = useMemo(() => {
+    return COUNTRIES.reduce((maxCount, country) => {
       return Math.max(maxCount, getCount(country));
     }, 0);
-  }, [hideUsBubble, selectedDecade]);
+  }, [selectedDecade]);
 
   const displayBubbleRadiusById = useMemo(() => {
-    const maxNonUsBaseRadius = visibleCountries.reduce((maxRadius, country) => {
-      if (country.id === "usa") return maxRadius;
+    const maxBaseRadius = COUNTRIES.reduce((maxRadius, country) => {
       return Math.max(maxRadius, country.r);
     }, 0);
 
     return COUNTRIES.reduce<Record<string, number>>((acc, country) => {
-      if (country.id === "usa") {
-        acc[country.id] = country.r;
-        return acc;
-      }
-
-      const count = getCount(country);
-      const contentMinRadius =
+      const paddedTextRadius =
         country.numFontSize <= 16
-          ? 26
+          ? 36
           : country.numFontSize <= 24
-            ? 32
-            : Math.ceil(country.numFontSize * 0.9 + 12);
+            ? 44
+            : Math.ceil(country.numFontSize * 1.1 + 8);
+      const count = getCount(country);
       const normalizedCount =
-        maxNonUsFilteredCount > 0
-          ? Math.sqrt(count / maxNonUsFilteredCount)
-          : 0;
+        maxFilteredCount > 0 ? Math.sqrt(count / maxFilteredCount) : 0;
       const scaledRadius =
-        count > 0
-          ? MIN_DYNAMIC_BUBBLE_RADIUS +
-            normalizedCount *
-              (maxNonUsBaseRadius - MIN_DYNAMIC_BUBBLE_RADIUS)
-          : ZERO_COUNT_BUBBLE_RADIUS;
+        MIN_DYNAMIC_BUBBLE_RADIUS +
+        normalizedCount * (maxBaseRadius - MIN_DYNAMIC_BUBBLE_RADIUS);
 
-      acc[country.id] = Math.max(Math.round(scaledRadius), contentMinRadius);
+      acc[country.id] = Math.max(
+        Math.round(scaledRadius),
+        paddedTextRadius,
+      );
       return acc;
     }, {});
-  }, [maxNonUsFilteredCount, selectedDecade, visibleCountries]);
+  }, [maxFilteredCount, selectedDecade]);
 
   const mobileBubbleOffsetX = useMemo(() => {
-    const bubbleBounds = visibleCountries.reduce(
+    const bubbleBounds = COUNTRIES.reduce(
       (acc, country) => {
         const pos = bubblePositions[country.id];
         const radius = displayBubbleRadiusById[country.id] ?? country.r;
@@ -264,13 +235,7 @@ export function SectionGoodwillAmbassador({
 
     const bubbleCenterX = (bubbleBounds.minX + bubbleBounds.maxX) / 2;
     return CANVAS_WIDTH / 2 - bubbleCenterX;
-  }, [bubblePositions, displayBubbleRadiusById, visibleCountries]);
-
-  useEffect(() => {
-    if (hideUsBubble && selectedCountry?.id === "usa") {
-      setSelectedCountry(null);
-    }
-  }, [hideUsBubble, selectedCountry]);
+  }, [bubblePositions, displayBubbleRadiusById]);
 
   useEffect(() => {
     const updateScale = () => {
@@ -303,12 +268,12 @@ export function SectionGoodwillAmbassador({
     const minY = 145;
     const maxX = CANVAS_WIDTH - edgePadding;
     const maxY = CANVAS_HEIGHT - BOTTOM_EMPTY_SPACE - edgePadding;
-    const gap = 8;
-    const ticks = 300;
+    const gap = 10;
+    const ticks = 320;
     const centerX = CANVAS_WIDTH * 0.52;
     const centerY = minY + (maxY - minY) * 0.5;
 
-    const nodes: BubbleNode[] = visibleCountries.map((country) => {
+    const nodes: BubbleNode[] = COUNTRIES.map((country) => {
       const radius = displayBubbleRadiusById[country.id] ?? country.r;
       return {
         id: country.id,
@@ -387,7 +352,7 @@ export function SectionGoodwillAmbassador({
         return acc;
       }, {});
 
-      setBubblePositions((prev) => ({ ...prev, ...next }));
+      setBubblePositions(next);
 
       if (currentTick < ticks) {
         rafId = requestAnimationFrame(step);
@@ -399,7 +364,7 @@ export function SectionGoodwillAmbassador({
     return () => {
       cancelAnimationFrame(rafId);
     };
-  }, [displayBubbleRadiusById, visibleCountries]);
+  }, [displayBubbleRadiusById]);
 
   useEffect(() => {
     const root = sectionRootRef.current;
@@ -413,35 +378,30 @@ export function SectionGoodwillAmbassador({
     }
 
     COUNTRIES.forEach((country) => {
-      const isVisible = visibleCountries.some(
-        (visibleCountry) => visibleCountry.id === country.id,
-      );
       const randomized = bubblePositions[country.id];
-      const flagDataName = COUNTRY_TO_FLAG_DATA_NAME[country.id];
-      const ellipseId = COUNTRY_TO_ELLIPSE_ID[country.id];
-
-      if (!randomized || !isVisible) return;
+      if (!randomized) return;
 
       const dx = randomized.cx - country.cx;
       const dy = randomized.cy - country.cy;
-      const radius = displayBubbleRadiusById[country.id] ?? country.r;
-      const flagScale = country.r > 0 ? radius / country.r : 1;
 
+      const flagDataName = COUNTRY_TO_FLAG_DATA_NAME[country.id];
       if (flagDataName) {
         const flagEl = root.querySelector<HTMLElement>(
           `[data-name="${flagDataName}"]`,
         );
         if (flagEl) {
-          flagEl.style.transform = `translate(${dx}px, ${dy}px) scale(${flagScale})`;
-          flagEl.style.transformOrigin = "center center";
+          flagEl.style.transform = `translate(${dx}px, ${dy}px)`;
+          flagEl.style.transformOrigin = "top left";
         }
       }
 
+      const ellipseId = COUNTRY_TO_ELLIPSE_ID[country.id];
       if (ellipseId) {
         const circleEl = root.querySelector<SVGCircleElement>(
           `circle[id="${ellipseId}"]`,
         );
         if (circleEl) {
+          const radius = displayBubbleRadiusById[country.id] ?? country.r;
           circleEl.setAttribute("cx", `${randomized.cx - MAP_GROUP_LEFT}`);
           circleEl.setAttribute("cy", `${randomized.cy - MAP_GROUP_TOP}`);
           circleEl.setAttribute("r", `${radius}`);
@@ -459,10 +419,8 @@ export function SectionGoodwillAmbassador({
   }, [
     bubblePositions,
     displayBubbleRadiusById,
-    hideUsBubble,
     hoveredCountryId,
     selectedCountry,
-    visibleCountries,
   ]);
 
   const handleBubbleClick = (country: CountryData) => {
@@ -497,14 +455,6 @@ export function SectionGoodwillAmbassador({
 .mcg-jazz-section {
   --goodwill-bubble-fill: ${GOODWILL_BUBBLE_FILL};
   background: #f9e4d2 !important;
-}
-
-.goodwill-artwork[data-hide-us="true"] [data-name="us united-states"] {
-  display: none !important;
-}
-
-.goodwill-artwork[data-hide-us="true"] circle[id="Ellipse 81"] {
-  display: none !important;
 }
 
 .goodwill-section-header {
@@ -567,33 +517,6 @@ export function SectionGoodwillAmbassador({
           white-space: nowrap;
         }
 
-        .goodwill-segmented {
-          display: inline-flex;
-          align-items: center;
-          border: 1px solid #c8c2b3;
-          border-radius: 999px;
-          padding: 1px;
-          background: rgba(255, 255, 255, 0.55);
-        }
-
-        .goodwill-segmented-button {
-          font-family: ${UI_FONT};
-          font-weight: 700;
-          font-size: 11px;
-          color: #7d7767;
-          background: transparent;
-          border: 0;
-          border-radius: 999px;
-          padding: 5px 9px;
-          cursor: pointer;
-          white-space: nowrap;
-        }
-
-        .goodwill-segmented-button.is-active {
-          background: #111111;
-          color: #ffffff;
-        }
-
         .goodwill-mobile-filter {
           display: none;
           font-family: ${UI_FONT};
@@ -604,10 +527,6 @@ export function SectionGoodwillAmbassador({
           border: 1px solid #c8c2b3;
           border-radius: 6px;
           padding: 9px 12px;
-        }
-
-        .goodwill-mobile-filter-row {
-          display: none;
         }
 
         .goodwill-desktop-panel {
@@ -702,22 +621,9 @@ export function SectionGoodwillAmbassador({
 
           .goodwill-mobile-filter {
             display: block;
-            width: 100%;
+            width: 40%;
             max-width: none;
-            margin: 0;
-          }
-
-          .goodwill-mobile-filter-row {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            width: calc(100% - 40px);
-            margin: 40px auto 0;
-            flex-wrap: wrap;
-          }
-
-          .goodwill-segmented {
-            display: inline-flex;
+            margin: 40px 16px auto;
           }
 
           .goodwill-desktop-panel {
@@ -803,57 +709,23 @@ export function SectionGoodwillAmbassador({
                 {decade}
               </button>
             ))}
-            <div className="goodwill-segmented" aria-label="United States visibility">
-              <button
-                type="button"
-                className={`goodwill-segmented-button${!hideUsBubble ? " is-active" : ""}`}
-                onClick={() => setHideUsBubble(false)}
-              >
-                Show U.S.
-              </button>
-              <button
-                type="button"
-                className={`goodwill-segmented-button${hideUsBubble ? " is-active" : ""}`}
-                onClick={() => setHideUsBubble(true)}
-              >
-                Hide U.S.
-              </button>
-            </div>
           </div>
         ) : (
-          <div className="goodwill-mobile-filter-row">
-            <select
-              aria-label="Filter events by decade"
-              className="goodwill-mobile-filter"
-              value={selectedDecade}
-              onChange={(event) =>
-                setSelectedDecade(event.target.value as Decade)
-              }
-            >
-              <option value="all">All</option>
-              {DECADES.map((decade) => (
-                <option key={decade} value={decade}>
-                  {decade}
-                </option>
-              ))}
-            </select>
-            <div className="goodwill-segmented" aria-label="United States visibility">
-              <button
-                type="button"
-                className={`goodwill-segmented-button${!hideUsBubble ? " is-active" : ""}`}
-                onClick={() => setHideUsBubble(false)}
-              >
-                Show U.S.
-              </button>
-              <button
-                type="button"
-                className={`goodwill-segmented-button${hideUsBubble ? " is-active" : ""}`}
-                onClick={() => setHideUsBubble(true)}
-              >
-                Hide U.S.
-              </button>
-            </div>
-          </div>
+          <select
+            aria-label="Filter events by decade"
+            className="goodwill-mobile-filter"
+            value={selectedDecade}
+            onChange={(event) =>
+              setSelectedDecade(event.target.value as Decade)
+            }
+          >
+            <option value="all">All</option>
+            {DECADES.map((decade) => (
+              <option key={decade} value={decade}>
+                {decade}
+              </option>
+            ))}
+          </select>
         )}
       </div>
 
@@ -879,8 +751,6 @@ export function SectionGoodwillAmbassador({
             >
               <div
                 ref={sectionRootRef}
-                className="goodwill-artwork"
-                data-hide-us={hideUsBubble ? "true" : "false"}
                 style={{ position: "absolute", inset: 0 }}
               >
                 <SectionGoodwillStageArtwork hideTitle hideFilters />
@@ -893,9 +763,8 @@ export function SectionGoodwillAmbassador({
                   pointerEvents: "none",
                 }}
               >
-                {visibleCountries.map((country) => {
+                {COUNTRIES.map((country) => {
                   const pos = bubblePositions[country.id];
-                  if (!pos) return null;
                   const radius = displayBubbleRadiusById[country.id] ?? country.r;
                   const tapSize = isMobile
                     ? Math.max(radius * 3, 52)
@@ -945,19 +814,15 @@ export function SectionGoodwillAmbassador({
                   );
                 })}
 
-                {visibleCountries.map((country) => {
+                {COUNTRIES.map((country) => {
                   const pos = bubblePositions[country.id];
                   if (!pos) return null;
 
                   const radius = displayBubbleRadiusById[country.id] ?? country.r;
                   const count = getCount(country);
-                  const countFontSize = Math.min(
-                    country.numFontSize,
-                    Math.max(10, radius * 0.28),
-                  );
                   const countTopOffset = Math.min(
-                    Math.max(radius * 0.42, countFontSize + 6),
-                    Math.max(radius - countFontSize - 6, countFontSize + 6),
+                    radius * 0.42,
+                    Math.max(country.numFontSize * 0.72, 14),
                   );
 
                   return (
@@ -972,7 +837,7 @@ export function SectionGoodwillAmbassador({
                         transform: "translateX(-50%)",
                         color: "#9e9887",
                         fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                        fontSize: countFontSize,
+                        fontSize: country.numFontSize,
                         fontWeight: 500,
                         lineHeight: 1,
                         whiteSpace: "nowrap",

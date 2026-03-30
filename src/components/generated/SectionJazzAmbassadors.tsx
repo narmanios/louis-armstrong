@@ -51,7 +51,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
           }}
         >
         <img
-          src="/images/jazz-ambassadors-louis.png"
+          src="/assets/jazz-ambassadors-louis.png"
           alt="Person 1"
           style={{
             position: "absolute",
@@ -63,7 +63,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
           }}
         />
         <img
-          src="/images/jazz-ambassadors-dave.png"
+          src="/assets/jazz-ambassadors-dave.png"
           alt="Person 2"
           style={{
             position: "absolute",
@@ -75,7 +75,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
           }}
         />
         <img
-          src="/images/jazz-ambassadors-dizzy.png"
+          src="/assets/jazz-ambassadors-dizzy.png"
           alt="Person 3"
           style={{
             position: "absolute",
@@ -87,7 +87,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
           }}
         />
         <img
-          src="/images/jazz-ambassadors-benny.png"
+          src="/assets/jazz-ambassadors-benny.png"
           alt="Person 4"
           style={{
             position: "absolute",
@@ -99,7 +99,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
           }}
         />
         <img
-          src="/images/jazz-ambassadors-duke.png"
+          src="/assets/jazz-ambassadors-duke.png"
           alt="Person 5"
           style={{
             position: "absolute",

@@ -17,7 +17,7 @@ interface AfricaTourJsonImage {
   image_link: string;
 }
 
-const africaTourJsonUrl = "/images/data/africa-tour.json";
+const africaTourJsonUrl = "/assets/data/africa-tour.json";
 
 export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
   className,
@@ -93,7 +93,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
   const activeTourImage =
     africaTourImageData[tourActiveIndex] ?? africaTourImageData[0] ?? null;
   const representativeTourImage = africaTourImageData[0] ?? null;
-  const mobileTourCardImageSrc = "/images/africa.png";
+  const mobileTourCardImageSrc = "/assets/africa.png";
   const desktopCardWidth = "min(280px, calc((100vw - 320px) / 3))";
   const desktopTourCardWidth = "min(280px, calc((100vw - 320px) / 3))";
   const desktopCardHeight = "min(214px, calc((100vw - 320px) / 3 * 0.766))";
@@ -247,7 +247,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             }}
           >
             <img
-              src="/images/egypt.png"
+              src="/assets/egypt.png"
               alt="Cairo"
               style={{
                 width: "100%",
@@ -308,7 +308,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               }}
             >
               <img
-                src="/images/congo.png"
+                src="/assets/congo.png"
                 alt="Congo"
                 style={{
                   width: "100%",
@@ -475,7 +475,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                 aria-label="Close overlay"
               >
                 <img
-                  src="/images/close.svg"
+                  src="/assets/close.svg"
                   alt="Close"
                   style={{
                     width: "24px",
@@ -541,7 +541,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   </div>
                 ) : activeOverlay === "egypt" ? (
                   <img
-                    src="/images/egypt.png"
+                    src="/assets/egypt.png"
                     alt="Cairo Large"
                     style={{
                       width: "100%",
@@ -552,8 +552,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   />
                 ) : (
                   <video
-                    src="/images/congo-footage.mp4"
-                    poster="/images/congo.png"
+                    src="/assets/congo-footage.mp4"
+                    poster="/assets/congo.png"
                     autoPlay
                     loop
                     muted
@@ -654,7 +654,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                 aria-label="Close overlay"
               >
                 <img
-                  src="/images/close.svg"
+                  src="/assets/close.svg"
                   alt="Close"
                   style={{
                     width: "32px",
@@ -723,7 +723,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   </div>
                 ) : activeOverlay === "egypt" ? (
                   <img
-                    src="/images/egypt.png"
+                    src="/assets/egypt.png"
                     alt="Cairo Large"
                     style={{
                       width: "auto",
@@ -736,8 +736,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   />
                 ) : (
                   <video
-                    src="/images/congo-footage.mp4"
-                    poster="/images/congo.png"
+                    src="/assets/congo-footage.mp4"
+                    poster="/assets/congo.png"
                     autoPlay
                     loop
                     muted

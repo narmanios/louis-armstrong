@@ -105,7 +105,7 @@ export const SectionWorldFair: React.FC = () => {
         <div className="world-fair-entry">
           <div className="interactive-card">
             <img
-              src="/images/orchestra.png"
+              src="/assets/orchestra.png"
               alt="Orchestra"
               className="world-fair-media-image"
             />
@@ -124,7 +124,7 @@ export const SectionWorldFair: React.FC = () => {
         <div className="world-fair-entry">
           <div className="interactive-card">
             <img
-              src="/images/chicago.png"
+              src="/assets/chicago.png"
               alt="Chicago"
               className="world-fair-media-image"
             />

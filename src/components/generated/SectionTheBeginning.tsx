@@ -105,7 +105,7 @@ export const SectionTheBeginning: React.FC = () => {
         <div className="beginning-entry">
           <div className="interactive-card">
             <img
-              src="/images/waifs-home.png"
+              src="/assets/waifs-home.png"
               alt="Waifs home band"
               className="beginning-media-image"
             />
@@ -124,7 +124,7 @@ export const SectionTheBeginning: React.FC = () => {
         <div className="beginning-entry">
           <div className="interactive-card">
             <img
-              src="/images/young-louis.png"
+              src="/assets/young-louis.png"
               alt="Young Louis"
               className="beginning-media-image"
             />

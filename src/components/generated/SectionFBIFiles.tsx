@@ -12,7 +12,7 @@ interface FBIFilesJsonItem {
   date: string;
 }
 
-const fbiFilesJsonUrl = "/images/data/fbi-files.json";
+const fbiFilesJsonUrl = "/assets/data/fbi-files.json";
 
 const getCategoryFromYear = (yearValue: string): string => {
   const year = parseInt(yearValue, 10);
@@ -44,7 +44,7 @@ export const SectionFBIFiles: React.FC = () => {
 
         const normalized: FileData[] = data.map((item, index) => ({
           id: `${index + 1}`,
-          src: `/images/fbi-files/${item.filename}`,
+          src: `/assets/fbi-files/${item.filename}`,
           alt: item.filename,
           category: getCategoryFromYear(item.date),
         }));
@@ -306,7 +306,7 @@ export const SectionFBIFiles: React.FC = () => {
                 aria-label="Close gallery"
               >
                 <img
-                  src="/images/close.svg"
+                  src="/assets/close.svg"
                   alt="Close"
                   style={{
                     width: isMobile ? "24px" : "28px",
@@ -447,7 +447,7 @@ export const SectionFBIFiles: React.FC = () => {
                 aria-label="Close gallery"
               >
                 <img
-                  src="/images/close.svg"
+                  src="/assets/close.svg"
                   alt="Close"
                   style={{
                     width: "28px",

@@ -10,7 +10,7 @@
         "name": "Willie Nelson",
         "year": 1988,
         "description": "What a Wonderful World is the 36th studio album by country singer Willie Nelson.",
-        "imageUrl": "/images/rerecording-artists/willie-nelson.jpg",
+        "imageUrl": "/assets/rerecording-artists/willie-nelson.jpg",
         "angle": 0
       },
       {
@@ -18,7 +18,7 @@
         "name": "Eva Cassidy",
         "year": 1996,
         "description": "Eva Cassidy's tender, soulful interpretation became one of her most beloved recordings.",
-        "imageUrl": "/images/rerecording-artists/eva-cassidy.jpg",
+        "imageUrl": "/assets/rerecording-artists/eva-cassidy.jpg",
         "angle": 30
       },
       {
@@ -26,7 +26,7 @@
         "name": "Tony Bennett",
         "year": 2002,
         "description": "Tony Bennett brought his legendary vocal style to this Armstrong classic with deep reverence.",
-        "imageUrl": "/images/rerecording-artists/tony-bennett.jpg",
+        "imageUrl": "/assets/rerecording-artists/tony-bennett.jpg",
         "angle": 60
       },
       {
@@ -34,7 +34,7 @@
         "name": "Rod Stewart",
         "year": 2004,
         "description": "Rod Stewart's version appeared on his Great American Songbook series.",
-        "imageUrl": "/images/rerecording-artists/rod-stewart.jpg",
+        "imageUrl": "/assets/rerecording-artists/rod-stewart.jpg",
         "angle": 90
       },
       {
@@ -42,7 +42,7 @@
         "name": "Kenny G",
         "year": 1999,
         "description": "Kenny G's smooth jazz instrumental interpretation added his signature soprano sax.",
-        "imageUrl": "/images/rerecording-artists/kenny-g.jpg",
+        "imageUrl": "/assets/rerecording-artists/kenny-g.jpg",
         "angle": 120
       },
       {
@@ -50,7 +50,7 @@
         "name": "Celine Dion",
         "year": 2013,
         "description": "Celine Dion's powerful vocal delivery brought dramatic emotion to the classic.",
-        "imageUrl": "/images/rerecording-artists/celion-dion.jpg",
+        "imageUrl": "/assets/rerecording-artists/celion-dion.jpg",
         "angle": 150
       },
       {
@@ -58,7 +58,7 @@
         "name": "Joey Ramone",
         "year": 2002,
         "description": "The Ramones frontman recorded a punk-tinged version released posthumously.",
-        "imageUrl": "/images/rerecording-artists/joey-ramone.jpg",
+        "imageUrl": "/assets/rerecording-artists/joey-ramone.jpg",
         "angle": 180
       },
       {
@@ -66,7 +66,7 @@
         "name": "Israel Kamakawiwoʻole",
         "year": 1993,
         "description": "The Hawaiian singer's ukulele medley became an iconic worldwide hit.",
-        "imageUrl": "/images/rerecording-artists/israel-kamakawiwo-ole.jpg",
+        "imageUrl": "/assets/rerecording-artists/israel-kamakawiwo-ole.jpg",
         "angle": 210
       },
       {
@@ -74,7 +74,7 @@
         "name": "Anne Murray",
         "year": 1991,
         "description": "Canadian country-pop singer Anne Murray's gentle version touched hearts.",
-        "imageUrl": "/images/rerecording-artists/anne-murray.jpg",
+        "imageUrl": "/assets/rerecording-artists/anne-murray.jpg",
         "angle": 240
       },
       {
@@ -82,7 +82,7 @@
         "name": "Katie Melua",
         "year": 2010,
         "description": "British-Georgian singer Katie Melua brought European charm to the classic.",
-        "imageUrl": "/images/rerecording-artists/katie-melua.jpg",
+        "imageUrl": "/assets/rerecording-artists/katie-melua.jpg",
         "angle": 270
       },
       {
@@ -90,7 +90,7 @@
         "name": "James Morrison",
         "year": 2011,
         "description": "British soul singer James Morrison's heartfelt version showcased his vocal power.",
-        "imageUrl": "/images/rerecording-artists/james-morrison.jpg",
+        "imageUrl": "/assets/rerecording-artists/james-morrison.jpg",
         "angle": 300
       },
       {
@@ -98,7 +98,7 @@
         "name": "Norah Jones",
         "year": 2016,
         "description": "Norah Jones brought her signature jazz-folk intimacy to the song.",
-        "imageUrl": "/images/rerecording-artists/norah-jones.jpg",
+        "imageUrl": "/assets/rerecording-artists/norah-jones.jpg",
         "angle": 330
       }
     ]
@@ -114,7 +114,7 @@
         "name": "Barbra Streisand",
         "year": 1969,
         "description": "Streisand's powerhouse performance in the film version became iconic.",
-        "imageUrl": "/images/rerecording-artists/barbra-streisand.jpg",
+        "imageUrl": "/assets/rerecording-artists/barbra-streisand.jpg",
         "angle": 0
       },
       {
@@ -122,7 +122,7 @@
         "name": "Michael Bublé",
         "year": 2010,
         "description": "Bublé brought his smooth jazz style to this Broadway classic.",
-        "imageUrl": "/images/rerecording-artists/michael-buble.jpg",
+        "imageUrl": "/assets/rerecording-artists/michael-buble.jpg",
         "angle": 30
       },
       {
@@ -130,7 +130,7 @@
         "name": "Ella Fitzgerald",
         "year": 1965,
         "description": "The First Lady of Song delivered a swinging interpretation full of joy.",
-        "imageUrl": "/images/rerecording-artists/ella-fitzgerald.jpg",
+        "imageUrl": "/assets/rerecording-artists/ella-fitzgerald.jpg",
         "angle": 60
       },
       {
@@ -138,7 +138,7 @@
         "name": "Carol Channing",
         "year": 1964,
         "description": "Carol Channing originated the role on Broadway with unforgettable energy.",
-        "imageUrl": "/images/rerecording-artists/carol-channing.jpg",
+        "imageUrl": "/assets/rerecording-artists/carol-channing.jpg",
         "angle": 90
       },
       {
@@ -146,7 +146,7 @@
         "name": "Bette Midler",
         "year": 2017,
         "description": "Bette Midler revived the role in the Broadway revival to critical acclaim.",
-        "imageUrl": "/images/rerecording-artists/bette-midler.jpg",
+        "imageUrl": "/assets/rerecording-artists/bette-midler.jpg",
         "angle": 120
       },
       {
@@ -154,7 +154,7 @@
         "name": "Jerry Herman",
         "year": 1964,
         "description": "Composer Jerry Herman's own recording showcased the song's theatrical brilliance.",
-        "imageUrl": "/images/rerecording-artists/jerry-herman.jpg",
+        "imageUrl": "/assets/rerecording-artists/jerry-herman.jpg",
         "angle": 150
       },
       {
@@ -162,7 +162,7 @@
         "name": "Pearl Bailey",
         "year": 1967,
         "description": "Pearl Bailey starred in the all-Black Broadway production with electrifying energy.",
-        "imageUrl": "/images/rerecording-artists/pearl-bailey.jpg",
+        "imageUrl": "/assets/rerecording-artists/pearl-bailey.jpg",
         "angle": 180
       },
       {
@@ -170,7 +170,7 @@
         "name": "Ethel Merman",
         "year": 1970,
         "description": "Broadway legend Ethel Merman brought her powerful voice to the role.",
-        "imageUrl": "/images/rerecording-artists/ethel-merman.jpg",
+        "imageUrl": "/assets/rerecording-artists/ethel-merman.jpg",
         "angle": 210
       },
       {
@@ -178,7 +178,7 @@
         "name": "Harry Connick Jr.",
         "year": 2001,
         "description": "Connick brought New Orleans jazz flavor back to the Dolly classic.",
-        "imageUrl": "/images/rerecording-artists/harry-connick-jr.jpg",
+        "imageUrl": "/assets/rerecording-artists/harry-connick-jr.jpg",
         "angle": 240
       },
       {
@@ -186,7 +186,7 @@
         "name": "Bernadette Peters",
         "year": 2011,
         "description": "Broadway star Bernadette Peters brought her trademark warmth and charm.",
-        "imageUrl": "/images/rerecording-artists/bernadette-peters.jpg",
+        "imageUrl": "/assets/rerecording-artists/bernadette-peters.jpg",
         "angle": 270
       },
       {
@@ -194,7 +194,7 @@
         "name": "Betty Grable",
         "year": 1966,
         "description": "Hollywood legend Betty Grable took over the role on Broadway.",
-        "imageUrl": "/images/rerecording-artists/betty-grable.jpg",
+        "imageUrl": "/assets/rerecording-artists/betty-grable.jpg",
         "angle": 300
       },
       {
@@ -202,7 +202,7 @@
         "name": "Cab Calloway",
         "year": 1967,
         "description": "Jazz legend Cab Calloway brought his unique energy to the all-Black production.",
-        "imageUrl": "/images/rerecording-artists/cab-calloway.jpg",
+        "imageUrl": "/assets/rerecording-artists/cab-calloway.jpg",
         "angle": 330
       }
     ]
@@ -218,7 +218,7 @@
         "name": "Grace Jones",
         "year": 1977,
         "description": "Grace Jones transformed the classic into a disco-infused masterpiece.",
-        "imageUrl": "/images/rerecording-artists/grace-jones.jpg",
+        "imageUrl": "/assets/rerecording-artists/grace-jones.jpg",
         "angle": 0
       },
       {
@@ -226,7 +226,7 @@
         "name": "Lady Gaga",
         "year": 2018,
         "description": "Lady Gaga's tender performance in A Star Is Born brought emotional depth.",
-        "imageUrl": "/images/rerecording-artists/lady-gaga.jpg",
+        "imageUrl": "/assets/rerecording-artists/lady-gaga.jpg",
         "angle": 30
       },
       {
@@ -234,7 +234,7 @@
         "name": "Andrea Bocelli",
         "year": 2006,
         "description": "Bocelli's operatic interpretation elevated the song with dramatic passion.",
-        "imageUrl": "/images/rerecording-artists/andrea-bocelli.jpg",
+        "imageUrl": "/assets/rerecording-artists/andrea-bocelli.jpg",
         "angle": 60
       },
       {
@@ -242,7 +242,7 @@
         "name": "Bing Crosby",
         "year": 1953,
         "description": "Crosby's smooth baritone brought warmth and romance to this French classic.",
-        "imageUrl": "/images/rerecording-artists/bing-crosby.jpg",
+        "imageUrl": "/assets/rerecording-artists/bing-crosby.jpg",
         "angle": 90
       },
       {
@@ -250,7 +250,7 @@
         "name": "Édith Piaf",
         "year": 1947,
         "description": "Édith Piaf's original French version defined the song's romantic essence.",
-        "imageUrl": "/images/rerecording-artists/edith-piaf.jpg",
+        "imageUrl": "/assets/rerecording-artists/edith-piaf.jpg",
         "angle": 120
       },
       {
@@ -258,7 +258,7 @@
         "name": "Celine Dion",
         "year": 1993,
         "description": "Celine Dion's bilingual version showcased her vocal range and emotional depth.",
-        "imageUrl": "/images/rerecording-artists/celion-dion.jpg",
+        "imageUrl": "/assets/rerecording-artists/celion-dion.jpg",
         "angle": 150
       },
       {
@@ -266,7 +266,7 @@
         "name": "Marion Cotillard",
         "year": 2007,
         "description": "Marion Cotillard's portrayal as Édith Piaf in the biopic became legendary.",
-        "imageUrl": "/images/rerecording-artists/marion-cotillard.jpg",
+        "imageUrl": "/assets/rerecording-artists/marion-cotillard.jpg",
         "angle": 180
       },
       {
@@ -274,7 +274,7 @@
         "name": "Tony Bennett",
         "year": 2012,
         "description": "Tony Bennett's duet version honored Armstrong's original interpretation.",
-        "imageUrl": "/images/rerecording-artists/tony-bennett.jpg",
+        "imageUrl": "/assets/rerecording-artists/tony-bennett.jpg",
         "angle": 210
       },
       {
@@ -282,7 +282,7 @@
         "name": "Cyndi Lauper",
         "year": 2003,
         "description": "Cyndi Lauper brought her unique vocal styling to this French romance.",
-        "imageUrl": "/images/rerecording-artists/cyndi-lauper.jpg",
+        "imageUrl": "/assets/rerecording-artists/cyndi-lauper.jpg",
         "angle": 240
       },
       {
@@ -290,7 +290,7 @@
         "name": "Cristin Milioti",
         "year": 2013,
         "description": "Broadway actress Cristin Milioti's delicate version captured youthful romance.",
-        "imageUrl": "/images/rerecording-artists/cristin-milioti.jpg",
+        "imageUrl": "/assets/rerecording-artists/cristin-milioti.jpg",
         "angle": 270
       },
       {
@@ -298,7 +298,7 @@
         "name": "Daniela Andrade",
         "year": 2014,
         "description": "Indie artist Daniela Andrade's intimate cover became a viral sensation.",
-        "imageUrl": "/images/rerecording-artists/daniela-andrade.jpg",
+        "imageUrl": "/assets/rerecording-artists/daniela-andrade.jpg",
         "angle": 300
       },
       {
@@ -306,7 +306,7 @@
         "name": "Jeff Buckley",
         "year": 1994,
         "description": "Jeff Buckley's ethereal interpretation showcased his haunting vocal range.",
-        "imageUrl": "/images/rerecording-artists/jeff-buckley.jpg",
+        "imageUrl": "/assets/rerecording-artists/jeff-buckley.jpg",
         "angle": 330
       }
     ]
@@ -322,7 +322,7 @@
         "name": "Bruce Springsteen",
         "year": 2006,
         "description": "The Boss brought rock energy to this New Orleans jazz standard.",
-        "imageUrl": "/images/rerecording-artists/bruce-springsteen.jpg",
+        "imageUrl": "/assets/rerecording-artists/bruce-springsteen.jpg",
         "angle": 0
       },
       {
@@ -330,7 +330,7 @@
         "name": "Fats Domino",
         "year": 1959,
         "description": "Fats Domino's New Orleans R&B version honored his hometown roots.",
-        "imageUrl": "/images/rerecording-artists/fats-domino.jpg",
+        "imageUrl": "/assets/rerecording-artists/fats-domino.jpg",
         "angle": 30
       },
       {
@@ -338,7 +338,7 @@
         "name": "The Beatles",
         "year": 1965,
         "description": "The Fab Four recorded this during their early Hamburg days.",
-        "imageUrl": "/images/rerecording-artists/the-beatles.jpg",
+        "imageUrl": "/assets/rerecording-artists/the-beatles.jpg",
         "angle": 60
       },
       {
@@ -346,7 +346,7 @@
         "name": "Elvis Presley",
         "year": 1956,
         "description": "Elvis brought his rock and roll swagger to this traditional spiritual.",
-        "imageUrl": "/images/rerecording-artists/elvis-presley.jpg",
+        "imageUrl": "/assets/rerecording-artists/elvis-presley.jpg",
         "angle": 90
       },
       {
@@ -354,7 +354,7 @@
         "name": "Jerry Lee Lewis",
         "year": 1961,
         "description": "The Killer's piano-driven version brought wild energy to the spiritual.",
-        "imageUrl": "/images/rerecording-artists/jerry-lee-lewis.jpg",
+        "imageUrl": "/assets/rerecording-artists/jerry-lee-lewis.jpg",
         "angle": 120
       },
       {
@@ -362,7 +362,7 @@
         "name": "Judy Garland",
         "year": 1961,
         "description": "Judy Garland's powerful live performances showcased her theatrical brilliance.",
-        "imageUrl": "/images/rerecording-artists/judy-garland.jpg",
+        "imageUrl": "/assets/rerecording-artists/judy-garland.jpg",
         "angle": 150
       },
       {
@@ -370,7 +370,7 @@
         "name": "Mahalia Jackson",
         "year": 1958,
         "description": "The Queen of Gospel brought spiritual power and authenticity.",
-        "imageUrl": "/images/rerecording-artists/mahalia-jackson.jpg",
+        "imageUrl": "/assets/rerecording-artists/mahalia-jackson.jpg",
         "angle": 180
       },
       {
@@ -378,7 +378,7 @@
         "name": "Preservation Hall Jazz Band",
         "year": 1963,
         "description": "The legendary New Orleans ensemble kept the traditional jazz spirit alive.",
-        "imageUrl": "/images/rerecording-artists/preservation-hall-jazz-band.jpg",
+        "imageUrl": "/assets/rerecording-artists/preservation-hall-jazz-band.jpg",
         "angle": 210
       },
       {
@@ -386,7 +386,7 @@
         "name": "Wynton Marsalis",
         "year": 1989,
         "description": "Wynton Marsalis brought modern jazz virtuosity to this traditional standard.",
-        "imageUrl": "/images/rerecording-artists/wynton-marsalis.jpg",
+        "imageUrl": "/assets/rerecording-artists/wynton-marsalis.jpg",
         "angle": 240
       },
       {
@@ -394,7 +394,7 @@
         "name": "B.B. King",
         "year": 1971,
         "description": "The King of Blues brought his guitar prowess to this spiritual anthem.",
-        "imageUrl": "/images/rerecording-artists/bb-king.jpg",
+        "imageUrl": "/assets/rerecording-artists/bb-king.jpg",
         "angle": 270
       },
       {
@@ -402,7 +402,7 @@
         "name": "Acker Bilk",
         "year": 1962,
         "description": "British clarinetist Acker Bilk brought trad jazz revival charm.",
-        "imageUrl": "/images/rerecording-artists/acker-bilk.jpg",
+        "imageUrl": "/assets/rerecording-artists/acker-bilk.jpg",
         "angle": 300
       },
       {
@@ -410,7 +410,7 @@
         "name": "Sammy Davis Jr.",
         "year": 1960,
         "description": "Teen idol Sammy Davis Jr. brought rockabilly flair to the traditional song.",
-        "imageUrl": "/images/rerecording-artists/sammy-davis-jr.jpg",
+        "imageUrl": "/assets/rerecording-artists/sammy-davis-jr.jpg",
         "angle": 330
       }
     ]
@@ -434,7 +434,7 @@
         "name": "Ella Fitzgerald",
         "year": 1960,
         "description": "Ella's legendary live performance in Berlin featured improvised lyrics.",
-        "imageUrl": "/images/rerecording-artists/ella_fitzgerald.jpg",
+        "imageUrl": "/assets/rerecording-artists/ella_fitzgerald.jpg",
         "angle": 30
       },
       {
@@ -450,7 +450,7 @@
         "name": "Michael Bublé",
         "year": 2004,
         "description": "Bublé's contemporary take introduced the classic to a new generation.",
-        "imageUrl": "/images/rerecording-artists/michael_buble.jpg",
+        "imageUrl": "/assets/rerecording-artists/michael_buble.jpg",
         "angle": 90
       },
       {
@@ -538,7 +538,7 @@
         "name": "Ella Fitzgerald",
         "year": 1950,
         "description": "Ella's duet with Louis Armstrong remains the gold standard.",
-        "imageUrl": "/images/rerecording-artists/ella_fitzgerald.jpg",
+        "imageUrl": "/assets/rerecording-artists/ella_fitzgerald.jpg",
         "angle": 30
       },
       {
@@ -562,7 +562,7 @@
         "name": "Michael Bublé",
         "year": 2009,
         "description": "Bublé's romantic interpretation became a wedding favorite.",
-        "imageUrl": "/images/rerecording-artists/michael_buble.jpg",
+        "imageUrl": "/assets/rerecording-artists/michael_buble.jpg",
         "angle": 120
       },
       {
@@ -754,7 +754,7 @@
         "name": "Harry Connick Jr.",
         "year": 1991,
         "description": "Harry Connick Jr. brought New Orleans piano jazz sensibility.",
-        "imageUrl": "/images/rerecording-artists/harry_connick_jr.jpg",
+        "imageUrl": "/assets/rerecording-artists/harry_connick_jr.jpg",
         "angle": 60
       },
       {
@@ -794,7 +794,7 @@
         "name": "Rod Stewart",
         "year": 2005,
         "description": "Rod Stewart's Great American Songbook series included this gem.",
-        "imageUrl": "/images/rerecording-artists/rod-stewart.jpg",
+        "imageUrl": "/assets/rerecording-artists/rod-stewart.jpg",
         "angle": 210
       },
       {
@@ -810,7 +810,7 @@
         "name": "Tony Bennett",
         "year": 1995,
         "description": "Tony Bennett's timeless interpretation honored the song's romance.",
-        "imageUrl": "/images/rerecording-artists/tony-bennett.jpg",
+        "imageUrl": "/assets/rerecording-artists/tony-bennett.jpg",
         "angle": 270
       },
       {
@@ -858,7 +858,7 @@
         "name": "Ella Fitzgerald",
         "year": 1958,
         "description": "Ella's virtuosic vocal runs showcased technical brilliance.",
-        "imageUrl": "/images/rerecording-artists/ella_fitzgerald.jpg",
+        "imageUrl": "/assets/rerecording-artists/ella_fitzgerald.jpg",
         "angle": 60
       },
       {
@@ -1074,7 +1074,7 @@
         "name": "Tony Bennett",
         "year": 1993,
         "description": "Tony Bennett's elegant version honored the song's jazz heritage.",
-        "imageUrl": "/images/rerecording-artists/tony-bennett.jpg",
+        "imageUrl": "/assets/rerecording-artists/tony-bennett.jpg",
         "angle": 90
       },
       {
@@ -1090,7 +1090,7 @@
         "name": "Ella Fitzgerald",
         "year": 1957,
         "description": "Ella's playful interpretation showcased her impeccable timing.",
-        "imageUrl": "/images/rerecording-artists/ella_fitzgerald.jpg",
+        "imageUrl": "/assets/rerecording-artists/ella_fitzgerald.jpg",
         "angle": 150
       },
       {
@@ -1226,7 +1226,7 @@
         "name": "Willie Nelson",
         "year": 1981,
         "description": "Country legend Willie Nelson brought his unique phrasing to the standard.",
-        "imageUrl": "/images/rerecording-artists/willie-nelson.jpg",
+        "imageUrl": "/assets/rerecording-artists/willie-nelson.jpg",
         "angle": 270
       },
       {
@@ -1242,7 +1242,7 @@
         "name": "Harry Connick Jr.",
         "year": 1990,
         "description": "Harry Connick Jr. brought New Orleans jazz tradition to the timeless song.",
-        "imageUrl": "/images/rerecording-artists/harry_connick_jr.jpg",
+        "imageUrl": "/assets/rerecording-artists/harry_connick_jr.jpg",
         "angle": 330
       }
     ]

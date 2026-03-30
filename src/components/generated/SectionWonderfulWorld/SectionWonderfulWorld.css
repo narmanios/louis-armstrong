@@ -86,15 +86,19 @@
   position: absolute;
   left: 12px;
   top: 50%;
-  transform: translateY(-50%);
-  font-size: 14px;
-  opacity: 0.7;
+  transform: translateY(-50%) rotate(-90deg);
+
+  font-size: 32px;
+  z-index: 1;
+  color: #000000;
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 .slg__search input {
   width: 260px;
-  padding: 10px 12px 10px 34px;
-  border-radius: 999px;
+  padding: 4px 12px 4px 34px;
+  border-radius: 8px;
   border: 1px solid var(--slg-border);
   background: var(--slg-glass);
   color: var(--slg-text);
@@ -106,7 +110,7 @@
 }
 
 .slg__search input::placeholder {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(0, 0, 0, 0.55);
 }
 
 .slg__search input:focus {
@@ -121,7 +125,7 @@
 
 .slg__zoom-controls {
   display: inline-flex;
-  border-radius: 999px;
+  border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--slg-border);
   background: var(--slg-glass);
@@ -134,7 +138,7 @@
   background: transparent;
   color: var(--slg-text);
   width: 38px;
-  height: 38px;
+  height: 32px;
   cursor: pointer;
   font-size: 18px;
   transition:
@@ -210,8 +214,6 @@
   position: absolute;
   border-radius: 999px;
   overflow: hidden;
-  /* border: 1px solid var(--slg-amber-2);
-  background-size: cover; */
   background-position: center;
   transition:
     transform 0.18s ease,
@@ -221,7 +223,7 @@
 }
 
 .slg__fact:hover {
-  transform: scale(2.5);
+  transform: scale(3.2);
   border-color: var(--slg-amber-3);
   border-width: 2px;
   box-shadow:
@@ -248,46 +250,111 @@
 
 .slg__tooltip.is-visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .slg__tooltip-inner {
+  position: relative;
   display: flex;
-  flex-direction: row;
   align-items: flex-start;
-  gap: 12px;
-  max-width: 440px;
-  padding: 10px 12px;
+  gap: 14px;
+  width: min(420px, calc(100vw - 40px));
+  padding: 18px 16px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(245, 158, 11, 0.5);
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(17, 17, 17, 0.14);
+  background: #ffffff;
+  box-shadow: 0 18px 40px rgba(17, 17, 17, 0.18);
+}
+
+.slg__tooltip-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #111111;
+  padding: 0;
+  cursor: pointer;
+}
+
+.slg__tooltip-close svg {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .slg__tooltip-image {
-  flex-shrink: 0;
-  width: 80px;
-  height: 80px;
+  width: 78px;
+  height: 98px;
+  flex: 0 0 auto;
   border-radius: 8px;
   object-fit: cover;
-  border: 1px solid rgba(245, 158, 11, 0.5);
+  border: 1px solid rgba(17, 17, 17, 0.12);
 }
 
 .slg__tooltip-body {
   min-width: 0;
+  flex: 1 1 auto;
 }
 
-.slg__tooltip-meta {
-  font-size: 11px;
+.slg__tooltip-row + .slg__tooltip-row {
+  margin-top: 10px;
+}
+
+.slg__tooltip-label {
+  font-size: 10px;
   font-weight: 700;
-  color: rgba(245, 158, 11, 0.9);
-  margin-bottom: 6px;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(17, 17, 17, 0.56);
+  margin-bottom: 2px;
 }
 
-.slg__tooltip-text {
+.slg__tooltip-value {
   font-size: 13px;
-  line-height: 1.35;
-  color: var(--slg-text);
+  line-height: 1.45;
+  color: #111111;
+}
+
+.slg__tooltip-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.slg__tooltip-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(17, 17, 17, 0.14);
+  color: #111111;
+  text-decoration: none;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.slg__tooltip-link:hover {
+  background: rgba(17, 17, 17, 0.04);
+  border-color: rgba(17, 17, 17, 0.28);
+  transform: translateY(-1px);
+}
+
+.slg__tooltip-link svg {
+  width: 17px;
+  height: 17px;
+  display: block;
 }
 
 .slg__photo-credit {
@@ -426,19 +493,16 @@
   }
 
   .slg__tooltip-inner {
-    max-width: none;
+    width: 100%;
+    padding-top: 18px;
   }
 
   .slg__tooltip-image {
     width: 64px;
-    height: 64px;
+    height: 84px;
   }
 
-  .slg__tooltip-meta {
-    font-size: 10px;
-  }
-
-  .slg__tooltip-text {
+  .slg__tooltip-value {
     font-size: 12px;
     line-height: 1.4;
   }

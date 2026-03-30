@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useIsMobile } from "../../hooks/use-mobile";
-import rawCareerTimeline from "../../../public/images/data/career-timeline.json" with { type: "json" };
+import rawCareerTimeline from "../../../public/assets/data/career-timeline.json" with { type: "json" };
 import "./SectionCareerTimeline.css";
 
 type Category = "musician" | "vocalist" | "bandleader" | "ambassador" | "film";

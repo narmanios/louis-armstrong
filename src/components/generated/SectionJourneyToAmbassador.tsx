@@ -105,7 +105,7 @@ export const SectionJourneyToAmbassador: React.FC = () => {
         <div className="journey-entry">
           <div className="interactive-card">
             <img
-              src="/images/orchestra.png"
+              src="/assets/orchestra.png"
               alt="Orchestra"
               className="journey-media-image"
             />
@@ -124,7 +124,7 @@ export const SectionJourneyToAmbassador: React.FC = () => {
         <div className="journey-entry">
           <div className="interactive-card">
             <img
-              src="/images/chicago.png"
+              src="/assets/chicago.png"
               alt="Chicago"
               className="journey-media-image"
             />

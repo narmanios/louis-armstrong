@@ -353,19 +353,19 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
       `}</style>
 
       <img
-        src="/images/shadow.png"
+        src="/assets/shadow.png"
         alt="Shadow Overlay"
         className="mcg-hero-overlay1 hero-intro-shadow"
       />
 
       <img
-        src="/images/louis-intro3.png"
+        src="/assets/louis-intro3.png"
         alt="Louis Armstrong"
         className="mcg-hero-overlay2 hero-intro-portrait"
       />
 
       <img
-        src="/images/logo_dark.png"
+        src="/assets/logo_dark.png"
         alt="Project logo"
         className="hero-intro-logo"
       />
@@ -480,7 +480,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
               }}
             >
               <img
-                src="/images/close.svg"
+                src="/assets/close.svg"
                 alt="Close"
                 className="hero-intro-about-close-icon"
                 style={{

@@ -155,7 +155,7 @@ export const SectionRealAmbassadors: React.FC<{
 
       <div className="mcg-lyrics-wrap real-ambassadors-layout">
         <img
-          src="/images/the-real-ambassadors.png"
+          src="/assets/the-real-ambassadors.png"
           alt="The Real Ambassadors Album"
           className="real-ambassadors-cover"
         />
