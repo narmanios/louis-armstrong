@@ -103,38 +103,42 @@ export const SectionTheBeginning: React.FC = () => {
 
       <div className="beginning-entry-grid">
         <div className="beginning-entry">
-          <div className="interactive-card">
+          <div>
             <img
               src="/assets/waifs-home.png"
               alt="Waifs home band"
               className="beginning-media-image"
             />
           </div>
-        <p className="beginning-caption">
-            Louis Armstrong and his Orchestra (1929)
+          <p className="beginning-caption">
+            Waif's Home Band, New Orleans, 1910s. Photo by Ernest J. Bellocq.
           </p>
           <p className="beginning-copy">
-            Text about Louis Armstrong and his Orchestra goes here. Text about
-            Louis Armstrong and his Orchestra goes here. Text about Louis
-            Armstrong and his Orchestra goes here. Text about Louis Armstrong
-            and his Orchestra goes here.
+            This photograph shows the brass band from the Colored Waif’s Home in
+            New Orleans, the reform school where Louis Armstrong spent part of
+            his youth and began developing his musical skills. The band was a
+            turning point in his life, giving him formal practice on cornet and
+            helping launch the career that would make him one of jazz’s most
+            influential musicians.
           </p>
         </div>
 
         <div className="beginning-entry">
-          <div className="interactive-card">
+          <div>
             <img
-              src="/assets/young-louis.png"
-              alt="Young Louis"
+              src="/assets/2006_1_3a.jpg"
+              alt="Creole Jazz Band"
               className="beginning-media-image"
             />
           </div>
-          <p className="beginning-caption">Young Louis</p>
+          <p className="beginning-caption">King Oliver's Creole Jazz Band</p>
           <p className="beginning-copy">
-            Text about young Louis goes here. Text about young Louis goes here.
-            Text about young Louis goes here. Text about young Louis goes here.
-            Text about young Louis goes here. Text about young Louis goes here.
-            Text about young Louis goes here.
+            King Oliver’s Creole Jazz Band was one of the most important early
+            jazz groups, bringing together leading New Orleans musicians in a
+            small ensemble that helped define classic jazz style. This photo
+            captures the band’s formal stage presence and highlights the group
+            that helped launch Louis Armstrong’s rise as a major figure in
+            American music.
           </p>
         </div>
       </div>

@@ -103,15 +103,15 @@ export const SectionWorldFair: React.FC = () => {
 
       <div className="world-fair-entry-grid">
         <div className="world-fair-entry">
-          <div className="interactive-card">
+          <div>
             <img
-              src="/assets/orchestra.png"
-              alt="Orchestra"
+              src="/assets/worldsfair.jpg"
+              alt="World Fair"
               className="world-fair-media-image"
             />
           </div>
           <p className="world-fair-caption">
-            Louis Armstrong and his Orchestra (1929)
+            World's Fair Louis Armstrong Day (1964)
           </p>
           <p className="world-fair-copy">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
@@ -122,14 +122,14 @@ export const SectionWorldFair: React.FC = () => {
         </div>
 
         <div className="world-fair-entry">
-          <div className="interactive-card">
+          <div>
             <img
-              src="/assets/chicago.png"
-              alt="Chicago"
+              src="/assets/berlin.jpg"
+              alt="East Berlin"
               className="world-fair-media-image"
             />
           </div>
-          <p className="world-fair-caption">Chicago</p>
+          <p className="world-fair-caption">East Berlin</p>
           <p className="world-fair-copy">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
             ullamcorper erat tortor, at accumsan sapien molestie et. Sed

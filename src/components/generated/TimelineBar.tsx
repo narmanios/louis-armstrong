@@ -26,8 +26,8 @@ const desktopTimelineRightGutter = 40;
 const mobileTimelineLeftGutter = 18;
 const mobileTimelineRightGutter = 18;
 const lyricHoverBackground = "#F5F3EA";
-const mobileLyricLetterSpacing = 0.08;
-const desktopLyricLetterSpacing = 0.1;
+const mobileLyricLetterSpacing = 0.03;
+const desktopLyricLetterSpacing = 0.05;
 const scrollbarHeight = 18;
 const mobileScrollbarThumbBoost = 8;
 const desktopScrollbarThumbBoost = 20;
@@ -38,26 +38,6 @@ const soundIconOnFilter =
 
 // Musical font for lyrics
 const lyricFont = "Georgia, 'Times New Roman', serif";
-
-// Vibrant colors from the role dots — used randomly on lyric hover
-const hoverColors = [
-  "rgb(0, 0, 0)",
-  // // actor blue
-  // "rgb(104, 96, 18)",
-  // // musician orange
-  // "rgb(0, 0, 0)",
-  // // bandleader pink
-  // "rgb(71, 69, 44)",
-  // // vocalist green
-  // "rgb(158, 158, 109)", // ambassador purple
-];
-function hashStringToInt(str: string): number {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
-  }
-  return hash;
-}
 
 function estimateLyricWidth(
   text: string,
@@ -115,27 +95,6 @@ export function TimelineBar({
         audioRef.current.currentTime = 0;
       }
     }
-  }, []);
-
-  // Pre-compute a stable color per lyric
-  const lyricColorMap = useMemo(() => {
-    const map: Record<string, string> = {};
-    lyricLabels.forEach((lyr) => {
-      map[lyr.id] = hoverColors[hashStringToInt(lyr.id) % hoverColors.length];
-    });
-    return map;
-  }, []);
-
-  // Pre-compute a stable color per phrase group
-  const phraseGroupColorMap = useMemo(() => {
-    const map: Record<number, string> = {};
-    rawLyrics.forEach((lyric) => {
-      if (!(lyric.phraseGroup in map)) {
-        map[lyric.phraseGroup] =
-          hoverColors[lyric.phraseGroup % hoverColors.length];
-      }
-    });
-    return map;
   }, []);
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -239,9 +198,6 @@ export function TimelineBar({
 
   const renderLyricLabels = (isMobileView: boolean) => {
     const yOffset = isMobileView ? 4 : 2;
-    const idleColor = isMobileView
-      ? "rgba(180,180,180,0.38)"
-      : "rgba(180,180,180,0.32)";
     const letterSpacingEm = isMobileView
       ? mobileLyricLetterSpacing
       : desktopLyricLetterSpacing;
@@ -259,10 +215,8 @@ export function TimelineBar({
         hoveredPhraseGroup >= 0 &&
         rawLyrics[lyrIndex].phraseGroup === hoveredPhraseGroup;
       const isActive = isHovered || isInSamePhrase;
-      const hoverColor = isInSamePhrase
-        ? phraseGroupColorMap[hoveredPhraseGroup]
-        : lyricColorMap[lyr.id];
-      const fontSize = isActive ? 11 : 9;
+      const fontSize = isActive ? 13 : 9;
+      const fontColor = isActive ? "#194BB3" : "#292929";
       const textX = lyr.x + lyricLabelStartOffset;
       const textWidth = estimateLyricWidth(lyr.text, fontSize, letterSpacingEm);
       const backgroundHeight = fontSize + 6;
@@ -310,7 +264,7 @@ export function TimelineBar({
             className={`tl-lyric ${isMobileView ? "is-mobile" : "is-desktop"} ${isActive ? "is-active" : "is-idle"}`}
             style={
               {
-                "--tl-lyric-color": isActive ? hoverColor : idleColor,
+                "--tl-lyric-color": fontColor,
                 "--tl-lyric-size": `${fontSize}px`,
                 letterSpacing,
               } as React.CSSProperties

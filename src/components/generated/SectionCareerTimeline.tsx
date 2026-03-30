@@ -344,10 +344,7 @@ function TimelineSVG({
           );
 
     const top = Math.min(
-      Math.max(
-        displayDot.cy - tooltipEstimatedHeight / 2,
-        tooltipEdgePadding,
-      ),
+      Math.max(displayDot.cy - tooltipEstimatedHeight / 2, tooltipEdgePadding),
       svgHeight - tooltipEstimatedHeight - tooltipEdgePadding,
     );
 
@@ -687,15 +684,9 @@ function TimelineSVG({
           }}
         >
           <div
-            className="career-timeline-tooltip"
-            style={{
-              border: `1.5px solid ${categoryColors[displayTip.cat]}`,
-            }}
+            className={`career-timeline-tooltip career-timeline-tooltip--${displayTip.cat}`}
           >
-            <div
-              className="career-timeline-tooltip-date"
-              style={{ color: categoryColors[displayTip.cat] }}
-            >
+            <div className="career-timeline-tooltip-date">
               {displayTip.event.dateText}
             </div>
             <div className="career-timeline-tooltip-text">
@@ -707,11 +698,7 @@ function TimelineSVG({
               {displayTip.event.categories.map((category) => (
                 <span
                   key={category}
-                  style={{
-                    backgroundColor: `${categoryColors[category]}18`,
-                    color: categoryColors[category],
-                  }}
-                  className="career-timeline-tooltip-tag"
+                  className={`career-timeline-tooltip-tag career-timeline-tooltip-tag--${category}`}
                 >
                   {timelineData.categoryLabels[category]}
                 </span>
@@ -724,9 +711,6 @@ function TimelineSVG({
                 rel="noopener noreferrer"
                 onClick={(event) => event.stopPropagation()}
                 className="career-timeline-tooltip-link"
-                style={{
-                  color: categoryColors[displayTip.cat],
-                }}
               >
                 <svg width="14" height="10" viewBox="0 0 24 17" fill="none">
                   <path

@@ -15,6 +15,8 @@
 .tl-mobile-root.is-section,
 .tl-desktop-root.is-section {
   position: absolute;
+  border-radius: 10px;
+  overflow: hidden;
   left: 0;
   right: 0;
   bottom: 0;
@@ -33,7 +35,7 @@
 .tl-header-title {
   font-family: helvetica, Arial, sans-serif;
   color: #000000;
-  letter-spacing: 0.1em;
+  /* letter-spacing: 0.1em; */
   pointer-events: none;
   white-space: nowrap;
 }
@@ -54,7 +56,7 @@
   transition:
     fill 0.18s ease,
     font-size 0.18s ease;
-  fill: #000;
+  fill: var(--tl-lyric-color, #000);
   font-size: var(--tl-lyric-size);
 }
 
@@ -148,6 +150,7 @@
 .tl-mobile-root.is-section .tl-mobile-viewport {
   width: 100%;
   margin: 0;
+  border-radius: inherit;
 }
 
 .tl-scroll-surface-desktop {

@@ -8,7 +8,22 @@
   --career-lane-stroke: #7a7669;
   --career-lane-stroke-width: 0.5px;
   --career-pill-dot-size: 8px;
-  --career-pill-dot-border-width: 2px;
+  --career-pill-dot-border-width: 0.8px;
+  --career-tag-film-bg: #ff6b6b;
+  --career-tag-film-color: #ff6b6b;
+  --career-tag-bandleader-bg: #f59e0b;
+  --career-tag-bandleader-color: #f59e0b;
+  --career-tag-musician-bg: #2563eb;
+  --career-tag-musician-color: #2563eb;
+  --career-tag-vocalist-bg: #10b981;
+  --career-tag-vocalist-color: #10b981;
+  --career-tag-ambassador-bg: #8b5cf6;
+  --career-tag-ambassador-color: #8b5cf6;
+  --career-tooltip-film-accent: #ff6b6b;
+  --career-tooltip-bandleader-accent: #f59e0b;
+  --career-tooltip-musician-accent: #2563eb;
+  --career-tooltip-vocalist-accent: #10b981;
+  --career-tooltip-ambassador-accent: #8b5cf6;
   background-color: var(--career-surface-bg) !important;
 }
 
@@ -65,7 +80,6 @@
 .career-timeline-chart-card {
   flex: 1 1 auto;
   height: 100%;
-  padding-top: 0;
   overflow: visible;
   background: transparent;
   padding: 0;
@@ -123,7 +137,7 @@
   height: var(--career-pill-dot-size);
   border-radius: 50%;
   background-color: var(--career-pill-dot);
-  border: 0.8px solid #4b473f;
+  border: var(--career-pill-dot-border-width) solid #4b473f;
 
   display: inline-block;
   flex-shrink: 0;
@@ -200,7 +214,7 @@
 /* Axis and guide lines */
 .career-timeline-year-grid-line {
   stroke: #ddd8ca;
-  opacity: 50%;
+  opacity: 0.5;
   stroke-width: 1;
 }
 
@@ -236,18 +250,39 @@
 }
 
 .career-timeline-tooltip {
-  background: #fbfaf4;
+  background: #ffffff;
   border-radius: 8px;
   padding: 11px 13px;
   box-shadow: none;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.career-timeline-tooltip--film {
+  --career-tooltip-accent: var(--career-tooltip-film-accent);
+}
+
+.career-timeline-tooltip--bandleader {
+  --career-tooltip-accent: var(--career-tooltip-bandleader-accent);
+}
+
+.career-timeline-tooltip--musician {
+  --career-tooltip-accent: var(--career-tooltip-musician-accent);
+}
+
+.career-timeline-tooltip--vocalist {
+  --career-tooltip-accent: var(--career-tooltip-vocalist-accent);
+}
+
+.career-timeline-tooltip--ambassador {
+  --career-tooltip-accent: var(--career-tooltip-ambassador-accent);
+}
+
 .career-timeline-tooltip-date {
-  font-size: 9px;
+  color: var(--career-tooltip-accent, #111827);
+  font-size: 11px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  /* text-transform: uppercase; */
+  /* letter-spacing: 0.12em; */
   margin-bottom: 5px;
 }
 
@@ -270,9 +305,37 @@
   padding: 2px 6px;
   border-radius: 3px;
   text-transform: uppercase;
+  background: var(--career-tag-bg, #00000014);
+  color: var(--career-tag-color, #111827);
+}
+
+.career-timeline-tooltip-tag--film {
+  --career-tag-bg: var(--career-tag-film-bg);
+  --career-tag-color: var(--career-tag-film-color);
+}
+
+.career-timeline-tooltip-tag--bandleader {
+  --career-tag-bg: var(--career-tag-bandleader-bg);
+  --career-tag-color: var(--career-tag-bandleader-color);
+}
+
+.career-timeline-tooltip-tag--musician {
+  --career-tag-bg: var(--career-tag-musician-bg);
+  --career-tag-color: var(--career-tag-musician-color);
+}
+
+.career-timeline-tooltip-tag--vocalist {
+  --career-tag-bg: var(--career-tag-vocalist-bg);
+  --career-tag-color: var(--career-tag-vocalist-color);
+}
+
+.career-timeline-tooltip-tag--ambassador {
+  --career-tag-bg: var(--career-tag-ambassador-bg);
+  --career-tag-color: var(--career-tag-ambassador-color);
 }
 
 .career-timeline-tooltip-link {
+  color: var(--career-tooltip-accent, #111827);
   display: flex;
   align-items: center;
   gap: 5px;

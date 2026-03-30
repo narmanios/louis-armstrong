@@ -288,7 +288,7 @@ export function SectionWonderfulWorld({
   initialZoom = 1,
   canvasWidth = 1000,
   canvasHeight = 500,
-  searchPlaceholder = "Search facts...",
+  searchPlaceholder = "Search artists, release dates...",
 }: SectionWonderfulWorldProps) {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<Error | null>(null);
