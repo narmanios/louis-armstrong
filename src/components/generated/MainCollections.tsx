@@ -56,8 +56,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       "FBI Files",
       "Jazz Ambassadors",
       "Africa Tour",
-      "World Fair + Berlin",
       "The Real Ambassadors",
+      "World Fair + Berlin",
     ],
     musician: ["What a Wonderful World", "More Covers"],
   };
@@ -347,7 +347,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   useEffect(() => {
     const root = document.documentElement;
     const updateNavOffset = () => {
-      const navOffset = isMobile && showFixedGroupNav ? `${getMobileNavOffset()}px` : "0px";
+      const navOffset =
+        isMobile && showFixedGroupNav ? `${getMobileNavOffset()}px` : "0px";
       root.style.setProperty("--mcg-mobile-nav-offset", navOffset);
     };
 
@@ -366,7 +367,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     color: "#000000",
   };
   const renderGroupNav = (className = "") => (
-    <nav className={`mcg-group-nav ${className}`.trim()} aria-label="Section groups">
+    <nav
+      className={`mcg-group-nav ${className}`.trim()}
+      aria-label="Section groups"
+    >
       {groupNavItems.map((item) => (
         <div
           key={item.id}
@@ -399,14 +403,16 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     </nav>
   );
   const renderMobileMenu = () => (
-      <div className="mcg-mobile-nav-shell">
+    <div className="mcg-mobile-nav-shell">
       <div className="mcg-mobile-nav-bar" ref={mobileNavBarRef}>
         <button
           type="button"
           className={`mcg-mobile-menu-button${
             isMobileMenuOpen ? " is-open" : ""
           }`}
-          aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-label={
+            isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
+          }
           aria-expanded={isMobileMenuOpen}
           onClick={() => setIsMobileMenuOpen((open) => !open)}
         >
@@ -1292,6 +1298,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                   <SectionJazzAmbassadors />
                 </div>
               </div>
+
               <div
                 ref={(element) => {
                   ambassadorSectionRefs.current[3] = element;
@@ -1302,16 +1309,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                   <SectionAfricaTour />
                 </div>
               </div>
-              <div
-                ref={(element) => {
-                  ambassadorSectionRefs.current[4] = element;
-                }}
-                className="mcg-group-section"
-              >
-                <div className="mcg-group-section-inner">
-                  <SectionWorldFair />
-                </div>
-              </div>
+
               <div
                 ref={(element) => {
                   ambassadorSectionRefs.current[5] = element;
@@ -1323,6 +1321,17 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                     onTimelineJump={scrollToTimelineSection}
                     isMobile={isMobile}
                   />
+                </div>
+
+                <div
+                  ref={(element) => {
+                    ambassadorSectionRefs.current[4] = element;
+                  }}
+                  className="mcg-group-section"
+                >
+                  <div className="mcg-group-section-inner">
+                    <SectionWorldFair />
+                  </div>
                 </div>
               </div>
             </div>
