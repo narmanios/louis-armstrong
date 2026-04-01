@@ -69,7 +69,6 @@ export type RoleLine = {
 type CareerTimelineData = {
   roleLines: Array<Omit<RoleLine, "y">>;
   legendItems: LegendItem[];
-  sectionsMeta: SectionMeta[];
   events: Array<{
     id: number;
     year: number;
@@ -97,13 +96,6 @@ export type LegendItem = {
   outline?: boolean;
 };
 export const legendItems: LegendItem[] = careerTimelineData.legendItems;
-export type SectionMeta = {
-  id: string;
-  label: string;
-  startYear: number;
-  endYear: number;
-};
-export const sectionsMeta: SectionMeta[] = careerTimelineData.sectionsMeta;
 export type TLDot = {
   id: string;
   year: number;
