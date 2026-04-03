@@ -22,12 +22,16 @@ export const SectionRealAmbassadors: React.FC<{
     <section className="mcg-section real-ambassadors-section">
       <style>{`
         .real-ambassadors-section {
-          background: #000000;
+          background: transparent;
           position: relative;
           overflow: hidden;
-          min-height: 800px;
-          padding: 49px 56px 60px;
+          min-height: 100dvh;
+          padding: 0 56px 60px;
           box-sizing: border-box;
+        }
+
+        .real-ambassadors-section .mcg-page-title {
+          color: #000000 !important;
         }
 
         .real-ambassadors-layout {
@@ -48,8 +52,8 @@ export const SectionRealAmbassadors: React.FC<{
 
         .real-ambassadors-track-list {
           margin: 0;
-          color: #fff;
-          font-family: "Helvetica Neue", sans-serif;
+          color: #111827;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
           font-size: 12px;
         }
 
@@ -57,7 +61,7 @@ export const SectionRealAmbassadors: React.FC<{
 
 
         .real-ambassadors-lyrics {
-          font-family: "Helvetica Neue", sans-serif;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
           font-size: 12px;
           color: #000000;
         }

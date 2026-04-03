@@ -1,33 +1,87 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SectionAboutProject } from "./SectionAboutProject";
 import { useIsMobile } from "../../hooks/use-mobile";
 
 interface SectionIntroHeroProps {
   onNavigateHistory: () => void;
-  onNavigateMusician: () => void;
+  onNavigateLegacy: () => void;
   onNavigateAmbassador: () => void;
+  isIntroActive?: boolean;
+  isTransitionOverlayActive?: boolean;
   sectionRef?: React.Ref<HTMLElement>;
 }
 
 const heroForegroundScale = 0.78;
+const panelTransitionDurationMs = 780;
+
+type HeroPanelKey = "history" | "ambassador" | "legacy";
+
 const scalePx = (value: number) =>
   `${Math.round(value * heroForegroundScale)}px`;
 
 export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
   onNavigateHistory,
-  onNavigateMusician,
+  onNavigateLegacy,
   onNavigateAmbassador,
+  isIntroActive = false,
+  isTransitionOverlayActive = false,
   sectionRef,
 }) => {
   const [isAboutOverlayOpen, setIsAboutOverlayOpen] = useState(false);
+  const [transitionTarget, setTransitionTarget] = useState<HeroPanelKey | null>(
+    null,
+  );
   const isMobile = useIsMobile();
+  const previousIntroActiveRef = useRef(isIntroActive);
+
+  useEffect(() => {
+    if (isIntroActive && !previousIntroActiveRef.current) {
+      setTransitionTarget(null);
+    }
+
+    previousIntroActiveRef.current = isIntroActive;
+  }, [isIntroActive]);
+
+  const openAboutOverlay = (event?: React.MouseEvent<HTMLButtonElement>) => {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    if (transitionTarget !== null) {
+      return;
+    }
+
+    setIsAboutOverlayOpen(true);
+  };
+
+  const handlePanelNavigation = (
+    panelKey: HeroPanelKey,
+    onNavigate: () => void,
+  ) => {
+    if (transitionTarget !== null) {
+      return;
+    }
+
+    if (isMobile) {
+      onNavigate();
+      return;
+    }
+
+    setTransitionTarget(panelKey);
+    onNavigate();
+  };
 
   return (
     <section
       ref={sectionRef}
-      className="mcg-section mcg-hero-wrap hero-intro-section hero-intro"
+      className={`mcg-section mcg-hero-wrap hero-intro-section hero-intro${
+        transitionTarget ? " hero-intro--transitioning" : ""
+      }${
+        transitionTarget && isTransitionOverlayActive
+          ? " hero-intro--overlay-active"
+          : ""
+      }`}
       style={{
-        backgroundColor: "#f9e4d2",
+        backgroundColor: "#000000",
         position: "relative",
       }}
     >
@@ -35,23 +89,215 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         .hero-intro {
           position: relative;
           background: #ffffff;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+        }
+
+        .hero-intro--overlay-active {
+          position: fixed !important;
+          inset: 0;
+          width: 100vw !important;
+          min-width: 0 !important;
+          height: 100dvh;
+          z-index: 40;
+          overflow: hidden;
+          pointer-events: none;
+          background: transparent !important;
+        }
+
+        .hero-intro button,
+        .hero-intro p,
+        .hero-intro span {
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+        }
+
+        .hero-intro-panel-grid {
+          position: absolute;
+          inset: 0;
+          width: 100vw;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          z-index: 12;
+          overflow: hidden;
+        }
+
+        .hero-intro-panel {
+          position: relative;
+          height: 100%;
+          overflow: hidden;
+          transition:
+            transform ${panelTransitionDurationMs}ms cubic-bezier(0.16, 1, 0.3, 1),
+            opacity 160ms linear,
+            background-color 220ms ease;
+          will-change: transform, opacity;
+        }
+
+        .hero-intro-panel--history {
+          background: #2a2a2a;
+        }
+
+        .hero-intro-panel--ambassador {
+          background: #1f1f1f;
+        }
+
+        .hero-intro-panel--legacy {
+          background: #151515;
+        }
+
+        .hero-intro-panel-media {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+          overflow: hidden;
+        }
+
+        .hero-intro-panel-media img,
+        .hero-intro-panel-media video {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          transition: opacity 0.22s ease;
+        }
+
+        .hero-intro-panel-media img {
+          object-position: center center;
+          filter: brightness(0.92) contrast(1.04);
+          opacity: 1;
+        }
+
+        .hero-intro-panel-media video {
+          object-position: 58% center;
+          filter: brightness(1.18) contrast(1.06);
+          opacity: 0;
+        }
+
+        .hero-intro-panel--history::before,
+        .hero-intro-panel--ambassador::before,
+        .hero-intro-panel--legacy::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          pointer-events: none;
+          transition: opacity 0.22s ease;
+        }
+
+        .hero-intro-panel--history::before {
+          background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.10) 0%,
+            rgba(0, 0, 0, 0.24) 100%
+          );
+        }
+
+        .hero-intro-panel--ambassador::before {
+          background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.10) 0%,
+            rgba(0, 0, 0, 0.26) 100%
+          );
+        }
+
+        .hero-intro-panel--legacy::before {
+          background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.04) 0%,
+            rgba(0, 0, 0, 0.18) 100%
+          );
+        }
+
+        .hero-intro-panel--history:hover .hero-intro-panel-media video,
+        .hero-intro-panel--history:focus-within .hero-intro-panel-media video,
+        .hero-intro-panel--ambassador:hover .hero-intro-panel-media video,
+        .hero-intro-panel--ambassador:focus-within .hero-intro-panel-media video,
+        .hero-intro-panel--legacy:hover .hero-intro-panel-media video,
+        .hero-intro-panel--legacy:focus-within .hero-intro-panel-media video {
+          opacity: 0.92;
+        }
+
+        .hero-intro-panel--history:hover .hero-intro-panel-media img,
+        .hero-intro-panel--history:focus-within .hero-intro-panel-media img,
+        .hero-intro-panel--ambassador:hover .hero-intro-panel-media img,
+        .hero-intro-panel--ambassador:focus-within .hero-intro-panel-media img,
+        .hero-intro-panel--legacy:hover .hero-intro-panel-media img,
+        .hero-intro-panel--legacy:focus-within .hero-intro-panel-media img {
+          opacity: 0.18;
+        }
+
+        .hero-intro-panel--history:hover::before,
+        .hero-intro-panel--history:focus-within::before,
+        .hero-intro-panel--ambassador:hover::before,
+        .hero-intro-panel--ambassador:focus-within::before,
+        .hero-intro-panel--legacy:hover::before,
+        .hero-intro-panel--legacy:focus-within::before {
+          opacity: 0.55;
+        }
+
+        .hero-intro-panel-button {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          border: none;
+          background: none;
+          cursor: pointer;
+          padding: 0;
+          z-index: 2;
+        }
+
+        .hero-intro--transitioning .hero-intro-panel-grid,
+        .hero-intro--transitioning .hero-intro-nav {
+          pointer-events: none;
+        }
+
+        .hero-intro--transitioning .hero-intro-panel-grid {
+          inset: 0;
+          width: 100vw;
+        }
+
+        .hero-intro--transitioning .hero-intro-panel {
+          background: #000000;
+        }
+
+        .hero-intro--transitioning .hero-intro-panel--history {
+          transform: translate3d(-104%, 0, 0);
+        }
+
+        .hero-intro--transitioning .hero-intro-panel--ambassador {
+          opacity: 0;
+        }
+
+        .hero-intro--transitioning .hero-intro-panel--legacy {
+          transform: translate3d(104%, 0, 0);
         }
 
         .hero-intro-title-line {
           margin: 0;
-          font-family: "Andale Mono", "Andale Mono WT", monospace;
-          font-weight: 700;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+          font-weight: 600;
           line-height: 0.9;
-          color: #cf6b4c;
+          color: #ffffff;
           letter-spacing: -0.03em;
         }
 
-        .hero-intro-kicker {
-          position: static;
+        .hero-intro-title-main {
           display: block;
-          font-family: "Helvetica Neue", sans-serif;
-          font-weight: 700;
-          color: #000000;
+          width: 100%;
+          white-space: nowrap;
+          line-height: 0.88;
+        }
+
+        .hero-intro-kicker {
+          position: absolute;
+          top: 16px;
+          right: 0;
+          display: block;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+          font-weight: 600;
+          color: #ffdd1d;
           white-space: nowrap;
           margin: 0;
           line-height: 1;
@@ -59,18 +305,18 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
         .hero-intro-shadow {
           position: absolute;
-          left: 210px;
-          bottom: 0;
-          width: 460px;
+          right: -50px;
+          bottom: -200px;
+          width: 700px;
           z-index: 1;
           pointer-events: none;
         }
 
         .hero-intro-portrait {
           position: absolute;
-          left: 0;
+          left: 560px;
           bottom: 0;
-          width: 380px;
+          width: 400px;
           z-index: 2;
           pointer-events: none;
         }
@@ -80,70 +326,96 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           left: 32px;
           bottom: 24px;
           width: 110px;
-          z-index: 6;
+          z-index: 14;
+          pointer-events: none;
         }
 
         .hero-intro-title-block {
           position: absolute;
-          left: 72px;
+          left: 32px;
+          right: 32px;
           top: 72px;
-          z-index: 5;
+          z-index: 14;
+          pointer-events: none;
         }
 
         .hero-intro-title-row {
-          display: flex;
-          align-items: flex-start;
-          gap: 18px;
+          position: relative;
+          display: block;
+          width: 100%;
         }
 
         .hero-intro-nav {
           position: absolute;
-          z-index: 10;
-          right: 56px;
+          z-index: 14;
+          right: 24px;
           bottom: 24px;
-          display: flex;
-          flex-direction: row;
-          align-items: flex-end;
-          gap: 12px;
+        }
+
+        .hero-intro--transitioning .hero-intro-title-block,
+        .hero-intro--transitioning .hero-intro-logo,
+        .hero-intro--transitioning .hero-intro-shadow,
+        .hero-intro--transitioning .hero-intro-nav {
+          opacity: 0;
+          transition: opacity 90ms linear;
         }
 
         .hero-intro-about-button {
           position: relative;
-          width: 26px;
-          height: 320px;
+          width: 40px;
+          height: 250px;
           display: block;
-          background: none;
+          background: transparent;
           border: none;
           cursor: pointer;
           padding: 0;
         }
 
         .hero-intro-about-button .hero-intro-nav-link-label {
+          position: absolute;
+          right: calc(100% + 12px);
+          left: auto;
+          bottom: 0%;
+          display: block;
+          transform: none;
+         
+          white-space: nowrap;
           font-size: 20px;
-          color: #000000;
+          line-height: 1;
+          letter-spacing: 0;
+          color: #ffffff;
+          
+          
+          transition: opacity 0.18s ease;
+        }
+
+        .hero-intro-about-button:hover .hero-intro-nav-link-label,
+        .hero-intro-about-button:focus-visible .hero-intro-nav-link-label {
+          opacity: 0.45;
         }
 
 
         .hero-intro-nav-link {
           position: relative;
-          width: 86px;
-          height: 320px;
+          width: 100%;
+          height: 100%;
           display: block;
         }
 
         .hero-intro-nav-link-label {
           position: absolute;
-          left: 0;
-          bottom: 0;
+          left: 50%;
+          top: auto;
+          bottom: 132px;
           display: block;
           transform: rotate(-90deg);
-          transform-origin: left bottom;
+          transform-origin: left center;
           white-space: nowrap;
           font-size: 80px;
-          line-height: 0.82;
+          line-height: 0;
           letter-spacing: -0.06em;
-          font-weight: 700;
-          font-family: "Andale Mono", "Andale Mono WT", monospace;
+          font-weight: 600;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
           color: #000000;
           opacity: 0.28;
           transition: opacity 0.18s ease;
@@ -152,15 +424,15 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         
 
         .hero-intro-nav-link--history .hero-intro-nav-link-label {
-          color: #cf6b4c;
+          color: #ffffff;
         }
 
         .hero-intro-nav-link--legacy .hero-intro-nav-link-label {
-          color: #6b7b4a;
+          color: #ffffff;
         }
 
         .hero-intro-nav-link--ambassador .hero-intro-nav-link-label {
-          color: #4f6f9a;
+          color: #ffffff;
         }
 
         .hero-intro-nav-link:hover .hero-intro-nav-link-label,
@@ -168,10 +440,26 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           opacity: 1;
         }
 
+        .hero-intro--transitioning .hero-intro-nav-link-label {
+          opacity: 0;
+          transition: opacity 90ms linear;
+        }
+
         /* Responsive hero styles */
         @media (max-width: 768px) {
           .hero-intro {
             min-height: 760px;
+          }
+
+          .hero-intro-panel-grid {
+            width: 100%;
+            inset: auto 0 0 0;
+            height: 160px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+
+          .hero-intro-panel {
+            border-left: none;
           }
 
           .hero-intro-shadow {
@@ -193,6 +481,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           .hero-intro-title-block {
             left: 50%;
             top: 90px;
+            right: auto;
             transform: translateX(-50%);
             text-align: center;
             width: 100%;
@@ -207,6 +496,10 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             text-align: center;
           }
 
+          .hero-intro-title-main {
+            white-space: normal;
+          }
+
           .hero-intro-kicker {
             position: static;
             display: block;
@@ -219,33 +512,45 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
           .hero-intro-nav {
             right: 24px;
-            bottom: 90px;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 6px;
+            bottom: 180px;
             max-width: calc(100vw - 48px);
           }
 
-          .hero-intro-nav-link,
-          .hero-intro-about-button {
-            width: auto;
-            height: auto;
-            flex: 0 0 auto;
+          .hero-intro-about-button .hero-intro-nav-link-label {
+            position: static;
+            right: auto;
+            left: auto;
+            top: auto;
+            translate: none;
+            transform: none;
+            display: block;
+            text-align: left;
+            white-space: nowrap;
+            font-size: 20px;
+            line-height: 1.1;
           }
 
+          
+
           .hero-intro-nav-link-label {
-            position: static;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            bottom: auto;
             transform: none;
             font-size: 24px;
             line-height: 1;
             letter-spacing: 0.02em;
-            font-weight: 400;
-            font-family: "Andale Mono", "Andale Mono WT", monospace;
+            font-weight: 600;
+            font-family: "Hanken Grotesk", Arial, sans-serif;
             color: #000000;
             opacity: 1;
-            max-width: calc(100vw - 48px);
-            text-align: right;
+            max-width: none;
+            translate: -50% -50%;
+            text-align: center;
             white-space: nowrap;
+            translate: -50% -50%;
+            transform: rotate(-90deg);
           }
 
 
@@ -270,6 +575,10 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         @media (max-width: 568px) {
           .hero-intro {
             min-height: 700px;
+          }
+
+          .hero-intro-panel-grid {
+            height: 132px;
           }
 
           .hero-intro-shadow {
@@ -317,10 +626,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
           .hero-intro-nav {
             right: 18px;
-            bottom: 78px;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 5px;
+            bottom: 150px;
           }
 
           /* phone overlay becomes full-screen */
@@ -353,19 +659,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
       `}</style>
 
       <img
-        src="/assets/shadow.png"
-        alt="Shadow Overlay"
-        className="mcg-hero-overlay1 hero-intro-shadow"
-      />
-
-      <img
-        src="/assets/louis-intro3.png"
-        alt="Louis Armstrong"
-        className="mcg-hero-overlay2 hero-intro-portrait"
-      />
-
-      <img
-        src="/assets/logo_dark.png"
+        src="/assets/logo_light.png"
         alt="Project logo"
         className="hero-intro-logo"
       />
@@ -373,57 +667,102 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
       <div className="mcg-hero-title hero-intro-title-block">
         <div className="hero-intro-title-row">
           <p
-            className="hero-intro-title-line"
+            className="hero-intro-title-line hero-intro-title-main"
             style={{
-              fontSize: "clamp(56px, 8vw, 118px)",
+              fontSize: "clamp(72px, 10vw, 196px)",
             }}
           >
-            Louis
+            Louis Armstrong
           </p>
 
           <p
             className="hero-intro-kicker"
             style={{
               fontSize: "clamp(14px, 2.2vw, 38px)",
-              margin: "14px 0 0 6px",
+              margin: 0,
             }}
           >
             A Musical Ambassador
           </p>
         </div>
+      </div>
 
-        <p
-          className="hero-intro-title-line"
-          style={{
-            fontSize: "clamp(64px, 9vw, 132px)",
-          }}
-        >
-          Armstrong
-        </p>
+      <div
+        className="hero-intro-panel-grid"
+        aria-label="Section navigation panels"
+      >
+        <div className="hero-intro-panel hero-intro-panel--history">
+          <div className="hero-intro-panel-media" aria-hidden="true">
+            <img src="/assets/history.jpg" alt="" />
+            <video
+              src="/assets/history.mov"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
+          </div>
+          <button
+            onClick={() => handlePanelNavigation("history", onNavigateHistory)}
+            className="hero-intro-panel-button hero-intro-nav-link hero-intro-nav-link--history"
+            disabled={transitionTarget !== null}
+          >
+            <span className="hero-intro-nav-link-label">History</span>
+          </button>
+        </div>
+        <div className="hero-intro-panel hero-intro-panel--ambassador">
+          <div className="hero-intro-panel-media" aria-hidden="true">
+            <img src="/assets/ambassador.jpg" alt="" />
+            <video
+              src="/assets/ambassador.mov"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
+          </div>
+          <button
+            onClick={() =>
+              handlePanelNavigation("ambassador", onNavigateAmbassador)
+            }
+            className="hero-intro-panel-button hero-intro-nav-link hero-intro-nav-link--ambassador"
+            disabled={transitionTarget !== null}
+          >
+            <span className="hero-intro-nav-link-label">Ambassador</span>
+          </button>
+        </div>
+        <div className="hero-intro-panel hero-intro-panel--legacy">
+          <div className="hero-intro-panel-media" aria-hidden="true">
+            <img src="/assets/legacy.png" alt="" />
+            <video
+              src="/assets/legacy.mov"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
+          </div>
+          <button
+            onClick={() => handlePanelNavigation("legacy", onNavigateLegacy)}
+            className="hero-intro-panel-button hero-intro-nav-link hero-intro-nav-link--legacy"
+            disabled={transitionTarget !== null}
+          >
+            <span className="hero-intro-nav-link-label">Legacy</span>
+          </button>
+        </div>
       </div>
 
       <div className="hero-intro-nav">
         <button
-          onClick={onNavigateHistory}
-          className="hero-intro-nav-link hero-intro-nav-link--history"
-        >
-          <span className="hero-intro-nav-link-label">History</span>
-        </button>
-        <button
-          onClick={onNavigateAmbassador}
-          className="hero-intro-nav-link hero-intro-nav-link--ambassador"
-        >
-          <span className="hero-intro-nav-link-label">Ambassador</span>
-        </button>
-        <button
-          onClick={onNavigateMusician}
-          className="hero-intro-nav-link hero-intro-nav-link--legacy"
-        >
-          <span className="hero-intro-nav-link-label">Legacy</span>
-        </button>
-        <button
-          onClick={() => setIsAboutOverlayOpen(true)}
-          className="hero-intro-nav-link hero-intro-about-button"
+          type="button"
+          onClick={openAboutOverlay}
+          className="hero-intro-about-button"
+          aria-haspopup="dialog"
+          aria-expanded={isAboutOverlayOpen}
+          aria-controls="hero-intro-about-overlay"
         >
           <span className="hero-intro-nav-link-label">About this project</span>
         </button>
@@ -431,6 +770,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
       {isAboutOverlayOpen && (
         <div
+          id="hero-intro-about-overlay"
           className="mcg-about-overlay hero-intro-about-overlay"
           style={{
             position: "fixed",
@@ -486,7 +826,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
                 style={{
                   width: "30px",
                   height: "30px",
-                  filter: "brightness(0)",
+                  filter: "brightness(0) invert(1)",
                 }}
               />
             </button>

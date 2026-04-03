@@ -1,11 +1,11 @@
 /* Chart-level controls */
 .career-timeline-section,
 .mcg-group-page--history .career-timeline-section {
-  --career-surface-bg: #f9e4d2;
+  --career-surface-bg: #000000;
   --career-dot-radius: 5px;
   --career-dot-featured-radius-offset: 0px;
   --career-dot-active-radius-offset: 1.25px;
-  --career-lane-stroke: #7a7669;
+  --career-lane-stroke: rgba(255, 255, 255, 0.5);
   --career-lane-stroke-width: 0.5px;
   --career-pill-dot-size: 8px;
   --career-pill-dot-border-width: 0.8px;
@@ -13,40 +13,27 @@
   --career-tag-film-color: #ff6b6b;
   --career-tag-bandleader-bg: #f59e0b;
   --career-tag-bandleader-color: #f59e0b;
-  --career-tag-musician-bg: #2563eb;
-  --career-tag-musician-color: #2563eb;
+  --career-tag-musician-bg: #00cce7;
+  --career-tag-musician-color: #00cce7;
   --career-tag-vocalist-bg: #10b981;
   --career-tag-vocalist-color: #10b981;
   --career-tag-ambassador-bg: #8b5cf6;
   --career-tag-ambassador-color: #8b5cf6;
   --career-tooltip-film-accent: #ff6b6b;
   --career-tooltip-bandleader-accent: #f59e0b;
-  --career-tooltip-musician-accent: #2563eb;
+  --career-tooltip-musician-accent: #00cce7;
   --career-tooltip-vocalist-accent: #10b981;
   --career-tooltip-ambassador-accent: #8b5cf6;
   background-color: var(--career-surface-bg) !important;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Section layout */
 .career-timeline-layout {
-  max-width: 1280px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Hanken Grotesk", Arial, sans-serif;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr);
@@ -60,10 +47,29 @@
   min-height: 100%;
   height: 100%;
   background: var(--career-surface-bg);
-  padding: 64px 0 22px;
+  padding: 0 0 22px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.career-timeline-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/history.jpg");
+  background-size: cover;
+  background-position: center center;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.career-timeline-header,
+.career-timeline-chart-card {
+  position: relative;
+  z-index: 1;
 }
 
 .career-timeline-header {
@@ -75,7 +81,7 @@
 
 .career-timeline-section .career-timeline-title.mcg-page-title {
   grid-column: 1 / -1;
-  color: #002768 !important;
+  color: #ffffff !important;
 }
 
 /* Legend / category filters */
@@ -129,7 +135,7 @@
 
 .career-timeline-legend-filter {
   border: none;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Hanken Grotesk", Arial, sans-serif;
   padding: 4px 10px;
   display: inline-flex;
   align-items: center;
@@ -159,13 +165,13 @@
 .career-timeline-chart-card .career-timeline-legend-label {
   font-size: 10px;
   font-weight: 400;
-  color: #000000 !important;
+  color: #ffffff !important;
 }
 
 .career-timeline-chart-card .career-timeline-legend-count {
   font-size: 9px;
   font-weight: 700;
-  color: #000000 !important;
+  color: #ffffff !important;
 }
 
 /* SVG chart */
@@ -176,7 +182,7 @@
 .career-timeline-chart-svg {
   display: block;
   overflow: visible;
-  background: var(--career-surface-bg);
+  background: transparent;
 }
 
 .career-timeline-plot-frame {
@@ -217,41 +223,42 @@
 
 /* Featured event labels */
 .career-timeline-featured-label {
-  fill: #3f3d35;
+  fill: #ffffff;
   font-size: 8px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Hanken Grotesk", Arial, sans-serif;
   font-weight: 500;
   letter-spacing: 0.02em;
 }
 
 /* Axis and guide lines */
 .career-timeline-year-grid-line {
-  stroke: #ddd8ca;
+  stroke: #ffffff;
   opacity: 0.5;
   stroke-width: 1;
 }
 
 .career-timeline-focus-line {
-  stroke: #7a7669;
+  stroke: #ffffff;
   stroke-width: 1;
-  stroke-opacity: 0.7;
+  stroke-opacity: 0.5;
 }
 
 .career-timeline-year-grid-line-decade {
-  stroke: #7a7669;
+  stroke: #ffffff;
   stroke-width: 1;
-  stroke-opacity: 0.7;
+  stroke-opacity: 0.5;
 }
 
 .career-timeline-year-tick-mark {
-  stroke: #000000;
+  stroke: #ffffff;
   stroke-width: 1;
+  stroke-opacity: 0.5;
 }
 
 .career-timeline-year-label {
-  fill: var(--career-year-color, #9ca3af);
+  fill: #ffffff;
   font-size: var(--career-year-size, 9px);
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Hanken Grotesk", Arial, sans-serif;
   font-weight: var(--career-year-weight, 400);
 }
 
@@ -267,7 +274,7 @@
   border-radius: 8px;
   padding: 11px 13px;
   box-shadow: none;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Hanken Grotesk", Arial, sans-serif;
 }
 
 .career-timeline-tooltip--film {
@@ -319,7 +326,7 @@
   border-radius: 3px;
   text-transform: uppercase;
   background: var(--career-tag-bg, #00000014);
-  color: var(--career-tag-color, #111827);
+  color: #ffffff;
 }
 
 .career-timeline-tooltip-tag--film {
@@ -348,7 +355,7 @@
 }
 
 .career-timeline-tooltip-link {
-  color: var(--career-tooltip-accent, #111827);
+  color: #000000;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -359,7 +366,7 @@
   border-top: 1px solid #f3f4f6;
   padding-top: 7px;
   cursor: pointer;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Hanken Grotesk", Arial, sans-serif;
 }
 
 .career-timeline-tooltip-pin-hint {

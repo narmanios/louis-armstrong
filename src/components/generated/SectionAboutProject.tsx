@@ -5,44 +5,83 @@ export const SectionAboutProject: React.FC = () => {
     <section className="mcg-section about-project-section">
       <style>{`
         .about-project-section {
+          --about-project-max-width: 1280px;
+          --about-project-layout-width: min(100vw, var(--about-project-max-width));
+        }
+
+        .about-project-section {
           background: #ffffff;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .about-project-section .mcg-page-title {
+          left: 56px !important;
         }
 
         .about-project-layout {
           position: absolute;
-          left: 56px;
-          top: 164px;
+          top: 0;
+          bottom: 0;
+          left: 0;
           display: flex;
-          gap: 142px;
+          align-items: stretch;
+          width: var(--about-project-layout-width);
+          max-width: var(--about-project-max-width);
+          height: 100%;
+          overflow: hidden;
+        }
+
+        .about-project-text-panel {
+          flex: 0 0 50%;
+          width: 50%;
+          max-width: 50%;
+          min-width: 50%;
+          padding: 164px 56px 60px;
+          box-sizing: border-box;
+          display: flex;
           align-items: flex-start;
+          overflow: hidden;
         }
 
         .about-project-copy {
-          width: 383px;
+          width: min(100%, 383px);
+          max-width: 383px;
           margin: 0;
           color: #000000;
-          font-family: "Helvetica Neue", sans-serif;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
           font-size: 14px;
           line-height: 22px;
         }
 
         .about-project-figure {
+          flex: 0 0 50%;
+          width: 50%;
+          max-width: 50%;
+          min-width: 50%;
           margin: 0;
-          width: 420px;
+          height: 100%;
+          position: relative;
+          overflow: hidden;
         }
 
         .about-project-image {
-          width: 420px;
-          height: 526px;
+          width: 100%;
+          height: 100%;
           object-fit: cover;
           display: block;
         }
 
         .about-project-caption {
-          margin: 8px 0 0;
-          color: #000000;
-          font-family: "Helvetica Neue", sans-serif;
+          position: absolute;
+          left: 24px;
+          right: 24px;
+          bottom: 24px;
+          margin: 0;
+          color: #ffffff;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
           font-size: 12px;
+          text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
         }
 
         @media (max-width: 768px) {
@@ -53,6 +92,7 @@ export const SectionAboutProject: React.FC = () => {
           }
 
           .about-project-section .mcg-page-title {
+            left: auto !important;
             position: static !important;
             display: block !important;
             margin: 0 0 32px 0 !important;
@@ -65,15 +105,36 @@ export const SectionAboutProject: React.FC = () => {
             flex-direction: column;
             gap: 0px;
             margin-top: 0;
+            width: auto;
+            max-width: none;
+            overflow: visible;
+            height: auto;
+          }
+
+          .about-project-text-panel {
+            flex: none;
+            width: auto;
+            max-width: none;
+            min-width: 0;
+            padding: 0;
+            display: block;
+            overflow: visible;
           }
 
           .about-project-copy {
             margin: 32px;
-            width: 75%;}
+            width: 75%;
+            max-width: none;
+          }
 
           .about-project-figure {
+            flex: none;
             width: min(100%, 320px);
+            max-width: none;
+            min-width: 0;
+            height: auto;
             margin: 32px;
+            overflow: visible;
           }
 
           .about-project-image {
@@ -83,25 +144,40 @@ export const SectionAboutProject: React.FC = () => {
             max-height: none;
             object-position: center top;
           }
+
+          .about-project-caption {
+            position: static;
+            margin: 8px 0 0;
+            color: #000000;
+            text-shadow: none;
+          }
         }
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title">About this Project</h2>
 
       <div className="about-project-layout">
-        <p className="about-project-copy">
-          This project, Louis Armstrong: The Real Ambassador, examines how
-          Armstrong&apos;s career illuminates the intersections of music, race,
-          politics, and U.S. cultural diplomacy in the mid-twentieth century. By
-          tracing his international tours, the circulation and reinterpretation
-          of his songs, and the political contexts surrounding his performances,
-          the project shows how Armstrong became more than a jazz icon: he
-          emerged as a powerful, if sometimes conflicted, symbol of American
-          ambassadorship. At the same time, it asks how that role was shaped not
-          only by official diplomacy, but also by the afterlife of his music,
-          which continued to carry ideas of goodwill, freedom, and connection
-          across borders long after his travels ended.
-        </p>
+        <div className="about-project-text-panel">
+          <p className="about-project-copy">
+            This project, Louis Armstrong: A Musical Ambassador, examines how
+            Armstrong’s career illuminates the intersections of music, race,
+            politics, and U.S. cultural diplomacy in the mid-twentieth century.
+            By tracing his international tours, the circulation and
+            reinterpretation of his songs, and the political contexts
+            surrounding his performances, the project shows how Armstrong became
+            more than a jazz icon: he emerged as a powerful, if sometimes
+            conflicted, symbol of American ambassadorship. At the same time, it
+            asks how that role was shaped not only by official diplomacy, but
+            also by the afterlife of his music, which continued to carry ideas
+            of goodwill, freedom, and connection across borders long after his
+            travels ended.
+            <br />
+            <br />
+            Thank you to Ricky Riccardi, Director of Research Collections at the
+            Louis Armstrong House Museum. Archival images courtesy of the Louis
+            Armstrong House Museum.
+          </p>
+        </div>
 
         <figure className="about-project-figure">
           <img

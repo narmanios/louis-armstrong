@@ -5,27 +5,27 @@ export const SectionTheBeginning: React.FC = () => {
     <section className="mcg-section beginning-section">
       <style>{`
         .beginning-section {
-          background: #000000;
-          min-height: 800px;
-          padding: 49px 56px 60px;
+          background: transparent;
+          min-height: 100dvh;
+          height: auto;
+          display: flow-root;
+          overflow: visible;
+          padding: 0 56px 60px;
           box-sizing: border-box;
         }
 
-        .beginning-section .mcg-page-title {
-          color: #ffffff;
-        }
-
         .beginning-entry-grid {
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          gap: 56px;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          align-items: start;
+          gap: 32px 56px;
           position: static;
           margin-top: 24px;
         }
 
         .beginning-entry {
-          width: min(340px, calc((100% - 56px) / 2));
+          width: 100%;
+          display: block;
         }
 
         .beginning-media-image {
@@ -39,9 +39,17 @@ export const SectionTheBeginning: React.FC = () => {
         .beginning-caption,
         .beginning-copy {
           margin: 0;
-          font-family: "Helvetica Neue", sans-serif;
-          font-size: 12px;
-          color: #ffffff;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+          font-size: 28px;
+          color: #000000;
+        }
+
+        .beginning-caption {
+          font-size: 11px;
+        }
+
+        .beginning-section .mcg-page-title {
+          color: #000000 !important;
         }
 
         .beginning-caption {
@@ -50,8 +58,12 @@ export const SectionTheBeginning: React.FC = () => {
 
         .beginning-copy {
           width: 100%;
-          line-height: 20px;
-          margin-top: 16px;
+          line-height: 40px;
+          margin-top: 12px;
+        }
+
+        .beginning-text {
+          display: block;
         }
 
         @media (max-width: 768px) {
@@ -74,6 +86,7 @@ export const SectionTheBeginning: React.FC = () => {
             position: static;
             left: auto;
             top: auto;
+            display: flex;
             flex-direction: column;
             gap: 32px;
             margin-top: 0;
@@ -85,6 +98,7 @@ export const SectionTheBeginning: React.FC = () => {
           }
 
           .beginning-entry {
+            display: block;
             width: calc(100% - 56px);
             margin: 0 0 0 20px;
           }
@@ -109,18 +123,16 @@ export const SectionTheBeginning: React.FC = () => {
               alt="Waifs home band"
               className="beginning-media-image"
             />
+            <p className="beginning-caption">
+              Waif's Home Band, New Orleans, 1910s. Photo by Ernest J. Bellocq.
+            </p>
           </div>
-          <p className="beginning-caption">
-            Waif's Home Band, New Orleans, 1910s. Photo by Ernest J. Bellocq.
-          </p>
-          <p className="beginning-copy">
-            This photograph shows the brass band from the Colored Waif’s Home in
-            New Orleans, the reform school where Louis Armstrong spent part of
-            his youth and began developing his musical skills. The band was a
-            turning point in his life, giving him formal practice on cornet and
-            helping launch the career that would make him one of jazz’s most
-            influential musicians.
-          </p>
+          <div className="beginning-text">
+            <p className="beginning-copy">
+              The reform school where Louis Armstrong spent part of his youth
+              and began developing his musical skills.
+            </p>
+          </div>
         </div>
 
         <div className="beginning-entry">
@@ -130,16 +142,15 @@ export const SectionTheBeginning: React.FC = () => {
               alt="Creole Jazz Band"
               className="beginning-media-image"
             />
+            <p className="beginning-caption">King Oliver's Creole Jazz Band</p>
           </div>
-          <p className="beginning-caption">King Oliver's Creole Jazz Band</p>
-          <p className="beginning-copy">
-            King Oliver’s Creole Jazz Band was one of the most important early
-            jazz groups, bringing together leading New Orleans musicians in a
-            small ensemble that helped define classic jazz style. This photo
-            captures the band’s formal stage presence and highlights the group
-            that helped launch Louis Armstrong’s rise as a major figure in
-            American music.
-          </p>
+          <div className="beginning-text">
+            <p className="beginning-copy">
+              King Oliver’s Creole Jazz Band was one of the most important early
+              jazz groups, that helped launch Louis Armstrong’s rise as a major
+              figure in American music.
+            </p>
+          </div>
         </div>
       </div>
     </section>

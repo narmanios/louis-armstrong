@@ -1,19 +1,19 @@
-import React from 'react';
+import React from "react";
 export function SectionIntro() {
   return (
     <section
       style={{
-        width: '100vw',
-        minWidth: '100vw',
-        height: '100vh',
-        minHeight: '100vh',
+        width: "100vw",
+        minWidth: "100vw",
+        height: "100vh",
+        minHeight: "100vh",
         flexShrink: 0,
-        backgroundColor: 'rgba(3, 52, 134, 1)',
-        position: 'relative',
-        overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
+        backgroundColor: "rgba(3, 52, 134, 1)",
+        position: "relative",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
       }}
       aria-label="Introduction"
     >
@@ -21,12 +21,12 @@ export function SectionIntro() {
         src="/assets/cover.jpg"
         alt="Historical photo background"
         style={{
-          width: '100vw',
-          height: '100vh',
-          position: 'absolute',
+          width: "100vw",
+          height: "100vh",
+          position: "absolute",
           left: 0,
           top: 0,
-          objectFit: 'cover',
+          objectFit: "cover",
           zIndex: 0,
         }}
       />
@@ -103,25 +103,25 @@ export function SectionIntro() {
       <div
         className="intro-content"
         style={{
-          position: 'relative',
-          width: '100%',
-          height: '100%',
+          position: "relative",
+          width: "100%",
+          height: "100%",
           zIndex: 1,
         }}
       >
         <span
           className="intro-l"
           style={{
-            width: '23.2%',
-            height: '88.9vh',
-            color: 'rgba(255,0,0,1)',
-            fontSize: 'clamp(24px, 45vw, 600px)',
-            fontFamily: '"Joti One", sans-serif',
+            width: "23.2%",
+            height: "88.9vh",
+            color: "rgba(255,0,0,1)",
+            fontSize: "clamp(24px, 45vw, 600px)",
+            fontFamily: '"Hanken Grotesk", Arial, sans-serif',
             fontWeight: 400,
-            lineHeight: '1',
-            position: 'absolute',
-            left: '20.5%',
-            top: '6.4%',
+            lineHeight: "1",
+            position: "absolute",
+            left: "20.5%",
+            top: "6.4%",
           }}
         >
           L
@@ -129,16 +129,16 @@ export function SectionIntro() {
         <span
           className="intro-a"
           style={{
-            width: '29.4%',
-            height: '88.9vh',
-            color: 'rgba(255,0,0,1)',
-            fontSize: 'clamp(24px, 45vw, 600px)',
-            fontFamily: '"Joti One", sans-serif',
+            width: "29.4%",
+            height: "88.9vh",
+            color: "rgba(255,0,0,1)",
+            fontSize: "clamp(24px, 45vw, 600px)",
+            fontFamily: '"Hanken Grotesk", Arial, sans-serif',
             fontWeight: 400,
-            lineHeight: '1',
-            position: 'absolute',
-            left: '45%',
-            top: '2%',
+            lineHeight: "1",
+            position: "absolute",
+            left: "45%",
+            top: "2%",
           }}
         >
           A
@@ -148,12 +148,12 @@ export function SectionIntro() {
           src="/assets/louis-intro.png"
           alt="Louis Armstrong head shot"
           style={{
-            width: '22%',
-            aspectRatio: '299/423',
-            position: 'absolute',
-            left: '28.4%',
-            top: '8%',
-            objectFit: 'cover',
+            width: "22%",
+            aspectRatio: "299/423",
+            position: "absolute",
+            left: "28.4%",
+            top: "8%",
+            objectFit: "cover",
           }}
         />
         <img
@@ -161,29 +161,29 @@ export function SectionIntro() {
           src="/assets/trumpet.png"
           alt="Louis Armstrong's trumpet"
           style={{
-            width: '50%',
-            aspectRatio: '968/465',
-            position: 'absolute',
-            left: '15.4%',
-            top: '30%',
-            objectFit: 'cover',
+            width: "50%",
+            aspectRatio: "968/465",
+            position: "absolute",
+            left: "15.4%",
+            top: "30%",
+            objectFit: "cover",
             zIndex: 10,
           }}
         />
         <h1
           className="intro-h1"
           style={{
-            width: '45%',
-            color: 'rgba(255,255,255,1)',
-            fontSize: '4vw',
-            fontFamily: '"Helvetica Neue", sans-serif',
+            width: "45%",
+            color: "rgba(255,255,255,1)",
+            fontSize: "4vw",
+            fontFamily: '"Hanken Grotesk", Arial, sans-serif',
             fontWeight: 500,
-            lineHeight: '1.2',
-            position: 'absolute',
-            left: '55%',
-            top: '25%',
+            lineHeight: "1.2",
+            position: "absolute",
+            left: "55%",
+            top: "25%",
             margin: 0,
-            textShadow: '2px 2px 10px rgba(0,0,0,1)',
+            textShadow: "2px 2px 10px rgba(0,0,0,1)",
             zIndex: 100,
           }}
         >
@@ -192,17 +192,17 @@ export function SectionIntro() {
         <p
           className="intro-p"
           style={{
-            width: '36.5%',
-            color: 'rgba(255,255,255,1)',
-            fontSize: '2.5vw',
-            fontFamily: '"Helvetica Neue", sans-serif',
+            width: "36.5%",
+            color: "rgba(255,255,255,1)",
+            fontSize: "2.5vw",
+            fontFamily: '"Hanken Grotesk", Arial, sans-serif',
             fontWeight: 500,
-            lineHeight: '1.2',
-            position: 'absolute',
-            left: '55%',
-            top: '32%',
+            lineHeight: "1.2",
+            position: "absolute",
+            left: "55%",
+            top: "32%",
             margin: 0,
-            textShadow: '2px 2px 10px rgba(0,0,0,1)',
+            textShadow: "2px 2px 10px rgba(0,0,0,1)",
             zIndex: 100,
           }}
         >
@@ -210,15 +210,15 @@ export function SectionIntro() {
         </p>
         <span
           style={{
-            color: 'rgba(255,255,255,1)',
-            fontSize: 'clamp(12px, 1.83vw, 24px)',
-            fontFamily: '"Helvetica Neue", sans-serif',
+            color: "rgba(255,255,255,1)",
+            fontSize: "clamp(12px, 1.83vw, 24px)",
+            fontFamily: '"Hanken Grotesk", Arial, sans-serif',
             fontWeight: 700,
-            lineHeight: '1.2',
-            position: 'absolute',
-            left: '86%',
-            top: '87.5%',
-            cursor: 'pointer',
+            lineHeight: "1.2",
+            position: "absolute",
+            left: "86%",
+            top: "87.5%",
+            cursor: "pointer",
           }}
         >
           Explore

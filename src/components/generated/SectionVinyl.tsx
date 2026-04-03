@@ -146,6 +146,8 @@ export function VinylRecordExplorer({
     );
   }, [activeSong, hoveredArtistId]);
 
+  const previewArtist = hoveredArtist ?? activeSong?.artists[0] ?? null;
+
   const rings = useMemo<VinylRing[]>(() => {
     if (!songs.length) return [];
 
@@ -241,7 +243,7 @@ export function VinylRecordExplorer({
     >
       <aside className="vre__left">
         <div className="vre__title">
-          <h1 className="mcg-page-title mcg-page-title--flow mcg-page-title--tight mcg-page-title--light">
+          <h1 className="mcg-page-title mcg-page-title--flow mcg-page-title--light">
             {title}
           </h1>
           <p className="vre__subtitle">{subtitle}</p>
@@ -458,12 +460,12 @@ export function VinylRecordExplorer({
             <div className="vre__empty-hint">{loadingText}</div>
           ) : loadError ? (
             <div className="vre__empty-hint">{errorText}</div>
-          ) : !hoveredArtist ? (
+          ) : !previewArtist ? (
             <div className="vre__empty-hint">{emptyText}</div>
           ) : (
             <div className="vre__artist-card vre__enter-up">
               <div className="vre__artist-img-wrap">
-                <img src={hoveredArtist.imageUrl} alt={hoveredArtist.name} />
+                <img src={previewArtist.imageUrl} alt={previewArtist.name} />
               </div>
               <div className="vre__artist-info">
                 <div className="vre__artist-header">
@@ -471,11 +473,11 @@ export function VinylRecordExplorer({
                     ‘{activeSong?.title ?? ""}’
                   </p>
                   <div className="vre__artist-title-row">
-                    <h2>{hoveredArtist.name}</h2>
-                    <div className="vre__year">{hoveredArtist.year}</div>
+                    <h2>{previewArtist.name}</h2>
+                    <div className="vre__year">{previewArtist.year}</div>
                   </div>
                 </div>
-                <p className="vre__desc">{hoveredArtist.description}</p>
+                <p className="vre__desc">{previewArtist.description}</p>
               </div>
             </div>
           )}

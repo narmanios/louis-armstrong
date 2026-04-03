@@ -86,10 +86,14 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
     e.stopPropagation();
     setActiveOverlay(null);
   };
-  const loremText =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ullamcorper erat tortor, at accumsan sapien molestie et. Sed hendrerit velit vel neque molestie eleifend. Ut sodales lorem vel mauris malesuada maximus.";
+  const tourDescription =
+    "In 1960 Armstrong toured Africa for several months under the auspices of the State Department.";
+  const egyptDescription =
+    "The final stop on Armstrong's 1960-1961 State Department-sponsored tour was Egypt, where he performed multiple concerts.";
+  const congoDescription =
+    "Armstrong toured the Congo during its civil war, performing in Leopoldville under a temporary truce, for 10,000 people in Katanga";
   const descriptionText =
-    "Description of image goes here. Description of image goes here. Description of image goes here. Description of image goes here. Description of image goes here. Description of image goes here. Description of image goes here. Description of image goes here.";
+    "Description of image goes here. Description of image goes here. Description of image goes here. ";
   const activeTourImage =
     africaTourImageData[tourActiveIndex] ?? africaTourImageData[0] ?? null;
   const representativeTourImage = africaTourImageData[0] ?? null;
@@ -99,37 +103,40 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
   const desktopCardHeight = "min(214px, calc((100vw - 320px) / 3 * 0.766))";
   return (
     <section
-      className={`mcg-section text-overlay-section ${className || ""}`}
+      className={`mcg-section text-overlay-section africa-tour-section ${className || ""}`}
       style={{
         width: isMobile ? "100%" : "100vw",
         minWidth: isMobile ? 0 : "100vw",
-        height: isMobile ? "auto" : "800px",
+        minHeight: isMobile ? undefined : "100dvh",
+        height: "auto",
+        display: "flow-root",
         flexShrink: isMobile ? undefined : 0,
         scrollSnapAlign: isMobile ? undefined : "start",
-        backgroundColor: "#000000",
+        backgroundColor: "#ffffff",
         position: "relative",
-        overflow: isMobile ? "visible" : "hidden",
-        fontFamily: '"Helvetica Neue", sans-serif',
+        overflow: "visible",
+        fontFamily: '"Hanken Grotesk", Arial, sans-serif',
         ...style,
       }}
     >
       <div
         style={{
-          maxWidth: isMobile ? "100%" : "1280px",
-          margin: "0 auto",
-          padding: isMobile ? "24px 20px 32px" : "49px 56px",
+          width: "100%",
+          padding: isMobile ? "24px 20px 32px" : "0 56px 0",
+          display: "flow-root",
           position: "relative",
         }}
       >
         <h1
-          className="mcg-page-title mcg-page-title--flow mcg-page-title--spaced"
+          className="mcg-page-title mcg-page-title--flow"
           style={
             isMobile
               ? {
                   width: "calc(100% - 40px)",
-                  margin: "0 auto 24px",
+                  margin: "0 auto 0",
+                  color: "#000000",
                 }
-              : undefined
+              : { color: "#000000" }
           }
         >
           Africa 1960-1961
@@ -137,11 +144,14 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
 
         <div
           style={{
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            gap: isMobile ? "32px" : "56px",
-            alignItems: "flex-start",
-            justifyContent: isMobile ? "center" : "flex-start",
+            display: "grid",
+            gridTemplateColumns: isMobile
+              ? "minmax(0, 1fr)"
+              : "repeat(3, minmax(0, 1fr))",
+            gap: isMobile ? "32px" : "32px 40px",
+            alignItems: "start",
+            justifyContent: "flex-start",
+            marginTop: isMobile ? "0" : "24px",
             marginBottom: isMobile ? "20px" : "27px",
           }}
         >
@@ -156,76 +166,81 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               padding: 0,
               cursor: "pointer",
               textAlign: "left",
-              width: isMobile ? "calc(100% - 56px)" : desktopTourCardWidth,
+              width: isMobile ? "calc(100% - 56px)" : "100%",
               margin: isMobile ? "0 0 0 20px" : 0,
               transition: "transform 0.25s ease",
               transform: hoveredCard === "tour" ? "scale(1.03)" : "scale(1)",
               transformOrigin: "center center",
+              display: "block",
             }}
           >
-            <div
-              style={{
-                width: "100%",
-                height: isMobile ? "auto" : desktopCardHeight,
-                aspectRatio: isMobile ? "5 / 4" : undefined,
-                backgroundColor: "#F5F3EA",
-                padding: isMobile ? 0 : "7px 5px",
-                boxSizing: "border-box",
-                display: isMobile ? "block" : "grid",
-                gridTemplateColumns: isMobile ? undefined : "repeat(7, 1fr)",
-                gap: isMobile ? undefined : "5px",
-                marginBottom: "9px",
-                overflow: "hidden",
-              }}
-            >
-              {isMobile ? (
-                <img
-                  src={mobileTourCardImageSrc}
-                  alt="Africa Tour"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
-                />
-              ) : (
-                africaTourImageData.slice(0, 28).map((img) => (
+            <div>
+              <div
+                style={{
+                  width: "100%",
+                  height: isMobile ? "auto" : desktopCardHeight,
+                  aspectRatio: isMobile ? "5 / 4" : undefined,
+                  backgroundColor: "#F5F3EA",
+                  padding: isMobile ? 0 : "7px 5px",
+                  boxSizing: "border-box",
+                  display: isMobile ? "block" : "grid",
+                  gridTemplateColumns: isMobile ? undefined : "repeat(7, 1fr)",
+                  gap: isMobile ? undefined : "5px",
+                  marginBottom: "9px",
+                  overflow: "hidden",
+                }}
+              >
+                {isMobile ? (
                   <img
-                    key={img.id}
-                    src={img.src}
-                    alt=""
+                    src={mobileTourCardImageSrc}
+                    alt="Africa Tour"
                     style={{
                       width: "100%",
-                      aspectRatio: "3 / 4",
-                      height: "auto",
+                      height: "100%",
                       objectFit: "cover",
+                      display: "block",
                     }}
                   />
-                ))
-              )}
+                ) : (
+                  africaTourImageData.slice(0, 28).map((img) => (
+                    <img
+                      key={img.id}
+                      src={img.src}
+                      alt=""
+                      style={{
+                        width: "100%",
+                        aspectRatio: "3 / 4",
+                        height: "auto",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ))
+                )}
+              </div>
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "11px",
+                  fontFamily: '"Hanken Grotesk", Arial, sans-serif',
+                  color: "#000000",
+                  marginTop: "12px",
+                }}
+              >
+                Africa Tour
+              </span>
             </div>
-            <span
-              style={{
-                fontSize: "12px",
-                fontFamily: '"Helvetica Neue", sans-serif',
-                color: "#000000",
-              }}
-            >
-              Africa Tour
-            </span>
-            {isMobile ? (
+            <div>
               <p
                 style={{
-                  fontSize: "12px",
-                  lineHeight: "18px",
-                  color: "#010000",
+                  fontSize: "28px",
+                  lineHeight: "40px",
+                  color: "#000000",
                   margin: "12px 0 0 0",
                 }}
               >
-                {loremText}
+                {tourDescription}
               </p>
-            ) : null}
+            </div>
           </button>
 
           {/* Card 2: Cairo */}
@@ -239,45 +254,50 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               padding: 0,
               cursor: "pointer",
               textAlign: "left",
-              width: isMobile ? "calc(100% - 56px)" : desktopCardWidth,
+              width: isMobile ? "calc(100% - 56px)" : "100%",
               margin: isMobile ? "0 0 0 20px" : 0,
               transition: "transform 0.25s ease",
               transform: hoveredCard === "egypt" ? "scale(1.03)" : "scale(1)",
               transformOrigin: "center center",
+              display: "block",
             }}
           >
-            <img
-              src="/assets/egypt.png"
-              alt="Cairo"
-              style={{
-                width: "100%",
-                height: isMobile ? "auto" : desktopCardHeight,
-                aspectRatio: isMobile ? "5 / 4" : undefined,
-                objectFit: "cover",
-                marginBottom: "9px",
-              }}
-            />
-            <span
-              style={{
-                fontSize: "12px",
-                fontFamily: '"Helvetica Neue", sans-serif',
-                color: "#000000",
-              }}
-            >
-              Cairo, Egypt
-            </span>
-            {isMobile ? (
+            <div>
+              <img
+                src="/assets/egypt.png"
+                alt="Cairo"
+                style={{
+                  width: "100%",
+                  height: isMobile ? "auto" : desktopCardHeight,
+                  aspectRatio: isMobile ? "5 / 4" : undefined,
+                  objectFit: "cover",
+                  marginBottom: "9px",
+                }}
+              />
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "11px",
+                  fontFamily: '"Hanken Grotesk", Arial, sans-serif',
+                  color: "#000000",
+                  marginTop: "3px",
+                }}
+              >
+                Cairo, Egypt
+              </span>
+            </div>
+            <div>
               <p
                 style={{
-                  fontSize: "12px",
-                  lineHeight: "18px",
-                  color: "#010000",
+                  fontSize: "28px",
+                  lineHeight: "40px",
+                  color: "#000000",
                   margin: "12px 0 0 0",
                 }}
               >
-                {loremText}
+                {egyptDescription}
               </p>
-            ) : null}
+            </div>
           </button>
 
           {/* Card 3: Congo */}
@@ -291,128 +311,88 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               padding: 0,
               cursor: "pointer",
               textAlign: "left",
-              width: isMobile ? "calc(100% - 56px)" : desktopCardWidth,
+              width: isMobile ? "calc(100% - 56px)" : "100%",
               margin: isMobile ? "0 0 0 20px" : 0,
               transition: "transform 0.25s ease",
               transform: hoveredCard === "congo" ? "scale(1.03)" : "scale(1)",
               transformOrigin: "center center",
+              display: "block",
             }}
           >
-            <div
-              style={{
-                width: "100%",
-                height: isMobile ? "auto" : desktopCardHeight,
-                aspectRatio: isMobile ? "5 / 4" : undefined,
-                position: "relative",
-                marginBottom: "9px",
-              }}
-            >
-              <img
-                src="/assets/congo.png"
-                alt="Congo"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
+            <div>
               <div
                 style={{
-                  position: "absolute",
-                  left: "185.65px",
-                  top: "205px",
-                  width: "6px",
-                  height: "6px",
-                  backgroundColor: "#F5F3EA",
-                  borderRadius: "50%",
-                  opacity: hoveredCard === "congo" ? 1 : 0,
-                  transition: "opacity 0.3s ease",
-                }}
-              />
-              <span
-                style={{
-                  position: "absolute",
-                  left: "90.65px",
-                  top: "193px",
-                  fontSize: "12px",
-                  fontFamily: '"Helvetica Neue", sans-serif',
-                  fontWeight: 900,
-                  color: "#F5F3EA",
-                  opacity: hoveredCard === "congo" ? 1 : 0,
-                  transition: "opacity 0.3s ease",
+                  width: "100%",
+                  height: isMobile ? "auto" : desktopCardHeight,
+                  aspectRatio: isMobile ? "5 / 4" : undefined,
+                  position: "relative",
+                  marginBottom: "9px",
                 }}
               >
-                Shinkolobwe Mine
+                <img
+                  src="/assets/congo.png"
+                  alt="Congo"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "185.65px",
+                    top: "205px",
+                    width: "6px",
+                    height: "6px",
+                    backgroundColor: "#F5F3EA",
+                    borderRadius: "50%",
+                    opacity: hoveredCard === "congo" ? 1 : 0,
+                    transition: "opacity 0.3s ease",
+                  }}
+                />
+                <span
+                  style={{
+                    position: "absolute",
+                    left: "90.65px",
+                    top: "193px",
+                    fontSize: "12px",
+                    fontFamily: '"Hanken Grotesk", Arial, sans-serif',
+                    fontWeight: 900,
+                    color: "#F5F3EA",
+                    opacity: hoveredCard === "congo" ? 1 : 0,
+                    transition: "opacity 0.3s ease",
+                  }}
+                >
+                  Shinkolobwe Mine
+                </span>
+              </div>
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "11px",
+                  fontFamily: '"Hanken Grotesk", Arial, sans-serif',
+                  color: "#000000",
+                  marginTop: "3px",
+                }}
+              >
+                Congo
               </span>
             </div>
-            <span
-              style={{
-                fontSize: "12px",
-                fontFamily: '"Helvetica Neue", sans-serif',
-                color: "#000000",
-              }}
-            >
-              Congo
-            </span>
-            {isMobile ? (
+            <div>
               <p
                 style={{
-                  fontSize: "12px",
-                  lineHeight: "18px",
-                  color: "#010000",
+                  fontSize: "28px",
+                  lineHeight: "40px",
+                  color: "#000000",
                   margin: "12px 0 0 0",
                 }}
               >
-                {loremText}
+                {congoDescription}
               </p>
-            ) : null}
+            </div>
           </button>
         </div>
-
-        {!isMobile ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "105px",
-              width: "100%",
-            }}
-          >
-            <p
-              style={{
-                width: "291px",
-                fontSize: "12px",
-                lineHeight: "18px",
-                color: "#010000",
-                margin: 0,
-              }}
-            >
-              {loremText}
-            </p>
-            <p
-              style={{
-                width: "291px",
-                fontSize: "12px",
-                lineHeight: "18px",
-                color: "#010000",
-                margin: 0,
-              }}
-            >
-              {loremText}
-            </p>
-            <p
-              style={{
-                width: "291px",
-                fontSize: "12px",
-                lineHeight: "18px",
-                color: "#010000",
-                margin: 0,
-              }}
-            >
-              {loremText}
-            </p>
-          </div>
-        ) : null}
       </div>
 
       {/* ── OVERLAY ── */}
@@ -570,20 +550,20 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               </div>
               <div
                 style={{
-                    width: "100%",
-                    flex: "1 1 auto",
-                    borderTop: "1px solid rgba(255,255,255,0.12)",
-                    backgroundColor: "#000000",
-                    padding: "24px 20px 32px",
-                    boxSizing: "border-box",
-                  }}
-                >
-                  <p
-                    style={{
-                      color: "rgba(255,255,255,0.45)",
-                      margin: "0 0 12px 0",
-                      fontSize: "12px",
-                      fontWeight: 500,
+                  width: "100%",
+                  flex: "1 1 auto",
+                  borderTop: "1px solid rgba(255,255,255,0.12)",
+                  backgroundColor: "#000000",
+                  padding: "24px 20px 32px",
+                  boxSizing: "border-box",
+                }}
+              >
+                <p
+                  style={{
+                    color: "rgba(255,255,255,0.45)",
+                    margin: "0 0 12px 0",
+                    fontSize: "12px",
+                    fontWeight: 500,
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
                   }}
@@ -594,12 +574,12 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                       ? "Cairo, Egypt"
                       : "Congo"}
                 </p>
-                  <p
-                    style={{
-                      color: "#FFFFFF",
-                      margin: 0,
-                      fontSize: "14px",
-                      lineHeight: "22px",
+                <p
+                  style={{
+                    color: "#FFFFFF",
+                    margin: 0,
+                    fontSize: "14px",
+                    lineHeight: "22px",
                     fontWeight: 400,
                   }}
                 >

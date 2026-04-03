@@ -5,27 +5,27 @@ export const SectionWorldFair: React.FC = () => {
     <section className="mcg-section world-fair-section">
       <style>{`
         .world-fair-section {
-          background: #000000;
-          min-height: 800px;
-          padding: 49px 56px 60px;
+          background: transparent;
+          min-height: 100dvh;
+          height: auto;
+          display: flow-root;
+          overflow: visible;
+          padding: 0 56px 60px;
           box-sizing: border-box;
         }
 
-        .world-fair-section .mcg-page-title {
-          color: #ffffff;
-        }
-
         .world-fair-entry-grid {
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          gap: 56px;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          align-items: start;
+          gap: 32px 56px;
           position: static;
           margin-top: 24px;
         }
 
         .world-fair-entry {
-          width: min(340px, calc((100% - 56px) / 2));
+          width: 100%;
+          display: block;
         }
 
         .world-fair-media-image {
@@ -39,9 +39,17 @@ export const SectionWorldFair: React.FC = () => {
         .world-fair-caption,
         .world-fair-copy {
           margin: 0;
-          font-family: "Helvetica Neue", sans-serif;
-          font-size: 12px;
-          color: #ffffff;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+          font-size: 28px;
+          color: #000000;
+        }
+
+        .world-fair-caption {
+          font-size: 11px;
+        }
+
+        .world-fair-section .mcg-page-title {
+          color: #000000 !important;
         }
 
         .world-fair-caption {
@@ -50,8 +58,12 @@ export const SectionWorldFair: React.FC = () => {
 
         .world-fair-copy {
           width: 100%;
-          line-height: 20px;
-          margin-top: 16px;
+          line-height: 40px;
+          margin-top: 12px;
+        }
+
+        .world-fair-text {
+          display: block;
         }
 
         @media (max-width: 768px) {
@@ -74,6 +86,7 @@ export const SectionWorldFair: React.FC = () => {
             position: static;
             left: auto;
             top: auto;
+            display: flex;
             flex-direction: column;
             gap: 32px;
             margin-top: 0;
@@ -85,6 +98,7 @@ export const SectionWorldFair: React.FC = () => {
           }
 
           .world-fair-entry {
+            display: block;
             width: calc(100% - 56px);
             margin: 0 0 0 20px;
           }
@@ -109,16 +123,16 @@ export const SectionWorldFair: React.FC = () => {
               alt="World Fair"
               className="world-fair-media-image"
             />
+            <p className="world-fair-caption">
+              World's Fair Louis Armstrong Day (1964)
+            </p>
           </div>
-          <p className="world-fair-caption">
-            World's Fair Louis Armstrong Day (1964)
-          </p>
-          <p className="world-fair-copy">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            ullamcorper erat tortor, at accumsan sapien molestie et. Sed
-            hendrerit velit vel neque molestie eleifend. Ut sodales lorem vel
-            mauris malesuada maximus.
-          </p>
+          <div className="world-fair-text">
+            <p className="world-fair-copy">
+              June 30, 1964, was declared “Louis Armstrong Day” at the 1964
+              World’s Fair, honoring his global influence and cultural legacy.
+            </p>
+          </div>
         </div>
 
         <div className="world-fair-entry">
@@ -128,14 +142,15 @@ export const SectionWorldFair: React.FC = () => {
               alt="East Berlin"
               className="world-fair-media-image"
             />
+            <p className="world-fair-caption">East Berlin</p>
           </div>
-          <p className="world-fair-caption">East Berlin</p>
-          <p className="world-fair-copy">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            ullamcorper erat tortor, at accumsan sapien molestie et. Sed
-            hendrerit velit vel neque molestie eleifend. Ut sodales lorem vel
-            mauris malesuada maximus.
-          </p>
+          <div className="world-fair-text">
+            <p className="world-fair-copy">
+              In 1965, Armstrong toured behind the Iron Curtain, including East
+              Berlin, where he sold out every show despite his records being
+              unavailable there.
+            </p>
+          </div>
         </div>
       </div>
     </section>

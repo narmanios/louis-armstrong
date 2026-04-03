@@ -5,27 +5,27 @@ export const SectionJourneyToAmbassador: React.FC = () => {
     <section className="mcg-section journey-section">
       <style>{`
         .journey-section {
-          background: #000000;
-          min-height: 800px;
-          padding: 49px 56px 60px;
+          background: transparent;
+          min-height: 100dvh;
+          height: auto;
+          display: flow-root;
+          overflow: visible;
+          padding: 0 56px 60px;
           box-sizing: border-box;
         }
 
-        .journey-section .mcg-page-title {
-          color: #ffffff;
-        }
-
         .journey-entry-grid {
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          gap: 56px;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          align-items: start;
+          gap: 32px 56px;
           position: static;
           margin-top: 24px;
         }
 
         .journey-entry {
-          width: min(340px, calc((100% - 56px) / 2));
+          width: 100%;
+          display: block;
         }
 
         .journey-media-image {
@@ -39,9 +39,17 @@ export const SectionJourneyToAmbassador: React.FC = () => {
         .journey-caption,
         .journey-copy {
           margin: 0;
-          font-family: "Helvetica Neue", sans-serif;
-          font-size: 12px;
-          color: #ffffff;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+          font-size: 28px;
+          color: #000000;
+        }
+
+        .journey-caption {
+          font-size: 11px;
+        }
+
+        .journey-section .mcg-page-title {
+          color: #000000 !important;
         }
 
         .journey-caption {
@@ -50,8 +58,12 @@ export const SectionJourneyToAmbassador: React.FC = () => {
 
         .journey-copy {
           width: 100%;
-          line-height: 20px;
-          margin-top: 16px;
+          line-height: 40px;
+          margin-top: 12px;
+        }
+
+        .journey-text {
+          display: block;
         }
 
         @media (max-width: 768px) {
@@ -74,6 +86,7 @@ export const SectionJourneyToAmbassador: React.FC = () => {
             position: static;
             left: auto;
             top: auto;
+            display: flex;
             flex-direction: column;
             gap: 32px;
             margin-top: 0;
@@ -85,6 +98,7 @@ export const SectionJourneyToAmbassador: React.FC = () => {
           }
 
           .journey-entry {
+            display: block;
             width: calc(100% - 56px);
             margin: 0 0 0 20px;
           }
@@ -103,39 +117,44 @@ export const SectionJourneyToAmbassador: React.FC = () => {
 
       <div className="journey-entry-grid">
         <div className="journey-entry">
-          <div className="interactive-card">
-            <img
-              src="/assets/orchestra.png"
-              alt="Orchestra"
-              className="journey-media-image"
-            />
+          <div>
+            <div className="interactive-card">
+              <img
+                src="/assets/orchestra.png"
+                alt="Orchestra"
+                className="journey-media-image"
+              />
+            </div>
+            <p className="journey-caption">
+              Louis Armstrong and his Orchestra (1929)
+            </p>
           </div>
-          <p className="journey-caption">
-            Louis Armstrong and his Orchestra (1929)
-          </p>
-          <p className="journey-copy">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            ullamcorper erat tortor, at accumsan sapien molestie et. Sed
-            hendrerit velit vel neque molestie eleifend. Ut sodales lorem vel
-            mauris malesuada maximus.
-          </p>
+          <div className="journey-text">
+            <p className="journey-copy">
+              In 1929, Armstrong moved to New York and began fronting a big
+              band, Louis Armstrong and His Orchestra.
+            </p>
+          </div>
         </div>
 
         <div className="journey-entry">
-          <div className="interactive-card">
-            <img
-              src="/assets/chicago.png"
-              alt="Chicago"
-              className="journey-media-image"
-            />
+          <div>
+            <div className="interactive-card">
+              <img
+                src="/assets/chicago.png"
+                alt="Chicago"
+                className="journey-media-image"
+              />
+            </div>
+            <p className="journey-caption">Chicago</p>
           </div>
-          <p className="journey-caption">Chicago</p>
-          <p className="journey-copy">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            ullamcorper erat tortor, at accumsan sapien molestie et. Sed
-            hendrerit velit vel neque molestie eleifend. Ut sodales lorem vel
-            mauris malesuada maximus.
-          </p>
+          <div className="journey-text">
+            <p className="journey-copy">
+              Armstrong made his film debut in 1930 and, by 1936, became the
+              first African American to receive featured billing in Pennies from
+              Heaven.
+            </p>
+          </div>
         </div>
       </div>
     </section>

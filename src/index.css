@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Joti+One:wght@400&display=swap');
-@import 'tailwindcss';
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Joti+One:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
 
 @plugin "tailwindcss-animate";
 
@@ -60,6 +61,8 @@ body {
 }
 
 :root {
+  --font-body: "Hanken Grotesk", Arial, sans-serif;
+  --font-heading: "Hanken Grotesk", Arial, sans-serif;
   --radius: 0.625rem;
   --background: oklch(0.2284 0.0384 282.9403);
   --foreground: oklch(0.145 0 0);
@@ -136,6 +139,19 @@ body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
   }
+
+  body,
+  body *,
+  button,
+  input,
+  textarea,
+  select,
+  option,
+  svg text,
+  svg tspan {
+    font-family: var(--font-body) !important;
+  }
+
   h1,
   h2,
   h3,

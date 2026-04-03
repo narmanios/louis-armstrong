@@ -16,7 +16,7 @@ interface MainCollectionsProps {
   className?: string;
 }
 
-type GroupId = "history" | "musician" | "ambassador";
+type GroupId = "history" | "legacy" | "ambassador";
 type TimelineJumpTarget =
   | { kind: "intro" }
   | { kind: "section"; groupId: GroupId; sectionIdx: number };
@@ -24,9 +24,11 @@ type TimelineJumpTarget =
 export const MainCollections: React.FC<MainCollectionsProps> = ({
   className,
 }) => {
-  const desktopGroupPeek = 104;
-  const desktopGroupGap = 28;
-  const desktopGroupTransitionMs = 460;
+  const desktopGroupPeek = 0;
+  const desktopGroupGap = 0;
+  const desktopStickyHeaderHeight = 44;
+  const desktopSectionAnchorOffset = 0;
+  const introOverlayDurationMs = 780;
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const introSectionRef = useRef<HTMLElement>(null);
   const mobileNavBarRef = useRef<HTMLDivElement>(null);
@@ -40,14 +42,17 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   const musicianSectionRefs = useRef<Array<HTMLDivElement | null>>([]);
   const ambassadorSectionRefs = useRef<Array<HTMLDivElement | null>>([]);
   const sectionJumpTimeoutRef = useRef<number | null>(null);
+  const introOverlayTimeoutRef = useRef<number | null>(null);
   const isMobile = useIsMobile();
   const [showFixedGroupNav, setShowFixedGroupNav] = useState(false);
   const [currentGroupId, setCurrentGroupId] = useState<GroupId>("history");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [introOverlayGroupId, setIntroOverlayGroupId] =
+    useState<GroupId | null>(null);
   const groupNavItems: Array<{ id: GroupId; label: string }> = [
     { id: "history", label: "history" },
     { id: "ambassador", label: "ambassador" },
-    { id: "musician", label: "legacy" },
+    { id: "legacy", label: "legacy" },
   ];
   const groupSectionItems: Record<GroupId, string[]> = {
     history: ["Career Highlights", "The Beginning", "Journey to Ambassador"],
@@ -59,21 +64,38 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       "The Real Ambassadors",
       "World Fair + Berlin",
     ],
-    musician: ["What a Wonderful World", "More Covers"],
+    legacy: ["What a Wonderful World", "More Covers"],
   };
   const timelineTargetMap: TimelineJumpTarget[] = [
     { kind: "intro" },
     { kind: "section", groupId: "history", sectionIdx: 0 },
     { kind: "section", groupId: "history", sectionIdx: 1 },
     { kind: "section", groupId: "history", sectionIdx: 2 },
-    { kind: "section", groupId: "musician", sectionIdx: 0 },
-    { kind: "section", groupId: "musician", sectionIdx: 1 },
-    { kind: "section", groupId: "musician", sectionIdx: 1 },
+    { kind: "section", groupId: "legacy", sectionIdx: 0 },
+    { kind: "section", groupId: "legacy", sectionIdx: 1 },
+    { kind: "section", groupId: "legacy", sectionIdx: 1 },
     { kind: "section", groupId: "ambassador", sectionIdx: 0 },
     { kind: "section", groupId: "ambassador", sectionIdx: 3 },
     { kind: "section", groupId: "ambassador", sectionIdx: 4 },
     { kind: "section", groupId: "ambassador", sectionIdx: 5 },
   ];
+
+  const renderScrollArrowIcon = () => (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 60 82"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M29.6641 81.0617C29.5391 81.0617 29.3828 81.0617 29.2578 81.0304C28.6641 80.9679 28.0703 80.7179 27.6016 80.2804C27.5391 80.2179 27.4766 80.1867 27.4141 80.1242L0.9141 53.6242C-0.3047 52.4054 -0.3047 50.4367 0.9141 49.218C2.1329 47.9993 4.1016 47.9992 5.3203 49.218L26.5393 70.406V3.125C26.5393 1.4062 27.9455 0 29.6643 0C31.3831 0 32.7893 1.4062 32.7893 3.125V70.406L53.9773 49.218C55.1961 47.9992 57.1648 47.9992 58.3835 49.218C59.0085 49.843 59.2898 50.6242 59.2898 51.4368C59.2898 52.2494 58.9773 53.0306 58.3835 53.6556L31.8525 80.1866C31.29 80.7491 30.6025 81.0303 29.8837 81.0928C29.8212 81.0616 29.7266 81.0617 29.6641 81.0617Z"
+        fill="#CF6B4C"
+      />
+    </svg>
+  );
 
   const getMobileNavOffset = () => {
     if (!isMobile || !showFixedGroupNav) return 0;
@@ -109,33 +131,46 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
     container.scrollTo({
       left: Math.max(child.offsetLeft - desktopGroupPeek, 0),
-      behavior: "smooth",
+      behavior: "auto",
     });
   };
 
   const getGroupPageElement = (groupId: GroupId) => {
     if (groupId === "history") return historyPageRef.current;
-    if (groupId === "musician") return musicianPageRef.current;
+    if (groupId === "legacy") return musicianPageRef.current;
     return ambassadorPageRef.current;
   };
 
   const getGroupScroller = (groupId: GroupId) => {
     if (groupId === "history") return historyScrollRef.current;
-    if (groupId === "musician") return musicianScrollRef.current;
+    if (groupId === "legacy") return musicianScrollRef.current;
     return ambassadorScrollRef.current;
   };
 
   const getGroupSectionElements = (groupId: GroupId) => {
     if (groupId === "history") return historySectionRefs.current;
-    if (groupId === "musician") return musicianSectionRefs.current;
+    if (groupId === "legacy") return musicianSectionRefs.current;
     return ambassadorSectionRefs.current;
+  };
+
+  const getDesktopSectionAnchorOffset = (section: HTMLDivElement | null) => {
+    if (!section) return desktopSectionAnchorOffset;
+    return section.classList.contains("mcg-group-section--auto-height")
+      ? 16
+      : desktopSectionAnchorOffset;
   };
 
   const scrollToGroupSection = (groupId: GroupId, sectionIdx = 0) => {
     const page = getGroupPageElement(groupId);
     const scroller = getGroupScroller(groupId);
     const section = getGroupSectionElements(groupId)[sectionIdx] ?? null;
-    const targetTop = section?.offsetTop ?? 0;
+    const targetLeft = page
+      ? Math.max(page.offsetLeft - desktopGroupPeek, 0)
+      : 0;
+    const targetTop = Math.max(
+      (section?.offsetTop ?? 0) - getDesktopSectionAnchorOffset(section),
+      0,
+    );
 
     setCurrentGroupId(groupId);
     if (isMobile) {
@@ -147,12 +182,37 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       return;
     }
 
-    const isChangingGroup = currentGroupId !== groupId;
+    const isNavigatingFromIntro = !showFixedGroupNav;
+    if (introOverlayTimeoutRef.current !== null) {
+      window.clearTimeout(introOverlayTimeoutRef.current);
+      introOverlayTimeoutRef.current = null;
+    }
+
+    if (isNavigatingFromIntro) {
+      setIntroOverlayGroupId(groupId);
+
+      scroller?.scrollTo({
+        top: targetTop,
+        behavior: "auto",
+      });
+
+      scrollContainerRef.current?.scrollTo({
+        left: targetLeft,
+        behavior: "auto",
+      });
+
+      introOverlayTimeoutRef.current = window.setTimeout(() => {
+        setShowFixedGroupNav(true);
+        setIntroOverlayGroupId(null);
+        introOverlayTimeoutRef.current = null;
+      }, introOverlayDurationMs);
+      return;
+    }
 
     if (page) {
       scrollContainerRef.current?.scrollTo({
         left: Math.max(page.offsetLeft - desktopGroupPeek, 0),
-        behavior: "smooth",
+        behavior: "auto",
       });
     }
 
@@ -161,22 +221,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       sectionJumpTimeoutRef.current = null;
     }
 
-    const scrollSectionIntoView = () => {
-      scroller?.scrollTo({
-        top: targetTop,
-        behavior: "smooth",
-      });
-    };
-
-    if (isChangingGroup) {
-      sectionJumpTimeoutRef.current = window.setTimeout(() => {
-        scrollSectionIntoView();
-        sectionJumpTimeoutRef.current = null;
-      }, desktopGroupTransitionMs);
-      return;
-    }
-
-    scrollSectionIntoView();
+    scroller?.scrollTo({
+      top: targetTop,
+      behavior: "auto",
+    });
   };
 
   const scrollToTimelineSection = (timelineIdx: number) => {
@@ -244,7 +292,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }> = [
           { id: "history", element: historyPageRef.current },
           { id: "ambassador", element: ambassadorPageRef.current },
-          { id: "musician", element: musicianPageRef.current },
+          { id: "legacy", element: musicianPageRef.current },
         ];
         const viewportCenter = window.innerHeight * 0.35;
         const closestMobilePage = mobilePages.reduce<{
@@ -274,9 +322,14 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       }> = [
         { id: "history", element: historyPageRef.current },
         { id: "ambassador", element: ambassadorPageRef.current },
-        { id: "musician", element: musicianPageRef.current },
+        { id: "legacy", element: musicianPageRef.current },
       ];
       if (!container || !historyPage) return;
+
+      if (introOverlayGroupId !== null) {
+        return;
+      }
+
       setShowFixedGroupNav(container.scrollLeft >= historyPage.offsetLeft / 2);
 
       const viewportAnchor = container.scrollLeft + desktopGroupPeek;
@@ -317,7 +370,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       container?.removeEventListener("scroll", updateNavVisibility);
       window.removeEventListener("resize", updateNavVisibility);
     };
-  }, [isMobile]);
+  }, [isMobile, introOverlayGroupId]);
 
   useEffect(() => {
     if (!isMobile || !showFixedGroupNav) {
@@ -341,6 +394,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       if (sectionJumpTimeoutRef.current !== null) {
         window.clearTimeout(sectionJumpTimeoutRef.current);
       }
+      if (introOverlayTimeoutRef.current !== null) {
+        window.clearTimeout(introOverlayTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -362,44 +418,54 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   }, [isMobile, showFixedGroupNav, isMobileMenuOpen]);
 
   const textBaseStyle: React.CSSProperties = {
-    fontFamily: '"Helvetica Neue", sans-serif',
+    fontFamily: '"Hanken Grotesk", Arial, sans-serif',
     fontWeight: 400,
     color: "#000000",
   };
+
+  const currentGroupLabel =
+    groupNavItems.find((item) => item.id === currentGroupId)?.label ??
+    currentGroupId;
+
   const renderGroupNav = (className = "") => (
     <nav
       className={`mcg-group-nav ${className}`.trim()}
       aria-label="Section groups"
     >
-      {groupNavItems.map((item) => (
-        <div
-          key={item.id}
-          className={`mcg-group-nav-item mcg-group-nav-item--${item.id}`}
-        >
-          <button
-            className={`mcg-group-nav-button${
-              currentGroupId === item.id ? " is-active" : ""
-            }`}
-            onClick={() => scrollToGroup(item.id)}
-          >
-            {item.label}
-          </button>
+      <div className="mcg-group-nav-label" aria-hidden="true">
+        {currentGroupLabel}
+      </div>
+      <div className="mcg-group-nav-links">
+        {groupNavItems.map((item) => (
           <div
-            className="mcg-group-nav-dropdown"
-            aria-label={`${item.label} sections`}
+            key={item.id}
+            className={`mcg-group-nav-item mcg-group-nav-item--${item.id}`}
           >
-            {groupSectionItems[item.id].map((label, index) => (
-              <button
-                key={`${item.id}-${label}`}
-                className="mcg-group-nav-dropdown-button"
-                onClick={() => scrollToGroupSection(item.id, index)}
-              >
-                {label}
-              </button>
-            ))}
+            <button
+              className={`mcg-group-nav-button${
+                currentGroupId === item.id ? " is-active" : ""
+              }`}
+              onClick={() => scrollToGroup(item.id)}
+            >
+              {item.label}
+            </button>
+            <div
+              className="mcg-group-nav-dropdown"
+              aria-label={`${item.label} sections`}
+            >
+              {groupSectionItems[item.id].map((label, index) => (
+                <button
+                  key={`${item.id}-${label}`}
+                  className="mcg-group-nav-dropdown-button"
+                  onClick={() => scrollToGroupSection(item.id, index)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </nav>
   );
   const renderMobileMenu = () => (
@@ -453,23 +519,65 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     </div>
   );
   return (
-    <div className={`mcg-root ${className || ""}`}>
+    <div
+      className={`mcg-root ${className || ""}${
+        showFixedGroupNav ? " has-sticky-group-header" : ""
+      }${introOverlayGroupId ? " is-intro-overlay-transition" : ""}`}
+    >
       <style>{`
         /* ── SHARED ── */
         .mcg-root {
-          width: 100%;
-          background: #161616;
+          width: 100vw;
+          max-width: 100vw;
+          overflow-x: hidden;
+          background: transparent;
+        }
+
+        .mcg-root.has-sticky-group-header::before {
+          content: "";
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: ${desktopStickyHeaderHeight}px;
+          background: #000000;
+          z-index: 130;
+          pointer-events: none;
         }
 
         .mcg-group-nav {
           position: fixed;
-          top: 24px;
-          right: 56px;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: ${desktopStickyHeaderHeight}px;
+          padding: 0 24px;
           z-index: 140;
           display: flex;
           flex-direction: row;
-          align-items: flex-start;
-          gap: 16px;
+          justify-content: space-between;
+          align-items: center;
+          gap: 10px;
+          box-sizing: border-box;
+        }
+
+        .mcg-group-nav-label {
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+          font-size: 22px;
+          font-weight: 400;
+          line-height: 1;
+          letter-spacing: -0.06em;
+          color: #ffffff;
+          white-space: nowrap;
+          pointer-events: none;
+          user-select: none;
+        }
+
+        .mcg-group-nav-links {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 10px;
         }
 
         .mcg-group-nav-item {
@@ -483,9 +591,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           padding: 0;
           margin: 0;
           cursor: pointer;
-          font-family: "Helvetica Neue", sans-serif;
-          font-size: 12px;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+          font-size: 11px;
           font-weight: 600;
+          line-height: 1;
           letter-spacing: 0.04em;
           color: #ffffff;
           text-align: left;
@@ -507,11 +616,11 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           left: 0;
           display: none;
           min-width: 180px;
-          padding-top: 6px;
+          padding-top: 8px;
           z-index: 141;
         }
 
-        .mcg-group-nav-item--musician .mcg-group-nav-dropdown {
+        .mcg-group-nav-item--legacy .mcg-group-nav-dropdown {
           left: auto;
           right: 0;
         }
@@ -529,11 +638,11 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         .mcg-group-nav-dropdown-button {
           display: block;
           width: 100%;
-          border: 1px solid rgba(255, 255, 255, 0.22);
-          background: #ffffff;
-          color: #000000;
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: #000000;
+          color: #ffffff;
           padding: 6px 10px;
-          font-family: "Helvetica Neue", sans-serif;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
           font-size: 12px;
           font-weight: 400;
           letter-spacing: 0;
@@ -547,8 +656,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
         /* ── DESKTOP: horizontal scroll ── */
         .mcg-track {
-          width: 100%;
-          height: 800px;
+          width: 100vw;
+          height: 100dvh;
           overflow-x: auto;
           overflow-y: hidden;
           display: flex;
@@ -563,46 +672,35 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
         .mcg-track::-webkit-scrollbar { display: none; }
 
+        .mcg-root.is-intro-overlay-transition .mcg-track {
+          overflow: hidden;
+        }
+
         .mcg-group-page {
-          width: calc(100vw - ${desktopGroupPeek * 2 + desktopGroupGap}px);
-          min-width: calc(100vw - ${desktopGroupPeek * 2 + desktopGroupGap}px);
-          height: 800px;
+          width: 100vw;
+          min-width: 100vw;
+          height: 100dvh;
           position: relative;
           overflow: hidden;
           flex-shrink: 0;
           scroll-snap-align: start;
-          background: #232323;
-          padding: 40px 56px 36px;
+          background: #ffffff;
+          padding: 0;
           box-sizing: border-box;
         }
 
         .mcg-group-label {
-          position: absolute;
-          left: 24px;
-          top: 50%;
-          transform: translate(-50%, -50%) rotate(-90deg);
-          transform-origin: center;
-          font-family: "Andale Mono", "Andale Mono WT", monospace;
-          font-size: 80px;
-          font-weight: 800;
-          line-height: 0.85;
-          letter-spacing: -0.06em;
-          color: rgba(255, 255, 255, 0.08);
-          pointer-events: none;
-          user-select: none;
-          white-space: nowrap;
-          text-align: left;
+          display: none;
         }
 
         .mcg-group-frame {
-          width: min(100%, 1112px);
-          height: 100%;
-          margin: 0 auto;
-          background: #000000;
+          width: 100vw;
+          min-height: 100%;
+          background: #ffffff;
           overflow: hidden;
-          padding-top: 28px;
+          padding-top: 0;
           box-sizing: border-box;
-          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+          box-shadow: none;
           position: relative;
           z-index: 1;
         }
@@ -632,72 +730,25 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           opacity: 1;
         }
 
-        .mcg-group-scroll-arrow img {
+        .mcg-group-scroll-arrow svg {
           width: 28px;
           height: 28px;
           display: block;
         }
 
-        .mcg-group-page--history .mcg-group-label {
-          color: rgba(207, 107, 76, 0.3);
-        }
-
-        .mcg-group-page--history .mcg-group-frame,
-        .mcg-group-page--history .mcg-section {
-          background: #343434 !important;
-        }
-
-        .mcg-group-page--history .mcg-page-title,
-        .mcg-group-page--history p,
-        .mcg-group-page--history span,
-        .mcg-group-page--history h1,
-        .mcg-group-page--history h2,
-        .mcg-group-page--history h3,
-        .mcg-group-page--history h4,
-        .mcg-group-page--history button,
-        .mcg-group-page--history a {
-          color: #ffffff !important;
-        }
-
-        .mcg-group-page--musician {
-          --slg-bg: #000000;
-        }
-
-        .mcg-group-page--musician .mcg-group-label {
-          color: rgba(107, 123, 74, 0.28);
-        }
-
-        .mcg-group-page--musician .mcg-group-frame,
-        .mcg-group-page--musician .mcg-section {
-          background: #000000 !important;
-        }
-
-        .mcg-group-page--ambassador .mcg-group-label {
-          color: rgba(79, 111, 154, 0.28);
-        }
-
-        .mcg-group-page--ambassador .mcg-group-frame,
-        .mcg-group-page--ambassador .mcg-section {
-          background: #343434 !important;
-        }
-
-        .mcg-group-page--ambassador .mcg-group-section:nth-child(n + 2) .mcg-page-title,
-        .mcg-group-page--ambassador .mcg-group-section:nth-child(n + 2) p,
-        .mcg-group-page--ambassador .mcg-group-section:nth-child(n + 2) span,
-        .mcg-group-page--ambassador .mcg-group-section:nth-child(n + 2) h1,
-        .mcg-group-page--ambassador .mcg-group-section:nth-child(n + 2) h2,
-        .mcg-group-page--ambassador .mcg-group-section:nth-child(n + 2) h3,
-        .mcg-group-page--ambassador .mcg-group-section:nth-child(n + 2) h4,
-        .mcg-group-page--ambassador .mcg-group-section:nth-child(n + 2) a {
-          color: #ffffff !important;
+        .mcg-group-page--legacy {
+          --slg-bg: transparent;
         }
 
         .mcg-group-scroll {
-          width: 100%;
+          width: 100vw;
           height: 100%;
           overflow-y: auto;
           overflow-x: hidden;
+          padding-top: 0;
+          box-sizing: border-box;
           scroll-snap-type: y mandatory;
+          scroll-padding-top: 0;
           scrollbar-width: none;
           -ms-overflow-style: none;
         }
@@ -707,25 +758,37 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
 
         .mcg-group-section {
-          width: 100%;
+          width: 100vw;
           min-width: 0;
           scroll-snap-align: start;
-          min-height: 800px;
+          min-height: 100dvh;
           position: relative;
           overflow: hidden;
+          scroll-margin-top: 0;
         }
 
         .mcg-group-section-inner {
-          width: 100%;
-          height: 800px;
-          transform: scale(0.88);
+          width: 100vw;
+          height: 100dvh;
+          transform: none;
           transform-origin: top center;
+        }
+
+        .mcg-group-section--auto-height {
+          min-height: 100dvh;
+          height: auto;
+          overflow: visible;
+        }
+
+        .mcg-group-section-inner--auto-height {
+          min-height: 100dvh;
+          height: auto;
         }
 
         .mcg-section {
           width: 100vw;
           min-width: 100vw;
-          height: 800px;
+          height: 100dvh;
           position: relative;
           overflow: hidden;
           flex-shrink: 0;
@@ -734,48 +797,63 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
 
         .mcg-group-page .mcg-section {
-          width: 100% !important;
-          min-width: 0 !important;
+          width: 100vw !important;
+          min-width: 100vw !important;
+          background: #ffffff !important;
+        }
+
+        .mcg-group-page .mcg-fbi-section,
+        .mcg-group-page .vre.mcg-section {
+          background: #000000 !important;
+          color: #ffffff !important;
+        }
+
+        .mcg-group-page .mcg-fbi-section .mcg-page-title,
+        .mcg-group-page .vre.mcg-section .mcg-page-title {
+          color: #ffffff !important;
         }
 
         /* Shared page title styling for all non-hero sections */
         .mcg-page-title {
           margin: 0 !important;
-          font-family: "Andale Mono", "Andale Mono WT", monospace !important;
-          font-size: 40px !important;
-          font-weight: 800 !important;
-          line-height: 48px !important;
-          color: var(--mcg-page-title-color, #002768) !important;
+          font-family: "Hanken Grotesk", Arial, sans-serif !important;
+          font-size: 32px !important;
+          font-weight: 700 !important;
+          line-height: 38px !important;
+          color: #ffffff !important;
+        }
+
+        .africa-tour-section .mcg-page-title,
+        .real-ambassadors-section .mcg-page-title,
+        .mcg-jazz-section .mcg-page-title {
+          color: #000000 !important;
         }
 
         .mcg-track > .mcg-section .mcg-page-title:not(.mcg-page-title--flow),
         .mcg-track > .mcg-group-page .mcg-section .mcg-page-title:not(.mcg-page-title--flow) {
           position: absolute !important;
           left: 56px !important;
-          top: 64px !important;
+          top: 76px !important;
           z-index: 5 !important;
         }
 
         .mcg-page-title--flow {
-          position: static !important;
-          left: auto !important;
-          top: auto !important;
-        }
-
-        .mcg-page-title--spaced {
-          margin-bottom: 57px !important;
+          display: block !important;
+          margin-top: 80px !important;
+          position: relative !important;
+          z-index: 6 !important;
         }
 
         .mcg-page-title--light {
-          --mcg-page-title-color: #ffffff;
-        }
-
-        .mcg-page-title--tight {
-          margin: 0 !important;
+          color: #000000 !important;
         }
 
         /* ── MOBILE: vertical stack ── */
         @media (max-width: 768px) {
+          .mcg-root.has-sticky-group-header::before {
+            display: none;
+          }
+
           .mcg-group-nav {
             display: none;
           }
@@ -796,7 +874,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             justify-content: flex-end;
             width: 100%;
             margin: 0;
-            padding: 12px 16px;
+            padding: 6px 16px;
             box-sizing: border-box;
             background: rgba(22, 22, 22, 0.94);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -866,7 +944,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             border: none;
             color: #ffffff;
             padding: 0 0 12px;
-            font-family: "Andale Mono", "Andale Mono WT", monospace;
+            font-family: "Hanken Grotesk", Arial, sans-serif;
             font-size: 22px;
             font-weight: 700;
             letter-spacing: -0.04em;
@@ -893,7 +971,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             border: none;
             color: rgba(255, 255, 255, 0.74);
             padding: 0;
-            font-family: "Helvetica Neue", sans-serif;
+            font-family: "Hanken Grotesk", Arial, sans-serif;
             font-size: 15px;
             font-weight: 400;
             line-height: 1.45;
@@ -925,21 +1003,30 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             overflow: visible;
             padding: 0 0 28px;
             box-sizing: border-box;
-            background: transparent;
+            background: #ffffff;
           }
 
           .mcg-group-label {
-            display: none;
+            display: block;
+            position: relative;
+            left: auto;
+            top: auto;
+            transform: none;
+            width: calc(100% - 40px);
+            margin: 0 auto 12px;
+            font-size: 30px;
+            line-height: 1;
+            z-index: auto;
           }
 
           .mcg-group-frame {
             width: 100vw;
             height: auto;
             overflow: hidden;
-            padding-top: 20px;
+            padding-top: 0;
             box-sizing: border-box;
             box-shadow: none;
-            background: transparent !important;
+            background: #ffffff !important;
           }
 
           .mcg-group-scroll-arrow {
@@ -949,6 +1036,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           .mcg-group-scroll {
             height: auto;
             overflow: visible;
+            padding-top: 0;
+            scroll-padding-top: 0;
             scroll-snap-type: none;
           }
 
@@ -979,16 +1068,22 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           .mcg-group-page .mcg-section {
             width: 100% !important;
             min-width: 0 !important;
-            background: transparent !important;
+            background: #ffffff !important;
+          }
+
+          .mcg-group-page .mcg-fbi-section,
+          .mcg-group-page .vre.mcg-section {
+            background: #000000 !important;
+            color: #ffffff !important;
           }
 
           .mcg-group-page--history .mcg-group-frame,
           .mcg-group-page--history .mcg-section,
-          .mcg-group-page--musician .mcg-group-frame,
-          .mcg-group-page--musician .mcg-section,
+          .mcg-group-page--legacy .mcg-group-frame,
+          .mcg-group-page--legacy .mcg-section,
           .mcg-group-page--ambassador .mcg-group-frame,
           .mcg-group-page--ambassador .mcg-section {
-            background: transparent !important;
+            background: #ffffff !important;
           }
 
           /* Hero section mobile styles are section-scoped in SectionIntroHero.tsx */
@@ -996,10 +1091,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             position: static !important;
             left: auto !important;
             top: auto !important;
-            font-size: 28px !important;
+            font-size: 24px !important;
             line-height: 1.2 !important;
             width: calc(100% - 40px);
-            margin: 0 auto 20px !important;
+            margin: 20px auto 20px !important;
           }
 
           /* Two-image card sections (Beginning, Journey, World Fair) */
@@ -1071,6 +1166,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             display: block !important;
             width: calc(100% - 40px);
             margin: 0 auto 24px !important;
+            color: #000000 !important;
           }
           .mcg-jazz-section .mcg-jazz-stage {
             min-height: 0 !important;
@@ -1205,8 +1301,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       <div className="mcg-track" ref={scrollContainerRef}>
         <SectionIntroHero
           sectionRef={introSectionRef}
+          isIntroActive={!showFixedGroupNav && introOverlayGroupId === null}
+          isTransitionOverlayActive={introOverlayGroupId !== null}
           onNavigateHistory={() => scrollToGroup("history")}
-          onNavigateMusician={() => scrollToGroup("musician")}
+          onNavigateLegacy={() => scrollToGroup("legacy")}
           onNavigateAmbassador={() => scrollToGroup("ambassador")}
         />
         {isMobile && showFixedGroupNav ? renderMobileMenu() : null}
@@ -1217,8 +1315,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           <div className="mcg-group-label" aria-hidden="true">
             history
           </div>
-          <div className="mcg-group-frame">
-            <div ref={historyScrollRef} className="mcg-group-scroll">
+          <div ref={historyScrollRef} className="mcg-group-scroll">
+            <div className="mcg-group-frame">
               <div
                 ref={(element) => {
                   historySectionRefs.current[0] = element;
@@ -1233,9 +1331,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                 ref={(element) => {
                   historySectionRefs.current[1] = element;
                 }}
-                className="mcg-group-section"
+                className="mcg-group-section mcg-group-section--auto-height"
               >
-                <div className="mcg-group-section-inner">
+                <div className="mcg-group-section-inner mcg-group-section-inner--auto-height">
                   <SectionTheBeginning />
                 </div>
               </div>
@@ -1243,21 +1341,21 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                 ref={(element) => {
                   historySectionRefs.current[2] = element;
                 }}
-                className="mcg-group-section"
+                className="mcg-group-section mcg-group-section--auto-height"
               >
-                <div className="mcg-group-section-inner">
+                <div className="mcg-group-section-inner mcg-group-section-inner--auto-height">
                   <SectionJourneyToAmbassador />
                 </div>
               </div>
             </div>
-            <button
-              className="mcg-group-scroll-arrow"
-              onClick={() => scrollGroupDown("history")}
-              aria-label="Scroll down in history"
-            >
-              <img src="/assets/arrow.svg" alt="" aria-hidden="true" />
-            </button>
           </div>
+          <button
+            className="mcg-group-scroll-arrow"
+            onClick={() => scrollGroupDown("history")}
+            aria-label="Scroll down in history"
+          >
+            {renderScrollArrowIcon()}
+          </button>
         </div>
         <div
           ref={ambassadorPageRef}
@@ -1266,8 +1364,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           <div className="mcg-group-label" aria-hidden="true">
             ambassador
           </div>
-          <div className="mcg-group-frame">
-            <div ref={ambassadorScrollRef} className="mcg-group-scroll">
+          <div ref={ambassadorScrollRef} className="mcg-group-scroll">
+            <div className="mcg-group-frame">
               <div
                 ref={(element) => {
                   ambassadorSectionRefs.current[0] = element;
@@ -1303,16 +1401,16 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                 ref={(element) => {
                   ambassadorSectionRefs.current[3] = element;
                 }}
-                className="mcg-group-section"
+                className="mcg-group-section mcg-group-section--auto-height"
               >
-                <div className="mcg-group-section-inner">
+                <div className="mcg-group-section-inner mcg-group-section-inner--auto-height">
                   <SectionAfricaTour />
                 </div>
               </div>
 
               <div
                 ref={(element) => {
-                  ambassadorSectionRefs.current[5] = element;
+                  ambassadorSectionRefs.current[4] = element;
                 }}
                 className="mcg-group-section"
               >
@@ -1322,37 +1420,37 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                     isMobile={isMobile}
                   />
                 </div>
+              </div>
 
-                <div
-                  ref={(element) => {
-                    ambassadorSectionRefs.current[4] = element;
-                  }}
-                  className="mcg-group-section"
-                >
-                  <div className="mcg-group-section-inner">
-                    <SectionWorldFair />
-                  </div>
+              <div
+                ref={(element) => {
+                  ambassadorSectionRefs.current[5] = element;
+                }}
+                className="mcg-group-section mcg-group-section--auto-height"
+              >
+                <div className="mcg-group-section-inner mcg-group-section-inner--auto-height">
+                  <SectionWorldFair />
                 </div>
               </div>
             </div>
-            <button
-              className="mcg-group-scroll-arrow"
-              onClick={() => scrollGroupDown("ambassador")}
-              aria-label="Scroll down in ambassador"
-            >
-              <img src="/assets/arrow.svg" alt="" aria-hidden="true" />
-            </button>
           </div>
+          <button
+            className="mcg-group-scroll-arrow"
+            onClick={() => scrollGroupDown("ambassador")}
+            aria-label="Scroll down in ambassador"
+          >
+            {renderScrollArrowIcon()}
+          </button>
         </div>
         <div
           ref={musicianPageRef}
-          className="mcg-group-page mcg-group-page--musician"
+          className="mcg-group-page mcg-group-page--legacy"
         >
           <div className="mcg-group-label" aria-hidden="true">
             legacy
           </div>
-          <div className="mcg-group-frame">
-            <div ref={musicianScrollRef} className="mcg-group-scroll">
+          <div ref={musicianScrollRef} className="mcg-group-scroll">
+            <div className="mcg-group-frame">
               <div
                 ref={(element) => {
                   musicianSectionRefs.current[0] = element;
@@ -1378,14 +1476,14 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                 </div>
               </div>
             </div>
-            <button
-              className="mcg-group-scroll-arrow"
-              onClick={() => scrollGroupDown("musician")}
-              aria-label="Scroll down in legacy"
-            >
-              <img src="/assets/arrow.svg" alt="" aria-hidden="true" />
-            </button>
           </div>
+          <button
+            className="mcg-group-scroll-arrow"
+            onClick={() => scrollGroupDown("legacy")}
+            aria-label="Scroll down in legacy"
+          >
+            {renderScrollArrowIcon()}
+          </button>
         </div>
       </div>
     </div>

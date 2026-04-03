@@ -21,13 +21,83 @@ type ArmstrongEvent = {
   url?: string;
 };
 
+type RawArmstrongEvent = {
+  id: number;
+  year: number | string;
+  dateText: string;
+  event: string;
+  categories: string[];
+  image?: string;
+  url?: string;
+};
+
 type CareerTimelineData = {
   categoryLabels: Record<Category, string>;
   categoryColors: Record<Category, string>;
   events: ArmstrongEvent[];
 };
 
-const timelineData = rawCareerTimeline as CareerTimelineData;
+type RawCareerTimelineData = {
+  categoryLabels: Record<Category, string>;
+  categoryColors: Record<Category, string>;
+  events: RawArmstrongEvent[];
+};
+
+function parseTimelineYear(value: number | string): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const match = value.trim().match(/^(\d{4})/);
+  if (!match) {
+    return null;
+  }
+
+  const parsed = Number.parseInt(match[1], 10);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+const allowedCategorySet = new Set<Category>([
+  "musician",
+  "vocalist",
+  "bandleader",
+  "ambassador",
+  "film",
+]);
+
+const rawTimelineData = rawCareerTimeline as RawCareerTimelineData;
+const timelineData: CareerTimelineData = {
+  categoryLabels: rawTimelineData.categoryLabels,
+  categoryColors: rawTimelineData.categoryColors,
+  events: rawTimelineData.events.flatMap((event) => {
+    const parsedYear = parseTimelineYear(event.year);
+    if (parsedYear === null) {
+      return [];
+    }
+
+    const validCategories = event.categories.filter(
+      (category): category is Category =>
+        allowedCategorySet.has(category as Category),
+    );
+
+    if (validCategories.length === 0) {
+      return [];
+    }
+
+    return [
+      {
+        ...event,
+        year: parsedYear,
+        categories: validCategories,
+      },
+    ];
+  }),
+};
+
 const dataYearMax = timelineData.events.reduce(
   (max, event) => Math.max(max, event.year),
   0,
@@ -98,7 +168,7 @@ const laneY: Record<Category, number> = {
 const categoryColors: Record<Category, string> = {
   film: "#FF6B6B",
   bandleader: "#F59E0B",
-  musician: "#2563EB",
+  musician: "#00CCE7",
   vocalist: "#10B981",
   ambassador: "#8B5CF6",
 };
@@ -168,10 +238,17 @@ const featuredLabels: Record<number, FeaturedCfg> = {
     cat: "vocalist",
     dir: "below",
   },
+
+  107: {
+    lines: ["African State Department tour", "(1960)"],
+    cat: "ambassador",
+    dir: "above",
+  },
+
   87: {
     lines: ["The Real", "Ambassadors", "(1961)"],
     cat: "ambassador",
-    dir: "above",
+    dir: "below",
   },
 };
 
@@ -870,7 +947,7 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
       style={{
         width: isMobile ? "100%" : "100vw",
         minWidth: isMobile ? 0 : "100vw",
-        height: isMobile ? "auto" : "800px",
+        height: isMobile ? "auto" : "100dvh",
         flexShrink: isMobile ? undefined : 0,
         scrollSnapAlign: isMobile ? undefined : "start",
         position: "relative",

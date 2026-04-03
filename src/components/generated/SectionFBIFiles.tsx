@@ -107,34 +107,46 @@ export const SectionFBIFiles: React.FC = () => {
         minWidth: "100vw",
         flexShrink: 0,
         scrollSnapAlign: "start",
-        minHeight: "800px",
+        minHeight: "100dvh",
         backgroundColor: "#000000",
         position: "relative",
-        fontFamily: '"Helvetica Neue", sans-serif',
+        fontFamily: '"Hanken Grotesk", Arial, sans-serif',
         overflowX: "hidden",
         boxSizing: "border-box",
-        padding: "49px 0 60px 0",
+        padding: "0 0 60px 0",
       }}
     >
+      <style>{`
+        .mcg-fbi-section {
+          background: #000000 !important;
+          color: #ffffff;
+        }
+
+        .mcg-fbi-section .mcg-page-title {
+          color: #ffffff !important;
+        }
+      `}</style>
       <div
         style={{
-          maxWidth: "1280px",
-          margin: "0 auto",
-          padding: isMobile ? "0 20px" : "0 56px",
+          width: "100%",
+          padding: isMobile ? "0 20px" : "0 56px 0",
           position: "relative",
+          boxSizing: "border-box",
         }}
       >
         {/* Header Section */}
         <header
           style={{
             display: "block",
-            marginBottom: "24px",
             width: isMobile ? "calc(100% - 40px)" : "100%",
             marginLeft: isMobile ? "auto" : undefined,
             marginRight: isMobile ? "auto" : undefined,
           }}
         >
-          <h1 className="mcg-page-title mcg-page-title--flow mcg-page-title--tight">
+          <h1
+            className="mcg-page-title mcg-page-title--flow"
+            style={{ color: "#ffffff" }}
+          >
             FBI Files
           </h1>
 
@@ -154,10 +166,11 @@ export const SectionFBIFiles: React.FC = () => {
                 key={year}
                 onClick={() => handleFilterClick(year)}
                 style={{
-                  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+                  fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                   fontWeight: "bold",
                   fontSize: 14,
-                  color: filter === year ? "#000000" : "#aaaaaa",
+                  color:
+                    filter === year ? "#FFFFFF" : "rgba(255, 255, 255, 0.7)",
                   background: "none",
                   border: "none",
                   padding: 0,

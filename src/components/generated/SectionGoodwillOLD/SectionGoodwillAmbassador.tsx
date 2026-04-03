@@ -138,7 +138,7 @@ const COUNTRY_TO_ELLIPSE_ID: Record<string, string> = {
   spain: "Ellipse 115",
 };
 
-const UI_FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+const UI_FONT = '"Hanken Grotesk", Arial, sans-serif';
 const GOODWILL_BUBBLE_FILL = "rgba(255, 255, 255, 0.38)";
 const GOODWILL_BUBBLE_ACTIVE_FILL = "rgba(255, 255, 255, 0.76)";
 
@@ -205,10 +205,7 @@ export function SectionGoodwillAmbassador({
         MIN_DYNAMIC_BUBBLE_RADIUS +
         normalizedCount * (maxBaseRadius - MIN_DYNAMIC_BUBBLE_RADIUS);
 
-      acc[country.id] = Math.max(
-        Math.round(scaledRadius),
-        paddedTextRadius,
-      );
+      acc[country.id] = Math.max(Math.round(scaledRadius), paddedTextRadius);
       return acc;
     }, {});
   }, [maxFilteredCount, selectedDecade]);
@@ -765,7 +762,8 @@ export function SectionGoodwillAmbassador({
               >
                 {COUNTRIES.map((country) => {
                   const pos = bubblePositions[country.id];
-                  const radius = displayBubbleRadiusById[country.id] ?? country.r;
+                  const radius =
+                    displayBubbleRadiusById[country.id] ?? country.r;
                   const tapSize = isMobile
                     ? Math.max(radius * 3, 52)
                     : radius * 2;
@@ -818,7 +816,8 @@ export function SectionGoodwillAmbassador({
                   const pos = bubblePositions[country.id];
                   if (!pos) return null;
 
-                  const radius = displayBubbleRadiusById[country.id] ?? country.r;
+                  const radius =
+                    displayBubbleRadiusById[country.id] ?? country.r;
                   const count = getCount(country);
                   const countTopOffset = Math.min(
                     radius * 0.42,
@@ -836,7 +835,7 @@ export function SectionGoodwillAmbassador({
                         width: radius * 2,
                         transform: "translateX(-50%)",
                         color: "#9e9887",
-                        fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+                        fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                         fontSize: country.numFontSize,
                         fontWeight: 500,
                         lineHeight: 1,

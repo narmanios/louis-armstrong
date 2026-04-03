@@ -15,7 +15,6 @@ function Map({ hideTitle = false }: { hideTitle?: boolean }) {
       className="absolute h-[800px] left-0 top-0 w-[1280.296px]"
       data-name="Map"
     >
-      <div className="absolute bg-[#f9e4d2] h-[800px] left-0 top-0 w-[1280px]" />
       {!hideTitle ? (
         <p className="absolute font-['Helvetica_Neue:Medium',sans-serif] leading-[normal] left-[56px] not-italic text-[48px] text-black top-[49px] whitespace-nowrap">
           Goodwill (Unoffical) Ambassador (starts 1948)
@@ -10154,118 +10153,64 @@ function BrBrazil() {
         <g clipPath="url(#clip0_br_goodwill)" id="br brazil">
           <path
             d={svgPaths.brFlagPath1}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #229E45)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #229E45)"
           />
           <path
             d={svgPaths.brFlagPath2}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #F8E509)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #F8E509)"
           />
           <path
             d={svgPaths.brFlagPath3}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #2B49A3)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #2B49A3)"
           />
           <path
             d={svgPaths.brFlagPath4}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #FFFFEF)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #FFFFEF)"
           />
           <path
             d={svgPaths.brFlagPath5}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #FFFFEF)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #FFFFEF)"
           />
           <path
             d={svgPaths.brFlagPath6}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #FFFFEF)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #FFFFEF)"
           />
           <path
             d={svgPaths.brFlagPath7}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, white)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, white)"
           />
-          <path
-            d={svgPaths.brFlagPath8}
-              fill="var(--fill-0, #309E3A)"
-          />
-          <path
-            d={svgPaths.brFlagPath9}
-              fill="var(--fill-0, #309E3A)"
-          />
-          <path
-            d={svgPaths.brFlagPath10}
-              fill="var(--fill-0, #F7FFFF)"
-          />
-          <path
-            d={svgPaths.brFlagPath11}
-              fill="var(--fill-0, #309E3A)"
-          />
-          <path
-            d={svgPaths.brFlagPath12}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.brFlagPath13}
-              fill="var(--fill-0, #309E3A)"
-          />
-          <path
-            d={svgPaths.brFlagPath14}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.brFlagPath15}
-              fill="var(--fill-0, #309E3A)"
-          />
-          <path
-            d={svgPaths.brFlagPath16}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.brFlagPath17}
-              fill="var(--fill-0, #309E3A)"
-          />
-          <path
-            d={svgPaths.brFlagPath18}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.brFlagPath19}
-              fill="var(--fill-0, #309E3A)"
-          />
-          <path
-            d={svgPaths.brFlagPath20}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.brFlagPath21}
-              fill="var(--fill-0, #309E3A)"
-          />
-          <path
-            d={svgPaths.brFlagPath22}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.brFlagPath23}
-              fill="var(--fill-0, #309E3A)"
-          />
-          <path
-            d={svgPaths.brFlagPath24}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.brFlagPath25}
-              fill="var(--fill-0, #309E3A)"
-          />
+          <path d={svgPaths.brFlagPath8} fill="var(--fill-0, #309E3A)" />
+          <path d={svgPaths.brFlagPath9} fill="var(--fill-0, #309E3A)" />
+          <path d={svgPaths.brFlagPath10} fill="var(--fill-0, #F7FFFF)" />
+          <path d={svgPaths.brFlagPath11} fill="var(--fill-0, #309E3A)" />
+          <path d={svgPaths.brFlagPath12} fill="var(--fill-0, white)" />
+          <path d={svgPaths.brFlagPath13} fill="var(--fill-0, #309E3A)" />
+          <path d={svgPaths.brFlagPath14} fill="var(--fill-0, white)" />
+          <path d={svgPaths.brFlagPath15} fill="var(--fill-0, #309E3A)" />
+          <path d={svgPaths.brFlagPath16} fill="var(--fill-0, white)" />
+          <path d={svgPaths.brFlagPath17} fill="var(--fill-0, #309E3A)" />
+          <path d={svgPaths.brFlagPath18} fill="var(--fill-0, white)" />
+          <path d={svgPaths.brFlagPath19} fill="var(--fill-0, #309E3A)" />
+          <path d={svgPaths.brFlagPath20} fill="var(--fill-0, white)" />
+          <path d={svgPaths.brFlagPath21} fill="var(--fill-0, #309E3A)" />
+          <path d={svgPaths.brFlagPath22} fill="var(--fill-0, white)" />
+          <path d={svgPaths.brFlagPath23} fill="var(--fill-0, #309E3A)" />
+          <path d={svgPaths.brFlagPath24} fill="var(--fill-0, white)" />
+          <path d={svgPaths.brFlagPath25} fill="var(--fill-0, #309E3A)" />
         </g>
         <defs>
           <clipPath id="clip0_br_goodwill">
@@ -10290,338 +10235,89 @@ function VeVenezuela() {
         viewBox="0 0 56 42"
       >
         <g clipPath="url(#clip0_ve_goodwill)" id="ve venezuela">
-          <path
-            d={svgPaths.veFlagPath1}
-              fill="var(--fill-0, #CF142B)"
-          />
-          <path
-            d={svgPaths.veFlagPath2}
-              fill="var(--fill-0, #00247D)"
-          />
-          <path
-            d={svgPaths.veFlagPath3}
-              fill="var(--fill-0, #FFCC00)"
-          />
-          <path
-            d={svgPaths.veFlagPath4}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath5}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath6}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath7}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath8}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath9}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath10}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath11}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath12}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath13}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath14}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath15}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath16}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath17}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath18}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath19}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath20}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath21}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath22}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath23}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath24}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath25}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath26}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath27}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath28}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath29}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath30}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath31}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath32}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath33}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath34}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath35}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath36}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath37}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath38}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath39}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath40}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath41}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath42}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath43}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath44}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath45}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath46}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath47}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath48}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath49}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath50}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath51}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath52}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath53}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath54}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath55}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath56}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath57}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath58}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath59}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath60}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath61}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath62}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath63}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath64}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath65}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath66}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath67}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath68}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath69}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath70}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath71}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath72}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath73}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath74}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath75}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath76}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath77}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath78}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath79}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath80}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath81}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath82}
-              fill="var(--fill-0, white)"
-          />
-          <path
-            d={svgPaths.veFlagPath83}
-              fill="var(--fill-0, white)"
-          />
+          <path d={svgPaths.veFlagPath1} fill="var(--fill-0, #CF142B)" />
+          <path d={svgPaths.veFlagPath2} fill="var(--fill-0, #00247D)" />
+          <path d={svgPaths.veFlagPath3} fill="var(--fill-0, #FFCC00)" />
+          <path d={svgPaths.veFlagPath4} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath5} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath6} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath7} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath8} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath9} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath10} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath11} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath12} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath13} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath14} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath15} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath16} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath17} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath18} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath19} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath20} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath21} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath22} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath23} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath24} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath25} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath26} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath27} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath28} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath29} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath30} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath31} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath32} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath33} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath34} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath35} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath36} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath37} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath38} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath39} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath40} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath41} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath42} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath43} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath44} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath45} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath46} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath47} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath48} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath49} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath50} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath51} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath52} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath53} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath54} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath55} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath56} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath57} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath58} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath59} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath60} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath61} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath62} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath63} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath64} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath65} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath66} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath67} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath68} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath69} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath70} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath71} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath72} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath73} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath74} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath75} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath76} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath77} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath78} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath79} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath80} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath81} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath82} fill="var(--fill-0, white)" />
+          <path d={svgPaths.veFlagPath83} fill="var(--fill-0, white)" />
         </g>
         <defs>
           <clipPath id="clip0_ve_goodwill">
@@ -10646,77 +10342,71 @@ function KrSouthKorea() {
         viewBox="0 0 56 42"
       >
         <g clipPath="url(#clip0_kr_goodwill)" id="kr south-korea">
-          <path
-            d={svgPaths.krFlagPath1}
-              fill="var(--fill-0, white)"
-          />
+          <path d={svgPaths.krFlagPath1} fill="var(--fill-0, white)" />
           <path
             d={svgPaths.krFlagPath2}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, white)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, white)"
           />
           <path
             d={svgPaths.krFlagPath3}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #000001)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #000001)"
           />
           <path
             d={svgPaths.krFlagPath4}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #000001)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #000001)"
           />
           <path
             d={svgPaths.krFlagPath5}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, black)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, black)"
           />
           <path
             d={svgPaths.krFlagPath6}
-              stroke="var(--stroke-0, white)"
-              strokeWidth="10"
+            stroke="var(--stroke-0, white)"
+            strokeWidth="10"
           />
           <path
             d={svgPaths.krFlagPath7}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #CD2E3A)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #CD2E3A)"
           />
           <path
             d={svgPaths.krFlagPath8}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #0047A0)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #0047A0)"
           />
-          <path
-            d={svgPaths.krFlagPath9}
-              fill="var(--fill-0, #CD2E3A)"
-          />
+          <path d={svgPaths.krFlagPath9} fill="var(--fill-0, #CD2E3A)" />
           <path
             d={svgPaths.krFlagPath10}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #000001)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #000001)"
           />
           <path
             d={svgPaths.krFlagPath11}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #000001)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #000001)"
           />
           <path
             d={svgPaths.krFlagPath12}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, black)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, black)"
           />
           <path
             d={svgPaths.krFlagPath13}
-              stroke="var(--stroke-0, white)"
-              strokeWidth="10"
+            stroke="var(--stroke-0, white)"
+            strokeWidth="10"
           />
         </g>
         <defs>
@@ -10744,27 +10434,27 @@ function JmJamaica() {
         <g clipPath="url(#clip0_jm_goodwill)" id="jm jamaica">
           <path
             d={svgPaths.jmFlagPath1}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #000001)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #000001)"
           />
           <path
             d={svgPaths.jmFlagPath2}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #009900)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #009900)"
           />
           <path
             d={svgPaths.jmFlagPath3}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #FFCC00)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #FFCC00)"
           />
           <path
             d={svgPaths.jmFlagPath4}
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="var(--fill-0, #FFCC00)"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill="var(--fill-0, #FFCC00)"
           />
         </g>
         <defs>
@@ -10891,7 +10581,7 @@ export default function SectionGoodwillStageArtwork({
   return (
     <div className="relative size-full" data-name="SectionGoodwillStageArtwork">
       <Map hideTitle={hideTitle} />
-      <div className="absolute bg-[#f9e4d2] h-[800px] left-0 top-0 w-[1280px]" />
+      <div className="absolute bg-[#f] h-[800px] left-0 top-0 w-[1280px]" />
       <Map1 hideTitle={hideTitle} bubbleFill={bubbleFill} />
       <Group14 />
       {!hideFilters ? <Filters /> : null}
