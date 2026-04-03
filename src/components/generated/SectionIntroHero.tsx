@@ -695,7 +695,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           <div className="hero-intro-panel-media" aria-hidden="true">
             <img src="/assets/history.jpg" alt="" />
             <video
-              src="/assets/history.mov"
+              src="/assets/history.mp4"
               autoPlay
               muted
               loop
@@ -715,7 +715,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           <div className="hero-intro-panel-media" aria-hidden="true">
             <img src="/assets/ambassador.jpg" alt="" />
             <video
-              src="/assets/ambassador.mov"
+              src="/assets/ambassador.mp4"
               autoPlay
               muted
               loop
@@ -737,7 +737,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           <div className="hero-intro-panel-media" aria-hidden="true">
             <img src="/assets/legacy.png" alt="" />
             <video
-              src="/assets/legacy.mov"
+              src="/assets/legacy.mp4"
               autoPlay
               muted
               loop
