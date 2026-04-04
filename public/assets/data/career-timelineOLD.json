@@ -851,6 +851,146 @@
       "event": "Records \"Louis Armstrong and His Friends\"",
       "categories": ["bandleader", "musician", "vocalist"],
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Louis_Armstrong,_by_Harry_Warnecke_and_Gus_Schoenbaechler,_1947.jpg"
+    },
+    {
+      "id": 96,
+      "year": 1932,
+      "dateText": "1932",
+      "event": "England",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 97,
+      "year": 1933,
+      "dateText": "1933-1934",
+      "event": "England, Denmark, Sweden, Netherlands, France, Paris, Switzerland",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 98,
+      "year": 1948,
+      "dateText": "1948",
+      "event": "France",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 99,
+      "year": 1949,
+      "dateText": "1949",
+      "event": "European tour",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 100,
+      "year": 1952,
+      "dateText": "1952",
+      "event": "European tour",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 101,
+      "year": 1953,
+      "dateText": "1953",
+      "event": "Japan",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 102,
+      "year": 1954,
+      "dateText": "1954",
+      "event": "Australia",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 103,
+      "year": 1955,
+      "dateText": "1955",
+      "event": "European tour",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 104,
+      "year": 1956,
+      "dateText": "1956",
+      "event": "Australia, England, Ghana",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 105,
+      "year": 1957,
+      "dateText": "1957",
+      "event": "Jamaica, South America",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 106,
+      "year": 1959,
+      "dateText": "1959",
+      "event": "European tour",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 107,
+      "year": 1960,
+      "dateText": "1960-1961",
+      "event": "African State Department tour",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 108,
+      "year": 1961,
+      "dateText": "1961",
+      "event": "European tour",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 109,
+      "year": 1962,
+      "dateText": "1962",
+      "event": "European tour",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 110,
+      "year": 1963,
+      "dateText": "1963",
+      "event": "Australia, New Zealand, Japan",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 111,
+      "year": 1964,
+      "dateText": "1964",
+      "event": "Australia, New Zealand, Japan",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 112,
+      "year": 1965,
+      "dateText": "1965",
+      "event": "\"Iron Curtain\" tour (Prague, East Berlin), European tour",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 113,
+      "year": 1967,
+      "dateText": "1967",
+      "event": "European tour",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 114,
+      "year": 1968,
+      "dateText": "1968",
+      "event": "England",
+      "categories": ["ambassador"]
+    },
+    {
+      "id": 115,
+      "year": 1970,
+      "dateText": "1970",
+      "event": "England",
+      "categories": ["ambassador"]
     }
   ]
 }
