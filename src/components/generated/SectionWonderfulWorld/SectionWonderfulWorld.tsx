@@ -43,6 +43,7 @@ export type SectionWonderfulWorldProps = {
   facts?: FactItem[];
   factsUrl?: string;
   maskSvgUrl?: string;
+  centerMediaUrl?: string;
   creditImageUrl?: string;
   title?: string;
   subtitle?: string;
@@ -64,6 +65,7 @@ const ZOOM_STEP = 0.2;
 const SILHOUETTE_SCALE = 0.85;
 const SVG_ASPECT_RATIO = 1562 / 1401;
 const DESKTOP_STAGE_SCALE = 1.08;
+const CENTER_MEDIA_SCALE = 1.2;
 const TOOLTIP_EDGE_THRESHOLD = 240;
 const TOOLTIP_EDGE_OFFSET = 14;
 const TOOLTIP_MAX_WIDTH = 420;
@@ -280,6 +282,7 @@ export function SectionWonderfulWorld({
   facts,
   factsUrl = "/assets/data/wonderfulworld.json",
   maskSvgUrl = "/assets/louis-silo.svg",
+  centerMediaUrl = "/assets/www.mp4",
   creditImageUrl = "/assets/photo-by-john-loengard.jpg",
   title = "What a Wonderful World",
   subtitle = "Artists' renditions of Louis Armstrong's iconic song.",
@@ -293,6 +296,7 @@ export function SectionWonderfulWorld({
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<Error | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [videoSoundEnabled, setVideoSoundEnabled] = useState(false);
   const [zoom, setZoomState] = useState(() =>
     clamp(initialZoom, ZOOM_MIN, ZOOM_MAX),
   );
@@ -310,6 +314,7 @@ export function SectionWonderfulWorld({
   const maskReadyRef = useRef(false);
   const stageOuterRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
+  const centerMediaRef = useRef<HTMLVideoElement | null>(null);
   const isMobile = useIsMobile();
   const [mobileStageScale, setMobileStageScale] = useState(1);
 
@@ -545,6 +550,38 @@ export function SectionWonderfulWorld({
     };
   }, [canvasHeight, canvasWidth]);
 
+  const centerMediaStyle = useMemo<CSSProperties>(() => {
+    const { drawWidth, drawHeight } = getSilhouetteBounds(
+      canvasWidth,
+      canvasHeight,
+    );
+
+    return {
+      width: `${drawWidth * CENTER_MEDIA_SCALE}px`,
+      height: `${drawHeight * CENTER_MEDIA_SCALE}px`,
+    };
+  }, [canvasHeight, canvasWidth]);
+
+  const centerMediaSrc = useMemo(
+    () => normalizeImagePath(centerMediaUrl),
+    [centerMediaUrl],
+  );
+
+  useEffect(() => {
+    const video = centerMediaRef.current;
+    if (!video) return;
+
+    video.muted = !videoSoundEnabled;
+
+    if (!videoSoundEnabled) {
+      return;
+    }
+
+    void video.play().catch(() => {
+      setVideoSoundEnabled(false);
+    });
+  }, [videoSoundEnabled]);
+
   const filteredFacts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
     if (!query) return placedFacts;
@@ -758,6 +795,72 @@ export function SectionWonderfulWorld({
             </div>
 
             <div className="slg__controls">
+              <button
+                type="button"
+                className="slg__sound-toggle"
+                onClick={() => setVideoSoundEnabled((current) => !current)}
+                aria-pressed={videoSoundEnabled}
+                aria-label={
+                  videoSoundEnabled
+                    ? "Mute center video"
+                    : "Unmute center video"
+                }
+                title={videoSoundEnabled ? "Sound on" : "Sound off"}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  {videoSoundEnabled ? (
+                    <>
+                      <path
+                        d="M5 9h4l5-4v14l-5-4H5z"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M17 9.5a4 4 0 0 1 0 5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M19.5 7a7.5 7.5 0 0 1 0 10"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <path
+                        d="M5 9h4l5-4v14l-5-4H5z"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M17 9l4 6"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M21 9l-4 6"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                    </>
+                  )}
+                </svg>
+                <span>{videoSoundEnabled ? "Sound on" : "Sound off"}</span>
+              </button>
+
               <label className="slg__search">
                 <span className="slg__search-icon" aria-hidden="true">
                   ⌕
@@ -795,11 +898,16 @@ export function SectionWonderfulWorld({
           <div className="slg__stage-shell" ref={stageOuterRef}>
             <div className="slg__stage-frame" style={stageFrameStyle}>
               <div className="slg__stage-scale" style={stageScaleStyle}>
-                <img
+                <video
+                  ref={centerMediaRef}
                   className="slg__silhouette"
-                  src={maskSvgUrl}
-                  style={silhouetteStyle}
-                  alt=""
+                  src={centerMediaSrc}
+                  style={centerMediaStyle}
+                  autoPlay
+                  muted={!videoSoundEnabled}
+                  loop
+                  playsInline
+                  preload="auto"
                   aria-hidden="true"
                 />
 
