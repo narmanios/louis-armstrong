@@ -812,7 +812,7 @@ export function SectionGoodwillAmbassador({
                 onClick={() => handleDecadeClick(decade)}
                 className="goodwill-filter-button"
                 style={{
-                  color: selectedDecade === decade ? "#000000" : "#ffffff",
+                  color: selectedDecade === decade ? "#eeb818" : "#ffffff",
                 }}
               >
                 {decade}

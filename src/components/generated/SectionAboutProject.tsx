@@ -103,7 +103,7 @@ export const SectionAboutProject: React.FC = () => {
             position: static;
             display: flex;
             flex-direction: column;
-            gap: 0px;
+            gap: 24px;
             margin-top: 0;
             width: auto;
             max-width: none;
@@ -112,6 +112,7 @@ export const SectionAboutProject: React.FC = () => {
           }
 
           .about-project-text-panel {
+            order: 1;
             flex: none;
             width: auto;
             max-width: none;
@@ -122,18 +123,19 @@ export const SectionAboutProject: React.FC = () => {
           }
 
           .about-project-copy {
-            margin: 32px;
-            width: 75%;
+            margin: 0;
+            width: 100%;
             max-width: none;
           }
 
           .about-project-figure {
+            order: 2;
             flex: none;
-            width: min(100%, 320px);
+            width: 100%;
             max-width: none;
             min-width: 0;
             height: auto;
-            margin: 32px;
+            margin: 0;
             overflow: visible;
           }
 

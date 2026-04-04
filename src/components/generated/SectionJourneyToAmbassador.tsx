@@ -112,7 +112,7 @@ export const SectionJourneyToAmbassador: React.FC = () => {
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">
-        Journey to Ambassador 1930-1948
+        Journey to Ambassador
       </h2>
 
       <div className="journey-entry-grid">
@@ -141,12 +141,14 @@ export const SectionJourneyToAmbassador: React.FC = () => {
           <div>
             <div className="interactive-card">
               <img
-                src="/assets/chicago.png"
-                alt="Chicago"
+                src="/assets/pennies.jpg"
+                alt="Pennies from Heaven"
                 className="journey-media-image"
               />
             </div>
-            <p className="journey-caption">Chicago</p>
+            <p className="journey-caption">
+              "Pennies from Heaven" with Bing Crosby
+            </p>
           </div>
           <div className="journey-text">
             <p className="journey-copy">

@@ -767,9 +767,7 @@ function TimelineSVG({
               {displayTip.event.dateText}
             </div>
             <div className="career-timeline-tooltip-text">
-              {displayTip.event.event.length > 90
-                ? `${displayTip.event.event.slice(0, 90)}…`
-                : displayTip.event.event}
+              {displayTip.event.event}
             </div>
             <div className="career-timeline-tooltip-tags">
               {displayTip.event.categories.map((category) => (

@@ -448,13 +448,13 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         /* Responsive hero styles */
         @media (max-width: 768px) {
           .hero-intro {
-            min-height: 760px;
+            min-height: 840px;
           }
 
           .hero-intro-panel-grid {
             width: 100%;
             inset: auto 0 0 0;
-            height: 160px;
+            height: 240px;
             grid-template-columns: repeat(3, minmax(0, 1fr));
           }
 
@@ -511,9 +511,21 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           }
 
           .hero-intro-nav {
-            right: 24px;
-            bottom: 180px;
+            left: 50%;
+            right: auto;
+            top: 300px;
+            bottom: auto;
+            width: auto;
             max-width: calc(100vw - 48px);
+            transform: translateX(-50%);
+            text-align: center;
+            display: flex;
+            justify-content: center;
+          }
+
+          .hero-intro-about-button {
+            width: auto;
+            height: auto;
           }
 
           .hero-intro-about-button .hero-intro-nav-link-label {
@@ -524,8 +536,8 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             translate: none;
             transform: none;
             display: block;
-            text-align: left;
-            white-space: nowrap;
+            text-align: center;
+            white-space: normal;
             font-size: 20px;
             line-height: 1.1;
           }
@@ -535,21 +547,19 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           .hero-intro-nav-link-label {
             position: absolute;
             left: 50%;
-            top: 50%;
+            top: 70%;
             bottom: auto;
-            transform: none;
-            font-size: 24px;
+            font-size: 32px;
             line-height: 1;
             letter-spacing: 0.02em;
             font-weight: 600;
             font-family: "Hanken Grotesk", Arial, sans-serif;
-            color: #000000;
+            // color: #000000;
             opacity: 1;
             max-width: none;
-            translate: -50% -50%;
             text-align: center;
             white-space: nowrap;
-            translate: -50% -50%;
+            transform-origin: left center;
             transform: rotate(-90deg);
           }
 
@@ -574,11 +584,11 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
         @media (max-width: 568px) {
           .hero-intro {
-            min-height: 700px;
+            min-height: 780px;
           }
 
           .hero-intro-panel-grid {
-            height: 132px;
+            height: 400px;
           }
 
           .hero-intro-shadow {
@@ -625,8 +635,19 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           }
 
           .hero-intro-nav {
-            right: 18px;
-            bottom: 150px;
+            left: 50%;
+            right: auto;
+            top: 258px;
+            bottom: auto;
+            width: auto;
+            max-width: calc(100vw - 36px);
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+          }
+
+          .hero-intro-about-button .hero-intro-nav-link-label {
+            font-size: 18px;
           }
 
           /* phone overlay becomes full-screen */

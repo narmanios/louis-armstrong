@@ -5,11 +5,13 @@ interface FileData {
   src: string;
   alt: string;
   category: string;
+  caption: string;
 }
 interface FBIFilesJsonItem {
   filename: string;
   link: string;
   date: string;
+  caption?: string;
 }
 
 const fbiFilesJsonUrl = "/assets/data/fbi-files.json";
@@ -47,6 +49,7 @@ export const SectionFBIFiles: React.FC = () => {
           src: `/assets/fbi-files/${item.filename}`,
           alt: item.filename,
           category: getCategoryFromYear(item.date),
+          caption: item.caption?.trim() ?? "",
         }));
 
         setFileItems(normalized);
@@ -99,6 +102,8 @@ export const SectionFBIFiles: React.FC = () => {
   const activeImage =
     fileItems[activeImageIndex] ??
     (selectedImageIndex !== null ? fileItems[selectedImageIndex] : null);
+  const activeCaption = activeImage?.caption.trim() ?? "";
+  const overlayCaptionText = activeCaption || " ";
   return (
     <section
       className="mcg-section mcg-fbi-section"
@@ -124,6 +129,27 @@ export const SectionFBIFiles: React.FC = () => {
 
         .mcg-fbi-section .mcg-page-title {
           color: #ffffff !important;
+        }
+
+        .mcg-fbi-overlay-scroll {
+          overflow-y: auto;
+          overflow-x: hidden;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255, 255, 255, 0.58) rgba(255, 255, 255, 0.12);
+        }
+
+        .mcg-fbi-overlay-scroll::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        .mcg-fbi-overlay-scroll::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.12);
+        }
+
+        .mcg-fbi-overlay-scroll::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.58);
+          border-radius: 999px;
+          border: 2px solid rgba(0, 0, 0, 0.25);
         }
       `}</style>
       <div
@@ -282,6 +308,7 @@ export const SectionFBIFiles: React.FC = () => {
         >
           {isMobile ? (
             <div
+              className="mcg-fbi-overlay-scroll"
               style={{
                 position: "relative",
                 width: "100vw",
@@ -292,18 +319,19 @@ export const SectionFBIFiles: React.FC = () => {
                 backgroundColor: "#000000",
                 borderRadius: 0,
                 boxShadow: "none",
-                overflow: "hidden",
+                overflowX: "hidden",
+                overflowY: "auto",
               }}
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setSelectedImageIndex(null)}
                 style={{
-                  position: isMobile ? "fixed" : "absolute",
+                  position: "fixed",
                   top: isMobile
-                    ? "calc(var(--mcg-mobile-nav-offset, 0px) + 12px)"
-                    : "24px",
-                  right: isMobile ? "12px" : "24px",
+                    ? "calc(var(--mcg-mobile-nav-offset, 0px) + 24px)"
+                    : "36px",
+                  right: isMobile ? "12px" : "20px",
                   background: "none",
                   border: "none",
                   cursor: "pointer",
@@ -334,11 +362,13 @@ export const SectionFBIFiles: React.FC = () => {
                   flex: isMobile ? "0 0 auto" : "1 1 auto",
                   minHeight: isMobile ? "0" : "100%",
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
                   padding: isMobile ? "56px 20px 20px" : "64px 40px",
                   boxSizing: "border-box",
                   backgroundColor: "#000000",
+                  gap: "18px",
                 }}
               >
                 <div
@@ -352,6 +382,7 @@ export const SectionFBIFiles: React.FC = () => {
                   }}
                   style={{
                     width: "100%",
+                    minHeight: isMobile ? "54vh" : "68vh",
                     display: "flex",
                     overflowX: "auto",
                     scrollSnapType: "x mandatory",
@@ -384,6 +415,21 @@ export const SectionFBIFiles: React.FC = () => {
                     </div>
                   ))}
                 </div>
+                <p
+                  style={{
+                    width: "100%",
+                    maxWidth: isMobile ? "100%" : "560px",
+                    margin: 0,
+                    minHeight: isMobile ? "38px" : "42px",
+                    color: "rgba(255,255,255,0.82)",
+                    fontSize: isMobile ? "13px" : "14px",
+                    lineHeight: isMobile ? "19px" : "21px",
+                    textAlign: "center",
+                    visibility: activeCaption ? "visible" : "hidden",
+                  }}
+                >
+                  {overlayCaptionText}
+                </p>
               </div>
               <div
                 style={{
@@ -402,7 +448,7 @@ export const SectionFBIFiles: React.FC = () => {
                 <p
                   style={{
                     color: "rgba(255,255,255,0.45)",
-                    margin: "0 0 12px 0",
+                    margin: 0,
                     fontSize: "12px",
                     fontWeight: 500,
                     letterSpacing: "0.1em",
@@ -411,32 +457,24 @@ export const SectionFBIFiles: React.FC = () => {
                 >
                   FBI Files
                 </p>
-                <p
-                  style={{
-                    color: "#FFFFFF",
-                    margin: 0,
-                    fontSize: "14px",
-                    lineHeight: "22px",
-                    fontWeight: 400,
-                  }}
-                >
-                  {activeImage.alt} ({activeImage.category})
-                </p>
               </div>
             </div>
           ) : (
             <div
+              className="mcg-fbi-overlay-scroll"
               style={{
                 position: "relative",
                 width: "min(62vw, 620px)",
                 minHeight: "min(74vh, 620px)",
+                maxHeight: "calc(100vh - 48px)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
                 padding: "24px 0 0",
                 boxSizing: "border-box",
-                transform: "translateX(-96px)",
+                overflowX: "hidden",
+                overflowY: "auto",
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -444,7 +482,7 @@ export const SectionFBIFiles: React.FC = () => {
                 onClick={() => setSelectedImageIndex(null)}
                 style={{
                   position: "fixed",
-                  top: "20px",
+                  top: "36px",
                   right: "20px",
                   background: "none",
                   border: "none",
@@ -476,11 +514,13 @@ export const SectionFBIFiles: React.FC = () => {
                   width: "100%",
                   flex: "1 1 auto",
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
                   minHeight: 0,
-                  padding: "8px 160px 0 0",
+                  padding: "8px 32px 0",
                   boxSizing: "border-box",
+                  gap: "18px",
                 }}
               >
                 <div
@@ -494,6 +534,7 @@ export const SectionFBIFiles: React.FC = () => {
                   }}
                   style={{
                     width: "100%",
+                    minHeight: "68vh",
                     display: "flex",
                     overflowX: "auto",
                     scrollSnapType: "x mandatory",
@@ -526,18 +567,22 @@ export const SectionFBIFiles: React.FC = () => {
                     </div>
                   ))}
                 </div>
+                <p
+                  style={{
+                    width: "100%",
+                    maxWidth: "460px",
+                    margin: 0,
+                    minHeight: "42px",
+                    color: "rgba(255,255,255,0.82)",
+                    fontSize: "14px",
+                    lineHeight: "21px",
+                    textAlign: "center",
+                    visibility: activeCaption ? "visible" : "hidden",
+                  }}
+                >
+                  {overlayCaptionText}
+                </p>
               </div>
-              <p
-                style={{
-                  color: "#FFFFFF",
-                  margin: "14px 0 0 0",
-                  fontSize: "16px",
-                  fontWeight: 500,
-                  textAlign: "center",
-                }}
-              >
-                {activeImage.alt} ({activeImage.category})
-              </p>
             </div>
           )}
         </div>
