@@ -159,11 +159,11 @@ const categoryOrder: Category[] = [
 ];
 
 const laneY: Record<Category, number> = {
-  film: 80,
-  bandleader: 185,
-  musician: 290,
-  vocalist: 395,
-  ambassador: 500,
+  film: 92,
+  bandleader: 222,
+  musician: 352,
+  vocalist: 482,
+  ambassador: 612,
 };
 const categoryColors: Record<Category, string> = {
   film: "#FF6B6B",
@@ -172,7 +172,7 @@ const categoryColors: Record<Category, string> = {
   vocalist: "#10B981",
   ambassador: "#8B5CF6",
 };
-const svgHeight = 620;
+const svgHeight = 740;
 const yearStart = 1923;
 const yearEnd = Math.max(1973, dataYearMax);
 const marginLeft = 40;
@@ -186,14 +186,14 @@ const decadeDash = "4 4";
 const connectorDash = "2 2";
 const featuredLabelLineHeight = 11;
 const featuredLabelConnectorLength = 28;
-const expandedClusterDotSpacing = 14;
+const expandedClusterDotSpacing = 10;
 const featuredLabelAboveOffset = 4;
 const featuredLabelBelowOffset = 3;
 const tooltipWidth = 248;
 const tooltipEstimatedHeight = 148;
 const tooltipGap = 18;
 const tooltipEdgePadding = 8;
-const yearAxisY = 530;
+const yearAxisY = 650;
 
 const featuredLabels: Record<number, FeaturedCfg> = {
   35: {
@@ -265,6 +265,23 @@ function getTimelineEventKey(
   event: Pick<ArmstrongEvent, "year" | "dateText" | "event">,
 ) {
   return `${event.year}|${event.dateText}|${event.event}`;
+}
+
+function withAlpha(hexColor: string, alpha: number) {
+  const normalized = hexColor.replace("#", "");
+  if (normalized.length !== 6) {
+    return hexColor;
+  }
+
+  const red = Number.parseInt(normalized.slice(0, 2), 16);
+  const green = Number.parseInt(normalized.slice(2, 4), 16);
+  const blue = Number.parseInt(normalized.slice(4, 6), 16);
+
+  if (Number.isNaN(red) || Number.isNaN(green) || Number.isNaN(blue)) {
+    return hexColor;
+  }
+
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }
 
 function isSameTimelineEvent(
@@ -812,6 +829,11 @@ function TimelineSVG({
                 const isGreyedForSelection =
                   selectionFocusActive && !isMetadataMatch;
                 const isDimmed = isGreyedForHover || isGreyedForSelection;
+                const useClusterTint =
+                  isGreyedForSelection &&
+                  isExpanded &&
+                  (!!selectedDot || !!pinnedDot) &&
+                  cluster.dots.length > 1;
                 const radius =
                   isHovered || isSelected || isPinned
                     ? dotRadius + activeDotRadiusOffset
@@ -836,12 +858,20 @@ function TimelineSVG({
                       top: centerY - radius,
                       width: diameter,
                       height: diameter,
-                      borderColor: isDimmed ? "#8f8a7d" : "#4B473F",
+                      borderColor: useClusterTint
+                        ? withAlpha(color, 0.44)
+                        : isDimmed
+                          ? "#8f8a7d"
+                          : "#4B473F",
                       borderWidth:
                         isHovered || isSelected || isPinned
                           ? activeBorderWidth
                           : defaultBorderWidth,
-                      backgroundColor: isDimmed ? "#bcb5a7" : color,
+                      backgroundColor: useClusterTint
+                        ? withAlpha(color, 0.2)
+                        : isDimmed
+                          ? "#bcb5a7"
+                          : color,
                       boxShadow:
                         isHovered || isSelected || isPinned
                           ? `0 0 0 1.5px ${color}20`
@@ -851,11 +881,13 @@ function TimelineSVG({
                           ? "scale(1.12)"
                           : "scale(1)",
                       opacity: isExpanded
-                        ? isDimmed
-                          ? hoverFocusActive
-                            ? 0.32
-                            : 0.4
-                          : 1
+                        ? useClusterTint
+                          ? 1
+                          : isDimmed
+                            ? hoverFocusActive
+                              ? 0.32
+                              : 0.4
+                            : 1
                         : 0,
                       pointerEvents: isExpanded ? "auto" : "none",
                       zIndex: isExpanded
