@@ -65,14 +65,23 @@ const ZOOM_MAX = 3;
 const ZOOM_STEP = 0.2;
 const SILHOUETTE_SCALE = 0.85;
 const SVG_ASPECT_RATIO = 1562 / 1401;
-const DESKTOP_STAGE_SCALE = 1.08;
-const CENTER_MEDIA_SCALE = 1.2;
+const DESKTOP_STAGE_SCALE = 1.14;
+const CENTER_MEDIA_SCALE = 1.32;
 const TOOLTIP_EDGE_THRESHOLD = 240;
 const TOOLTIP_EDGE_OFFSET = 14;
 const TOOLTIP_MAX_WIDTH = 420;
 const TOOLTIP_VIEWPORT_MARGIN = 20;
 const TOOLTIP_ESTIMATED_HEIGHT = 230;
 const TOOLTIP_VERTICAL_OFFSET = 16;
+const DECADE_OPTIONS = [
+  "1960s",
+  "1970s",
+  "1980s",
+  "1990s",
+  "2000s",
+  "2010s",
+  "2020s",
+] as const;
 
 type ServiceName = "youtube" | "spotify" | "apple";
 
@@ -145,6 +154,17 @@ function formatReleaseDate(value: string) {
     month: "long",
     day: "numeric",
   }).format(parsed);
+}
+
+function getReleaseYear(value: string) {
+  const matchedYear = value.match(/\b(19|20)\d{2}\b/);
+  return matchedYear ? Number(matchedYear[0]) : null;
+}
+
+function getFactDecadeLabel(fact: FactItem) {
+  const year = getReleaseYear(fact.firstReleaseDate);
+  if (year === null) return null;
+  return `${Math.floor(year / 10) * 10}s`;
 }
 
 function getSearchText(fact: FactItem) {
@@ -286,19 +306,19 @@ export function SectionWonderfulWorld({
   factsUrl = "/assets/data/wonderfulworld.json",
   maskSvgUrl = "/assets/www-silo.svg",
   centerMediaUrl = "/assets/www.mp4",
-  creditImageUrl = "/assets/photo-by-john-loengard.jpg",
   title = "What a Wonderful World",
   subtitle = "Artists' renditions of Louis Armstrong's iconic song.",
   className,
   height = "100%",
   initialZoom = 1,
-  canvasWidth = 1000,
-  canvasHeight = 500,
+  canvasWidth = 1120,
+  canvasHeight = 620,
   searchPlaceholder = "Search artists, release dates...",
 }: SectionWonderfulWorldProps) {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<Error | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDecade, setSelectedDecade] = useState<string>("all");
   const [videoSoundEnabled, setVideoSoundEnabled] = useState(false);
   const [zoom, setZoomState] = useState(() =>
     clamp(initialZoom, ZOOM_MIN, ZOOM_MAX),
@@ -320,7 +340,7 @@ export function SectionWonderfulWorld({
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const centerMediaRef = useRef<HTMLVideoElement | null>(null);
   const isMobile = useIsMobile();
-  const [mobileStageScale, setMobileStageScale] = useState(1);
+  const [stageScale, setStageScale] = useState(1);
 
   const setZoom = (next: number) =>
     setZoomState(clamp(next, ZOOM_MIN, ZOOM_MAX));
@@ -377,7 +397,10 @@ export function SectionWonderfulWorld({
       ? stageRect.bottom - TOOLTIP_VIEWPORT_MARGIN - TOOLTIP_ESTIMATED_HEIGHT
       : viewportBottomBound;
     const minTop = Math.max(viewportTopBound, stageTopBound);
-    const maxTop = Math.max(minTop, Math.min(viewportBottomBound, stageBottomBound));
+    const maxTop = Math.max(
+      minTop,
+      Math.min(viewportBottomBound, stageBottomBound),
+    );
     const preferredBelowTop = rect.bottom + TOOLTIP_VERTICAL_OFFSET;
     const preferredAboveTop =
       rect.top - TOOLTIP_VERTICAL_OFFSET - TOOLTIP_ESTIMATED_HEIGHT;
@@ -395,7 +418,7 @@ export function SectionWonderfulWorld({
       y: isMobile ? window.innerHeight - 24 : desktopTop,
       align,
       verticalAlign:
-        isMobile || hasRoomAbove && !hasRoomBelow ? "above" : "below",
+        isMobile || (hasRoomAbove && !hasRoomBelow) ? "above" : "below",
       fact,
     });
   };
@@ -537,35 +560,21 @@ export function SectionWonderfulWorld({
   );
 
   const stageFrameStyle = useMemo<CSSProperties>(
-    () =>
-      isMobile
-        ? {
-            width: `${canvasWidth * mobileStageScale}px`,
-            height: `${canvasHeight * mobileStageScale}px`,
-          }
-        : {
-            width: `${canvasWidth * DESKTOP_STAGE_SCALE}px`,
-            height: `${canvasHeight * DESKTOP_STAGE_SCALE}px`,
-          },
-    [canvasHeight, canvasWidth, isMobile, mobileStageScale],
+    () => ({
+      width: `${canvasWidth * stageScale}px`,
+      height: `${canvasHeight * stageScale}px`,
+    }),
+    [canvasHeight, canvasWidth, stageScale],
   );
 
   const stageScaleStyle = useMemo<CSSProperties>(
-    () =>
-      isMobile
-        ? {
-            width: `${canvasWidth}px`,
-            height: `${canvasHeight}px`,
-            transform: `scale(${mobileStageScale})`,
-            transformOrigin: "top left",
-          }
-        : {
-            width: `${canvasWidth}px`,
-            height: `${canvasHeight}px`,
-            transform: `scale(${DESKTOP_STAGE_SCALE})`,
-            transformOrigin: "top left",
-          },
-    [canvasHeight, canvasWidth, isMobile, mobileStageScale],
+    () => ({
+      width: `${canvasWidth}px`,
+      height: `${canvasHeight}px`,
+      transform: `scale(${stageScale})`,
+      transformOrigin: "top left",
+    }),
+    [canvasHeight, canvasWidth, stageScale],
   );
 
   const silhouetteStyle = useMemo<CSSProperties>(() => {
@@ -614,9 +623,26 @@ export function SectionWonderfulWorld({
 
   const filteredFacts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
-    if (!query) return placedFacts;
-    return placedFacts.filter((fact) => getSearchText(fact).includes(query));
-  }, [placedFacts, searchTerm]);
+    return placedFacts.filter((fact) => {
+      const matchesSearch = !query || getSearchText(fact).includes(query);
+      const matchesDecade =
+        selectedDecade === "all" || getFactDecadeLabel(fact) === selectedDecade;
+
+      return matchesSearch && matchesDecade;
+    });
+  }, [placedFacts, searchTerm, selectedDecade]);
+
+  useEffect(() => {
+    setSelectedBubbleId(null);
+    setTooltip({
+      visible: false,
+      x: -9999,
+      y: -9999,
+      align: "center",
+      verticalAlign: "below",
+      fact: null,
+    });
+  }, [searchTerm, selectedDecade]);
 
   const factStyle = (fact: PlacedFact): CSSProperties => ({
     left: `${fact.x - fact.r}px`,
@@ -776,15 +802,12 @@ export function SectionWonderfulWorld({
 
   useEffect(() => {
     const updateScale = () => {
-      if (!isMobile) {
-        setMobileStageScale(1);
-        return;
-      }
-
       const outerWidth =
         stageOuterRef.current?.clientWidth ?? window.innerWidth;
-      const availableWidth = Math.max(outerWidth - 40, 280);
-      setMobileStageScale(Math.min(availableWidth / canvasWidth, 1));
+      const horizontalPadding = isMobile ? 40 : 64;
+      const availableWidth = Math.max(outerWidth - horizontalPadding, 280);
+      const maxScale = isMobile ? 1 : DESKTOP_STAGE_SCALE;
+      setStageScale(Math.min(availableWidth / canvasWidth, maxScale));
     };
 
     updateScale();
@@ -891,6 +914,21 @@ export function SectionWonderfulWorld({
                 <span>{videoSoundEnabled ? "Sound on" : "Sound off"}</span>
               </button>
 
+              <label className="slg__decade-filter">
+                <select
+                  value={selectedDecade}
+                  onChange={(event) => setSelectedDecade(event.target.value)}
+                  aria-label="Filter by decade"
+                >
+                  <option value="all">All decades</option>
+                  {DECADE_OPTIONS.map((decade) => (
+                    <option key={decade} value={decade}>
+                      {decade}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
               <label className="slg__search">
                 <span className="slg__search-icon" aria-hidden="true">
                   ⌕
@@ -971,19 +1009,6 @@ export function SectionWonderfulWorld({
             </div>
           ) : null}
         </main>
-
-        <div className="slg__photo-credit" aria-hidden="true">
-          <img
-            src={creditImageUrl}
-            alt="Louis Armstrong silhouette"
-            className="slg__credit-photo"
-          />
-          <p className="slg__credit-text">
-            Atlantic City, N.J., 1965.
-            <br />
-            Photo John Loengard/Getty
-          </p>
-        </div>
       </div>
     </section>
   );

@@ -79,14 +79,23 @@
   gap: 12px;
 }
 
+.slg__sound-toggle,
+.slg__decade-filter select,
+.slg__search input {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--slg-text);
+}
+
 .slg__sound-toggle {
   appearance: none;
   border: 1px solid var(--slg-border);
   background: var(--slg-glass);
-  color: var(--slg-text);
   border-radius: 8px;
   height: 32px;
-  padding: 0 10px;
+  padding: 0 14px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -104,7 +113,7 @@
 }
 
 .slg__sound-toggle[aria-pressed="true"] {
-  color: var(--slg-amber);
+  color: var(--slg-text);
   border-color: rgba(245, 158, 11, 0.45);
 }
 
@@ -116,9 +125,51 @@
 }
 
 .slg__sound-toggle span {
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1;
+  font: inherit;
+}
+
+.slg__decade-filter {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.slg__decade-filter select {
+  appearance: none;
+  width: 156px;
+  height: 32px;
+  padding: 4px 34px 4px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--slg-border);
+  background:
+    linear-gradient(45deg, transparent 50%, rgba(17, 17, 17, 0.58) 50%)
+      calc(100% - 15px) calc(50% - 2px) / 6px 6px no-repeat,
+    linear-gradient(135deg, rgba(17, 17, 17, 0.58) 50%, transparent 50%)
+      calc(100% - 10px) calc(50% - 2px) / 6px 6px no-repeat,
+    var(--slg-glass);
+  text-align: left;
+  outline: none;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.slg__decade-filter select:hover {
+  background:
+    linear-gradient(45deg, transparent 50%, rgba(17, 17, 17, 0.58) 50%)
+      calc(100% - 15px) calc(50% - 2px) / 6px 6px no-repeat,
+    linear-gradient(135deg, rgba(17, 17, 17, 0.58) 50%, transparent 50%)
+      calc(100% - 10px) calc(50% - 2px) / 6px 6px no-repeat,
+    var(--slg-glass-2);
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.slg__decade-filter select:focus {
+  border-color: rgba(245, 158, 11, 0.7);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
 }
 
 .slg__search {
@@ -142,11 +193,11 @@
 
 .slg__search input {
   width: 260px;
+  height: 32px;
   padding: 4px 12px 4px 34px;
   border-radius: 8px;
   border: 1px solid var(--slg-border);
   background: var(--slg-glass);
-  color: var(--slg-text);
   outline: none;
   backdrop-filter: blur(10px);
   transition:
@@ -165,7 +216,7 @@
 
 .slg__search input:hover {
   background: var(--slg-glass-2);
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(245, 158, 11, 0.35);
 }
 
 .slg__zoom-controls {
@@ -481,6 +532,8 @@
   }
 
   .slg__brand,
+  .slg__sound-toggle,
+  .slg__decade-filter,
   .slg__search,
   .slg__zoom-controls {
     width: 100%;
@@ -500,6 +553,12 @@
   .slg__search input {
     width: 100%;
     min-width: 0;
+  }
+
+  .slg__sound-toggle,
+  .slg__decade-filter select {
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .slg__zoom-controls {
@@ -522,13 +581,13 @@
   }
 
   .slg__stage-scale {
-    width: 1000px;
-    height: 560px;
+    width: 1120px;
+    height: 620px;
   }
 
   .slg__viz {
-    width: 1000px;
-    height: 560px;
+    width: 1120px;
+    height: 620px;
   }
 
   .slg__tooltip {
