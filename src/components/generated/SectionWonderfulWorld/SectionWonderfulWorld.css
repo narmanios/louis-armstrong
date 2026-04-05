@@ -230,7 +230,7 @@
 
 .slg__silhouette {
   position: absolute;
-  left: 50%;
+  left: 55%;
   top: calc(50% - 12px);
   transform: translate(-50%, -50%);
   object-fit: contain;

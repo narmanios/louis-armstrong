@@ -281,7 +281,7 @@ async function loadFactsJson(factsUrl: string): Promise<FactItem[]> {
 export function SectionWonderfulWorld({
   facts,
   factsUrl = "/assets/data/wonderfulworld.json",
-  maskSvgUrl = "/assets/louis-silo.svg",
+  maskSvgUrl = "/assets/www-silo.svg",
   centerMediaUrl = "/assets/www.mp4",
   creditImageUrl = "/assets/photo-by-john-loengard.jpg",
   title = "What a Wonderful World",
