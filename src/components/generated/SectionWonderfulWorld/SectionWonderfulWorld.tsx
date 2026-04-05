@@ -36,6 +36,7 @@ type TooltipState = {
   x: number;
   y: number;
   align: "center" | "left" | "right";
+  verticalAlign: "above" | "below";
   fact: PlacedFact | null;
 };
 
@@ -70,6 +71,8 @@ const TOOLTIP_EDGE_THRESHOLD = 240;
 const TOOLTIP_EDGE_OFFSET = 14;
 const TOOLTIP_MAX_WIDTH = 420;
 const TOOLTIP_VIEWPORT_MARGIN = 20;
+const TOOLTIP_ESTIMATED_HEIGHT = 230;
+const TOOLTIP_VERTICAL_OFFSET = 16;
 
 type ServiceName = "youtube" | "spotify" | "apple";
 
@@ -307,6 +310,7 @@ export function SectionWonderfulWorld({
     x: -9999,
     y: -9999,
     align: "center",
+    verticalAlign: "below",
     fact: null,
   });
 
@@ -328,6 +332,7 @@ export function SectionWonderfulWorld({
       x: -9999,
       y: -9999,
       align: "center",
+      verticalAlign: "below",
       fact: null,
     });
   };
@@ -337,6 +342,7 @@ export function SectionWonderfulWorld({
     fact: PlacedFact,
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
+    const stageRect = stageOuterRef.current?.getBoundingClientRect();
     const tooltipWidth = Math.min(
       TOOLTIP_MAX_WIDTH,
       window.innerWidth - TOOLTIP_VIEWPORT_MARGIN * 2,
@@ -361,11 +367,35 @@ export function SectionWonderfulWorld({
       window.innerWidth - tooltipWidth - TOOLTIP_VIEWPORT_MARGIN,
     );
 
+    const viewportTopBound = TOOLTIP_VIEWPORT_MARGIN;
+    const viewportBottomBound =
+      window.innerHeight - TOOLTIP_VIEWPORT_MARGIN - TOOLTIP_ESTIMATED_HEIGHT;
+    const stageTopBound = stageRect
+      ? stageRect.top + TOOLTIP_VIEWPORT_MARGIN
+      : viewportTopBound;
+    const stageBottomBound = stageRect
+      ? stageRect.bottom - TOOLTIP_VIEWPORT_MARGIN - TOOLTIP_ESTIMATED_HEIGHT
+      : viewportBottomBound;
+    const minTop = Math.max(viewportTopBound, stageTopBound);
+    const maxTop = Math.max(minTop, Math.min(viewportBottomBound, stageBottomBound));
+    const preferredBelowTop = rect.bottom + TOOLTIP_VERTICAL_OFFSET;
+    const preferredAboveTop =
+      rect.top - TOOLTIP_VERTICAL_OFFSET - TOOLTIP_ESTIMATED_HEIGHT;
+    const hasRoomBelow = preferredBelowTop <= maxTop;
+    const hasRoomAbove = preferredAboveTop >= minTop;
+    const desktopTop = hasRoomBelow
+      ? preferredBelowTop
+      : hasRoomAbove
+        ? preferredAboveTop
+        : clamp(preferredBelowTop, minTop, maxTop);
+
     setTooltip({
       visible: true,
       x: clampedLeft,
-      y: isMobile ? window.innerHeight - 24 : rect.top - 16,
+      y: isMobile ? window.innerHeight - 24 : desktopTop,
       align,
+      verticalAlign:
+        isMobile || hasRoomAbove && !hasRoomBelow ? "above" : "below",
       fact,
     });
   };
@@ -385,7 +415,7 @@ export function SectionWonderfulWorld({
 
   const tooltipStyle = useMemo<CSSProperties>(
     () => ({
-      transform: `translate(${Math.round(tooltip.x)}px, ${Math.round(tooltip.y)}px) translate(0, -100%)`,
+      transform: `translate(${Math.round(tooltip.x)}px, ${Math.round(tooltip.y)}px)`,
     }),
     [tooltip.x, tooltip.y],
   );
