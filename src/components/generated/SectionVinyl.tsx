@@ -180,7 +180,7 @@ export function VinylRecordExplorer({
   soundtracks: soundtrackProps,
   soundtracksUrl = DEFAULT_SOUNDTRACKS_URL,
   title = "Louis Armstrong Soundtracks",
-  subtitle = "A decade-by-decade look at how Louis Armstrong’s music kept finding new life on screen, introducing his sound to new audiences through film and television across generations.",
+  subtitle = "A decade by decade look at how Louis Armstrong’s music kept finding new life on screen, introducing his sound to new audiences through film and television across generations.",
   centerImageUrl = DEFAULT_CENTER_IMAGE,
   className,
   style,
