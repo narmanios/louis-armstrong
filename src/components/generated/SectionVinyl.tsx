@@ -15,8 +15,8 @@ export interface VinylSoundtrack {
   decade: string;
   title: string;
   year: number;
-  titleType: string;
-  creditLine: string;
+  media: string;
+  song: string;
   localImagePath: string;
   imageUrl: string;
   metadata: Record<string, SoundtrackMetadataValue>;
@@ -98,8 +98,8 @@ function normalizeSoundtrack(item: unknown, index: number): VinylSoundtrack {
   const decade = readString(record.id).trim() || "Unknown";
   const title = readString(record.title).trim() || "Untitled";
   const year = readNumber(record.year);
-  const titleType = readString(record.titleType).trim();
-  const creditLine = readString(record.creditLine).trim();
+  const media = readString(record.media).trim();
+  const song = readString(record.song).trim();
   const localImagePath = readString(record.local_image_path).trim();
   const imageUrl = normalizeImagePath(localImagePath) || DEFAULT_CENTER_IMAGE;
 
@@ -108,16 +108,16 @@ function normalizeSoundtrack(item: unknown, index: number): VinylSoundtrack {
     decade,
     title,
     year,
-    titleType,
-    creditLine,
+    media,
+    song,
     localImagePath,
     imageUrl,
     metadata: {
       id: decade,
       title,
       year,
-      titleType,
-      creditLine,
+      media,
+      song,
       local_image_path: localImagePath,
     },
   };
@@ -180,7 +180,7 @@ export function VinylRecordExplorer({
   soundtracks: soundtrackProps,
   soundtracksUrl = DEFAULT_SOUNDTRACKS_URL,
   title = "Louis Armstrong Soundtracks",
-  subtitle = "Film and television soundtrack appearances grouped by decade.",
+  subtitle = "A decade-by-decade look at how Louis Armstrong’s music kept finding new life on screen, introducing his sound to new audiences through film and television across generations.",
   centerImageUrl = DEFAULT_CENTER_IMAGE,
   className,
   style,
@@ -196,8 +196,7 @@ export function VinylRecordExplorer({
   artistLabel,
 }: VinylRecordExplorerProps) {
   const resolvedDecadeLabel = decadeLabel ?? songLabel ?? "Decade";
-  const resolvedSoundtrackLabel =
-    soundtrackLabel ?? artistLabel ?? "Soundtrack";
+  const resolvedSoundtrackLabel = soundtrackLabel ?? artistLabel ?? "Media";
 
   const [soundtracks, setSoundtracks] = useState<VinylSoundtrack[]>(
     soundtrackProps ?? [],
@@ -426,7 +425,7 @@ export function VinylRecordExplorer({
   const tooltipMetadataEntries = useMemo(() => {
     if (!hoveredSoundtrack) return [];
     return Object.entries(hoveredSoundtrack.metadata).filter(
-      ([key]) => key !== "local_image_path",
+      ([key]) => key !== "local_image_path" && key !== "id" && key !== "title",
     );
   }, [hoveredSoundtrack]);
 
@@ -602,7 +601,7 @@ export function VinylRecordExplorer({
                     fill="none"
                     stroke={
                       activeDecadeId === ring.decade.id
-                        ? "#f9e4d2"
+                        ? "#ffdd1d"
                         : "url(#vre-ring-gradient)"
                     }
                     strokeWidth={activeDecadeId === ring.decade.id ? 2.5 : 1.5}
@@ -663,7 +662,7 @@ export function VinylRecordExplorer({
                                 rx="4"
                                 fill="none"
                                 stroke={hovered ? "#EF4444" : "#DC2626"}
-                                strokeWidth="3"
+                                strokeWidth="4"
                               />
 
                               <image
@@ -707,9 +706,6 @@ export function VinylRecordExplorer({
                 />
               </div>
               <div className="vre__tooltip-body">
-                <p className="vre__tooltip-kicker">
-                  {activeDecade?.label ?? hoveredSoundtrack.decade} soundtrack
-                </p>
                 <div className="vre__tooltip-title-row">
                   <h2>{hoveredSoundtrack.title}</h2>
                   <span>{hoveredSoundtrack.year}</span>

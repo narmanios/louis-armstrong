@@ -30,7 +30,6 @@
 
 .vre__left {
   display: flex;
-  flex-direction: column;
   gap: 16px;
   min-width: 0;
   padding-top: 4px;
@@ -58,19 +57,19 @@
 }
 
 .vre__subtitle {
-  max-width: 260px;
-  margin: 10px 0 0 0;
+  max-width: 600px;
+  margin: 14px 0 0 0;
   color: rgba(255, 255, 255, 0.62);
-  font-size: 12px;
+  font-size: 20px;
   line-height: 1.35;
   font-weight: 400;
 }
 
-.vre__empty-hint {
+/* .vre__empty-hint {
   margin: 0;
   color: rgba(255, 255, 255, 0.35);
   font-style: italic;
-}
+} */
 
 .vre__meta-list {
   display: grid;
@@ -109,7 +108,7 @@
   overflow: visible;
 }
 
-.vre__status-overlay {
+/* .vre__status-overlay {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -120,7 +119,7 @@
   font-style: italic;
   line-height: 1.45;
   pointer-events: none;
-}
+} */
 
 .vre__panel {
   grid-column: 2;
@@ -146,17 +145,18 @@
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  border: 2px solid #f9e4d2;
+  border: 2px solid #ffdd1d;
 }
 
 .vre__dot--red {
   border-color: #dc2626;
+  border-radius: 0px;
 }
 
-.vre__song-section {
+/* .vre__song-section {
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding-top: 10px;
-}
+} */
 
 .vre__song-section h3 {
   margin: 0 0 8px 0;
@@ -191,14 +191,13 @@
     color 150ms ease;
 }
 
-.vre__song-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
+/* .vre__song-btn:hover {
+  background: #ffdd1d;
   color: #fff;
-}
+} */
 
 .vre__song-btn.is-active {
-  background: #f9e4d2;
-  opacity: 0.7;
+  background: #ffdd1d;
   color: #000000;
 }
 
@@ -234,7 +233,7 @@
 .vre__tooltip-image-wrap {
   width: 96px;
   height: 128px;
-  border-radius: 0;
+  border-radius: 4px;
   overflow: hidden;
   border: 3px solid #dc2626;
   flex: 0 0 auto;
