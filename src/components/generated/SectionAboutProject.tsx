@@ -15,8 +15,10 @@ export const SectionAboutProject: React.FC = () => {
           overflow: hidden;
         }
 
-        .about-project-section .mcg-page-title {
+        .about-project-section .about-project-title.mcg-page-title {
           left: 56px !important;
+          color: #000000 !important;
+          -webkit-text-fill-color: #000000 !important;
         }
 
         .about-project-layout {
@@ -91,7 +93,7 @@ export const SectionAboutProject: React.FC = () => {
             box-sizing: border-box;
           }
 
-          .about-project-section .mcg-page-title {
+          .about-project-section .about-project-title.mcg-page-title {
             left: auto !important;
             position: static !important;
             display: block !important;
@@ -156,28 +158,41 @@ export const SectionAboutProject: React.FC = () => {
         }
       `}</style>
 
-      <h2 className="mcg-section-title mcg-page-title">About this Project</h2>
+      <h2 className="about-project-title mcg-section-title mcg-page-title mcg-page-title--light">
+        About this Project
+      </h2>
 
       <div className="about-project-layout">
         <div className="about-project-text-panel">
           <p className="about-project-copy">
-            This project, Louis Armstrong: A Musical Ambassador, examines how
-            Armstrong’s career illuminates the intersections of music, race,
-            politics, and U.S. cultural diplomacy in the mid-twentieth century.
-            By tracing his international tours, the circulation and
-            reinterpretation of his songs, and the political contexts
-            surrounding his performances, the project shows how Armstrong became
-            more than a jazz icon: he emerged as a powerful, if sometimes
-            conflicted, symbol of American ambassadorship. At the same time, it
-            asks how that role was shaped not only by official diplomacy, but
-            also by the afterlife of his music, which continued to carry ideas
-            of goodwill, freedom, and connection across borders long after his
-            travels ended.
+            This project, Louis Armstrong: The Story of Louis Armstrong in Data
+            and Song, examines how Armstrong’s career illuminates the
+            intersections of music, race, politics, and U.S. cultural diplomacy
+            in the mid-twentieth century till the present. By tracing his
+            international tours, the circulation and reinterpretation of his
+            songs, and the political contexts surrounding his performances, the
+            project shows how Armstrong became more than a jazz icon: he emerged
+            as a powerful, if sometimes conflicted, symbol of American
+            ambassadorship. At the same time, it asks how that role was shaped
+            not only by official diplomacy, but also by the afterlife of his
+            music, which continued to carry ideas of goodwill, freedom, and
+            connection across borders long after his travels ended.
+            <br />
+            <br />
+            Thank you to SecondHandSongs for providing data on cover versions of
+            Armstrong's songs.<br></br>
+            <a href="https://secondhandsongs.com/" target="_blank">
+              https://secondhandsongs.com/
+            </a>
             <br />
             <br />
             Thank you to Ricky Riccardi, Director of Research Collections at the
             Louis Armstrong House Museum. Archival images courtesy of the Louis
             Armstrong House Museum.
+            <br></br>
+            <a href="https://www.louisarmstronghouse.org/" target="_blank">
+              https://www.louisarmstronghouse.org/
+            </a>
           </p>
         </div>
 
