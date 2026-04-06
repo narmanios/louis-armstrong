@@ -688,6 +688,16 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           >
             The Story of Louis Armstrong in Data and Song{" "}
           </p>
+
+          <p
+            className="hero-intro-kicker-date"
+            style={{
+              fontSize: "clamp(14px, 2.2vw, 38px)",
+              margin: 0,
+            }}
+          >
+            1901-1971{" "}
+          </p>
         </div>
       </div>
 
