@@ -65,8 +65,8 @@ const ZOOM_MAX = 3;
 const ZOOM_STEP = 0.2;
 const SILHOUETTE_SCALE = 0.85;
 const SVG_ASPECT_RATIO = 1562 / 1401;
-const DESKTOP_STAGE_SCALE = 1.14;
-const CENTER_MEDIA_SCALE = 1.32;
+const DESKTOP_STAGE_SCALE = 1.08;
+const CENTER_MEDIA_SCALE = 1.24;
 const TOOLTIP_EDGE_THRESHOLD = 240;
 const TOOLTIP_EDGE_OFFSET = 14;
 const TOOLTIP_MAX_WIDTH = 420;
@@ -311,8 +311,8 @@ export function SectionWonderfulWorld({
   className,
   height = "100%",
   initialZoom = 1,
-  canvasWidth = 1120,
-  canvasHeight = 620,
+  canvasWidth = 1060,
+  canvasHeight = 590,
   searchPlaceholder = "Search artists, release dates...",
 }: SectionWonderfulWorldProps) {
   const [loading, setLoading] = useState(true);

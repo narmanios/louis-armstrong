@@ -1,18 +1,9 @@
 import React from "react";
 import { TimelineBar } from "./TimelineBar";
+import { mobileTimelineHeight, timelineHeight } from "./TimelineShared";
 
-const trackList = [
-  "Cultural Exchange",
-  "Remember Who You Are",
-  "My One Bad Habit",
-  "Summer Song",
-  "King for a Day",
-  "The Real Ambassador",
-  "In The Lurch",
-  "One Moment Worth Years",
-  "They Say I Look Like Ambassador",
-  "Since Love Had Its Way",
-];
+const realAmbassadorsParagraph =
+  "The Real Ambassadors is a jazz musical by Dave Brubeck and Iola Brubeck, written for Louis Armstrong, that satirizes America’s use of jazz musicians as cultural representatives during the Cold War. The lyrics describe how Armstrong and other Black performers were sent abroad to symbolize freedom and democracy while facing racism and segregation at home.";
 
 export const SectionRealAmbassadors: React.FC<{
   onTimelineJump?: (idx: number) => void;
@@ -24,7 +15,8 @@ export const SectionRealAmbassadors: React.FC<{
         .real-ambassadors-section {
           background: transparent;
           position: relative;
-          overflow: hidden;
+          overflow: visible;
+          height: auto;
           min-height: 100dvh;
           padding: 0 56px 60px;
           box-sizing: border-box;
@@ -36,61 +28,49 @@ export const SectionRealAmbassadors: React.FC<{
 
         .real-ambassadors-layout {
           position: static;
-          display: flex;
-          gap: 56px;
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 32px 40px;
           align-items: flex-start;
           margin-top: 24px;
         }
 
         .real-ambassadors-cover {
-          width: min(470px, 32vw);
-          // aspect-ratio: 470 / 360;
+          width: 100%;
           height: auto;
           object-fit: contain;
           display: block;
         }
 
-        .real-ambassadors-track-list {
-          margin: 0;
-          color: #111827;
+        .real-ambassadors-copy {
+          width: 100%;
           font-family: "Hanken Grotesk", Arial, sans-serif;
-          font-size: 12px;
-        }
-
-
-
-
-        .real-ambassadors-lyrics {
-          font-family: "Hanken Grotesk", Arial, sans-serif;
-          font-size: 12px;
+          font-size: 20px;
+          line-height: 40px;
           color: #000000;
         }
 
-        .real-ambassadors-track-list {
-          width: 144px;
-          line-height: 18px;
+        .real-ambassadors-spacer {
+          width: 100%;
+          min-height: 1px;
         }
 
-        .real-ambassadors-lyrics {
-          width: 277px;
-          height: 514px;
-          overflow-y: auto;
-          line-height: 20px;
-          padding-right: 12px;
-        }
-
-        .real-ambassadors-lyrics p {
+        .real-ambassadors-copy p {
           margin: 0;
-        }
-
-        .real-ambassadors-lyrics p + p {
-          margin-top: 20px;
         }
 
         .real-ambassadors-timeline {
           position: static;
           z-index: 20;
-          margin-top: 24px;
+          margin-top: 12px;
+          box-sizing: border-box;
+        }
+
+        .real-ambassadors-timeline-frame {
+          position: relative;
+          width: calc(100% - 96px);
+          max-width: 1180px;
+          margin: 0 auto;
         }
 
         @media (max-width: 768px) {
@@ -113,6 +93,7 @@ export const SectionRealAmbassadors: React.FC<{
             position: static;
             left: auto;
             top: auto;
+            display: flex;
             flex-direction: column;
             gap: 20px;
             margin-top: 0;
@@ -124,16 +105,12 @@ export const SectionRealAmbassadors: React.FC<{
             height: auto;
           }
 
-          .real-ambassadors-track-list,
-          .real-ambassadors-lyrics {
+          .real-ambassadors-copy {
             width: 100%;
           }
 
-          .real-ambassadors-lyrics {
-            height: auto;
-            max-height: none;
-            overflow: visible;
-            padding-right: 0;
+          .real-ambassadors-spacer {
+            display: none;
           }
 
           .real-ambassadors-timeline {
@@ -141,14 +118,12 @@ export const SectionRealAmbassadors: React.FC<{
             left: auto;
             right: auto;
             bottom: auto;
-            margin-top: 24px;
+            margin-top: 16px;
           }
 
-          .real-ambassadors-timeline .tl-mobile-root.is-section {
-            position: relative;
-            left: auto;
-            right: auto;
-            bottom: auto;
+          .real-ambassadors-timeline-frame {
+            width: 100%;
+            max-width: none;
           }
         }
       `}</style>
@@ -164,35 +139,24 @@ export const SectionRealAmbassadors: React.FC<{
           className="real-ambassadors-cover"
         />
 
-        <div className="mcg-track-list real-ambassadors-track-list">
-          {trackList.map((track) => (
-            <div key={track}>{track}</div>
-          ))}
+        <div className="real-ambassadors-copy">
+          <p>{realAmbassadorsParagraph}</p>
         </div>
 
-        {/* <div className="mcg-lyrics-text real-ambassadors-lyrics">
-          <p>
-            <strong>The Real Ambassador</strong>
-          </p>
-          <p>
-            Selected lyric excerpt:
-            <br />
-            "Who&apos;s the real ambassador?"
-          </p>
-          <p>
-            The longer lyric block was removed from the component source so the
-            section is easier to edit and doesn&apos;t trip content filtering
-            while you work on the layout.
-          </p>
-        </div> */}
+        <div className="real-ambassadors-spacer" aria-hidden="true" />
       </div>
 
       <div className="real-ambassadors-timeline">
-        <TimelineBar
-          onDotClick={onTimelineJump}
-          isMobile={isMobile}
-          placement="section"
-        />
+        <div
+          className="real-ambassadors-timeline-frame"
+          style={{ height: isMobile ? mobileTimelineHeight : timelineHeight }}
+        >
+          <TimelineBar
+            onDotClick={onTimelineJump}
+            isMobile={isMobile}
+            placement="section"
+          />
+        </div>
       </div>
     </section>
   );

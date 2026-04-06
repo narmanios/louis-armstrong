@@ -292,7 +292,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
         .hero-intro-kicker {
           position: absolute;
-          top: 16px;
+          top: 0px;
           right: 0;
           display: block;
           font-family: "Hanken Grotesk", Arial, sans-serif;
@@ -303,23 +303,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           line-height: 1;
         }
 
-        .hero-intro-shadow {
-          position: absolute;
-          right: -50px;
-          bottom: -200px;
-          width: 700px;
-          z-index: 1;
-          pointer-events: none;
-        }
-
-        .hero-intro-portrait {
-          position: absolute;
-          left: 560px;
-          bottom: 0;
-          width: 400px;
-          z-index: 2;
-          pointer-events: none;
-        }
+       
 
         .hero-intro-logo {
           position: absolute;
@@ -334,14 +318,13 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           position: absolute;
           left: 32px;
           right: 32px;
-          top: 72px;
+          top: 56px;
           z-index: 14;
           pointer-events: none;
         }
 
         .hero-intro-title-row {
           position: relative;
-          display: block;
           width: 100%;
         }
 
@@ -505,7 +488,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             display: block;
             margin: 0 0 12px 0;
             text-align: center;
-            white-space: normal;
+            // white-space: normal;
             font-size: 18px !important;
             max-width: none;
           }
@@ -703,7 +686,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
               margin: 0,
             }}
           >
-            A Musical Ambassador
+            The Story of Louis Armstrong in Data and Song{" "}
           </p>
         </div>
       </div>

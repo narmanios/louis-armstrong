@@ -3,7 +3,7 @@ import SectionGoodwillStageArtwork from "./SectionGoodwillStageArtwork";
 import { X } from "lucide-react";
 import countriesData from "../../../../public/assets/data/goodwillCountries.json";
 
-type Decade = "all" | "1920s" | "1930s" | "1940s" | "1950s" | "1960s" | "1970s";
+type Decade = "all" | "1930s" | "1940s" | "1950s" | "1960s" | "1970s";
 
 interface CountryEvent {
   year: string;
@@ -42,14 +42,7 @@ interface BubbleNode {
 
 const COUNTRIES: CountryData[] = countriesData as CountryData[];
 
-const DECADES: Decade[] = [
-  "1920s",
-  "1930s",
-  "1940s",
-  "1950s",
-  "1960s",
-  "1970s",
-];
+const DECADES: Decade[] = ["1930s", "1940s", "1950s", "1960s", "1970s"];
 
 const CANVAS_WIDTH = 1280;
 const CANVAS_HEIGHT = 800;
@@ -60,8 +53,6 @@ const DESKTOP_CHART_OFFSET_Y = -36;
 const MOBILE_CHART_OFFSET_Y = -96;
 const MOBILE_CHART_OFFSET_X = -72;
 const MIN_DYNAMIC_BUBBLE_RADIUS = 22;
-const ZERO_COUNT_BUBBLE_RADIUS = 14;
-
 const MAP_GROUP_LEFT = 110;
 const MAP_GROUP_TOP = 136;
 
@@ -155,13 +146,23 @@ const UI_FONT = '"Hanken Grotesk", Arial, sans-serif';
 const GOODWILL_BUBBLE_FILL = "rgba(255, 255, 255, 0.58)";
 const GOODWILL_BUBBLE_ACTIVE_FILL = "rgba(255, 255, 255, 0.86)";
 
+const getEventDecade = (yearText: string): Decade | null => {
+  const yearMatch = yearText.match(/\d{4}/);
+  if (!yearMatch) return null;
+
+  const year = Number(yearMatch[0]);
+  if (!Number.isFinite(year)) return null;
+
+  return `${Math.floor(year / 10) * 10}s` as Decade;
+};
+
 export function SectionGoodwillAmbassador({
   textBaseStyle,
 }: {
   textBaseStyle: React.CSSProperties;
 }) {
   const [selectedDecade, setSelectedDecade] = useState<Decade>("all");
-  const [hideUsBubble, setHideUsBubble] = useState(false);
+  const [hideUsBubble, setHideUsBubble] = useState(true);
   const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(
     null,
   );
@@ -194,10 +195,16 @@ export function SectionGoodwillAmbassador({
     return getDecadeCount(country, selectedDecade);
   };
 
+  const hasVisibleCount = (country: CountryData): boolean =>
+    getCount(country) > 0;
+
   const visibleCountries = useMemo(
     () =>
-      COUNTRIES.filter((country) => !(hideUsBubble && country.id === "usa")),
-    [hideUsBubble],
+      COUNTRIES.filter(
+        (country) =>
+          !(hideUsBubble && country.id === "usa") && hasVisibleCount(country),
+      ),
+    [hideUsBubble, selectedDecade],
   );
 
   const maxNonUsFilteredCount = useMemo(() => {
@@ -231,10 +238,8 @@ export function SectionGoodwillAmbassador({
           ? Math.sqrt(count / maxNonUsFilteredCount)
           : 0;
       const scaledRadius =
-        count > 0
-          ? MIN_DYNAMIC_BUBBLE_RADIUS +
-            normalizedCount * (maxNonUsBaseRadius - MIN_DYNAMIC_BUBBLE_RADIUS)
-          : ZERO_COUNT_BUBBLE_RADIUS;
+        MIN_DYNAMIC_BUBBLE_RADIUS +
+        normalizedCount * (maxNonUsBaseRadius - MIN_DYNAMIC_BUBBLE_RADIUS);
 
       acc[country.id] = Math.max(Math.round(scaledRadius), contentMinRadius);
       return acc;
@@ -270,6 +275,23 @@ export function SectionGoodwillAmbassador({
       setSelectedCountry(null);
     }
   }, [hideUsBubble, selectedCountry]);
+
+  useEffect(() => {
+    if (selectedCountry && !hasVisibleCount(selectedCountry)) {
+      setSelectedCountry(null);
+    }
+  }, [selectedCountry, selectedDecade]);
+
+  useEffect(() => {
+    if (hoveredCountryId) {
+      const hoveredCountry = COUNTRIES.find(
+        (country) => country.id === hoveredCountryId,
+      );
+      if (!hoveredCountry || !hasVisibleCount(hoveredCountry)) {
+        setHoveredCountryId(null);
+      }
+    }
+  }, [hoveredCountryId, selectedDecade]);
 
   useEffect(() => {
     const updateScale = () => {
@@ -419,6 +441,24 @@ export function SectionGoodwillAmbassador({
       const flagDataName = COUNTRY_TO_FLAG_DATA_NAME[country.id];
       const ellipseId = COUNTRY_TO_ELLIPSE_ID[country.id];
 
+      if (flagDataName) {
+        const flagEl = root.querySelector<HTMLElement>(
+          `[data-name="${flagDataName}"]`,
+        );
+        if (flagEl) {
+          flagEl.style.display = isVisible ? "" : "none";
+        }
+      }
+
+      if (ellipseId) {
+        const circleEl = root.querySelector<SVGCircleElement>(
+          `circle[id="${ellipseId}"]`,
+        );
+        if (circleEl) {
+          circleEl.style.display = isVisible ? "" : "none";
+        }
+      }
+
       if (!randomized || !isVisible) return;
 
       const dx = randomized.cx - country.cx;
@@ -501,7 +541,7 @@ export function SectionGoodwillAmbassador({
   content: "";
   position: absolute;
   inset: 0;
-  background: url("/assets/ambassador.jpg") no-repeat center center;
+  background: url("/assets/goodwill.png") no-repeat center center;
   background-size: cover;
   pointer-events: none;
   z-index: 0;
@@ -690,13 +730,6 @@ export function SectionGoodwillAmbassador({
           touch-action: manipulation;
         }
 
-        .goodwill-chip {
-          font-family: ${UI_FONT};
-          font-size: 12px;
-          padding: 3px 8px;
-          border-radius: 2px;
-        }
-
         @media (max-width: ${MOBILE_BREAKPOINT}px) {
           .goodwill-section-header {
             width: calc(100% - 40px);
@@ -767,10 +800,6 @@ export function SectionGoodwillAmbassador({
             padding: 24px 20px 28px;
           }
 
-          .goodwill-chip {
-            font-size: 11px;
-          }
-
           .goodwill-stage-shell {
             width: calc(100% - 40px);
             max-width: none;
@@ -801,7 +830,7 @@ export function SectionGoodwillAmbassador({
               onClick={() => setSelectedDecade("all")}
               className="goodwill-filter-button"
               style={{
-                color: selectedDecade === "all" ? "#000000" : "#aaaaaa",
+                color: selectedDecade === "all" ? "#eeb818" : "#aaaaaa",
               }}
             >
               All
@@ -1026,7 +1055,6 @@ export function SectionGoodwillAmbassador({
             <CountryPanelContent
               country={selectedCountry}
               selectedDecade={selectedDecade}
-              decades={DECADES}
               getCount={getCount}
               onClose={() => setSelectedCountry(null)}
               textBaseStyle={textBaseStyle}
@@ -1047,7 +1075,6 @@ export function SectionGoodwillAmbassador({
             <CountryPanelContent
               country={selectedCountry}
               selectedDecade={selectedDecade}
-              decades={DECADES}
               getCount={getCount}
               onClose={() => setSelectedCountry(null)}
               textBaseStyle={textBaseStyle}
@@ -1063,7 +1090,6 @@ export function SectionGoodwillAmbassador({
 function CountryPanelContent({
   country,
   selectedDecade,
-  decades,
   getCount,
   onClose,
   textBaseStyle,
@@ -1071,12 +1097,21 @@ function CountryPanelContent({
 }: {
   country: CountryData;
   selectedDecade: Decade;
-  decades: Decade[];
   getCount: (country: CountryData) => number;
   onClose: () => void;
   textBaseStyle: React.CSSProperties;
   isMobile: boolean;
 }) {
+  const filteredEvents = useMemo(() => {
+    if (selectedDecade === "all") {
+      return country.events;
+    }
+
+    return country.events.filter(
+      (event) => getEventDecade(event.year) === selectedDecade,
+    );
+  }, [country.events, selectedDecade]);
+
   return (
     <div className="goodwill-panel-inner">
       <div className="goodwill-panel-header">
@@ -1120,35 +1155,14 @@ function CountryPanelContent({
         >
           {selectedDecade === "all"
             ? `${country.counts.all} total visits across all decades`
-            : `${getCount(country)} visits in ${selectedDecade} · ${country.counts.all} total`}
+            : `${getCount(country)} visits in ${selectedDecade}`}
         </div>
 
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            {decades.map((d) => (
-              <div
-                key={d}
-                className="goodwill-chip"
-                style={{
-                  color:
-                    selectedDecade === d ? "white" : "rgba(255,255,255,0.4)",
-                  background:
-                    selectedDecade === d
-                      ? "rgba(255,255,255,0.12)"
-                      : "rgba(255,255,255,0.05)",
-                }}
-              >
-                {d}: {country.counts[d] ?? 0}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {country.events.map((event, i) => (
+        {filteredEvents.map((event, i) => (
           <div
             key={`${country.id}-${event.year}-${i}`}
             style={{
-              marginBottom: i < country.events.length - 1 ? 32 : 0,
+              marginBottom: i < filteredEvents.length - 1 ? 32 : 0,
             }}
           >
             <h3
