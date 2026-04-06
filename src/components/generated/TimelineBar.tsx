@@ -19,7 +19,8 @@ import "./TimelineBar.css";
 
 // Pale grey for all 5 lines
 const lineDefaultColor = "rgb(0, 0, 0)";
-const lineDefaultOpacity = 1;
+const lineDefaultOpacity = 0.7;
+const lineStrokeWidth = 1;
 const roleLineStartOffset = 40;
 const lyricLabelStartOffset = 60;
 const desktopTimelineRightGutter = 40;
@@ -216,7 +217,7 @@ export function TimelineBar({
         rawLyrics[lyrIndex].phraseGroup === hoveredPhraseGroup;
       const isActive = isHovered || isInSamePhrase;
       const fontSize = isActive ? 13 : 9;
-      const fontColor = isActive ? "#194BB3" : "#292929";
+      const fontColor = isActive ? "#000000" : "#000000";
       const textX = lyr.x + lyricLabelStartOffset;
       const textWidth = estimateLyricWidth(lyr.text, fontSize, letterSpacingEm);
       const backgroundHeight = fontSize + 6;
@@ -358,7 +359,8 @@ export function TimelineBar({
                 >
                   {/* 5 horizontal role lines */}
                   {roleLines.map((rl, i) => {
-                    const lineY = timelineTopPad + i * timelineLineSpacing;
+                    const lineY =
+                      timelineTopPad + i * timelineLineSpacing + 0.5;
                     return (
                       <line
                         className="tl-role-line"
@@ -368,8 +370,10 @@ export function TimelineBar({
                         x2={totalWidth}
                         y2={lineY}
                         stroke={lineDefaultColor}
-                        strokeWidth={0.5}
+                        strokeWidth={lineStrokeWidth}
                         opacity={lineDefaultOpacity}
+                        vectorEffect="non-scaling-stroke"
+                        strokeLinecap="butt"
                         shapeRendering="crispEdges"
                       />
                     );
@@ -469,7 +473,7 @@ export function TimelineBar({
             >
               {/* 5 horizontal role lines — uniform pale grey, thin and crisp */}
               {roleLines.map((rl, i) => {
-                const lineY = timelineTopPad + i * timelineLineSpacing;
+                const lineY = timelineTopPad + i * timelineLineSpacing + 0.5;
                 return (
                   <line
                     className="tl-role-line"
@@ -479,8 +483,10 @@ export function TimelineBar({
                     x2={totalWidth}
                     y2={lineY}
                     stroke={lineDefaultColor}
-                    strokeWidth={0.3}
+                    strokeWidth={lineStrokeWidth}
                     opacity={lineDefaultOpacity}
+                    vectorEffect="non-scaling-stroke"
+                    strokeLinecap="butt"
                     shapeRendering="crispEdges"
                   />
                 );
