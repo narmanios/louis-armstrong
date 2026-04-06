@@ -45,6 +45,8 @@ export type SectionWonderfulWorldProps = {
   factsUrl?: string;
   maskSvgUrl?: string;
   centerMediaUrl?: string;
+  centerMediaCaptionsUrl?: string;
+  centerMediaCaptionsLabel?: string;
   creditImageUrl?: string;
   title?: string;
   subtitle?: string;
@@ -306,6 +308,8 @@ export function SectionWonderfulWorld({
   factsUrl = "/assets/data/wonderfulworld.json",
   maskSvgUrl = "/assets/www-silo.svg",
   centerMediaUrl = "/assets/www.mp4",
+  centerMediaCaptionsUrl = "/assets/www-captions.vtt",
+  centerMediaCaptionsLabel = "English captions",
   title = "What a Wonderful World",
   subtitle = "Artists' renditions of Louis Armstrong's iconic song.",
   className,
@@ -320,6 +324,7 @@ export function SectionWonderfulWorld({
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDecade, setSelectedDecade] = useState<string>("all");
   const [videoSoundEnabled, setVideoSoundEnabled] = useState(false);
+  const [activeCaption, setActiveCaption] = useState("");
   const [zoom, setZoomState] = useState(() =>
     clamp(initialZoom, ZOOM_MIN, ZOOM_MAX),
   );
@@ -605,6 +610,10 @@ export function SectionWonderfulWorld({
     () => normalizeImagePath(centerMediaUrl),
     [centerMediaUrl],
   );
+  const centerMediaCaptionsSrc = useMemo(
+    () => normalizeImagePath(centerMediaCaptionsUrl),
+    [centerMediaCaptionsUrl],
+  );
 
   useEffect(() => {
     const video = centerMediaRef.current;
@@ -620,6 +629,51 @@ export function SectionWonderfulWorld({
       setVideoSoundEnabled(false);
     });
   }, [videoSoundEnabled]);
+
+  useEffect(() => {
+    const video = centerMediaRef.current;
+    if (!video) return;
+
+    let removeCueListener: (() => void) | null = null;
+
+    const bindTrack = () => {
+      removeCueListener?.();
+
+      const [track] = Array.from(video.textTracks);
+      if (!track) {
+        setActiveCaption("");
+        return;
+      }
+
+      track.mode = "hidden";
+
+      const updateCaption = () => {
+        const activeCue = track.activeCues?.[0] as VTTCue | undefined;
+        const cueText =
+          typeof activeCue?.text === "string" ? activeCue.text.trim() : "";
+        setActiveCaption(cueText);
+      };
+
+      updateCaption();
+      track.addEventListener("cuechange", updateCaption);
+      removeCueListener = () => {
+        track.removeEventListener("cuechange", updateCaption);
+      };
+    };
+
+    const handleLoadedMetadata = () => {
+      bindTrack();
+    };
+
+    video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    bindTrack();
+
+    return () => {
+      removeCueListener?.();
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      setActiveCaption("");
+    };
+  }, [centerMediaCaptionsSrc, centerMediaSrc]);
 
   const filteredFacts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -977,7 +1031,21 @@ export function SectionWonderfulWorld({
                   playsInline
                   preload="auto"
                   aria-hidden="true"
-                />
+                >
+                  <track
+                    default
+                    kind="captions"
+                    src={centerMediaCaptionsSrc}
+                    srcLang="en"
+                    label={centerMediaCaptionsLabel}
+                  />
+                </video>
+
+                {activeCaption ? (
+                  <div className="slg__caption-overlay" aria-live="polite">
+                    <p className="slg__caption-text">{activeCaption}</p>
+                  </div>
+                ) : null}
 
                 <div
                   className="slg__viz"
