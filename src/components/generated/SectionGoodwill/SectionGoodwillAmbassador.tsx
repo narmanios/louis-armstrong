@@ -543,6 +543,7 @@ export function SectionGoodwillAmbassador({
   inset: 0;
   background: url("/assets/goodwill.png") no-repeat center center;
   background-size: cover;
+  opacity: 0.4;
   pointer-events: none;
   z-index: 0;
 }
@@ -613,7 +614,7 @@ export function SectionGoodwillAmbassador({
 
         .goodwill-filter-button {
           font-family: ${UI_FONT};
-          font-weight: 700;
+          font-weight: 400;
           font-size: 14px;
           background: none;
           border: none;
@@ -625,23 +626,29 @@ export function SectionGoodwillAmbassador({
         .goodwill-segmented {
           display: inline-flex;
           align-items: center;
-          border: 1px solid #c8c2b3;
-          border-radius: 999px;
-          padding: 1px;
-          background: rgba(255, 255, 255, 0.55);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          border-radius: 8px;
+          padding: 0;
+          background: rgba(255, 255, 255, 0.38);
+          backdrop-filter: blur(10px);
+          overflow: hidden;
         }
 
         .goodwill-segmented-button {
           font-family: ${UI_FONT};
-          font-weight: 700;
-          font-size: 11px;
-          color: #7d7767;
+          font-weight: 400;
+          font-size: 12px;
+          color: #c1c1bf;
           background: transparent;
           border: 0;
-          border-radius: 999px;
-          padding: 5px 9px;
+          border-radius: 0;
+          padding: 0 14px;
+          height: 32px;
           cursor: pointer;
           white-space: nowrap;
+          transition:
+            background 0.2s ease,
+            color 0.2s ease;
         }
 
         .goodwill-segmented-button.is-active {
@@ -649,10 +656,18 @@ export function SectionGoodwillAmbassador({
           color: #ffffff;
         }
 
+        .goodwill-segmented-button:hover {
+          background: rgba(255, 255, 255, 0.18);
+        }
+
+        .goodwill-segmented-button + .goodwill-segmented-button {
+          border-left: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
         .goodwill-mobile-filter {
           display: none;
           font-family: ${UI_FONT};
-          font-weight: 700;
+          font-weight: 400;
           font-size: 14px;
           color: #000000;
           background: rgba(255, 255, 255, 0.6);

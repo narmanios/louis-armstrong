@@ -179,8 +179,8 @@ function getMarkerDimensions(baseWidth: number, hovered: boolean) {
 export function VinylRecordExplorer({
   soundtracks: soundtrackProps,
   soundtracksUrl = DEFAULT_SOUNDTRACKS_URL,
-  title = "Louis Armstrong Soundtracks",
-  subtitle = "A decade by decade look at how Louis Armstrong’s music kept finding new life on screen, introducing his sound to new audiences through film and television across generations.",
+  title = "Soundtracks",
+  // subtitle = "A decade by decade look at how Louis Armstrong’s music kept finding new life on screen, introducing his sound to new audiences through film and television across generations.",
   centerImageUrl = DEFAULT_CENTER_IMAGE,
   className,
   style,
@@ -444,7 +444,28 @@ export function VinylRecordExplorer({
           <h1 className="mcg-page-title mcg-page-title--flow mcg-page-title--light">
             {title}
           </h1>
-          <p className="vre__subtitle">{subtitle}</p>
+        </div>
+
+        <div className="vre__song-section vre__song-section--header">
+          <h3>Decades</h3>
+          <div className="vre__song-list vre__song-list--horizontal">
+            {decades.map((decade) => (
+              <div
+                key={decade.id}
+                className={cx(
+                  "vre__song-btn",
+                  activeDecadeId === decade.id && "is-active",
+                )}
+                onMouseEnter={() => onDecadeHover(decade.id)}
+                onMouseLeave={() => onDecadeUnhover(decade.id)}
+              >
+                <span className="vre__song-title">{decade.label}</span>
+                <span className="vre__song-meta">
+                  {decade.soundtracks.length} soundtracks
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </aside>
 
@@ -601,7 +622,7 @@ export function VinylRecordExplorer({
                     fill="none"
                     stroke={
                       activeDecadeId === ring.decade.id
-                        ? "#ffdd1d"
+                        ? "#ffffff"
                         : "url(#vre-ring-gradient)"
                     }
                     strokeWidth={activeDecadeId === ring.decade.id ? 2.5 : 1.5}
@@ -653,7 +674,7 @@ export function VinylRecordExplorer({
                                 fill="transparent"
                               />
 
-                              <rect
+                              {/* <rect
                                 className="vre__artist-border"
                                 x={point.x - width / 2}
                                 y={point.y - height / 2}
@@ -663,7 +684,7 @@ export function VinylRecordExplorer({
                                 fill="none"
                                 stroke={hovered ? "#EF4444" : "#DC2626"}
                                 strokeWidth="4"
-                              />
+                              /> */}
 
                               <image
                                 className="vre__artist-image vre__no-pointer"
@@ -708,7 +729,6 @@ export function VinylRecordExplorer({
               <div className="vre__tooltip-body">
                 <div className="vre__tooltip-title-row">
                   <h2>{hoveredSoundtrack.title}</h2>
-                  <span>{hoveredSoundtrack.year}</span>
                 </div>
                 <div className="vre__meta-list">
                   {tooltipMetadataEntries.map(([key, value]) => (
@@ -726,43 +746,6 @@ export function VinylRecordExplorer({
             </div>
           ) : null}
         </div>
-
-        <aside className="vre__panel">
-          <div className="vre__legend">
-            <div className="vre__legend-row">
-              <span className="vre__dot" />
-              <span>{resolvedDecadeLabel}</span>
-            </div>
-            <div className="vre__legend-row">
-              <span className="vre__dot vre__dot--red" />
-              <span>{resolvedSoundtrackLabel}</span>
-            </div>
-          </div>
-
-          <div className="vre__song-section">
-            <h3>Decades</h3>
-            <div className="vre__song-list">
-              {decades.map((decade) => (
-                <button
-                  key={decade.id}
-                  type="button"
-                  className={cx(
-                    "vre__song-btn",
-                    activeDecadeId === decade.id && "is-active",
-                  )}
-                  onMouseEnter={() => onDecadeHover(decade.id)}
-                  onMouseLeave={() => onDecadeUnhover(decade.id)}
-                  onClick={() => selectDecade(decade.id)}
-                >
-                  <span className="vre__song-title">{decade.label}</span>
-                  <span className="vre__song-meta">
-                    {decade.soundtracks.length} soundtracks
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </aside>
       </main>
     </div>
   );

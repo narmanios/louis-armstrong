@@ -172,7 +172,8 @@ export const SectionJazzAmbassadors: React.FC = () => {
             />
             <span
               style={{
-                fontSize: "12px",
+                fontSize: "14px",
+                fontWeight: 400,
                 fontFamily: '"Hanken Grotesk", Arial, sans-serif',
               }}
             >
@@ -188,8 +189,8 @@ export const SectionJazzAmbassadors: React.FC = () => {
           >
             <span
               style={{
-                fontSize: "12px",
-                fontWeight: 700,
+                fontSize: "14px",
+                fontWeight: 400,
                 fontFamily: '"Hanken Grotesk", Arial, sans-serif',
               }}
             >
@@ -213,7 +214,8 @@ export const SectionJazzAmbassadors: React.FC = () => {
                 />
                 <span
                   style={{
-                    fontSize: "10px",
+                    fontSize: "14px",
+                    fontWeight: 400,
                     fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                   }}
                 >

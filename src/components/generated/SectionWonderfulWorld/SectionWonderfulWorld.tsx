@@ -311,7 +311,7 @@ export function SectionWonderfulWorld({
   centerMediaCaptionsUrl = "/assets/www-captions.vtt",
   centerMediaCaptionsLabel = "English captions",
   title = "What a Wonderful World",
-  subtitle = "Artists' renditions of Louis Armstrong's iconic song.",
+  // subtitle = "Artists' renditions of Louis Armstrong's iconic song.",
   className,
   height = "100%",
   initialZoom = 1,
@@ -898,7 +898,7 @@ export function SectionWonderfulWorld({
           </h1>
           <header className="slg__header">
             <div className="slg__brand">
-              <p>{subtitle}</p>
+              {/* <p>{subtitle}</p> */}
             </div>
 
             <div className="slg__controls">

@@ -134,7 +134,7 @@ export const SectionFBIFiles: React.FC = () => {
             FBI Files
           </h1>
 
-          <nav
+          {/* <nav
             style={{
               display: "flex",
               gap: "10px",
@@ -165,7 +165,7 @@ export const SectionFBIFiles: React.FC = () => {
                 {year}
               </button>
             ))}
-          </nav>
+          </nav> */}
         </header>
 
         {/* Grid Container */}

@@ -12,6 +12,7 @@ import { SectionWorldFair } from "./SectionWorldFair";
 import { SectionGoodwillAmbassador } from "./SectionGoodwill/SectionGoodwillAmbassador.tsx";
 import { SectionWonderfulWorld } from "./SectionWonderfulWorld/SectionWonderfulWorld.tsx";
 import { SectionVinyl } from "./SectionVinyl.tsx";
+import JazzAmbassadorsMap from "./JazzAmbassadorsMap.tsx";
 interface MainCollectionsProps {
   className?: string;
 }
@@ -796,11 +797,11 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           background: #000000;
         }
 
-        .mcg-group-page .mcg-section {
-          width: 100vw !important;
-          min-width: 100vw !important;
-          background: #ffffff !important;
-        }
+        // .mcg-group-page .mcg-section {
+        //   width: 100vw !important;
+        //   min-width: 100vw !important;
+        //   background: #ffffff !important;
+        // }
 
         .mcg-group-page .mcg-fbi-section,
         .mcg-group-page .vre.mcg-section {
@@ -1376,16 +1377,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                   <SectionGoodwillAmbassador textBaseStyle={textBaseStyle} />
                 </div>
               </div>
-              <div
-                ref={(element) => {
-                  ambassadorSectionRefs.current[1] = element;
-                }}
-                className="mcg-group-section"
-              >
-                <div className="mcg-group-section-inner">
-                  <SectionFBIFiles />
-                </div>
-              </div>
+
               <div
                 ref={(element) => {
                   ambassadorSectionRefs.current[2] = element;
@@ -1393,7 +1385,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                 className="mcg-group-section"
               >
                 <div className="mcg-group-section-inner">
-                  <SectionJazzAmbassadors />
+                  <JazzAmbassadorsMap />
                 </div>
               </div>
 
@@ -1407,7 +1399,16 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                   <SectionAfricaTour />
                 </div>
               </div>
-
+              <div
+                ref={(element) => {
+                  ambassadorSectionRefs.current[1] = element;
+                }}
+                className="mcg-group-section"
+              >
+                <div className="mcg-group-section-inner">
+                  <SectionFBIFiles />
+                </div>
+              </div>
               <div
                 ref={(element) => {
                   ambassadorSectionRefs.current[4] = element;

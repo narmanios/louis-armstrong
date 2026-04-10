@@ -326,7 +326,6 @@ function CategoryPill({
     >
       <span className="career-timeline-legend-dot" />
       <span className="career-timeline-legend-label">{label}</span>
-      <span className="career-timeline-legend-count">{count}</span>
     </button>
   );
 }
