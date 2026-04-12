@@ -55,10 +55,10 @@ const statsCardContent: Record<StatsCardKey, StatsCardContent> = {
     "At 62 years of age, Louis Armstrong’s “Hello, Dolly!” knocked the Beatles from No. 1 on the Billboard Hot 100 on May 9, 1964.",
   ),
   "history-1": buildStatsCard(
-    "At just 11, Louis Armstrong got his first formal music training in a boys’ reform home.",
+    "At just 11, Louis Armstrong got his first formal music training in a boys’ reform home.\n\nBy 1923, he was a featured soloist on recordings with King Oliver’s Creole Jazz Band, marking the start of his rise to international stardom.",
   ),
   "history-2": buildStatsCard(
-    "The transition from local musician to international cultural figure. The card can be used to summarize the widening reach of Armstrong's public role.",
+    "Louis Armstrong’s career spanned over 50 years, during which he became one of the most influential figures in jazz and popular music. \n\n He was the first Black star to have double billing in major venues, breaking racial barriers and paving the way for future generations of artists.",
   ),
   "legacy-0": buildStatsCard(
     "The lasting legacy of “What a Wonderful World” can be seen in the many rerecordings it continues to inspire, proving that Louis Armstrong’s voice and message still resonate across generations.",
@@ -866,6 +866,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           font-size: 14px;
           line-height: 1.6;
           color: rgba(255, 255, 255, 0.72);
+          white-space: pre-line;
           text-wrap: balance;
         }
 
