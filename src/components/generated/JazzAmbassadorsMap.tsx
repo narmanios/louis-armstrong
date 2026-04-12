@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import jazzDiplomacyData from "../../../public/assets/data/jazz-diplomacy.json";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -6,6 +7,8 @@ interface TourEntry {
   country: string;
   year: string;
   number_of_events: number;
+  lat: number;
+  lng: number;
 }
 interface CountryPin {
   id: string;
@@ -75,549 +78,38 @@ const MUSICIAN_COLORS: Record<string, string> = {
 };
 const MUSICIANS = Object.keys(MUSICIAN_COLORS);
 
-// ─── Raw Tour Data ─────────────────────────────────────────────────────────────
-
-const RAW_TOURS: Record<string, TourEntry[]> = {
-  "Louis Armstrong": [
-    {
-      country: "Ghana",
-      year: "1956",
-      number_of_events: 7,
-    },
-    {
-      country: "Ghana",
-      year: "1960",
-      number_of_events: 9,
-    },
-    {
-      country: "Democratic Republic of Congo",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Democratic Republic of Congo",
-      year: "1960",
-      number_of_events: 7,
-    },
-    {
-      country: "Sudan",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Sudan",
-      year: "1961",
-      number_of_events: 7,
-    },
-    {
-      country: "Uganda",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Uganda",
-      year: "1960",
-      number_of_events: 4,
-    },
-    {
-      country: "Ivory Coast",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Ivory Coast",
-      year: "1960",
-      number_of_events: 3,
-    },
-    {
-      country: "Egypt",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Egypt",
-      year: "1961",
-      number_of_events: 4,
-    },
-    {
-      country: "Kenya",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Kenya",
-      year: "1960",
-      number_of_events: 7,
-    },
-    {
-      country: "Nigeria",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Nigeria",
-      year: "1960",
-      number_of_events: 4,
-    },
-    {
-      country: "Tanzania",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Tanzania",
-      year: "1960",
-      number_of_events: 2,
-    },
-  ],
-  "Dave Brubeck": [
-    {
-      country: "East Germany",
-      year: "1958",
-      number_of_events: 1,
-    },
-    {
-      country: "Poland",
-      year: "1958",
-      number_of_events: 1,
-    },
-    {
-      country: "Turkey",
-      year: "1958",
-      number_of_events: 1,
-    },
-    {
-      country: "India",
-      year: "1958",
-      number_of_events: 1,
-    },
-    {
-      country: "Sri Lanka",
-      year: "1958",
-      number_of_events: 1,
-    },
-    {
-      country: "Pakistan",
-      year: "1958",
-      number_of_events: 1,
-    },
-    {
-      country: "Afghanistan",
-      year: "1958",
-      number_of_events: 1,
-    },
-    {
-      country: "Iran",
-      year: "1958",
-      number_of_events: 1,
-    },
-    {
-      country: "Iraq",
-      year: "1958",
-      number_of_events: 1,
-    },
-    {
-      country: "Poland",
-      year: "1970",
-      number_of_events: 1,
-    },
-  ],
-  "Dizzy Gillespie": [
-    {
-      country: "Iran",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Greece",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Pakistan",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Turkey",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Bangladesh",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Lebanon",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Yugoslavia",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Dominican Republic",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Argentina",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Brazil",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Kenya",
-      year: "1973",
-      number_of_events: 1,
-    },
-    {
-      country: "Tanzania",
-      year: "1973",
-      number_of_events: 1,
-    },
-  ],
-  "Duke Ellington": [
-    {
-      country: "Syria",
-      year: "1963",
-      number_of_events: 1,
-    },
-    {
-      country: "Jordan",
-      year: "1963",
-      number_of_events: 1,
-    },
-    {
-      country: "Afghanistan",
-      year: "1963",
-      number_of_events: 1,
-    },
-    {
-      country: "India",
-      year: "1963",
-      number_of_events: 1,
-    },
-    {
-      country: "Sri Lanka",
-      year: "1963",
-      number_of_events: 1,
-    },
-    {
-      country: "Pakistan",
-      year: "1963",
-      number_of_events: 1,
-    },
-    {
-      country: "Iran",
-      year: "1963",
-      number_of_events: 1,
-    },
-    {
-      country: "Iraq",
-      year: "1963",
-      number_of_events: 1,
-    },
-    {
-      country: "Lebanon",
-      year: "1963",
-      number_of_events: 1,
-    },
-    {
-      country: "Turkey",
-      year: "1963",
-      number_of_events: 1,
-    },
-    {
-      country: "Senegal",
-      year: "1966",
-      number_of_events: 1,
-    },
-    {
-      country: "Soviet Union",
-      year: "1971",
-      number_of_events: 1,
-    },
-    {
-      country: "Argentina",
-      year: "1971",
-      number_of_events: 1,
-    },
-    {
-      country: "Sri Lanka",
-      year: "1972",
-      number_of_events: 1,
-    },
-    {
-      country: "Laos",
-      year: "1972",
-      number_of_events: 1,
-    },
-    {
-      country: "Zambia",
-      year: "1973",
-      number_of_events: 1,
-    },
-    {
-      country: "Ethiopia",
-      year: "1973",
-      number_of_events: 1,
-    },
-  ],
-  "Benny Goodman": [
-    {
-      country: "Thailand",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Myanmar",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Cambodia",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Malaysia",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Japan",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Singapore",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "South Korea",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Hong Kong",
-      year: "1956",
-      number_of_events: 1,
-    },
-    {
-      country: "Soviet Union",
-      year: "1962",
-      number_of_events: 30,
-    },
-  ],
-};
-
-// ─── Country Centroids ─────────────────────────────────────────────────────────
-
-const COUNTRY_COORDS: Record<
-  string,
-  {
-    lat: number;
-    lng: number;
-  }
-> = {
-  Ghana: {
-    lat: 7.9465,
-    lng: -1.0232,
-  },
-  "Democratic Republic of Congo": {
-    lat: -4.0383,
-    lng: 21.7587,
-  },
-  Sudan: {
-    lat: 12.8628,
-    lng: 30.2176,
-  },
-  Uganda: {
-    lat: 1.3733,
-    lng: 32.2903,
-  },
-  "Ivory Coast": {
-    lat: 7.54,
-    lng: -5.5471,
-  },
-  Egypt: {
-    lat: 26.8206,
-    lng: 30.8025,
-  },
-  Kenya: {
-    lat: -0.0236,
-    lng: 37.9062,
-  },
-  Nigeria: {
-    lat: 9.082,
-    lng: 8.6753,
-  },
-  Tanzania: {
-    lat: -6.369,
-    lng: 34.8888,
-  },
-  "East Germany": {
-    lat: 52.52,
-    lng: 13.405,
-  },
-  Poland: {
-    lat: 51.9194,
-    lng: 19.1451,
-  },
-  Turkey: {
-    lat: 38.9637,
-    lng: 35.2433,
-  },
-  India: {
-    lat: 20.5937,
-    lng: 78.9629,
-  },
-  "Sri Lanka": {
-    lat: 7.8731,
-    lng: 80.7718,
-  },
-  Pakistan: {
-    lat: 30.3753,
-    lng: 69.3451,
-  },
-  Afghanistan: {
-    lat: 33.9391,
-    lng: 67.71,
-  },
-  Iran: {
-    lat: 32.4279,
-    lng: 53.688,
-  },
-  Iraq: {
-    lat: 33.2232,
-    lng: 43.6793,
-  },
-  Greece: {
-    lat: 39.0742,
-    lng: 21.8243,
-  },
-  Bangladesh: {
-    lat: 23.685,
-    lng: 90.3563,
-  },
-  Lebanon: {
-    lat: 33.8547,
-    lng: 35.8623,
-  },
-  Yugoslavia: {
-    lat: 44.0165,
-    lng: 21.0059,
-  },
-  "Dominican Republic": {
-    lat: 18.7357,
-    lng: -70.1627,
-  },
-  Argentina: {
-    lat: -38.4161,
-    lng: -63.6167,
-  },
-  Brazil: {
-    lat: -14.235,
-    lng: -51.9253,
-  },
-  Syria: {
-    lat: 34.8021,
-    lng: 38.9968,
-  },
-  Jordan: {
-    lat: 30.5852,
-    lng: 36.2384,
-  },
-  Senegal: {
-    lat: 14.4974,
-    lng: -14.4524,
-  },
-  "Soviet Union": {
-    lat: 55.7558,
-    lng: 37.6173,
-  },
-  Laos: {
-    lat: 19.8563,
-    lng: 102.4955,
-  },
-  Zambia: {
-    lat: -13.1339,
-    lng: 27.8493,
-  },
-  Ethiopia: {
-    lat: 9.145,
-    lng: 40.4897,
-  },
-  Thailand: {
-    lat: 15.87,
-    lng: 100.9925,
-  },
-  Myanmar: {
-    lat: 21.9162,
-    lng: 95.956,
-  },
-  Cambodia: {
-    lat: 12.5657,
-    lng: 104.991,
-  },
-  Malaysia: {
-    lat: 4.2105,
-    lng: 108.9758,
-  },
-  Japan: {
-    lat: 36.2048,
-    lng: 138.2529,
-  },
-  Singapore: {
-    lat: 1.3521,
-    lng: 103.8198,
-  },
-  "South Korea": {
-    lat: 35.9078,
-    lng: 127.7669,
-  },
-  "Hong Kong": {
-    lat: 22.3193,
-    lng: 114.1694,
-  },
-};
-
 // ─── Build Country Pins ────────────────────────────────────────────────────────
 
 function buildCountryPins(): CountryPin[] {
   const map = new Map<string, CountryPin>();
+
   MUSICIANS.forEach((musician) => {
-    const entries = RAW_TOURS[musician] || [];
-    entries.forEach((entry) => {
-      const coords = COUNTRY_COORDS[entry.country];
-      if (!coords) return;
-      if (!map.has(entry.country)) {
-        map.set(entry.country, {
-          id: entry.country,
-          country: entry.country,
-          lat: coords.lat,
-          lng: coords.lng,
+    const musicianData =
+      jazzDiplomacyData[musician as keyof typeof jazzDiplomacyData];
+    if (!musicianData?.trips) return;
+
+    musicianData.trips.forEach((trip) => {
+      if (!map.has(trip.country)) {
+        map.set(trip.country, {
+          id: trip.country,
+          country: trip.country,
+          lat: trip.lat,
+          lng: trip.lng,
           musicians: [],
           tours: [],
           totalEvents: 0,
         });
       }
-      const pin = map.get(entry.country)!;
+      const pin = map.get(trip.country)!;
       if (!pin.musicians.includes(musician)) pin.musicians.push(musician);
       pin.tours.push({
-        ...entry,
         country: musician,
+        year: trip.year,
+        number_of_events: trip.number_of_events,
+        lat: trip.lat,
+        lng: trip.lng,
       });
-      pin.totalEvents += entry.number_of_events;
+      pin.totalEvents += trip.number_of_events;
     });
   });
   return Array.from(map.values());
@@ -636,9 +128,12 @@ function buildMusicianDots(): MusicianDot[] {
       const radius = n === 1 ? 0 : CLUSTER_RADIUS_DEG;
       const lat = pin.lat + radius * Math.sin(angle);
       const lng = pin.lng + radius * Math.cos(angle);
-      const tourEntries = RAW_TOURS[musician].filter(
-        (t) => t.country === pin.country,
-      );
+
+      const musicianData =
+        jazzDiplomacyData[musician as keyof typeof jazzDiplomacyData];
+      const tourEntries =
+        musicianData?.trips.filter((t) => t.country === pin.country) || [];
+
       const events = tourEntries.reduce(
         (sum, t) => sum + t.number_of_events,
         0,
@@ -891,6 +386,9 @@ export const JazzAmbassadorsMap: React.FC = () => {
             {MUSICIANS.map((musician) => {
               const hidden = hiddenMusicians.has(musician);
               const color = MUSICIAN_COLORS[musician];
+              const musicianData =
+                jazzDiplomacyData[musician as keyof typeof jazzDiplomacyData];
+              const totalCount = musicianData?.total_count || 0;
               return (
                 <button
                   key={musician}
@@ -920,7 +418,10 @@ export const JazzAmbassadorsMap: React.FC = () => {
                       color: hidden ? "#94a3b8" : "#334155",
                     }}
                   >
-                    {musician}
+                    {musician}{" "}
+                    <span style={{ fontSize: "12px" }}>
+                      ({totalCount} events)
+                    </span>
                   </span>
                 </button>
               );
