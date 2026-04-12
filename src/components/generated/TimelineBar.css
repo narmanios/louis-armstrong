@@ -169,7 +169,7 @@
   right: 0;
   bottom: 0;
   width: var(--tl-desktop-right-gutter, 40px);
-  background: #f5f3ea;
+  /* background: #f5f3ea; */
   pointer-events: none;
   z-index: 15;
 }

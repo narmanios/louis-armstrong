@@ -70,7 +70,7 @@ const statsCardContent: Record<StatsCardKey, StatsCardContent> = {
     "Louis Armstrong became a goodwill ambassador long before the title was official, traveling the world as one of the first Black pop stars to spread jazz and American culture abroad.",
   ),
   "ambassador-1": buildStatsCard(
-    "The Jazz Diplomacy program sent musicians overseas and used these artists to project an image of American freedom and culture abroad, even as Cold War conflict and segregation at home challenged that image.",
+    "The Jazz Diplomacy program sent musicians overseas to promote jazz while also projecting an image of American freedom and culture abroad, even as Cold War conflict and segregation at home challenged that image.",
   ),
   "ambassador-2": buildStatsCard(
     "Africa tour that Armstrong undertook in 1960 as part of the Jazz Diplomacy program, which was a key moment in his role as a cultural ambassador and in the broader context of U.S. cultural diplomacy during the Cold War.",

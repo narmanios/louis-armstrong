@@ -166,10 +166,10 @@ export const mapRoutes: MapRoute[] = [
   },
 ];
 export const albumImages: string[] = [
-  "https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/9c84f400-2f6a-4687-879c-c49301f775ed.jpg",
-  "https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/2c79a1ad-ca63-443b-9c23-129efe694154.jpg",
-  "https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/84827751-864c-4c26-9629-a0b725c23b4d.jpg",
-  "https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/b802efd5-1934-4e1e-8e0d-da5c6ed6c09c.jpg",
+  "/assets/wonderfulworld/www1.jpg",
+  "/assets/wonderfulworld/www2.jpg",
+  "/assets/wonderfulworld/www3.jpg",
+  "/assets/wonderfulworld/www4.jpg",
 ];
 export const albumPositions: {
   left: number;

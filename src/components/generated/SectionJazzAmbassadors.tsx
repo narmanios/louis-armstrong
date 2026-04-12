@@ -17,6 +17,46 @@ const ambassadorData = [
     name: "Duke Ellington 1963",
   },
 ] as any[];
+
+const encodeSvgDataUri = (svg: string) =>
+  `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+
+const jazzMapLightSvg = encodeSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="1122" height="480" viewBox="0 0 1122 480" fill="none">
+    <rect width="1122" height="480" fill="#F3EEE2"/>
+    <path d="M88 120C168 76 286 70 380 108C468 143 534 120 606 88C688 52 804 56 904 102C986 140 1038 214 1019 290C996 378 890 418 776 400C692 387 639 333 570 312C489 286 401 308 324 340C236 376 128 366 80 296C34 228 47 159 88 120Z" fill="#E7DDC8" fill-opacity="0.5"/>
+    <path d="M170 98C240 80 318 92 370 130C425 171 458 216 448 260C436 313 366 340 298 327C222 312 154 266 136 212C120 162 138 112 170 98Z" fill="#DCCFB5" fill-opacity="0.45"/>
+    <path d="M675 72C760 48 850 68 909 121C965 171 1000 240 968 301C936 362 840 382 756 360C676 339 618 288 606 227C594 166 629 92 675 72Z" fill="#E1D5BE" fill-opacity="0.42"/>
+    <path d="M105 356C162 315 247 300 319 319C395 338 460 384 480 424" stroke="#D0C3A6" stroke-width="6" stroke-linecap="round" stroke-opacity="0.45"/>
+    <path d="M662 360C742 328 850 330 942 370C993 392 1032 418 1074 446" stroke="#D0C3A6" stroke-width="6" stroke-linecap="round" stroke-opacity="0.45"/>
+  </svg>
+`);
+
+const jazzTravelsLightSvg = encodeSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="627" height="240" viewBox="0 0 627 240" fill="none">
+    <rect width="627" height="240" fill="transparent"/>
+    <path d="M24 46C87 27 133 35 176 62C219 90 249 110 302 98C361 85 388 47 435 34C496 17 553 39 604 67" stroke="#7A5A3C" stroke-opacity="0.35" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12"/>
+    <path d="M60 182C121 150 168 147 222 161C286 177 336 168 386 137C444 102 503 92 580 120" stroke="#7A5A3C" stroke-opacity="0.28" stroke-width="4" stroke-linecap="round" stroke-dasharray="8 10"/>
+    <circle cx="78" cy="50" r="7" fill="#7A5A3C" fill-opacity="0.45"/>
+    <circle cx="296" cy="98" r="7" fill="#7A5A3C" fill-opacity="0.45"/>
+    <circle cx="522" cy="61" r="7" fill="#7A5A3C" fill-opacity="0.45"/>
+    <circle cx="170" cy="160" r="7" fill="#7A5A3C" fill-opacity="0.45"/>
+    <circle cx="394" cy="140" r="7" fill="#7A5A3C" fill-opacity="0.45"/>
+  </svg>
+`);
+
+const jazzTooltipIndiaSvg = encodeSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="292" height="210" viewBox="0 0 292 210" fill="none">
+    <defs>
+      <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+        <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000000" flood-opacity="0.14"/>
+      </filter>
+    </defs>
+    <rect x="1" y="1" width="290" height="208" rx="18" fill="#FFFFFF" filter="url(#shadow)"/>
+    <rect x="1" y="1" width="290" height="208" rx="18" fill="none" stroke="#E5E7EB"/>
+  </svg>
+`);
+
 export const SectionJazzAmbassadors: React.FC = () => {
   return (
     <section
@@ -125,7 +165,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
           }}
         >
           <img
-            src="https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/54a6b55c-1685-41bf-b0c3-19ee02eb6bf3.svg"
+            src={jazzMapLightSvg}
             alt="Map light"
             style={{
               width: "100%",
@@ -133,7 +173,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
             }}
           />
           <img
-            src="https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/3c0f2fbc-b683-4e6f-8cda-f1fede8b95c3.svg"
+            src={jazzTravelsLightSvg}
             alt="Travels light"
             className="mcg-map-travels"
             style={{
@@ -234,10 +274,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
             width: "292px",
           }}
         >
-          <img
-            src="https://storage.googleapis.com/storage.magicpath.ai/user/371750313973129216/figma-assets/b2950c4d-bdde-4691-85f0-60e5e545fadf.svg"
-            alt="Tooltip India"
-          />
+          <img src={jazzTooltipIndiaSvg} alt="Tooltip India" />
           <div
             style={{
               position: "absolute",

@@ -687,7 +687,7 @@ function buildDotHtml(dot: MusicianDot): string {
 function buildDotPopupHtml(dot: MusicianDot): string {
   const color = MUSICIAN_COLORS[dot.musician] || "#64748b";
   const yearsStr = dot.years.join(", ");
-  return `<div style="font-family:Inter,system-ui,sans-serif;min-width:200px;max-width:260px;"><div style="padding:12px 14px 10px;border-bottom:1px solid ${color}20;"><div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:-0.3px;">${dot.country}</div><div style="display:flex;align-items:center;gap:6px;margin-top:5px;"><div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0;"></div><div style="font-size:11px;font-weight:600;color:${color};">${dot.musician}</div></div></div><div style="padding:10px 14px 12px;"><div style="font-size:10px;color:#64748b;margin-bottom:4px;"><span style="font-weight:600;color:#0f172a;">${dot.events}</span>&nbsp;${dot.events === 1 ? "event" : "events"}</div><div style="font-size:10px;color:#94a3b8;">${yearsStr}</div></div></div>`;
+  return `<div style="font-family:Inter,system-ui,sans-serif;min-width:200px;max-width:260px;"><div style="padding:12px 14px 10px;border-bottom:1px solid ${color}20;"><div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:-0.3px;line-height:1.2;">${dot.country}</div><div style="display:flex;align-items:center;gap:6px;margin-top:5px;"><div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0;"></div><div style="font-size:10px;line-height:1.35;font-weight:600;color:${color};">${dot.musician}</div></div></div><div style="padding:10px 14px 12px;"><div style="font-size:10px;line-height:1.35;color:#64748b;margin-bottom:4px;"><span style="font-weight:600;color:#0f172a;font-size:13px;">${dot.events}</span>&nbsp;${dot.events === 1 ? "event" : "events"}</div><div style="font-size:10px;line-height:1.35;color:#94a3b8;">${yearsStr}</div></div></div>`;
 }
 
 // ─── LeafletMap component ──────────────────────────────────────────────────────
@@ -714,9 +714,9 @@ const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
       attributionControl: true,
       worldCopyJump: false,
       maxBoundsViscosity: 1.0,
-      minZoom: 3,
+      minZoom: 2.75,
       maxZoom: 6,
-    }).setView([35, 55], 3.55);
+    }).setView([10, 30], 2);
 
     if (onMapReady && mapInstanceRef.current) {
       onMapReady(mapInstanceRef.current);
@@ -862,7 +862,7 @@ export const JazzAmbassadorsMap: React.FC = () => {
             className="mcg-page-title mcg-page-title--flow"
             style={{ color: "#000000" }}
           >
-            Jazz Diplomacy Tours
+            Jazz Diplomacy Tours 1950s-1970s
           </h1>
         </div>
 

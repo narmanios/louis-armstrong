@@ -1,0 +1,357 @@
+{
+  "Louis Armstrong": {
+    "total_count": 62,
+    "trips": [
+      {
+        "country": "Ghana",
+        "year": "1956",
+        "number_of_events": 7
+      },
+      {
+        "country": "Ghana",
+        "year": "1960",
+        "number_of_events": 9
+      },
+      {
+        "country": "Democratic Republic of Congo",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Democratic Republic of Congo",
+        "year": "1960",
+        "number_of_events": 7
+      },
+      {
+        "country": "Sudan",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Sudan",
+        "year": "1961",
+        "number_of_events": 7
+      },
+      {
+        "country": "Uganda",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Uganda",
+        "year": "1960",
+        "number_of_events": 4
+      },
+      {
+        "country": "Côte d'Ivoire",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Côte d'Ivoire",
+        "year": "1960",
+        "number_of_events": 3
+      },
+      {
+        "country": "Egypt",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Egypt",
+        "year": "1961",
+        "number_of_events": 4
+      },
+      {
+        "country": "Kenya",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Kenya",
+        "year": "1960",
+        "number_of_events": 7
+      },
+      {
+        "country": "Nigeria",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Nigeria",
+        "year": "1960",
+        "number_of_events": 4
+      },
+      {
+        "country": "Tanzania",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Tanzania",
+        "year": "1960",
+        "number_of_events": 2
+      }
+    ]
+  },
+  "Dave Brubeck": {
+    "total_count": 10,
+    "trips": [
+      {
+        "country": "Germany (East Germany)",
+        "year": "1958",
+        "number_of_events": 1
+      },
+      {
+        "country": "Poland",
+        "year": "1958",
+        "number_of_events": 1
+      },
+      {
+        "country": "Turkey",
+        "year": "1958",
+        "number_of_events": 1
+      },
+      {
+        "country": "India",
+        "year": "1958",
+        "number_of_events": 1
+      },
+      {
+        "country": "Sri Lanka",
+        "year": "1958",
+        "number_of_events": 1
+      },
+      {
+        "country": "Pakistan",
+        "year": "1958",
+        "number_of_events": 1
+      },
+      {
+        "country": "Afghanistan",
+        "year": "1958",
+        "number_of_events": 1
+      },
+      {
+        "country": "Iran",
+        "year": "1958",
+        "number_of_events": 1
+      },
+      {
+        "country": "Iraq",
+        "year": "1958",
+        "number_of_events": 1
+      },
+      {
+        "country": "Poland",
+        "year": "1970",
+        "number_of_events": 1
+      }
+    ]
+  },
+  "Dizzy Gillespie": {
+    "total_count": 12,
+    "trips": [
+      {
+        "country": "Iran",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Greece",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Pakistan",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Turkey",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Bangladesh (then East Pakistan)",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Lebanon",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Yugoslavia",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Dominican Republic",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Argentina",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Brazil",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Kenya",
+        "year": "1973",
+        "number_of_events": 1
+      },
+      {
+        "country": "Tanzania",
+        "year": "1973",
+        "number_of_events": 1
+      }
+    ]
+  },
+  "Duke Ellington": {
+    "total_count": 17,
+    "trips": [
+      {
+        "country": "Syria",
+        "year": "1963",
+        "number_of_events": 1
+      },
+      {
+        "country": "Jordan",
+        "year": "1963",
+        "number_of_events": 1
+      },
+      {
+        "country": "Afghanistan",
+        "year": "1963",
+        "number_of_events": 1
+      },
+      {
+        "country": "India",
+        "year": "1963",
+        "number_of_events": 1
+      },
+      {
+        "country": "Sri Lanka",
+        "year": "1963",
+        "number_of_events": 1
+      },
+      {
+        "country": "Pakistan",
+        "year": "1963",
+        "number_of_events": 1
+      },
+      {
+        "country": "Iran",
+        "year": "1963",
+        "number_of_events": 1
+      },
+      {
+        "country": "Iraq",
+        "year": "1963",
+        "number_of_events": 1
+      },
+      {
+        "country": "Lebanon",
+        "year": "1963",
+        "number_of_events": 1
+      },
+      {
+        "country": "Turkey",
+        "year": "1963",
+        "number_of_events": 1
+      },
+      {
+        "country": "Senegal",
+        "year": "1966",
+        "number_of_events": 1
+      },
+      {
+        "country": "Soviet Union",
+        "year": "1971",
+        "number_of_events": 1
+      },
+      {
+        "country": "Argentina",
+        "year": "1971",
+        "number_of_events": 1
+      },
+      {
+        "country": "Sri Lanka",
+        "year": "1972",
+        "number_of_events": 1
+      },
+      {
+        "country": "Laos",
+        "year": "1972",
+        "number_of_events": 1
+      },
+      {
+        "country": "Zambia",
+        "year": "1973",
+        "number_of_events": 1
+      },
+      {
+        "country": "Ethiopia",
+        "year": "1973",
+        "number_of_events": 1
+      }
+    ]
+  },
+  "Benny Goodman": {
+    "total_count": 38,
+    "trips": [
+      {
+        "country": "Thailand",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Myanmar (then Burma)",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Cambodia",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Malaysia (then Malaya)",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Japan",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Singapore",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "South Korea",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Hong Kong",
+        "year": "1956",
+        "number_of_events": 1
+      },
+      {
+        "country": "Soviet Union",
+        "year": "1962",
+        "number_of_events": 30
+      }
+    ]
+  }
+}
