@@ -36,6 +36,35 @@ export const SectionTheBeginning: React.FC = () => {
           display: block;
         }
 
+        .beginning-image-wrap {
+          position: relative;
+          transition: transform 0.25s ease;
+          transform-origin: center center;
+        }
+
+        .beginning-image-wrap:hover {
+          transform: scale(1.03);
+        }
+
+        .beginning-logo-link {
+          position: absolute;
+          right: 12px;
+          bottom: 12px;
+          width: 76px;
+          height: 76px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2;
+        }
+
+        .beginning-logo-link img {
+          width: 100%;
+          height: 100%;
+          display: block;
+          object-fit: contain;
+        }
+
         .beginning-caption,
         .beginning-copy {
           margin: 0;
@@ -117,16 +146,25 @@ export const SectionTheBeginning: React.FC = () => {
 
       <div className="beginning-entry-grid">
         <div className="beginning-entry">
-          <div>
+          <div className="beginning-image-wrap">
             <img
               src="/assets/waifs-home.png"
               alt="Waifs home band"
               className="beginning-media-image"
             />
-            <p className="beginning-caption">
-              Waif's Home Band, New Orleans, 1910s. Photo by Ernest J. Bellocq.
-            </p>
+            <a
+              className="beginning-logo-link"
+              href="https://www.louisarmstronghouse.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open Louis Armstrong House website"
+            >
+              <img src="/assets/logo_light.png" alt="" aria-hidden="true" />
+            </a>
           </div>
+          <p className="beginning-caption">
+            Waif's Home Band, New Orleans, 1910s. Photo by Ernest J. Bellocq.
+          </p>
           <div className="beginning-text">
             <p className="beginning-copy">
               The reform school where Louis Armstrong spent part of his youth
@@ -136,14 +174,23 @@ export const SectionTheBeginning: React.FC = () => {
         </div>
 
         <div className="beginning-entry">
-          <div>
+          <div className="beginning-image-wrap">
             <img
               src="/assets/2006_1_3a.jpg"
               alt="Creole Jazz Band"
               className="beginning-media-image"
             />
-            <p className="beginning-caption">King Oliver's Creole Jazz Band</p>
+            <a
+              className="beginning-logo-link"
+              href="https://www.louisarmstronghouse.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open Louis Armstrong House website"
+            >
+              <img src="/assets/logo_light.png" alt="" aria-hidden="true" />
+            </a>
           </div>
+          <p className="beginning-caption">King Oliver's Creole Jazz Band</p>
           <div className="beginning-text">
             <p className="beginning-copy">
               King Oliver’s Creole Jazz Band was one of the most important early

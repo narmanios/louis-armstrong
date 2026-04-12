@@ -86,6 +86,12 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
     "As part of his 1960-1961 State Department tour, Armstrong visited the wartorn Congo region in the middle of a civil war between supporters of Patrice Lumumba and Mobutu Sese Seke. A temporary truce was declared to allow Armstrong to perform in Leopoldville. Two weeks later, he performed in front of 10,000 fans in the secessionist state of Katanga, staying with President Moises Tshombe during his time there";
   const desktopMediaAspectRatio = "470 / 360";
   const mobileTourCardImageSrc = "/assets/africa.png";
+  const logoLinkProps = {
+    href: "https://www.louisarmstronghouse.org/",
+    target: "_blank",
+    rel: "noopener noreferrer",
+    "aria-label": "Open Louis Armstrong House website",
+  } as const;
   const overlayTitle =
     activeOverlay === "tour"
       ? "Africa Tour"
@@ -161,6 +167,31 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
           position: "relative",
         }}
       >
+        <style>{`
+          .africa-tour-image-wrap {
+            position: relative;
+          }
+
+          .africa-tour-logo-link {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            width: 76px;
+            height: 76px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+          }
+
+          .africa-tour-logo-link img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+          }
+        `}</style>
+
         <h1
           className="mcg-page-title mcg-page-title--flow"
           style={
@@ -202,14 +233,12 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               textAlign: "left",
               width: isMobile ? "calc(100% - 56px)" : "100%",
               margin: isMobile ? "0 0 0 20px" : 0,
-              transition: "transform 0.25s ease",
-              transform: hoveredCard === "tour" ? "scale(1.03)" : "scale(1)",
-              transformOrigin: "center center",
               display: "block",
             }}
           >
             <div>
               <div
+                className="africa-tour-image-wrap"
                 style={{
                   width: "100%",
                   height: "auto",
@@ -222,6 +251,10 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                   gap: isMobile ? undefined : "5px",
                   marginBottom: "9px",
                   overflow: "hidden",
+                  transition: "transform 0.25s ease",
+                  transform:
+                    hoveredCard === "tour" ? "scale(1.03)" : "scale(1)",
+                  transformOrigin: "center center",
                 }}
               >
                 {isMobile ? (
@@ -250,6 +283,9 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                     />
                   ))
                 )}
+                <a className="africa-tour-logo-link" {...logoLinkProps}>
+                  <img src="/assets/logo_light.png" alt="" aria-hidden="true" />
+                </a>
               </div>
               <span
                 style={{
@@ -290,24 +326,34 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               textAlign: "left",
               width: isMobile ? "calc(100% - 56px)" : "100%",
               margin: isMobile ? "0 0 0 20px" : 0,
-              transition: "transform 0.25s ease",
-              transform: hoveredCard === "egypt" ? "scale(1.03)" : "scale(1)",
-              transformOrigin: "center center",
               display: "block",
             }}
           >
             <div>
-              <img
-                src="/assets/egypt.png"
-                alt="Cairo"
+              <div
+                className="africa-tour-image-wrap"
                 style={{
-                  width: "100%",
-                  height: "auto",
-                  aspectRatio: isMobile ? "5 / 4" : desktopMediaAspectRatio,
-                  objectFit: "cover",
-                  marginBottom: "9px",
+                  transition: "transform 0.25s ease",
+                  transform:
+                    hoveredCard === "egypt" ? "scale(1.03)" : "scale(1)",
+                  transformOrigin: "center center",
                 }}
-              />
+              >
+                <img
+                  src="/assets/egypt.png"
+                  alt="Cairo"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    aspectRatio: isMobile ? "5 / 4" : desktopMediaAspectRatio,
+                    objectFit: "cover",
+                    marginBottom: "9px",
+                  }}
+                />
+                <a className="africa-tour-logo-link" {...logoLinkProps}>
+                  <img src="/assets/logo_light.png" alt="" aria-hidden="true" />
+                </a>
+              </div>
               <span
                 style={{
                   display: "block",
@@ -347,20 +393,22 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
               textAlign: "left",
               width: isMobile ? "calc(100% - 56px)" : "100%",
               margin: isMobile ? "0 0 0 20px" : 0,
-              transition: "transform 0.25s ease",
-              transform: hoveredCard === "congo" ? "scale(1.03)" : "scale(1)",
-              transformOrigin: "center center",
               display: "block",
             }}
           >
             <div>
               <div
+                className="africa-tour-image-wrap"
                 style={{
                   width: "100%",
                   height: "auto",
                   aspectRatio: isMobile ? "5 / 4" : desktopMediaAspectRatio,
                   position: "relative",
                   marginBottom: "9px",
+                  transition: "transform 0.25s ease",
+                  transform:
+                    hoveredCard === "congo" ? "scale(1.03)" : "scale(1)",
+                  transformOrigin: "center center",
                 }}
               >
                 <img
@@ -372,6 +420,9 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                     objectFit: "cover",
                   }}
                 />
+                <a className="africa-tour-logo-link" {...logoLinkProps}>
+                  <img src="/assets/logo_light.png" alt="" aria-hidden="true" />
+                </a>
                 <div
                   style={{
                     position: "absolute",

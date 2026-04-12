@@ -36,6 +36,35 @@ export const SectionWorldFair: React.FC = () => {
           display: block;
         }
 
+        .world-fair-image-wrap {
+          position: relative;
+          transition: transform 0.25s ease;
+          transform-origin: center center;
+        }
+
+        .world-fair-image-wrap:hover {
+          transform: scale(1.03);
+        }
+
+        .world-fair-logo-link {
+          position: absolute;
+          right: 12px;
+          bottom: 12px;
+          width: 76px;
+          height: 76px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2;
+        }
+
+        .world-fair-logo-link img {
+          width: 100%;
+          height: 100%;
+          display: block;
+          object-fit: contain;
+        }
+
         .world-fair-caption,
         .world-fair-copy {
           margin: 0;
@@ -117,16 +146,25 @@ export const SectionWorldFair: React.FC = () => {
 
       <div className="world-fair-entry-grid">
         <div className="world-fair-entry">
-          <div>
+          <div className="world-fair-image-wrap">
             <img
               src="/assets/worldsfair.jpg"
               alt="World Fair"
               className="world-fair-media-image"
             />
-            <p className="world-fair-caption">
-              World's Fair Louis Armstrong Day (1964)
-            </p>
+            <a
+              className="world-fair-logo-link"
+              href="https://www.louisarmstronghouse.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open Louis Armstrong House website"
+            >
+              <img src="/assets/logo_light.png" alt="" aria-hidden="true" />
+            </a>
           </div>
+          <p className="world-fair-caption">
+            World's Fair Louis Armstrong Day (1964)
+          </p>
           <div className="world-fair-text">
             <p className="world-fair-copy">
               June 30, 1964, was declared “Louis Armstrong Day” at the 1964
@@ -136,14 +174,23 @@ export const SectionWorldFair: React.FC = () => {
         </div>
 
         <div className="world-fair-entry">
-          <div>
+          <div className="world-fair-image-wrap">
             <img
               src="/assets/berlin.jpg"
               alt="East Berlin"
               className="world-fair-media-image"
             />
-            <p className="world-fair-caption">East Berlin</p>
+            <a
+              className="world-fair-logo-link"
+              href="https://www.louisarmstronghouse.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open Louis Armstrong House website"
+            >
+              <img src="/assets/logo_light.png" alt="" aria-hidden="true" />
+            </a>
           </div>
+          <p className="world-fair-caption">East Berlin</p>
           <div className="world-fair-text">
             <p className="world-fair-copy">
               In 1965, Armstrong toured behind the Iron Curtain, including East

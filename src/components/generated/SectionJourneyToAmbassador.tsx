@@ -36,6 +36,35 @@ export const SectionJourneyToAmbassador: React.FC = () => {
           display: block;
         }
 
+        .journey-image-wrap {
+          position: relative;
+          transition: transform 0.25s ease;
+          transform-origin: center center;
+        }
+
+        .journey-image-wrap:hover {
+          transform: scale(1.03);
+        }
+
+        .journey-logo-link {
+          position: absolute;
+          right: 12px;
+          bottom: 12px;
+          width: 76px;
+          height: 76px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2;
+        }
+
+        .journey-logo-link img {
+          width: 100%;
+          height: 100%;
+          display: block;
+          object-fit: contain;
+        }
+
         .journey-caption,
         .journey-copy {
           margin: 0;
@@ -117,7 +146,7 @@ export const SectionJourneyToAmbassador: React.FC = () => {
 
       <div className="journey-entry-grid">
         <div className="journey-entry">
-          <div>
+          <div className="journey-image-wrap">
             <div className="interactive-card">
               <img
                 src="/assets/orchestra.png"
@@ -125,10 +154,19 @@ export const SectionJourneyToAmbassador: React.FC = () => {
                 className="journey-media-image"
               />
             </div>
-            <p className="journey-caption">
-              Louis Armstrong and his Orchestra (1929)
-            </p>
+            <a
+              className="journey-logo-link"
+              href="https://www.louisarmstronghouse.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open Louis Armstrong House website"
+            >
+              <img src="/assets/logo_light.png" alt="" aria-hidden="true" />
+            </a>
           </div>
+          <p className="journey-caption">
+            Louis Armstrong and his Orchestra (1929)
+          </p>
           <div className="journey-text">
             <p className="journey-copy">
               In 1929, Armstrong moved to New York and began fronting a big
@@ -138,7 +176,7 @@ export const SectionJourneyToAmbassador: React.FC = () => {
         </div>
 
         <div className="journey-entry">
-          <div>
+          <div className="journey-image-wrap">
             <div className="interactive-card">
               <img
                 src="/assets/pennies.jpg"
@@ -146,10 +184,19 @@ export const SectionJourneyToAmbassador: React.FC = () => {
                 className="journey-media-image"
               />
             </div>
-            <p className="journey-caption">
-              "Pennies from Heaven" with Bing Crosby
-            </p>
+            <a
+              className="journey-logo-link"
+              href="https://www.louisarmstronghouse.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open Louis Armstrong House website"
+            >
+              <img src="/assets/logo_light.png" alt="" aria-hidden="true" />
+            </a>
           </div>
+          <p className="journey-caption">
+            "Pennies from Heaven" with Bing Crosby
+          </p>
           <div className="journey-text">
             <p className="journey-copy">
               Armstrong made his film debut in 1930 and, by 1936, became the
