@@ -104,6 +104,9 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           background: transparent !important;
         }
 
+
+
+        
         .hero-intro button,
         .hero-intro p,
         .hero-intro span {
