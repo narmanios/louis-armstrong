@@ -22,6 +22,70 @@ type TimelineJumpTarget =
   | { kind: "intro" }
   | { kind: "section"; groupId: GroupId; sectionIdx: number };
 
+type StatsCardKey =
+  | "history-0"
+  | "history-1"
+  | "history-2"
+  | "legacy-0"
+  | "legacy-1"
+  | "ambassador-0"
+  | "ambassador-1"
+  | "ambassador-2"
+  | "ambassador-3"
+  | "ambassador-4"
+  | "ambassador-5";
+
+type StatsCardStat = {
+  label: string;
+  value: string;
+};
+
+type StatsCardContent = {
+  description: string;
+};
+
+const buildStatsCard = (
+  description = "Add section-specific copy here. Add a second sentence to support the section title.",
+): StatsCardContent => ({
+  description,
+});
+
+const statsCardContent: Record<StatsCardKey, StatsCardContent> = {
+  "history-0": buildStatsCard(
+    "At 62 years of age, Louis Armstrong’s “Hello, Dolly!” knocked the Beatles from No. 1 on the Billboard Hot 100 on May 9, 1964.",
+  ),
+  "history-1": buildStatsCard(
+    "At just 11, Louis Armstrong got his first formal music training in a boys’ reform home.",
+  ),
+  "history-2": buildStatsCard(
+    "The transition from local musician to international cultural figure. The card can be used to summarize the widening reach of Armstrong's public role.",
+  ),
+  "legacy-0": buildStatsCard(
+    "The lasting legacy of “What a Wonderful World” can be seen in the many rerecordings it continues to inspire, proving that Louis Armstrong’s voice and message still resonate across generations.",
+  ),
+  "legacy-1": buildStatsCard(
+    "Louis Armstrong’s music still lives on in screen media today, from “Dream a Little Dream of Me” in Stranger Things to “We Have All the Time in the World” in the James Bond film No Time to Die, showing how his sound continues to shape popular culture across generations.",
+  ),
+  "ambassador-0": buildStatsCard(
+    "Louis Armstrong became a goodwill ambassador long before the title was official, traveling the world as one of the first Black pop stars to spread jazz and American culture abroad.",
+  ),
+  "ambassador-1": buildStatsCard(
+    "The Jazz Diplomacy program sent musicians overseas and used these artists to project an image of American freedom and culture abroad, even as Cold War conflict and segregation at home challenged that image.",
+  ),
+  "ambassador-2": buildStatsCard(
+    "Africa tour that Armstrong undertook in 1960 as part of the Jazz Diplomacy program, which was a key moment in his role as a cultural ambassador and in the broader context of U.S. cultural diplomacy during the Cold War.",
+  ),
+  "ambassador-3": buildStatsCard(
+    "Louis Armstrong was sent abroad to symbolize American freedom, even as FBI files, segregation, and voter suppression exposed how limited that freedom was at home.",
+  ),
+  "ambassador-4": buildStatsCard(
+    "Real Ambassadors was a jazz musical created by Dave Brubeck and Iola Brubeck that premiered in 1962. The show was a satirical take on the Jazz Diplomacy program, using humor and music to critique the contradictions of American cultural diplomacy during the Cold War.",
+  ),
+  "ambassador-5": buildStatsCard(
+    "1964 World Fair in New York and the 1965 Berlin tour were major highlights of Armstrong's ambassadorial career, showcasing his global influence and the power of jazz as a cultural bridge during the Cold War era.",
+  ),
+};
+
 export const MainCollections: React.FC<MainCollectionsProps> = ({
   className,
 }) => {
@@ -47,6 +111,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   const isMobile = useIsMobile();
   const [showFixedGroupNav, setShowFixedGroupNav] = useState(false);
   const [currentGroupId, setCurrentGroupId] = useState<GroupId>("history");
+  const [activeStatsCardKey, setActiveStatsCardKey] =
+    useState<StatsCardKey | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [introOverlayGroupId, setIntroOverlayGroupId] =
     useState<GroupId | null>(null);
@@ -59,9 +125,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     history: ["Career Highlights", "The Beginning", "Journey to Ambassador"],
     ambassador: [
       "Goodwill Ambassador",
-      "FBI Files",
       "Jazz Ambassadors",
       "Africa Tour",
+      "FBI Files",
       "The Real Ambassadors",
       "World Fair + Berlin",
     ],
@@ -159,6 +225,59 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     return section.classList.contains("mcg-group-section--auto-height")
       ? 16
       : desktopSectionAnchorOffset;
+  };
+
+  const getSectionStatsCardKey = (
+    groupId: GroupId | null,
+    sectionIdx: number | null,
+  ): StatsCardKey | null => {
+    if (!groupId || sectionIdx === null) {
+      return null;
+    }
+
+    return `${groupId}-${sectionIdx}` as StatsCardKey;
+  };
+
+  const getActiveStatsCardKeyForGroup = (groupId: GroupId) => {
+    const scroller = getGroupScroller(groupId);
+    const sections = getGroupSectionElements(groupId).filter(
+      (section): section is HTMLDivElement => !!section,
+    );
+
+    if (sections.length === 0) {
+      return null;
+    }
+
+    if (!scroller) {
+      const sectionIndex = getGroupSectionElements(groupId).findIndex(
+        (section) => !!section && section.getBoundingClientRect().top >= 0,
+      );
+      return getSectionStatsCardKey(
+        groupId,
+        sectionIndex >= 0 ? sectionIndex : 0,
+      );
+    }
+
+    const viewportAnchor = scroller.scrollTop + scroller.clientHeight * 0.4;
+    let activeIndex = 0;
+
+    sections.forEach((section, index) => {
+      if (section.offsetTop <= viewportAnchor) {
+        activeIndex = index;
+      }
+    });
+
+    return getSectionStatsCardKey(groupId, activeIndex);
+  };
+
+  const updateActiveStatsCard = () => {
+    if (!showFixedGroupNav || introOverlayGroupId !== null) {
+      setActiveStatsCardKey(null);
+      return;
+    }
+
+    const nextKey = getActiveStatsCardKeyForGroup(currentGroupId);
+    setActiveStatsCardKey(nextKey);
   };
 
   const scrollToGroupSection = (groupId: GroupId, sectionIdx = 0) => {
@@ -285,7 +404,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         const introSection = introSectionRef.current;
         if (!introSection) return;
         const rect = introSection.getBoundingClientRect();
-        setShowFixedGroupNav(rect.bottom <= 0);
+        const nextShowFixedGroupNav = rect.bottom <= 0;
+        setShowFixedGroupNav(nextShowFixedGroupNav);
 
         const mobilePages: Array<{
           id: GroupId;
@@ -312,6 +432,15 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         if (closestMobilePage) {
           setCurrentGroupId(closestMobilePage.id);
         }
+
+        if (!nextShowFixedGroupNav) {
+          setActiveStatsCardKey(null);
+          return;
+        }
+
+        const activeGroupId = closestMobilePage?.id ?? currentGroupId;
+        const nextKey = getActiveStatsCardKeyForGroup(activeGroupId);
+        setActiveStatsCardKey(nextKey);
         return;
       }
 
@@ -331,7 +460,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         return;
       }
 
-      setShowFixedGroupNav(container.scrollLeft >= historyPage.offsetLeft / 2);
+      const nextShowFixedGroupNav =
+        container.scrollLeft >= historyPage.offsetLeft / 2;
+      setShowFixedGroupNav(nextShowFixedGroupNav);
 
       const viewportAnchor = container.scrollLeft + desktopGroupPeek;
       const closestDesktopPage = desktopPages.reduce<{
@@ -349,6 +480,15 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       if (closestDesktopPage) {
         setCurrentGroupId(closestDesktopPage.id);
       }
+
+      if (!nextShowFixedGroupNav) {
+        setActiveStatsCardKey(null);
+        return;
+      }
+
+      const activeGroupId = closestDesktopPage?.id ?? currentGroupId;
+      const nextKey = getActiveStatsCardKeyForGroup(activeGroupId);
+      setActiveStatsCardKey(nextKey);
     };
 
     updateNavVisibility();
@@ -389,6 +529,40 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       document.body.style.overflow = previousOverflow;
     };
   }, [isMobile, isMobileMenuOpen]);
+
+  useEffect(() => {
+    const listeners: Array<{
+      element: HTMLElement | null;
+      handler: () => void;
+    }> = [
+      {
+        element: historyScrollRef.current,
+        handler: updateActiveStatsCard,
+      },
+      {
+        element: ambassadorScrollRef.current,
+        handler: updateActiveStatsCard,
+      },
+      {
+        element: musicianScrollRef.current,
+        handler: updateActiveStatsCard,
+      },
+    ];
+
+    const activeListeners = listeners.filter((entry) => entry.element);
+
+    activeListeners.forEach(({ element, handler }) => {
+      element?.addEventListener("scroll", handler, { passive: true });
+    });
+
+    updateActiveStatsCard();
+
+    return () => {
+      activeListeners.forEach(({ element, handler }) => {
+        element?.removeEventListener("scroll", handler);
+      });
+    };
+  }, [currentGroupId, isMobile, showFixedGroupNav, introOverlayGroupId]);
 
   useEffect(() => {
     return () => {
@@ -653,6 +827,65 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
         .mcg-group-nav-dropdown-button + .mcg-group-nav-dropdown-button {
           border-top: none;
+        }
+
+        .mcg-section-stats-card {
+          position: fixed;
+          top: 50%;
+          right: 0;
+          left: auto;
+          bottom: auto;
+          width: min(420px, calc(100vw - 32px));
+          padding: 14px 16px 13px;
+          border-radius: 0;
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          background: rgba(0, 0, 0, 0.94);
+          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.36);
+          backdrop-filter: blur(10px);
+          z-index: 150;
+          pointer-events: none;
+          opacity: 0;
+          transform: translateY(calc(-50% + 12px));
+          transition:
+            opacity 180ms ease,
+            transform 180ms ease;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+        }
+
+        .mcg-section-stats-card.is-visible {
+          opacity: 1;
+          transform: translateY(-50%);
+        }
+
+        .mcg-section-stats-card__eyebrow {
+          display: none;
+        }
+
+        .mcg-section-stats-card__note {
+          margin: 0;
+          font-size: 14px;
+          line-height: 1.6;
+          color: rgba(255, 255, 255, 0.72);
+          text-wrap: balance;
+        }
+
+        .mcg-section-stats-card__content {
+          animation: mcgStatsCardTextIn 420ms cubic-bezier(0.22, 1, 0.36, 1);
+          will-change: transform, opacity, filter;
+        }
+
+        @keyframes mcgStatsCardTextIn {
+          from {
+            opacity: 0;
+            transform: translateY(18px);
+            filter: blur(6px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+          }
         }
 
         /* ── DESKTOP: horizontal scroll ── */
@@ -978,6 +1211,19 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             line-height: 1.45;
             text-align: left;
             cursor: pointer;
+          }
+
+          .mcg-section-stats-card {
+            top: auto;
+            left: 12px;
+            right: 12px;
+            bottom: calc(12px + var(--mcg-mobile-nav-offset, 0px));
+            width: auto;
+            transform: translateY(12px);
+          }
+
+          .mcg-section-stats-card.is-visible {
+            transform: translateY(0);
           }
 
           .mcg-group-nav-button {
@@ -1380,7 +1626,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
               <div
                 ref={(element) => {
-                  ambassadorSectionRefs.current[2] = element;
+                  ambassadorSectionRefs.current[1] = element;
                 }}
                 className="mcg-group-section"
               >
@@ -1391,7 +1637,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
               <div
                 ref={(element) => {
-                  ambassadorSectionRefs.current[3] = element;
+                  ambassadorSectionRefs.current[2] = element;
                 }}
                 className="mcg-group-section mcg-group-section--auto-height"
               >
@@ -1401,7 +1647,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               </div>
               <div
                 ref={(element) => {
-                  ambassadorSectionRefs.current[1] = element;
+                  ambassadorSectionRefs.current[3] = element;
                 }}
                 className="mcg-group-section"
               >
@@ -1487,6 +1733,22 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           </button>
         </div>
       </div>
+
+      <aside
+        className={`mcg-section-stats-card${activeStatsCardKey ? " is-visible" : ""}`}
+        aria-live="polite"
+      >
+        {activeStatsCardKey && statsCardContent[activeStatsCardKey] ? (
+          <div
+            key={activeStatsCardKey}
+            className="mcg-section-stats-card__content"
+          >
+            <p className="mcg-section-stats-card__note">
+              {statsCardContent[activeStatsCardKey].description}
+            </p>
+          </div>
+        ) : null}
+      </aside>
     </div>
   );
 };

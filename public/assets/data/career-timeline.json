@@ -699,13 +699,6 @@
       "categories": ["ambassador", "musician", "vocalist"]
     },
     {
-      "id": 88,
-      "year": 1963,
-      "dateText": "December 3, 1963",
-      "event": "Records the hit single \"Hello, Dolly!\"",
-      "categories": ["musician", "vocalist"]
-    },
-    {
       "id": 89,
       "year": 1965,
       "dateText": "November 1965",
@@ -1400,6 +1393,13 @@
       "dateText": "October 28, 1969",
       "event": "Records the single \"We Have All the Time in the World,\" used in James Bond film \"On Her Majesty's Secret Service\"",
       "categories": ["bandleader", "vocalist"]
+    },
+    {
+      "id": 189,
+      "year": 1964,
+      "dateText": "May 9, 1964",
+      "event": "At 62, Louis Armstrong ended the Beatles’ 14-week run at No. 1 on the Billboard Hot 100 when “Hello, Dolly!” replaced “Can’t Buy Me Love” on May 9, 1964.",
+      "categories": ["vocalist"]
     }
   ]
 }
