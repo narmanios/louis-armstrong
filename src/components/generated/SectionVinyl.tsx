@@ -204,7 +204,7 @@ export function VinylRecordExplorer({
   const [loading, setLoading] = useState<boolean>(!soundtrackProps);
   const [loadError, setLoadError] = useState<Error | null>(null);
   const [selectedDecadeId, setSelectedDecadeId] = useState<string | null>(
-    soundtrackProps?.[0]?.decade ?? null,
+    "2020s",
   );
   const [hoveredDecadeId, setHoveredDecadeId] = useState<string | null>(null);
   const [hoveredSoundtrackKey, setHoveredSoundtrackKey] = useState<
@@ -222,9 +222,7 @@ export function VinylRecordExplorer({
       setSoundtracks(soundtrackProps);
       setLoading(false);
       setLoadError(null);
-      setSelectedDecadeId(
-        (current) => current ?? soundtrackProps[0]?.decade ?? null,
-      );
+      setSelectedDecadeId((current) => current ?? "2020s");
       return;
     }
 
@@ -245,7 +243,7 @@ export function VinylRecordExplorer({
           ? data.map((item, index) => normalizeSoundtrack(item, index))
           : [];
         setSoundtracks(nextSoundtracks);
-        setSelectedDecadeId(nextSoundtracks[0]?.decade ?? null);
+        setSelectedDecadeId("2020s");
       })
       .catch((error: unknown) => {
         if (!cancelled) {
@@ -278,15 +276,21 @@ export function VinylRecordExplorer({
       return;
     }
 
-    setSelectedDecadeId((current) =>
-      current && decades.some((decade) => decade.id === current)
-        ? current
-        : (decades[0]?.id ?? null),
-    );
+    setSelectedDecadeId((current) => {
+      if (current && decades.some((decade) => decade.id === current)) {
+        return current;
+      }
+      const twenties = decades.find((decade) => decade.id === "2020s");
+      return twenties ? "2020s" : (decades[0]?.id ?? null);
+    });
   }, [decades]);
 
   const activeDecadeId =
-    hoveredDecadeId ?? selectedDecadeId ?? decades[0]?.id ?? null;
+    hoveredDecadeId ??
+    selectedDecadeId ??
+    decades.find((d) => d.id === "2020s")?.id ??
+    decades[0]?.id ??
+    null;
   const activeDecade = useMemo(
     () => decades.find((decade) => decade.id === activeDecadeId) ?? null,
     [activeDecadeId, decades],
@@ -446,6 +450,17 @@ export function VinylRecordExplorer({
           </h1>
         </div>
 
+        <div className="vre__soundtrack-count">
+          <span className="vre__soundtrack-count-number">
+            {activeSoundtracks.length}
+          </span>
+          <span className="vre__soundtrack-count-label">of</span>
+          <span className="vre__soundtrack-count-number">
+            {soundtracks.length}
+          </span>
+          <span className="vre__soundtrack-count-label">soundtracks</span>
+        </div>
+
         <div className="vre__song-section vre__song-section--header">
           <h3>Decades</h3>
           <div className="vre__song-list vre__song-list--horizontal">
@@ -460,9 +475,6 @@ export function VinylRecordExplorer({
                 onMouseLeave={() => onDecadeUnhover(decade.id)}
               >
                 <span className="vre__song-title">{decade.label}</span>
-                <span className="vre__song-meta">
-                  {decade.soundtracks.length} soundtracks
-                </span>
               </div>
             ))}
           </div>

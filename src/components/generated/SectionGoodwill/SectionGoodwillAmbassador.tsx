@@ -246,6 +246,18 @@ export function SectionGoodwillAmbassador({
     }, {});
   }, [maxNonUsFilteredCount, selectedDecade, visibleCountries]);
 
+  const totalEventsForSelectedDecade = useMemo(() => {
+    return COUNTRIES.reduce((total, country) => {
+      if (hideUsBubble && country.id === "usa") {
+        return total;
+      }
+      if (selectedDecade === "all") {
+        return total + country.counts.all;
+      }
+      return total + (country.counts[selectedDecade] ?? 0);
+    }, 0);
+  }, [selectedDecade, hideUsBubble]);
+
   const mobileBubbleOffsetX = useMemo(() => {
     const bubbleBounds = visibleCountries.reduce(
       (acc, country) => {
@@ -580,6 +592,23 @@ export function SectionGoodwillAmbassador({
           margin-top: 12px;
         }
 
+        .goodwill-event-count {
+          font-family: ${UI_FONT};
+          font-size: 32px;
+          font-weight: 700;
+          color: #ffffff;
+          line-height: 1;
+          margin-left: 24px;
+        }
+
+        .goodwill-event-label {
+          font-family: ${UI_FONT};
+          font-size: 13px;
+          font-weight: 400;
+          color: rgba(255, 255, 255, 0.6);
+          margin-left: 6px;
+        }
+
         .goodwill-stage-shell {
           position: relative;
           width: 100%;
@@ -638,7 +667,7 @@ export function SectionGoodwillAmbassador({
           font-family: ${UI_FONT};
           font-weight: 400;
           font-size: 12px;
-          color: #c1c1bf;
+          color: #ffffff;
           background: transparent;
           border: 0;
           border-radius: 0;
@@ -657,7 +686,7 @@ export function SectionGoodwillAmbassador({
         }
 
         .goodwill-segmented-button:hover {
-          background: rgba(255, 255, 255, 0.18);
+          background: #000000;
         }
 
         .goodwill-segmented-button + .goodwill-segmented-button {
@@ -779,6 +808,17 @@ export function SectionGoodwillAmbassador({
             flex-wrap: wrap;
           }
 
+          .goodwill-event-count {
+            font-size: 48px;
+            margin-top: 16px;
+            width: 100%;
+            text-align: left;
+          }
+
+          .goodwill-event-label {
+            font-size: 14px;
+          }
+
           .goodwill-segmented {
             display: inline-flex;
           }
@@ -881,6 +921,10 @@ export function SectionGoodwillAmbassador({
                 Hide U.S.
               </button>
             </div>
+            <div className="goodwill-event-count">
+              {totalEventsForSelectedDecade}
+              <span className="goodwill-event-label">events</span>
+            </div>
           </div>
         ) : (
           <div className="goodwill-mobile-filter-row">
@@ -917,6 +961,10 @@ export function SectionGoodwillAmbassador({
               >
                 Hide U.S.
               </button>
+            </div>
+            <div className="goodwill-event-count">
+              {totalEventsForSelectedDecade}
+              <span className="goodwill-event-label">events</span>
             </div>
           </div>
         )}

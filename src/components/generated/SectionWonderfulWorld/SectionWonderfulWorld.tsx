@@ -897,120 +897,129 @@ export function SectionWonderfulWorld({
             {title}
           </h1>
           <header className="slg__header">
-            <div className="slg__brand">
-              {/* <p>{subtitle}</p> */}
-            </div>
+            <div className="slg__brand">{/* <p>{subtitle}</p> */}</div>
 
             <div className="slg__controls">
-              <button
-                type="button"
-                className="slg__sound-toggle"
-                onClick={() => setVideoSoundEnabled((current) => !current)}
-                aria-pressed={videoSoundEnabled}
-                aria-label={
-                  videoSoundEnabled
-                    ? "Mute center video"
-                    : "Unmute center video"
-                }
-                title={videoSoundEnabled ? "Sound on" : "Sound off"}
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  {videoSoundEnabled ? (
-                    <>
-                      <path
-                        d="M5 9h4l5-4v14l-5-4H5z"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M17 9.5a4 4 0 0 1 0 5"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        d="M19.5 7a7.5 7.5 0 0 1 0 10"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <path
-                        d="M5 9h4l5-4v14l-5-4H5z"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M17 9l4 6"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        d="M21 9l-4 6"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                      />
-                    </>
-                  )}
-                </svg>
-                <span>{videoSoundEnabled ? "Sound on" : "Sound off"}</span>
-              </button>
-
-              <label className="slg__decade-filter">
-                <select
-                  value={selectedDecade}
-                  onChange={(event) => setSelectedDecade(event.target.value)}
-                  aria-label="Filter by decade"
-                >
-                  <option value="all">All decades</option>
-                  {DECADE_OPTIONS.map((decade) => (
-                    <option key={decade} value={decade}>
-                      {decade}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="slg__search">
-                <span className="slg__search-icon" aria-hidden="true">
-                  ⌕
-                </span>
-                <input
-                  value={searchTerm}
-                  onChange={(event) => setSearchTerm(event.target.value)}
-                  type="text"
-                  placeholder={searchPlaceholder}
-                  autoComplete="off"
-                />
-              </label>
-
-              <div className="slg__zoom-controls" aria-label="Zoom controls">
+              <div className="slg__controls-left">
                 <button
                   type="button"
-                  title="Zoom in"
-                  onClick={() => setZoom(zoom + ZOOM_STEP)}
+                  className="slg__sound-toggle"
+                  onClick={() => setVideoSoundEnabled((current) => !current)}
+                  aria-pressed={videoSoundEnabled}
+                  aria-label={
+                    videoSoundEnabled
+                      ? "Mute center video"
+                      : "Unmute center video"
+                  }
+                  title={videoSoundEnabled ? "Sound on" : "Sound off"}
                 >
-                  +
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    {videoSoundEnabled ? (
+                      <>
+                        <path
+                          d="M5 9h4l5-4v14l-5-4H5z"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M17 9.5a4 4 0 0 1 0 5"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M19.5 7a7.5 7.5 0 0 1 0 10"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <path
+                          d="M5 9h4l5-4v14l-5-4H5z"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M17 9l4 6"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M21 9l-4 6"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                        />
+                      </>
+                    )}
+                  </svg>
+                  <span>{videoSoundEnabled ? "Sound on" : "Sound off"}</span>
                 </button>
-                <button
-                  type="button"
-                  title="Zoom out"
-                  onClick={() => setZoom(zoom - ZOOM_STEP)}
-                >
-                  −
-                </button>
+
+                <label className="slg__decade-filter">
+                  <select
+                    value={selectedDecade}
+                    onChange={(event) => setSelectedDecade(event.target.value)}
+                    aria-label="Filter by decade"
+                  >
+                    <option value="all">All decades</option>
+                    {DECADE_OPTIONS.map((decade) => (
+                      <option key={decade} value={decade}>
+                        {decade}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <div className="slg__recording-count">
+                  <span className="slg__recording-count-number">
+                    {filteredFacts.length}
+                  </span>
+                  <span className="slg__recording-count-label">recordings</span>
+                </div>
+              </div>
+
+              <div className="slg__controls-right">
+                <label className="slg__search">
+                  <span className="slg__search-icon" aria-hidden="true">
+                    ⌕
+                  </span>
+                  <input
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                    type="text"
+                    placeholder={searchPlaceholder}
+                    autoComplete="off"
+                  />
+                </label>
+
+                <div className="slg__zoom-controls" aria-label="Zoom controls">
+                  <button
+                    type="button"
+                    title="Zoom in"
+                    onClick={() => setZoom(zoom + ZOOM_STEP)}
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    title="Zoom out"
+                    onClick={() => setZoom(zoom - ZOOM_STEP)}
+                  >
+                    −
+                  </button>
+                </div>
               </div>
             </div>
           </header>

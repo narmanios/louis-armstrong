@@ -113,6 +113,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   const [currentGroupId, setCurrentGroupId] = useState<GroupId>("history");
   const [activeStatsCardKey, setActiveStatsCardKey] =
     useState<StatsCardKey | null>(null);
+  const [isStatsCardDismissed, setIsStatsCardDismissed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [introOverlayGroupId, setIntroOverlayGroupId] =
     useState<GroupId | null>(null);
@@ -576,6 +577,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   }, []);
 
   useEffect(() => {
+    setIsStatsCardDismissed(false);
+  }, [activeStatsCardKey]);
+
+  useEffect(() => {
     const root = document.documentElement;
     const updateNavOffset = () => {
       const navOffset =
@@ -855,6 +860,38 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         .mcg-section-stats-card.is-visible {
           opacity: 1;
           transform: translateY(-50%);
+          pointer-events: auto;
+        }
+
+        .mcg-section-stats-card.is-dismissed {
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        .mcg-section-stats-card__close {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          width: 18px;
+          height: 18px;
+          padding: 0;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          opacity: 0.7;
+          transition: opacity 0.18s ease;
+          z-index: 1;
+        }
+
+        .mcg-section-stats-card__close:hover {
+          opacity: 1;
+        }
+
+        .mcg-section-stats-card__close img {
+          width: 100%;
+          height: 100%;
+          display: block;
+          filter: brightness(0) invert(1);
         }
 
         .mcg-section-stats-card__eyebrow {
@@ -863,6 +900,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
         .mcg-section-stats-card__note {
           margin: 0;
+          padding-right: 24px;
           font-size: 14px;
           line-height: 1.6;
           color: rgba(255, 255, 255, 0.72);
@@ -1736,18 +1774,27 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       </div>
 
       <aside
-        className={`mcg-section-stats-card${activeStatsCardKey ? " is-visible" : ""}`}
+        className={`mcg-section-stats-card${activeStatsCardKey && !isStatsCardDismissed ? " is-visible" : ""}${isStatsCardDismissed ? " is-dismissed" : ""}`}
         aria-live="polite"
       >
         {activeStatsCardKey && statsCardContent[activeStatsCardKey] ? (
-          <div
-            key={activeStatsCardKey}
-            className="mcg-section-stats-card__content"
-          >
-            <p className="mcg-section-stats-card__note">
-              {statsCardContent[activeStatsCardKey].description}
-            </p>
-          </div>
+          <>
+            <button
+              className="mcg-section-stats-card__close"
+              onClick={() => setIsStatsCardDismissed(true)}
+              aria-label="Close stats card"
+            >
+              <img src="/assets/close.svg" alt="" aria-hidden="true" />
+            </button>
+            <div
+              key={activeStatsCardKey}
+              className="mcg-section-stats-card__content"
+            >
+              <p className="mcg-section-stats-card__note">
+                {statsCardContent[activeStatsCardKey].description}
+              </p>
+            </div>
+          </>
         ) : null}
       </aside>
     </div>

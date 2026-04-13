@@ -53,6 +53,27 @@
   color: #ffffff !important;
 }
 
+.vre__soundtrack-count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  line-height: 1;
+}
+
+.vre__soundtrack-count-number {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.vre__soundtrack-count-label {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .vre__subtitle {
   max-width: 300px;
   margin: 14px 0 0 0;
