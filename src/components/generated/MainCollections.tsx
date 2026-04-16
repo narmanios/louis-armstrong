@@ -931,7 +931,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         .mcg-track {
           width: 100vw;
           height: 100dvh;
-          overflow-x: auto;
+          overflow-x: hidden;
           overflow-y: hidden;
           display: flex;
           flex-direction: row;

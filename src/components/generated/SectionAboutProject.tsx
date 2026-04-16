@@ -165,14 +165,14 @@ export const SectionAboutProject: React.FC = () => {
       <div className="about-project-layout">
         <div className="about-project-text-panel">
           <p className="about-project-copy">
-            This project, Louis Armstrong: The Story of Louis Armstrong in Data
-            and Song, examines how Armstrong’s career illuminates the
-            intersections of music, race, politics, and U.S. cultural diplomacy
-            in the mid-twentieth century till the present. By tracing his
-            international tours, the circulation and reinterpretation of his
-            songs, and the political contexts surrounding his performances, the
-            project shows how Armstrong became more than a jazz icon: he emerged
-            as a powerful, if sometimes conflicted, symbol of American
+            This project, The Story of Louis Armstrong in Data and Song,
+            examines how Armstrong’s career illuminates the intersections of
+            music, race, politics, and U.S. cultural diplomacy in the
+            mid-twentieth century till the present. By tracing his international
+            tours, the circulation and reinterpretation of his songs, and the
+            political contexts surrounding his performances, the project shows
+            how Armstrong became more than a jazz icon: he emerged as a
+            powerful, if sometimes conflicted, symbol of American
             ambassadorship. At the same time, it asks how that role was shaped
             not only by official diplomacy, but also by the afterlife of his
             music, which continued to carry ideas of goodwill, freedom, and

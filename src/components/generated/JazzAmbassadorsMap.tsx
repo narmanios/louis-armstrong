@@ -460,6 +460,7 @@ export const JazzAmbassadorsMap: React.FC = () => {
             width: "100%",
             height: "100%",
             margin: "0 auto",
+            pointerEvents: "none",
           }}
         >
           <div className="relative w-full h-full">
@@ -475,6 +476,7 @@ export const JazzAmbassadorsMap: React.FC = () => {
               className="absolute top-4 right-4 flex flex-col gap-1"
               style={{
                 zIndex: 1000,
+                pointerEvents: "auto",
               }}
             >
               <button
