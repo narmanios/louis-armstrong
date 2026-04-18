@@ -58,13 +58,13 @@ const statsCardContent: Record<StatsCardKey, StatsCardContent> = {
     "At just 11, Louis Armstrong got his first formal music training in a boys’ reform home.\n\nBy 1923, he was a featured soloist on recordings with King Oliver’s Creole Jazz Band, marking the start of his rise to international stardom.",
   ),
   "history-2": buildStatsCard(
-    "Louis Armstrong’s career spanned over 50 years, during which he became one of the most influential figures in jazz and popular music. \n\n He was the first Black star to have double billing in major venues, breaking racial barriers and paving the way for future generations of artists.",
+    "Louis Armstrong’s career spanned over 50 years, during which he became one of the most influential figures in jazz and popular music.",
   ),
   "legacy-0": buildStatsCard(
     "The lasting legacy of “What a Wonderful World” can be seen in the many rerecordings it continues to inspire, proving that Louis Armstrong’s voice and message still resonate across generations.",
   ),
   "legacy-1": buildStatsCard(
-    "Louis Armstrong’s music still lives on in screen media today, from “Dream a Little Dream of Me” in Stranger Things to “We Have All the Time in the World” in the James Bond film No Time to Die, showing how his sound continues to shape popular culture across generations.",
+    "Louis Armstrong’s music still lives on in screen media today, from “Dream a Little Dream of Me” in Stranger Things to “We Have All the Time in the World” in the James Bond film No Time to Die",
   ),
   "ambassador-0": buildStatsCard(
     "Louis Armstrong became a goodwill ambassador long before the title was official, traveling the world as one of the first Black pop stars to spread jazz and American culture abroad.",
@@ -79,10 +79,10 @@ const statsCardContent: Record<StatsCardKey, StatsCardContent> = {
     "Louis Armstrong was sent abroad to symbolize American freedom, even as FBI files, segregation, and voter suppression exposed how limited that freedom was at home.",
   ),
   "ambassador-4": buildStatsCard(
-    "Real Ambassadors was a jazz musical created by Dave Brubeck and Iola Brubeck that premiered in 1962. The show was a satirical take on the Jazz Diplomacy program, using humor and music to critique the contradictions of American cultural diplomacy during the Cold War.",
+    "Real Ambassadors was a jazz musical that was a satirical take on the Jazz Diplomacy program, using humor to critique the contradictions of American cultural diplomacy during the Cold War.",
   ),
   "ambassador-5": buildStatsCard(
-    "1964 World Fair in New York and the 1965 Berlin tour were major highlights of Armstrong's ambassadorial career, showcasing his global influence and the power of jazz as a cultural bridge during the Cold War era.",
+    "1964 World Fair in New York and the 1965 Berlin tour were major highlights of Armstrong's ambassadorial career, showcasing his global influence",
   ),
 };
 
@@ -132,7 +132,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       "The Real Ambassadors",
       "World Fair + Berlin",
     ],
-    legacy: ["What a Wonderful World", "More Covers"],
+    legacy: ["Soundtrack features", "What a Wonderful World"],
   };
   const timelineTargetMap: TimelineJumpTarget[] = [
     { kind: "intro" },
@@ -141,7 +141,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     { kind: "section", groupId: "history", sectionIdx: 2 },
     { kind: "section", groupId: "legacy", sectionIdx: 0 },
     { kind: "section", groupId: "legacy", sectionIdx: 1 },
-    { kind: "section", groupId: "legacy", sectionIdx: 1 },
+    // { kind: "section", groupId: "legacy", sectionIdx: 1 },
     { kind: "section", groupId: "ambassador", sectionIdx: 0 },
     { kind: "section", groupId: "ambassador", sectionIdx: 3 },
     { kind: "section", groupId: "ambassador", sectionIdx: 4 },
@@ -800,6 +800,15 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           z-index: 141;
         }
 
+        .mcg-group-nav-item--history .mcg-group-nav-dropdown {
+          left: auto;
+          right: 0;
+        }
+ .mcg-group-nav-item--ambassador .mcg-group-nav-dropdown {
+          left: auto;
+          right: 0;
+        }
+
         .mcg-group-nav-item--legacy .mcg-group-nav-dropdown {
           left: auto;
           right: 0;
@@ -836,21 +845,21 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
         .mcg-section-stats-card {
           position: fixed;
-          top: 50%;
-          right: 0;
-          left: auto;
-          bottom: auto;
+          top: auto;
+          right: auto;
+          left: 50%;
+          bottom: 16px;
           width: min(420px, calc(100vw - 32px));
-          padding: 14px 16px 13px;
+          padding: 28px 32px;
           border-radius: 0;
-          border: 1px solid rgba(255, 255, 255, 0.14);
-          background: rgba(0, 0, 0, 0.94);
+          border: none;
+          background: rgba(255, 255, 255, 0.9);
           box-shadow: 0 18px 40px rgba(0, 0, 0, 0.36);
           backdrop-filter: blur(10px);
           z-index: 150;
           pointer-events: none;
           opacity: 0;
-          transform: translateY(calc(-50% + 12px));
+          transform: translateX(-50%) translateY(12px);
           transition:
             opacity 180ms ease,
             transform 180ms ease;
@@ -859,7 +868,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
         .mcg-section-stats-card.is-visible {
           opacity: 1;
-          transform: translateY(-50%);
+          transform: translateX(-50%) translateY(0);
           pointer-events: auto;
         }
 
@@ -891,7 +900,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           width: 100%;
           height: 100%;
           display: block;
-          filter: brightness(0) invert(1);
+          filter: brightness(0);
         }
 
         .mcg-section-stats-card__eyebrow {
@@ -901,9 +910,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         .mcg-section-stats-card__note {
           margin: 0;
           padding-right: 24px;
-          font-size: 14px;
+          font-size: 16px;
           line-height: 1.6;
-          color: rgba(255, 255, 255, 0.72);
+          color: rgba(0, 0, 0, 0.85);
           white-space: pre-line;
           text-wrap: balance;
         }
@@ -1254,15 +1263,15 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
           .mcg-section-stats-card {
             top: auto;
-            left: 12px;
-            right: 12px;
+            left: 50%;
+            right: auto;
             bottom: calc(12px + var(--mcg-mobile-nav-offset, 0px));
-            width: auto;
-            transform: translateY(12px);
+            width: calc(100vw - 24px);
+            transform: translateX(-50%) translateY(12px);
           }
 
           .mcg-section-stats-card.is-visible {
-            transform: translateY(0);
+            transform: translateX(-50%) translateY(0);
           }
 
           .mcg-group-nav-button {
@@ -1744,7 +1753,11 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                 className="mcg-group-section"
               >
                 <div className="mcg-group-section-inner">
-                  <SectionWonderfulWorld />
+                  <SectionVinyl
+                    className="mcg-section"
+                    height="100%"
+                    minHeight="100%"
+                  />
                 </div>
               </div>
               <div
@@ -1754,11 +1767,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                 className="mcg-group-section"
               >
                 <div className="mcg-group-section-inner">
-                  <SectionVinyl
-                    className="mcg-section"
-                    height="100%"
-                    minHeight="100%"
-                  />
+                  <SectionWonderfulWorld />
                 </div>
               </div>
             </div>

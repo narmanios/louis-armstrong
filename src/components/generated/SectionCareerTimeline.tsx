@@ -304,27 +304,56 @@ function CategoryPill({
   onToggle,
   label,
   color,
+  dimmed,
+  onHover,
+  onHoverEnd,
 }: {
   active: boolean;
   count: number;
   onToggle: () => void;
   label: string;
   color: string;
+  dimmed: boolean;
+  onHover: () => void;
+  onHoverEnd: () => void;
 }) {
   const pillVars = {
     "--career-pill-bg": active ? `${color}12` : "transparent",
     "--career-pill-dot": color,
-    "--career-pill-label": active ? "#111827" : "#9CA3AF",
+    "--career-pill-label": active ? "#ffffff" : "#9CA3AF",
     "--career-pill-count": active ? color : "#9CA3AF",
   } as React.CSSProperties;
+
+  const [isHovered, setIsHovered] = React.useState(false);
 
   return (
     <button
       onClick={onToggle}
-      style={pillVars}
+      onMouseEnter={() => {
+        setIsHovered(true);
+        onHover();
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        onHoverEnd();
+      }}
+      style={{
+        ...pillVars,
+        opacity: dimmed ? 0.35 : 1,
+        transition: "opacity 0.2s ease",
+      }}
       className="career-timeline-legend-filter"
     >
-      <span className="career-timeline-legend-dot" />
+      <span
+        className="career-timeline-legend-dot"
+        style={{
+          transform: isHovered ? "scale(1.5)" : "scale(1)",
+          boxShadow: isHovered
+            ? `0 0 4px 1px ${color}40, 0 0 2px 0px ${color}60`
+            : "none",
+          transition: "transform 0.2s ease, box-shadow 0.2s ease",
+        }}
+      />
       <span className="career-timeline-legend-label">{label}</span>
     </button>
   );
@@ -340,6 +369,8 @@ function TimelineSVG({
   activeDotRadiusOffset,
   laneStroke,
   laneStrokeWidth,
+  dimmedCategories,
+  hoveredLegendCategory,
 }: {
   svgWidth: number;
   active: Set<Category>;
@@ -348,8 +379,10 @@ function TimelineSVG({
   dotRadius: number;
   featuredDotRadiusOffset: number;
   activeDotRadiusOffset: number;
+  dimmedCategories: Set<Category>;
   laneStroke: string;
   laneStrokeWidth: number;
+  hoveredLegendCategory: Category | null;
 }) {
   const [hoverKey, setHoverKey] = useState<string | null>(null);
   const [hoverTip, setHoverTip] = useState<TipInfo | null>(null);
@@ -474,7 +507,6 @@ function TimelineSVG({
   }, [dots, pinTip, selected]);
 
   const displayTip = hoverTip ?? pinTip;
-  const isPinned = !hoverTip && !!pinTip;
   const displayTipCategories = useMemo(() => {
     if (!displayTip) {
       return [];
@@ -598,6 +630,14 @@ function TimelineSVG({
     [onSelect, selected],
   );
 
+  const dismissTooltip = useCallback(() => {
+    setHoverTip(null);
+    setHoverKey(null);
+    setPinTip(null);
+    setSelectionFocusEnabled(false);
+    onSelect(null);
+  }, [onSelect]);
+
   const yearTicks: number[] = [];
   for (let year = yearStart; year <= yearEnd; year += 5) yearTicks.push(year);
   if (yearTicks[yearTicks.length - 1] !== yearEnd) yearTicks.push(yearEnd);
@@ -651,6 +691,7 @@ function TimelineSVG({
               y2={laneY[category]}
               stroke={laneStroke}
               strokeWidth={laneStrokeWidth}
+              opacity={dimmedCategories.has(category) ? 0.3 : 1}
             />
           ) : null,
         )}
@@ -668,6 +709,7 @@ function TimelineSVG({
             featured.dir === "above"
               ? y1 - connectorLength
               : y1 + connectorLength;
+          const isDimmed = dimmedCategories.has(dot.cat);
           return (
             <line
               key={`conn-${dot.event.id}`}
@@ -678,6 +720,7 @@ function TimelineSVG({
               stroke="#8c8679"
               strokeWidth={1}
               strokeDasharray={featured.dashArray ?? connectorDash}
+              opacity={isDimmed ? 0.3 : 1}
             />
           );
         })}
@@ -699,8 +742,9 @@ function TimelineSVG({
             featured.dir === "above"
               ? y2 - featuredLabelAboveOffset - (lines - 1) * lineHeight
               : y2 + lineHeight;
+          const isDimmed = dimmedCategories.has(dot.cat);
           return (
-            <g key={`lbl-${dot.event.id}`}>
+            <g key={`lbl-${dot.event.id}`} opacity={isDimmed ? 0.3 : 1}>
               <text
                 className="career-timeline-featured-label"
                 x={dot.cx}
@@ -764,7 +808,11 @@ function TimelineSVG({
           const isHoveredCluster = hoverClusterKey === cluster.key;
           const representativeIsDimmed =
             (hoverFocusActive && !isHoveredCluster) ||
-            (selectionFocusActive && !selectedDot);
+            (selectionFocusActive && !selectedDot) ||
+            dimmedCategories.has(cluster.cat);
+          const representativeLegendHovered =
+            hoveredLegendCategory !== null &&
+            cluster.cat === hoveredLegendCategory;
           const representativeRadius = dotRadius;
           const representativeDiameter = representativeRadius * 2;
           const representativeColor = categoryColors[cluster.cat];
@@ -797,8 +845,14 @@ function TimelineSVG({
                   backgroundColor: representativeIsDimmed
                     ? "#bcb5a7"
                     : representativeColor,
-                  boxShadow: "none",
-                  transform: "scale(1)",
+                  transform:
+                    representativeLegendHovered || isHoveredCluster
+                      ? "scale(1.3)"
+                      : "scale(1)",
+                  boxShadow:
+                    representativeLegendHovered || isHoveredCluster
+                      ? `0 0 4px 1px ${representativeColor}40, 0 0 2px 0px ${representativeColor}60`
+                      : "none",
                   opacity: isExpanded ? 0 : representativeIsDimmed ? 0.32 : 1,
                   pointerEvents: isExpanded ? "none" : "auto",
                   zIndex: 1,
@@ -827,7 +881,12 @@ function TimelineSVG({
                 const isGreyedForHover = hoverFocusActive && !isHoveredCluster;
                 const isGreyedForSelection =
                   selectionFocusActive && !isMetadataMatch;
-                const isDimmed = isGreyedForHover || isGreyedForSelection;
+                const isGreyedForDimmed = dimmedCategories.has(dot.cat);
+                const isDimmed =
+                  isGreyedForHover || isGreyedForSelection || isGreyedForDimmed;
+                const isLegendHovered =
+                  hoveredLegendCategory !== null &&
+                  dot.cat === hoveredLegendCategory;
                 const useClusterTint =
                   isGreyedForSelection &&
                   isExpanded &&
@@ -872,13 +931,15 @@ function TimelineSVG({
                           ? "#bcb5a7"
                           : color,
                       boxShadow:
-                        isHovered || isSelected || isPinned
-                          ? `0 0 0 1.5px ${color}20`
+                        isHovered || isLegendHovered
+                          ? `0 0 4px 1px ${color}40, 0 0 2px 0px ${color}60`
                           : "none",
                       transform:
                         isHovered || isSelected || isPinned
-                          ? "scale(1.12)"
-                          : "scale(1)",
+                          ? "scale(1.35)"
+                          : isLegendHovered
+                            ? "scale(1.3)"
+                            : "scale(1)",
                       opacity: isExpanded
                         ? useClusterTint
                           ? 1
@@ -927,12 +988,33 @@ function TimelineSVG({
           style={{
             left: tooltipPosition?.left ?? tooltipEdgePadding,
             top: tooltipPosition?.top ?? tooltipEdgePadding,
-            pointerEvents: isPinned ? "auto" : "none",
+            pointerEvents: "auto",
           }}
         >
           <div
             className={`career-timeline-tooltip career-timeline-tooltip--${displayTip.cat}`}
           >
+            <button
+              type="button"
+              className="career-timeline-tooltip-close"
+              onClick={dismissTooltip}
+              aria-label="Close tooltip"
+            >
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 14 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1 1L13 13M1 13L13 1"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
             <div className="career-timeline-tooltip-date">
               {displayTip.event.dateText}
             </div>
@@ -940,13 +1022,26 @@ function TimelineSVG({
               {displayTip.event.event}
             </div>
             <div className="career-timeline-tooltip-tags">
-              {displayTipCategories.map((category) => (
-                <span
-                  key={category}
-                  className={`career-timeline-tooltip-tag career-timeline-tooltip-tag--${category}`}
-                >
-                  {timelineData.categoryLabels[category]}
-                </span>
+              {displayTipCategories.map((category, index) => (
+                <React.Fragment key={category}>
+                  {index > 0 && (
+                    <span
+                      style={{
+                        color: "#9CA3AF",
+                        margin: "0 4px",
+                        fontSize: "8px",
+                      }}
+                    >
+                      {" "}
+                      |{" "}
+                    </span>
+                  )}
+                  <span
+                    className={`career-timeline-tooltip-tag career-timeline-tooltip-tag--${category}`}
+                  >
+                    {timelineData.categoryLabels[category]}
+                  </span>
+                </React.Fragment>
               ))}
             </div>
             {displayTip.event.url && (
@@ -966,16 +1061,6 @@ function TimelineSVG({
                 </svg>
                 Watch on YouTube
               </a>
-            )}
-            {isPinned && (
-              <div
-                className="career-timeline-tooltip-pin-hint"
-                style={{
-                  marginTop: displayTip.event.url ? 5 : 8,
-                }}
-              >
-                Hover or click another dot to dismiss
-              </div>
             )}
           </div>
         </div>
@@ -1008,6 +1093,11 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
   const [selectedEvent, setSelectedEvent] = useState<ArmstrongEvent | null>(
     null,
   );
+  const [dimmedCategories, setDimmedCategories] = useState<Set<Category>>(
+    new Set(),
+  );
+  const [hoveredLegendCategory, setHoveredLegendCategory] =
+    useState<Category | null>(null);
 
   useEffect(() => {
     const element = containerRef.current;
@@ -1082,10 +1172,10 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
   }, [activeCategories, selectedEvent]);
 
   const toggleCategory = (category: Category) => {
-    setActiveCategories((prev) => {
+    setDimmedCategories((prev) => {
       const next = new Set(prev);
       if (next.has(category)) {
-        if (next.size > 1) next.delete(category);
+        next.delete(category);
       } else {
         next.add(category);
       }
@@ -1108,6 +1198,28 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
     });
     return counts;
   }, []);
+
+  const tooltipCategoryLookup = useMemo(() => {
+    const lookup = new Map<string, Category[]>();
+
+    for (const event of timelineData.events) {
+      const key = getTimelineEventKey(event);
+      const existing = lookup.get(key) ?? [];
+      const merged = new Set<Category>([...existing, ...event.categories]);
+      lookup.set(
+        key,
+        allCategories.filter((category) => merged.has(category)),
+      );
+    }
+
+    return lookup;
+  }, []);
+
+  const selectedEventCategories = useMemo(() => {
+    if (!selectedEvent) return null;
+    const key = getTimelineEventKey(selectedEvent);
+    return tooltipCategoryLookup.get(key) ?? selectedEvent.categories;
+  }, [selectedEvent, tooltipCategoryLookup]);
 
   return (
     <section
@@ -1135,16 +1247,26 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
           <div className="career-timeline-chart-card">
             <div className="career-timeline-chart-surface">
               <div className="career-timeline-legend-panel">
-                {allCategories.map((category) => (
-                  <CategoryPill
-                    key={category}
-                    active={activeCategories.has(category)}
-                    count={categoryCounts[category]}
-                    onToggle={() => toggleCategory(category)}
-                    label={timelineData.categoryLabels[category]}
-                    color={categoryColors[category]}
-                  />
-                ))}
+                {allCategories.map((category) => {
+                  const isInSelectedEvent =
+                    selectedEventCategories === null ||
+                    selectedEventCategories.includes(category);
+                  const shouldDim =
+                    dimmedCategories.has(category) || !isInSelectedEvent;
+                  return (
+                    <CategoryPill
+                      key={category}
+                      active={!dimmedCategories.has(category)}
+                      count={categoryCounts[category]}
+                      onToggle={() => toggleCategory(category)}
+                      label={timelineData.categoryLabels[category]}
+                      color={categoryColors[category]}
+                      dimmed={shouldDim}
+                      onHover={() => setHoveredLegendCategory(category)}
+                      onHoverEnd={() => setHoveredLegendCategory(null)}
+                    />
+                  );
+                })}
               </div>
               <div ref={containerRef} className="career-timeline-scroll-area">
                 <div className="career-timeline-scroll-inner">
@@ -1158,6 +1280,8 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
                     activeDotRadiusOffset={activeDotRadiusOffset}
                     laneStroke={laneStroke}
                     laneStrokeWidth={laneStrokeWidth}
+                    dimmedCategories={dimmedCategories}
+                    hoveredLegendCategory={hoveredLegendCategory}
                   />
                 </div>
               </div>

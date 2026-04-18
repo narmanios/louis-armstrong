@@ -62,7 +62,7 @@
   background-image: url("/assets/history.jpg");
   background-size: cover;
   background-position: center center;
-  opacity: 0.4;
+  opacity: 0.3;
   pointer-events: none;
 }
 
@@ -235,6 +235,7 @@
   stroke: #ffffff;
   opacity: 0.5;
   stroke-width: 1;
+  stroke-dasharray: 2 3;
 }
 
 .career-timeline-focus-line {
@@ -275,6 +276,29 @@
   padding: 11px 13px;
   box-shadow: none;
   font-family: "Hanken Grotesk", Arial, sans-serif;
+  position: relative;
+}
+
+.career-timeline-tooltip-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  color: #111827;
+}
+
+.career-timeline-tooltip-close:hover {
+  opacity: 1;
 }
 
 .career-timeline-tooltip--film {
@@ -315,17 +339,18 @@
 .career-timeline-tooltip-tags {
   margin-top: 6px;
   display: flex;
-  gap: 3px;
+  gap: 0;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .career-timeline-tooltip-tag {
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 3px;
-  background: var(--career-tag-bg, #00000014);
-  color: #ffffff;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--career-tag-color, #111827);
 }
 
 .career-timeline-tooltip-tag--film {
