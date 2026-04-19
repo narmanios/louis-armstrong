@@ -179,7 +179,7 @@ function getMarkerDimensions(baseWidth: number, hovered: boolean) {
 export function VinylRecordExplorer({
   soundtracks: soundtrackProps,
   soundtracksUrl = DEFAULT_SOUNDTRACKS_URL,
-  title = "Soundtracks",
+  title = "Legacy on Screen",
   // subtitle = "A decade by decade look at how Louis Armstrong’s music kept finding new life on screen, introducing his sound to new audiences through film and television across generations.",
   centerImageUrl = DEFAULT_CENTER_IMAGE,
   className,
@@ -215,6 +215,11 @@ export function VinylRecordExplorer({
     x: 0,
     y: 0,
   });
+  const [viewMode, setViewMode] = useState<"rings" | "chart">("rings");
+  const [hoveredBarDecadeId, setHoveredBarDecadeId] = useState<string | null>(
+    null,
+  );
+  const [hoveredMediaType, setHoveredMediaType] = useState<string | null>(null);
   const visualRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -285,6 +290,13 @@ export function VinylRecordExplorer({
     });
   }, [decades]);
 
+  useEffect(() => {
+    // Clear bar hover state when switching away from chart mode
+    if (viewMode === "rings") {
+      setHoveredBarDecadeId(null);
+    }
+  }, [viewMode]);
+
   const activeDecadeId =
     hoveredDecadeId ??
     selectedDecadeId ??
@@ -333,6 +345,68 @@ export function VinylRecordExplorer({
     );
   }, [activeSoundtracks, hoveredSoundtrackKey]);
 
+  const mediaTypes = useMemo(() => {
+    const types = new Set<string>();
+    soundtracks.forEach((soundtrack) => {
+      if (soundtrack.media) {
+        types.add(soundtrack.media);
+      }
+    });
+    return Array.from(types).sort();
+  }, [soundtracks]);
+
+  const mediaTypeCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    soundtracks.forEach((soundtrack) => {
+      if (soundtrack.media) {
+        counts.set(soundtrack.media, (counts.get(soundtrack.media) || 0) + 1);
+      }
+    });
+    return counts;
+  }, [soundtracks]);
+
+  const decadeCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    decades.forEach((decade) => {
+      counts.set(decade.id, decade.soundtracks.length);
+    });
+    return counts;
+  }, [decades]);
+
+  const displayCount = useMemo(() => {
+    if (viewMode === "chart") {
+      if (hoveredBarDecadeId) {
+        return decadeCounts.get(hoveredBarDecadeId) || 0;
+      }
+      if (hoveredMediaType) {
+        return mediaTypeCounts.get(hoveredMediaType) || 0;
+      }
+      return soundtracks.length;
+    }
+    return activeSoundtracks.length;
+  }, [
+    viewMode,
+    hoveredBarDecadeId,
+    hoveredMediaType,
+    decadeCounts,
+    mediaTypeCounts,
+    soundtracks.length,
+    activeSoundtracks.length,
+  ]);
+
+  const displayLabel = useMemo(() => {
+    if (viewMode === "chart") {
+      if (hoveredBarDecadeId) {
+        const decade = decades.find((d) => d.id === hoveredBarDecadeId);
+        return decade ? `in the ${decade.label}` : "soundtracks";
+      }
+      if (hoveredMediaType) {
+        return hoveredMediaType.toLowerCase();
+      }
+    }
+    return "soundtracks";
+  }, [viewMode, hoveredBarDecadeId, hoveredMediaType, decades]);
+
   const markerBaseRadius = useMemo(
     () => getMarkerRadius(activeRingRadius, activeSoundtracks.length),
     [activeRingRadius, activeSoundtracks.length],
@@ -341,6 +415,42 @@ export function VinylRecordExplorer({
     () => Math.max(18, markerBaseRadius * 2),
     [markerBaseRadius],
   );
+
+  const barChartData = useMemo(() => {
+    const chartWidth = 1100;
+    const chartHeight = 800;
+    const chartLeft = -550;
+    const chartBottom = 450;
+    const barPadding = 20;
+    const barWidth =
+      decades.length > 0
+        ? (chartWidth - barPadding * (decades.length + 1)) / decades.length
+        : 0;
+
+    const maxCount = Math.max(...decades.map((d) => d.soundtracks.length), 1);
+    const stackHeight = chartHeight / maxCount;
+
+    return decades.map((decade, decadeIndex) => {
+      const x = chartLeft + barPadding + decadeIndex * (barWidth + barPadding);
+      const stacks = decade.soundtracks.map((soundtrack, stackIndex) => {
+        const y = chartBottom - (stackIndex + 1) * stackHeight;
+        return {
+          x,
+          y,
+          width: barWidth,
+          height: stackHeight,
+          soundtrack,
+        };
+      });
+      return {
+        decade,
+        decadeIndex,
+        x,
+        barWidth,
+        stacks,
+      };
+    });
+  }, [decades]);
 
   const coords = (index: number, radius: number, totalItems: number) => {
     const angleDeg = totalItems > 0 ? (360 / totalItems) * index - 90 : -90;
@@ -357,6 +467,9 @@ export function VinylRecordExplorer({
     setHoveredDecadeId(decadeId);
     setHoveredSoundtrackKey(null);
     setTooltip((current) => ({ ...current, visible: false }));
+    if (viewMode === "chart") {
+      setHoveredBarDecadeId(decadeId);
+    }
   };
 
   const onDecadeUnhover = (decadeId: string) => {
@@ -364,6 +477,9 @@ export function VinylRecordExplorer({
       setHoveredDecadeId(null);
       setHoveredSoundtrackKey(null);
       setTooltip((current) => ({ ...current, visible: false }));
+    }
+    if (viewMode === "chart") {
+      setHoveredBarDecadeId(null);
     }
   };
 
@@ -426,6 +542,14 @@ export function VinylRecordExplorer({
     setTooltip((current) => ({ ...current, visible: false }));
   };
 
+  const onBarDecadeEnter = (decadeId: string) => {
+    setHoveredBarDecadeId(decadeId);
+  };
+
+  const onBarDecadeLeave = () => {
+    setHoveredBarDecadeId(null);
+  };
+
   const tooltipMetadataEntries = useMemo(() => {
     if (!hoveredSoundtrack) return [];
     return Object.entries(hoveredSoundtrack.metadata).filter(
@@ -450,41 +574,112 @@ export function VinylRecordExplorer({
           </h1>
         </div>
 
-        <div className="vre__soundtrack-count">
-          <span className="vre__soundtrack-count-number">
-            {activeSoundtracks.length}
-          </span>
-          <span className="vre__soundtrack-count-label">of</span>
-          <span className="vre__soundtrack-count-number">
-            {soundtracks.length}
-          </span>
-          <span className="vre__soundtrack-count-label">soundtracks</span>
+        <div className="vre__view-toggle">
+          <button
+            className={cx("vre__view-btn", viewMode === "rings" && "is-active")}
+            onClick={() => setViewMode("rings")}
+            aria-label="Vinyl rings view"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="7" />
+              <circle cx="12" cy="12" r="4" />
+            </svg>
+          </button>
+          <button
+            className={cx("vre__view-btn", viewMode === "chart" && "is-active")}
+            onClick={() => setViewMode("chart")}
+            aria-label="Bar chart view"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="3" y="14" width="3" height="7" rx="0.5" />
+              <rect x="8" y="8" width="3" height="13" rx="0.5" />
+              <rect x="13" y="11" width="3" height="10" rx="0.5" />
+              <rect x="18" y="5" width="3" height="16" rx="0.5" />
+            </svg>
+          </button>
         </div>
 
-        <div className="vre__song-section vre__song-section--header">
-          <h3>Decades</h3>
-          <div className="vre__song-list vre__song-list--horizontal">
-            {decades.map((decade) => (
-              <div
-                key={decade.id}
-                className={cx(
-                  "vre__song-btn",
-                  activeDecadeId === decade.id && "is-active",
-                )}
-                onMouseEnter={() => onDecadeHover(decade.id)}
-                onMouseLeave={() => onDecadeUnhover(decade.id)}
-              >
-                <span className="vre__song-title">{decade.label}</span>
-              </div>
-            ))}
+        {viewMode === "rings" && (
+          <div className="vre__song-section vre__song-section--header">
+            <div className="vre__song-list vre__song-list--horizontal">
+              {decades.map((decade) => (
+                <div
+                  key={decade.id}
+                  className={cx(
+                    "vre__song-btn",
+                    activeDecadeId === decade.id && "is-active",
+                  )}
+                  onMouseEnter={() => onDecadeHover(decade.id)}
+                  onMouseLeave={() => onDecadeUnhover(decade.id)}
+                >
+                  <span className="vre__song-title">{decade.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
+        )}
+
+        {viewMode === "chart" && (
+          <div className="vre__song-section vre__song-section--header">
+            <div className="vre__song-list vre__song-list--horizontal">
+              {mediaTypes.map((mediaType) => (
+                <div
+                  key={mediaType}
+                  className={cx(
+                    "vre__song-btn",
+                    hoveredMediaType === mediaType && "is-active",
+                  )}
+                  onMouseEnter={() => setHoveredMediaType(mediaType)}
+                  onMouseLeave={() => setHoveredMediaType(null)}
+                >
+                  <span className="vre__song-title">{mediaType}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="vre__soundtrack-count">
+          <span className="vre__soundtrack-count-number">{displayCount}</span>
+          {viewMode === "rings" && (
+            <>
+              <span className="vre__soundtrack-count-label">of</span>
+              <span className="vre__soundtrack-count-number">
+                {soundtracks.length}
+              </span>
+              <span className="vre__soundtrack-count-label">
+                {displayLabel}
+              </span>
+            </>
+          )}
+          {viewMode === "chart" && (
+            <>
+              <span className="vre__soundtrack-count-label">of</span>
+              <span className="vre__soundtrack-count-number">
+                {soundtracks.length}
+              </span>
+              {hoveredBarDecadeId && (
+                <span className="vre__soundtrack-count-label">
+                  {displayLabel}
+                </span>
+              )}
+            </>
+          )}
         </div>
       </aside>
 
       <main className="vre__right">
         <div className="vre__visual" ref={visualRef}>
           <svg
-            className="vre__svg"
+            className={cx("vre__svg", `vre__svg--${viewMode}`)}
             viewBox="-640 -640 1280 1280"
             aria-label="Vinyl visualization"
           >
@@ -533,188 +728,307 @@ export function VinylRecordExplorer({
               })}
             </defs>
 
-            <circle
-              className="vre__no-pointer"
-              cx="0"
-              cy="0"
-              r="490"
-              fill="none"
-              stroke="#0f0f0f"
-              strokeWidth="48"
-            />
+            <g className="vre__rings-view">
+              <circle
+                className="vre__no-pointer"
+                cx="0"
+                cy="0"
+                r="490"
+                fill="none"
+                stroke="#0f0f0f"
+                strokeWidth="48"
+              />
 
-            <g>
-              {Array.from({ length: 70 }, (_, index) => (
-                <circle
-                  key={index}
-                  className="vre__no-pointer"
-                  cx="0"
-                  cy="0"
-                  r={120 + index * 5}
-                  fill="none"
-                  stroke="rgba(255,255,255,0.03)"
-                  strokeWidth="0.5"
-                />
-              ))}
+              <g>
+                {Array.from({ length: 70 }, (_, index) => (
+                  <circle
+                    key={index}
+                    className="vre__no-pointer"
+                    cx="0"
+                    cy="0"
+                    r={120 + index * 5}
+                    fill="none"
+                    stroke="rgba(255,255,255,0.03)"
+                    strokeWidth="0.5"
+                  />
+                ))}
+              </g>
+
+              <circle
+                className="vre__no-pointer"
+                cx="0"
+                cy="0"
+                r="110"
+                fill="#1a1a1a"
+                stroke="#2a2a2a"
+                strokeWidth="2"
+              />
+
+              <image
+                className="vre__no-pointer"
+                href={centerImageUrl}
+                x="-250"
+                y="-150"
+                width="400"
+                height="400"
+                clipPath="url(#vre-center-clip)"
+                preserveAspectRatio="xMidYMid slice"
+              />
+
+              <circle
+                className="vre__no-pointer"
+                cx="0"
+                cy="0"
+                r="25"
+                fill="black"
+              />
+
+              <circle
+                className="vre__no-pointer"
+                cx="0"
+                cy="0"
+                r="490"
+                fill="none"
+                stroke="#0a0a0a"
+                strokeWidth="36"
+              />
+
+              <g>
+                {decorativeRings.map((ring) => (
+                  <circle
+                    key={ring.key}
+                    className="vre__no-pointer vre__decorative"
+                    cx="0"
+                    cy="0"
+                    r={ring.radius}
+                    fill="none"
+                    stroke="url(#vre-ring-gradient)"
+                    strokeWidth="1"
+                  />
+                ))}
+
+                {rings.map((ring, ringIndex) => {
+                  const correspondingBar = barChartData[ringIndex];
+                  const barCenterX = correspondingBar
+                    ? correspondingBar.x + correspondingBar.barWidth / 2
+                    : 0;
+
+                  return (
+                    <g
+                      key={ring.key}
+                      className="vre__decade-ring"
+                      data-decade-id={ring.decade.id}
+                      style={{
+                        transform:
+                          viewMode === "chart"
+                            ? `translate(${barCenterX}px, 0)`
+                            : "translate(0, 0)",
+                        transition:
+                          "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+                      }}
+                    >
+                      <circle
+                        className="vre__hover-target"
+                        cx="0"
+                        cy="0"
+                        r={ring.radius}
+                        fill="none"
+                        stroke="transparent"
+                        strokeWidth="30"
+                        onMouseEnter={() => onRingEnter(ring.decade.id)}
+                        onClick={() => selectDecade(ring.decade.id)}
+                        onMouseLeave={(event) =>
+                          onRingLeave(event, ring.decade.id)
+                        }
+                      />
+
+                      <circle
+                        className="vre__visible-ring"
+                        cx="0"
+                        cy="0"
+                        r={ring.radius}
+                        fill="none"
+                        stroke={
+                          activeDecadeId === ring.decade.id
+                            ? "#ffffff"
+                            : "url(#vre-ring-gradient)"
+                        }
+                        strokeWidth={
+                          activeDecadeId === ring.decade.id ? 2.5 : 1.5
+                        }
+                      />
+
+                      <g className="vre__artists-layer">
+                        {activeDecadeId === ring.decade.id
+                          ? ring.decade.soundtracks.map((soundtrack, index) => {
+                              const point = coords(
+                                index,
+                                ring.radius,
+                                ring.decade.soundtracks.length,
+                              );
+                              const hovered = isHoveredSoundtrack(
+                                soundtrack.key,
+                              );
+                              const { width, height } = getMarkerDimensions(
+                                markerBaseWidth,
+                                hovered,
+                              );
+
+                              return (
+                                <g
+                                  key={soundtrack.key}
+                                  className="vre__soundtrack-group vre__pop-in vre__pop-in-active"
+                                  onMouseEnter={(event) =>
+                                    onSoundtrackEnter(
+                                      ring.decade.id,
+                                      soundtrack.key,
+                                      event,
+                                    )
+                                  }
+                                  onMouseLeave={() =>
+                                    onSoundtrackLeave(soundtrack.key)
+                                  }
+                                  onClick={(event) =>
+                                    onSoundtrackEnter(
+                                      ring.decade.id,
+                                      soundtrack.key,
+                                      event,
+                                    )
+                                  }
+                                >
+                                  <rect
+                                    className="vre__artist-hover-target"
+                                    x={point.x - width / 2 - 8}
+                                    y={point.y - height / 2 - 8}
+                                    width={width + 16}
+                                    height={height + 16}
+                                    rx="8"
+                                    fill="transparent"
+                                  />
+
+                                  <image
+                                    className="vre__artist-image vre__no-pointer"
+                                    href={soundtrack.imageUrl}
+                                    x={point.x - width / 2}
+                                    y={point.y - height / 2}
+                                    width={width}
+                                    height={height}
+                                    clipPath={`url(#${soundtrackClipId(soundtrack.key)})`}
+                                    preserveAspectRatio="xMidYMid slice"
+                                  />
+                                </g>
+                              );
+                            })
+                          : null}
+                      </g>
+                    </g>
+                  );
+                })}
+              </g>
             </g>
 
-            <circle
-              className="vre__no-pointer"
-              cx="0"
-              cy="0"
-              r="110"
-              fill="#1a1a1a"
-              stroke="#2a2a2a"
-              strokeWidth="2"
-            />
+            <g className="vre__chart-view">
+              {/* Bar Chart View */}
+              <g className="vre__chart-axes">{/* Y-axis labels removed */}</g>
 
-            <image
-              className="vre__no-pointer"
-              href={centerImageUrl}
-              x="-250"
-              y="-150"
-              width="400"
-              height="400"
-              clipPath="url(#vre-center-clip)"
-              preserveAspectRatio="xMidYMid slice"
-            />
+              <g className="vre__chart-bars">
+                {barChartData.map((bar) => {
+                  const isDecadeHovered = hoveredBarDecadeId === bar.decade.id;
+                  const shouldGreyOut =
+                    hoveredBarDecadeId !== null && !isDecadeHovered;
+                  const barCenterX = bar.x + bar.barWidth / 2;
 
-            <circle
-              className="vre__no-pointer"
-              cx="0"
-              cy="0"
-              r="25"
-              fill="black"
-            />
+                  return (
+                    <g
+                      key={bar.decade.id}
+                      className="vre__decade-bar"
+                      data-decade-id={bar.decade.id}
+                      style={{
+                        transform:
+                          viewMode === "rings"
+                            ? `translate(${-barCenterX}px, 0)`
+                            : "translate(0, 0)",
+                        transition:
+                          "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+                      }}
+                      onMouseEnter={() => onBarDecadeEnter(bar.decade.id)}
+                      onMouseLeave={() => onBarDecadeLeave()}
+                    >
+                      {bar.stacks.map((stack) => (
+                        <g
+                          key={stack.soundtrack.key}
+                          onMouseEnter={(event) =>
+                            onSoundtrackEnter(
+                              bar.decade.id,
+                              stack.soundtrack.key,
+                              event,
+                            )
+                          }
+                          onMouseLeave={() =>
+                            onSoundtrackLeave(stack.soundtrack.key)
+                          }
+                          onClick={(event) =>
+                            onSoundtrackEnter(
+                              bar.decade.id,
+                              stack.soundtrack.key,
+                              event,
+                            )
+                          }
+                        >
+                          <rect
+                            className="vre__bar-rect"
+                            x={stack.x}
+                            y={stack.y}
+                            width={stack.width}
+                            height={stack.height - 2}
+                            fill={
+                              hoveredMediaType !== null
+                                ? stack.soundtrack.media === hoveredMediaType
+                                  ? "#ffffff"
+                                  : "rgba(255,255,255,0.2)"
+                                : shouldGreyOut
+                                  ? "rgba(255,255,255,0.2)"
+                                  : hoveredSoundtrackKey ===
+                                      stack.soundtrack.key
+                                    ? "#ffffff"
+                                    : "rgba(255,255,255,0.7)"
+                            }
+                            stroke="rgba(0,0,0,0.3)"
+                            strokeWidth="1"
+                          />
+                        </g>
+                      ))}
 
-            <circle
-              className="vre__no-pointer"
-              cx="0"
-              cy="0"
-              r="490"
-              fill="none"
-              stroke="#0a0a0a"
-              strokeWidth="36"
-            />
+                      {/* Show count at top of bar when hovered */}
+                      {isDecadeHovered && bar.stacks.length > 0 && (
+                        <text
+                          x={bar.x + bar.barWidth / 2}
+                          y={bar.stacks[bar.stacks.length - 1].y - 15}
+                          fill="#ffffff"
+                          fontSize="24"
+                          fontWeight="700"
+                          textAnchor="middle"
+                        >
+                          {bar.stacks.length}
+                        </text>
+                      )}
 
-            <g>
-              {decorativeRings.map((ring) => (
-                <circle
-                  key={ring.key}
-                  className="vre__no-pointer vre__decorative"
-                  cx="0"
-                  cy="0"
-                  r={ring.radius}
-                  fill="none"
-                  stroke="url(#vre-ring-gradient)"
-                  strokeWidth="1"
-                />
-              ))}
-
-              {rings.map((ring) => (
-                <g key={ring.key} data-decade-id={ring.decade.id}>
-                  <circle
-                    className="vre__hover-target"
-                    cx="0"
-                    cy="0"
-                    r={ring.radius}
-                    fill="none"
-                    stroke="transparent"
-                    strokeWidth="30"
-                    onMouseEnter={() => onRingEnter(ring.decade.id)}
-                    onClick={() => selectDecade(ring.decade.id)}
-                    onMouseLeave={(event) => onRingLeave(event, ring.decade.id)}
-                  />
-
-                  <circle
-                    className="vre__visible-ring"
-                    cx="0"
-                    cy="0"
-                    r={ring.radius}
-                    fill="none"
-                    stroke={
-                      activeDecadeId === ring.decade.id
-                        ? "#ffffff"
-                        : "url(#vre-ring-gradient)"
-                    }
-                    strokeWidth={activeDecadeId === ring.decade.id ? 2.5 : 1.5}
-                  />
-
-                  <g className="vre__artists-layer">
-                    {activeDecadeId === ring.decade.id
-                      ? ring.decade.soundtracks.map((soundtrack, index) => {
-                          const point = coords(
-                            index,
-                            ring.radius,
-                            ring.decade.soundtracks.length,
-                          );
-                          const hovered = isHoveredSoundtrack(soundtrack.key);
-                          const { width, height } = getMarkerDimensions(
-                            markerBaseWidth,
-                            hovered,
-                          );
-
-                          return (
-                            <g
-                              key={soundtrack.key}
-                              className="vre__soundtrack-group vre__pop-in vre__pop-in-active"
-                              onMouseEnter={(event) =>
-                                onSoundtrackEnter(
-                                  ring.decade.id,
-                                  soundtrack.key,
-                                  event,
-                                )
-                              }
-                              onMouseLeave={() =>
-                                onSoundtrackLeave(soundtrack.key)
-                              }
-                              onClick={(event) =>
-                                onSoundtrackEnter(
-                                  ring.decade.id,
-                                  soundtrack.key,
-                                  event,
-                                )
-                              }
-                            >
-                              <rect
-                                className="vre__artist-hover-target"
-                                x={point.x - width / 2 - 8}
-                                y={point.y - height / 2 - 8}
-                                width={width + 16}
-                                height={height + 16}
-                                rx="8"
-                                fill="transparent"
-                              />
-
-                              {/* <rect
-                                className="vre__artist-border"
-                                x={point.x - width / 2}
-                                y={point.y - height / 2}
-                                width={width}
-                                height={height}
-                                rx="4"
-                                fill="none"
-                                stroke={hovered ? "#EF4444" : "#DC2626"}
-                                strokeWidth="4"
-                              /> */}
-
-                              <image
-                                className="vre__artist-image vre__no-pointer"
-                                href={soundtrack.imageUrl}
-                                x={point.x - width / 2}
-                                y={point.y - height / 2}
-                                width={width}
-                                height={height}
-                                clipPath={`url(#${soundtrackClipId(soundtrack.key)})`}
-                                preserveAspectRatio="xMidYMid slice"
-                              />
-                            </g>
-                          );
-                        })
-                      : null}
-                  </g>
-                </g>
-              ))}
+                      <text
+                        x={bar.x + bar.barWidth / 2}
+                        y="475"
+                        fill={
+                          shouldGreyOut ? "rgba(255,255,255,0.4)" : "#ffffff"
+                        }
+                        fontSize="14"
+                        textAnchor="middle"
+                        style={{ transition: "fill 0.3s ease" }}
+                      >
+                        {bar.decade.label}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
             </g>
           </svg>
 

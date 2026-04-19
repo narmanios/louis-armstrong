@@ -61,10 +61,10 @@ const statsCardContent: Record<StatsCardKey, StatsCardContent> = {
     "Louis Armstrong’s career spanned over 50 years, during which he became one of the most influential figures in jazz and popular music.",
   ),
   "legacy-0": buildStatsCard(
-    "The lasting legacy of “What a Wonderful World” can be seen in the many rerecordings it continues to inspire, proving that Louis Armstrong’s voice and message still resonate across generations.",
+    "Louis Armstrong’s music still lives on in screen media today, from “Dream a Little Dream of Me” in Stranger Things to “We Have All the Time in the World” in the James Bond film No Time to Die.",
   ),
   "legacy-1": buildStatsCard(
-    "Louis Armstrong’s music still lives on in screen media today, from “Dream a Little Dream of Me” in Stranger Things to “We Have All the Time in the World” in the James Bond film No Time to Die",
+    "The lasting legacy of “What a Wonderful World” can be seen in the many rerecordings it continues to inspire, proving that Louis Armstrong’s voice and message still resonate across generations.",
   ),
   "ambassador-0": buildStatsCard(
     "Louis Armstrong became a goodwill ambassador long before the title was official, traveling the world as one of the first Black pop stars to spread jazz and American culture abroad.",
@@ -118,12 +118,16 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   const [introOverlayGroupId, setIntroOverlayGroupId] =
     useState<GroupId | null>(null);
   const groupNavItems: Array<{ id: GroupId; label: string }> = [
-    { id: "history", label: "history" },
-    { id: "ambassador", label: "ambassador" },
-    { id: "legacy", label: "legacy" },
+    { id: "history", label: "History" },
+    { id: "ambassador", label: "Ambassador" },
+    { id: "legacy", label: "Legacy" },
   ];
   const groupSectionItems: Record<GroupId, string[]> = {
-    history: ["Career Highlights", "The Beginning", "Journey to Ambassador"],
+    history: [
+      "Historical Highlights",
+      "The Beginning",
+      "Journey to Ambassador",
+    ],
     ambassador: [
       "Goodwill Ambassador",
       "Jazz Ambassadors",
@@ -132,7 +136,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       "The Real Ambassadors",
       "World Fair + Berlin",
     ],
-    legacy: ["Soundtrack features", "What a Wonderful World"],
+    legacy: ["Legacy on Screen", "What a Wonderful World"],
   };
   const timelineTargetMap: TimelineJumpTarget[] = [
     { kind: "intro" },
@@ -607,15 +611,36 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     groupNavItems.find((item) => item.id === currentGroupId)?.label ??
     currentGroupId;
 
+  const scrollToIntro = () => {
+    if (isMobile) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    } else {
+      const container = scrollContainerRef.current;
+      if (container) {
+        container.scrollTo({ left: 0, behavior: "auto" });
+      }
+    }
+    setIsMobileMenuOpen(false);
+  };
+
   const renderGroupNav = (className = "") => (
     <nav
       className={`mcg-group-nav ${className}`.trim()}
       aria-label="Section groups"
     >
-      <div className="mcg-group-nav-label" aria-hidden="true">
-        {currentGroupLabel}
-      </div>
+      <button
+        className="mcg-group-nav-label"
+        onClick={scrollToIntro}
+        aria-label="Back to intro"
+      >
+        Louis Armstrong in Data & Song
+      </button>
       <div className="mcg-group-nav-links">
+        <div className="mcg-group-nav-item mcg-group-nav-item--home">
+          <button className="mcg-group-nav-button" onClick={scrollToIntro}>
+            Home
+          </button>
+        </div>
         {groupNavItems.map((item) => (
           <div
             key={item.id}
@@ -669,6 +694,15 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       </div>
       {isMobileMenuOpen ? (
         <div className="mcg-mobile-menu-panel" aria-label="Section groups">
+          <div className="mcg-mobile-menu-group">
+            <button
+              type="button"
+              className="mcg-mobile-menu-group-button"
+              onClick={scrollToIntro}
+            >
+              Home
+            </button>
+          </div>
           {groupNavItems.map((item) => (
             <div key={item.id} className="mcg-mobile-menu-group">
               <button
@@ -742,15 +776,23 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
 
         .mcg-group-nav-label {
+          background: none;
+          border: none;
+          padding: 0;
+          margin: 0;
+          cursor: pointer;
           font-family: "Hanken Grotesk", Arial, sans-serif;
-          font-size: 22px;
+          font-size: 14px;
           font-weight: 400;
           line-height: 1;
-          letter-spacing: -0.06em;
+          letter-spacing: -0.02em;
           color: #ffffff;
           white-space: nowrap;
-          pointer-events: none;
-          user-select: none;
+          transition: opacity 0.18s ease;
+        }
+
+        .mcg-group-nav-label:hover {
+          opacity: 0.72;
         }
 
         .mcg-group-nav-links {
@@ -914,7 +956,6 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           line-height: 1.6;
           color: rgba(0, 0, 0, 0.85);
           white-space: pre-line;
-          text-wrap: balance;
         }
 
         .mcg-section-stats-card__content {

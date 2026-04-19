@@ -332,7 +332,7 @@
 .slg__caption-overlay {
   position: absolute;
   left: 50%;
-  bottom: 42px;
+  bottom: 120px;
   transform: translateX(-50%);
   width: min(78%, 620px);
   display: flex;
@@ -693,7 +693,7 @@
   }
 
   .slg__caption-overlay {
-    bottom: 26px;
+    bottom: 116px;
     width: min(calc(100% - 48px), 420px);
   }
 

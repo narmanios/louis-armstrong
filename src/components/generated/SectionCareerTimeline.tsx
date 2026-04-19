@@ -73,29 +73,48 @@ const rawTimelineData = rawCareerTimeline as RawCareerTimelineData;
 const timelineData: CareerTimelineData = {
   categoryLabels: rawTimelineData.categoryLabels,
   categoryColors: rawTimelineData.categoryColors,
-  events: rawTimelineData.events.flatMap((event) => {
-    const parsedYear = parseTimelineYear(event.year);
-    if (parsedYear === null) {
-      return [];
-    }
+  events: (() => {
+    // First, parse and filter events
+    const parsedEvents = rawTimelineData.events.flatMap((event) => {
+      const parsedYear = parseTimelineYear(event.year);
+      if (parsedYear === null) {
+        return [];
+      }
 
-    const validCategories = event.categories.filter(
-      (category): category is Category =>
-        allowedCategorySet.has(category as Category),
-    );
+      const validCategories = event.categories.filter(
+        (category): category is Category =>
+          allowedCategorySet.has(category as Category),
+      );
 
-    if (validCategories.length === 0) {
-      return [];
-    }
+      if (validCategories.length === 0) {
+        return [];
+      }
 
-    return [
-      {
-        ...event,
-        year: parsedYear,
-        categories: validCategories,
-      },
-    ];
-  }),
+      return [
+        {
+          ...event,
+          year: parsedYear,
+          categories: validCategories,
+        },
+      ];
+    });
+
+    // Deduplicate events based on content (year, dateText, event, categories)
+    // Keep the event with the lowest ID when duplicates are found
+    const uniqueEventsMap = new Map<string, ArmstrongEvent>();
+
+    parsedEvents.forEach((event) => {
+      const sortedCategories = [...event.categories].sort().join(",");
+      const contentKey = `${event.year}|${event.dateText}|${event.event}|${sortedCategories}`;
+
+      const existing = uniqueEventsMap.get(contentKey);
+      if (!existing || event.id < existing.id) {
+        uniqueEventsMap.set(contentKey, event);
+      }
+    });
+
+    return Array.from(uniqueEventsMap.values()).sort((a, b) => a.id - b.id);
+  })(),
 };
 
 const dataYearMax = timelineData.events.reduce(
@@ -159,11 +178,11 @@ const categoryOrder: Category[] = [
 ];
 
 const laneY: Record<Category, number> = {
-  film: 92,
-  bandleader: 222,
-  musician: 352,
-  vocalist: 482,
-  ambassador: 612,
+  film: 77,
+  bandleader: 186,
+  musician: 295,
+  vocalist: 404,
+  ambassador: 513,
 };
 const categoryColors: Record<Category, string> = {
   film: "#FF6B6B",
@@ -172,11 +191,11 @@ const categoryColors: Record<Category, string> = {
   vocalist: "#10B981",
   ambassador: "#8B5CF6",
 };
-const svgHeight = 740;
+const svgHeight = 620;
 const yearStart = 1923;
 const yearEnd = Math.max(1973, dataYearMax);
-const marginLeft = 40;
-const marginRight = 40;
+const marginLeft = 32;
+const marginRight = 32;
 const fallbackDotRadius = 3.25;
 const fallbackFeaturedDotRadiusOffset = 0;
 const fallbackActiveDotRadiusOffset = 1.25;
@@ -185,15 +204,15 @@ const fallbackLaneStrokeWidth = 0.8;
 const decadeDash = "4 4";
 const connectorDash = "2 2";
 const featuredLabelLineHeight = 11;
-const featuredLabelConnectorLength = 28;
-const expandedClusterDotSpacing = 10;
+const featuredLabelConnectorLength = 24;
+const expandedClusterDotSpacing = 8;
 const featuredLabelAboveOffset = 4;
 const featuredLabelBelowOffset = 3;
 const tooltipWidth = 248;
 const tooltipEstimatedHeight = 148;
 const tooltipGap = 18;
 const tooltipEdgePadding = 8;
-const yearAxisY = 650;
+const yearAxisY = 545;
 
 const featuredLabels: Record<number, FeaturedCfg> = {
   35: {
@@ -226,7 +245,7 @@ const featuredLabels: Record<number, FeaturedCfg> = {
   18: { lines: ["West End Blues", "(1928)"], cat: "musician", dir: "above" },
   22: { lines: ["Ain't Misbehavin'", "(1929)"], cat: "musician", dir: "below" },
   71: { lines: ["Mack the Knife", "(1955)"], cat: "musician", dir: "below" },
-  88: { lines: ["Hello, Dolly!", "(1963)"], cat: "musician", dir: "below" },
+  189: { lines: ["Hello, Dolly!", "(1964)"], cat: "vocalist", dir: "below" },
   7: {
     lines: ["St. Louis Blues", "w/ Bessie Smith", "(1925)"],
     cat: "vocalist",
@@ -261,10 +280,8 @@ function xOf(year: number, width: number) {
   );
 }
 
-function getTimelineEventKey(
-  event: Pick<ArmstrongEvent, "year" | "dateText" | "event">,
-) {
-  return `${event.year}|${event.dateText}|${event.event}`;
+function getTimelineEventKey(event: Pick<ArmstrongEvent, "id">) {
+  return `event-${event.id}`;
 }
 
 function withAlpha(hexColor: string, alpha: number) {
@@ -356,6 +373,265 @@ function CategoryPill({
       />
       <span className="career-timeline-legend-label">{label}</span>
     </button>
+  );
+}
+
+function StackedDotChart({
+  category,
+  svgWidth,
+  dotRadius,
+  onBack,
+}: {
+  category: Category;
+  svgWidth: number;
+  dotRadius: number;
+  onBack: () => void;
+}) {
+  const color = categoryColors[category];
+  const categoryEvents = useMemo(() => {
+    return timelineData.events.filter((event) =>
+      event.categories.includes(category),
+    );
+  }, [category]);
+
+  const [isAnimating, setIsAnimating] = useState(true);
+
+  useEffect(() => {
+    setIsAnimating(true);
+    const timer = setTimeout(() => setIsAnimating(false), 50);
+    return () => clearTimeout(timer);
+  }, [category]);
+
+  const stackedHeight = 300;
+  const stackMarginLeft = 32;
+  const stackMarginRight = 32;
+  const stackMarginTop = 200;
+  const xAxisY = 140;
+  const dotSpacing = 2;
+  const maxDotsPerColumn = Math.floor(
+    stackedHeight / (dotRadius * 2 + dotSpacing),
+  );
+  const timelineLaneY = laneY[category];
+
+  const stackedDots = useMemo(() => {
+    const yearGroups = new Map<number, ArmstrongEvent[]>();
+    categoryEvents.forEach((event) => {
+      const existing = yearGroups.get(event.year) || [];
+      existing.push(event);
+      yearGroups.set(event.year, existing);
+    });
+
+    const dots: Array<{
+      event: ArmstrongEvent;
+      x: number;
+      y: number;
+      initialX: number;
+      initialY: number;
+      key: string;
+    }> = [];
+    const years = Array.from(yearGroups.keys()).sort((a, b) => a - b);
+    const yearRange = yearEnd - yearStart;
+    const chartWidth = svgWidth - stackMarginLeft - stackMarginRight;
+
+    years.forEach((year) => {
+      const events = yearGroups.get(year)!;
+      const xPos =
+        stackMarginLeft + ((year - yearStart) / yearRange) * chartWidth;
+
+      events.forEach((event, idx) => {
+        const columnIdx = Math.floor(idx / maxDotsPerColumn);
+        const rowIdx = idx % maxDotsPerColumn;
+        const x = xPos + columnIdx * (dotRadius * 2 + dotSpacing);
+        const y = stackMarginTop + rowIdx * (dotRadius * 2 + dotSpacing);
+
+        // Calculate initial position from timeline
+        const initialX =
+          marginLeft +
+          ((event.year - yearStart) / (yearEnd - yearStart)) *
+            (svgWidth - marginLeft - marginRight);
+        const initialY = timelineLaneY;
+
+        dots.push({
+          event,
+          x,
+          y,
+          initialX,
+          initialY,
+          key: getTimelineEventKey(event),
+        });
+      });
+    });
+
+    return dots;
+  }, [categoryEvents, svgWidth, timelineLaneY]);
+
+  const [hoveredDot, setHoveredDot] = useState<string | null>(null);
+  const [selectedDot, setSelectedDot] = useState<string | null>(null);
+  const [tooltip, setTooltip] = useState<{
+    event: ArmstrongEvent;
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const yearTicks: number[] = [];
+  for (let year = yearStart; year <= yearEnd; year += 10) yearTicks.push(year);
+  if (yearTicks[yearTicks.length - 1] !== yearEnd) yearTicks.push(yearEnd);
+
+  return (
+    <div
+      className="career-timeline-chart-wrap"
+      style={{ position: "relative" }}
+    >
+      <button
+        onClick={onBack}
+        className="career-timeline-view-btn"
+        aria-label="Timeline view"
+        style={{
+          opacity: isAnimating ? 0 : 1,
+          transition: "opacity 0.6s ease-in 0.4s",
+        }}
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <circle cx="6" cy="12" r="2" fill="currentColor" />
+          <circle cx="12" cy="12" r="2" fill="currentColor" />
+          <circle cx="18" cy="12" r="2" fill="currentColor" />
+          <line x1="6" y1="6" x2="6" y2="18" strokeWidth="1" opacity="0.4" />
+          <line x1="12" y1="6" x2="12" y2="18" strokeWidth="1" opacity="0.4" />
+          <line x1="18" y1="6" x2="18" y2="18" strokeWidth="1" opacity="0.4" />
+        </svg>
+      </button>
+      <svg
+        width={svgWidth}
+        height={stackedHeight + stackMarginTop + 60}
+        style={{ display: "block", background: "transparent" }}
+      >
+        {/* X-axis line */}
+        <line
+          x1={stackMarginLeft}
+          y1={xAxisY}
+          x2={svgWidth - stackMarginRight}
+          y2={xAxisY}
+          stroke="#4B473F"
+          strokeWidth={1.5}
+          style={{
+            opacity: isAnimating ? 0 : 1,
+            transition: "opacity 0.6s ease-in 0.3s",
+          }}
+        />
+
+        {/* Year labels */}
+        {yearTicks.map((year) => {
+          const yearRange = yearEnd - yearStart;
+          const chartWidth = svgWidth - stackMarginLeft - stackMarginRight;
+          const x =
+            stackMarginLeft + ((year - yearStart) / yearRange) * chartWidth;
+          return (
+            <text
+              key={year}
+              x={x}
+              y={xAxisY + 20}
+              textAnchor="middle"
+              fontSize="11"
+              fill="#6B6B6B"
+              style={{
+                opacity: isAnimating ? 0 : 1,
+                transition: "opacity 0.6s ease-in 0.4s",
+              }}
+            >
+              {year}
+            </text>
+          );
+        })}
+
+        {/* Title */}
+        <text
+          x={svgWidth / 2}
+          y={40}
+          textAnchor="middle"
+          fontSize="18"
+          fontWeight="500"
+          fill="#ffffff"
+          style={{
+            opacity: isAnimating ? 0 : 1,
+            transition: "opacity 0.6s ease-in 0.4s",
+          }}
+        >
+          {timelineData.categoryLabels[category]} Events (
+          {categoryEvents.length})
+        </text>
+
+        {/* Dots */}
+        {stackedDots.map((dot) => {
+          const isHovered = hoveredDot === dot.key;
+          const isSelected = selectedDot === dot.key;
+          const radius = dotRadius * (isHovered || isSelected ? 1.4 : 1);
+
+          const displayX = isAnimating ? dot.initialX : dot.x;
+          const displayY = isAnimating ? dot.initialY : dot.y;
+
+          return (
+            <circle
+              key={dot.key}
+              cx={displayX}
+              cy={displayY}
+              r={radius}
+              fill={color}
+              stroke={isHovered || isSelected ? "#ffffff" : "#4B473F"}
+              strokeWidth={isHovered || isSelected ? 1.2 : 0.8}
+              style={{
+                cursor: "pointer",
+                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+                filter: isHovered ? `drop-shadow(0 0 4px ${color})` : "none",
+              }}
+              onMouseEnter={() => {
+                setHoveredDot(dot.key);
+                setTooltip({ event: dot.event, x: dot.x, y: dot.y });
+              }}
+              onMouseLeave={() => {
+                setHoveredDot(null);
+                setTooltip(null);
+              }}
+              onClick={() => {
+                setSelectedDot(selectedDot === dot.key ? null : dot.key);
+              }}
+            />
+          );
+        })}
+      </svg>
+
+      {/* Tooltip */}
+      {tooltip && (
+        <div
+          style={{
+            position: "absolute",
+            left: Math.min(tooltip.x + 10, svgWidth - 260),
+            top: Math.max(tooltip.y - 60, 10),
+            background: "rgba(0, 0, 0, 0.92)",
+            color: "#ffffff",
+            padding: "12px 14px",
+            borderRadius: "6px",
+            fontSize: "13px",
+            maxWidth: "240px",
+            pointerEvents: "none",
+            zIndex: 100,
+            lineHeight: 1.5,
+          }}
+        >
+          <div style={{ fontWeight: 600, marginBottom: 4 }}>
+            {tooltip.event.dateText}
+          </div>
+          <div>{tooltip.event.event}</div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -1098,6 +1374,9 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
   );
   const [hoveredLegendCategory, setHoveredLegendCategory] =
     useState<Category | null>(null);
+  const [detailViewCategory, setDetailViewCategory] = useState<Category | null>(
+    null,
+  );
 
   useEffect(() => {
     const element = containerRef.current;
@@ -1172,15 +1451,30 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
   }, [activeCategories, selectedEvent]);
 
   const toggleCategory = (category: Category) => {
-    setDimmedCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(category)) {
-        next.delete(category);
-      } else {
-        next.add(category);
-      }
-      return next;
-    });
+    // If we're in detail view for this category, exit detail view
+    if (detailViewCategory === category) {
+      setDetailViewCategory(null);
+      return;
+    }
+
+    // If category is not dimmed (active), enter detail view
+    if (!dimmedCategories.has(category)) {
+      setDetailViewCategory(category);
+      return;
+    }
+
+    // Otherwise, toggle dim state (only when not in detail view)
+    if (!detailViewCategory) {
+      setDimmedCategories((prev) => {
+        const next = new Set(prev);
+        if (next.has(category)) {
+          next.delete(category);
+        } else {
+          next.add(category);
+        }
+        return next;
+      });
+    }
   };
 
   const categoryCounts = useMemo(() => {
@@ -1240,49 +1534,86 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
         <div className="career-timeline-surface">
           <div className="career-timeline-header">
             <h2 className="career-timeline-title mcg-page-title mcg-page-title--flow">
-              Career Highlights
+              Historical Highlights
             </h2>
           </div>
 
           <div className="career-timeline-chart-card">
             <div className="career-timeline-chart-surface">
-              <div className="career-timeline-legend-panel">
-                {allCategories.map((category) => {
-                  const isInSelectedEvent =
-                    selectedEventCategories === null ||
-                    selectedEventCategories.includes(category);
-                  const shouldDim =
-                    dimmedCategories.has(category) || !isInSelectedEvent;
-                  return (
-                    <CategoryPill
-                      key={category}
-                      active={!dimmedCategories.has(category)}
-                      count={categoryCounts[category]}
-                      onToggle={() => toggleCategory(category)}
-                      label={timelineData.categoryLabels[category]}
-                      color={categoryColors[category]}
-                      dimmed={shouldDim}
-                      onHover={() => setHoveredLegendCategory(category)}
-                      onHoverEnd={() => setHoveredLegendCategory(null)}
-                    />
-                  );
-                })}
-              </div>
+              {!detailViewCategory && (
+                <div
+                  className="career-timeline-legend-panel"
+                  style={{
+                    transition: "all 0.3s ease-out",
+                  }}
+                >
+                  {allCategories.map((category) => {
+                    const isInSelectedEvent =
+                      selectedEventCategories === null ||
+                      selectedEventCategories.includes(category);
+                    const shouldDim =
+                      dimmedCategories.has(category) || !isInSelectedEvent;
+                    return (
+                      <CategoryPill
+                        key={category}
+                        active={!dimmedCategories.has(category)}
+                        count={categoryCounts[category]}
+                        onToggle={() => toggleCategory(category)}
+                        label={timelineData.categoryLabels[category]}
+                        color={categoryColors[category]}
+                        dimmed={shouldDim}
+                        onHover={() => setHoveredLegendCategory(category)}
+                        onHoverEnd={() => setHoveredLegendCategory(null)}
+                      />
+                    );
+                  })}
+                </div>
+              )}
               <div ref={containerRef} className="career-timeline-scroll-area">
-                <div className="career-timeline-scroll-inner">
-                  <TimelineSVG
-                    svgWidth={Math.max(svgWidth, 1320)}
-                    active={activeCategories}
-                    selected={selectedEvent}
-                    onSelect={setSelectedEvent}
-                    dotRadius={dotRadius}
-                    featuredDotRadiusOffset={featuredDotRadiusOffset}
-                    activeDotRadiusOffset={activeDotRadiusOffset}
-                    laneStroke={laneStroke}
-                    laneStrokeWidth={laneStrokeWidth}
-                    dimmedCategories={dimmedCategories}
-                    hoveredLegendCategory={hoveredLegendCategory}
-                  />
+                <div
+                  className="career-timeline-scroll-inner"
+                  style={{ position: "relative" }}
+                >
+                  <div
+                    style={{
+                      opacity: detailViewCategory ? 0 : 1,
+                      transition: "opacity 0.5s ease-out",
+                      pointerEvents: detailViewCategory ? "none" : "auto",
+                    }}
+                  >
+                    <TimelineSVG
+                      svgWidth={svgWidth}
+                      active={activeCategories}
+                      selected={selectedEvent}
+                      onSelect={setSelectedEvent}
+                      dotRadius={dotRadius}
+                      featuredDotRadiusOffset={featuredDotRadiusOffset}
+                      activeDotRadiusOffset={activeDotRadiusOffset}
+                      laneStroke={laneStroke}
+                      laneStrokeWidth={laneStrokeWidth}
+                      dimmedCategories={dimmedCategories}
+                      hoveredLegendCategory={hoveredLegendCategory}
+                    />
+                  </div>
+                  {detailViewCategory && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        opacity: 1,
+                        transition: "opacity 0.5s ease-in",
+                      }}
+                    >
+                      <StackedDotChart
+                        category={detailViewCategory}
+                        svgWidth={svgWidth}
+                        dotRadius={dotRadius}
+                        onBack={() => setDetailViewCategory(null)}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

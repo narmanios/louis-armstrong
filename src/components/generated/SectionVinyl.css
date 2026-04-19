@@ -53,6 +53,37 @@
   color: #ffffff !important;
 }
 
+.vre__view-toggle {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.vre__view-btn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "Hanken Grotesk", Arial, sans-serif;
+}
+
+.vre__view-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.vre__view-btn.is-active {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000000;
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
 .vre__soundtrack-count {
   display: inline-flex;
   align-items: baseline;
@@ -271,6 +302,41 @@
   height: auto;
   margin: 0;
   overflow: visible;
+  transition: opacity 0.4s ease;
+}
+
+.vre__rings-view,
+.vre__chart-view {
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vre__svg--rings .vre__chart-view {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vre__svg--chart .vre__rings-view {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vre__decade-ring,
+.vre__decade-bar {
+  transition:
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vre__artist-image,
+.vre__bar-rect {
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vre__bar-rect {
+  transition:
+    fill 0.3s ease,
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .vre__tooltip {

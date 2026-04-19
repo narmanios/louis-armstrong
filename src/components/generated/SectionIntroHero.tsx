@@ -314,7 +314,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           bottom: 24px;
           width: 110px;
           z-index: 14;
-          pointer-events: none;
+          cursor: pointer;
         }
 
         .hero-intro-title-block {
@@ -665,11 +665,18 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         }
       `}</style>
 
-      <img
-        src="/assets/logo_light.png"
-        alt="Project logo"
-        className="hero-intro-logo"
-      />
+      <a
+        href="https://www.louisarmstronghouse.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Visit Louis Armstrong House Museum"
+      >
+        <img
+          src="/assets/logo_light.png"
+          alt="Project logo"
+          className="hero-intro-logo"
+        />
+      </a>
 
       <div className="mcg-hero-title hero-intro-title-block">
         <div className="hero-intro-title-row">
