@@ -148,11 +148,18 @@ export const SectionJourneyToAmbassador: React.FC = () => {
         <div className="journey-entry">
           <div className="journey-image-wrap">
             <div className="interactive-card">
-              <img
-                src="/assets/orchestra.png"
-                alt="Orchestra"
-                className="journey-media-image"
-              />
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "block", cursor: "pointer" }}
+              >
+                <img
+                  src="/assets/orchestra.png"
+                  alt="Orchestra"
+                  className="journey-media-image"
+                />
+              </a>
             </div>
             <a
               className="journey-logo-link"
@@ -178,11 +185,18 @@ export const SectionJourneyToAmbassador: React.FC = () => {
         <div className="journey-entry">
           <div className="journey-image-wrap">
             <div className="interactive-card">
-              <img
-                src="/assets/pennies.jpg"
-                alt="Pennies from Heaven"
-                className="journey-media-image"
-              />
+              <a
+                href="https://collections.louisarmstronghouse.org/asset-detail/1205629"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "block", cursor: "pointer" }}
+              >
+                <img
+                  src="/assets/pennies.jpg"
+                  alt="Pennies from Heaven"
+                  className="journey-media-image"
+                />
+              </a>
             </div>
             <a
               className="journey-logo-link"

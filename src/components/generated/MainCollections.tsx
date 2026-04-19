@@ -64,7 +64,7 @@ const statsCardContent: Record<StatsCardKey, StatsCardContent> = {
     "Louis Armstrong’s music still lives on in screen media today, from “Dream a Little Dream of Me” in Stranger Things to “We Have All the Time in the World” in the James Bond film No Time to Die.",
   ),
   "legacy-1": buildStatsCard(
-    "The lasting legacy of “What a Wonderful World” can be seen in the many rerecordings it continues to inspire, proving that Louis Armstrong’s voice and message still resonate across generations.",
+    "The lasting legacy of the song “What a Wonderful World” can be seen in the many rerecordings as it continues to inspire, proving that Louis Armstrong’s voice and message still resonate across generations.",
   ),
   "ambassador-0": buildStatsCard(
     "Louis Armstrong became a goodwill ambassador long before the title was official, traveling the world as one of the first Black pop stars to spread jazz and American culture abroad.",

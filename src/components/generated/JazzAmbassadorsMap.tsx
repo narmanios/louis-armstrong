@@ -357,7 +357,7 @@ export const JazzAmbassadorsMap: React.FC = () => {
             className="mcg-page-title mcg-page-title--flow"
             style={{ color: "#000000" }}
           >
-            Jazz Diplomacy Tours 1950s-1970s
+            Jazz Diplomacy Tours
           </h1>
         </div>
 

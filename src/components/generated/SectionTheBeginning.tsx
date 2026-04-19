@@ -147,11 +147,18 @@ export const SectionTheBeginning: React.FC = () => {
       <div className="beginning-entry-grid">
         <div className="beginning-entry">
           <div className="beginning-image-wrap">
-            <img
-              src="/assets/waifs-home.png"
-              alt="Waifs home band"
-              className="beginning-media-image"
-            />
+            <a
+              href="https://collections.louisarmstronghouse.org/asset-detail/1045326"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "block", cursor: "pointer" }}
+            >
+              <img
+                src="/assets/waifs-home.png"
+                alt="Waifs home band"
+                className="beginning-media-image"
+              />
+            </a>
             <a
               className="beginning-logo-link"
               href="https://www.louisarmstronghouse.org/"
@@ -175,11 +182,18 @@ export const SectionTheBeginning: React.FC = () => {
 
         <div className="beginning-entry">
           <div className="beginning-image-wrap">
-            <img
-              src="/assets/2006_1_3a.jpg"
-              alt="Creole Jazz Band"
-              className="beginning-media-image"
-            />
+            <a
+              href="https://collections.louisarmstronghouse.org/asset-detail/1045326"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "block", cursor: "pointer" }}
+            >
+              <img
+                src="/assets/2006_1_3a.jpg"
+                alt="Creole Jazz Band"
+                className="beginning-media-image"
+              />
+            </a>
             <a
               className="beginning-logo-link"
               href="https://www.louisarmstronghouse.org/"

@@ -147,11 +147,18 @@ export const SectionWorldFair: React.FC = () => {
       <div className="world-fair-entry-grid">
         <div className="world-fair-entry">
           <div className="world-fair-image-wrap">
-            <img
-              src="/assets/worldsfair.jpg"
-              alt="World Fair"
-              className="world-fair-media-image"
-            />
+            <a
+              href="https://collections.louisarmstronghouse.org/asset-detail/1198635"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "block", cursor: "pointer" }}
+            >
+              <img
+                src="/assets/worldsfair.jpg"
+                alt="World Fair"
+                className="world-fair-media-image"
+              />
+            </a>
             <a
               className="world-fair-logo-link"
               href="https://www.louisarmstronghouse.org/"
@@ -175,11 +182,18 @@ export const SectionWorldFair: React.FC = () => {
 
         <div className="world-fair-entry">
           <div className="world-fair-image-wrap">
-            <img
-              src="/assets/berlin.jpg"
-              alt="East Berlin"
-              className="world-fair-media-image"
-            />
+            <a
+              href="https://collections.louisarmstronghouse.org/asset-detail/1197712"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "block", cursor: "pointer" }}
+            >
+              <img
+                src="/assets/berlin.jpg"
+                alt="East Berlin"
+                className="world-fair-media-image"
+              />
+            </a>
             <a
               className="world-fair-logo-link"
               href="https://www.louisarmstronghouse.org/"

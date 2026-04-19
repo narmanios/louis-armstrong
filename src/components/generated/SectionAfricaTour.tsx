@@ -11,11 +11,13 @@ interface GalleryImage {
   src: string;
   caption: string;
   description: string;
+  url: string;
 }
 interface AfricaTourJsonImage {
   id: number;
   description: string;
   image_link: string;
+  url: string;
 }
 
 const africaTourJsonUrl = "/assets/data/africa-tour.json";
@@ -48,6 +50,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
           src: item.image_link.startsWith("/")
             ? item.image_link
             : `/${item.image_link}`,
+          url: item.url,
           caption: `Image ${item.id}`,
           description: item.description,
         }));
@@ -106,6 +109,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
         src: image.src,
         alt: image.caption,
         caption: image.description,
+        link: image.url,
       }));
     }
 

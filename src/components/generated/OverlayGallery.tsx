@@ -8,6 +8,7 @@ export interface OverlayGallerySlide {
   alt: string;
   caption?: string;
   poster?: string;
+  link?: string;
 }
 
 interface OverlayGalleryProps {
@@ -218,6 +219,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
                       scrollSnapAlign: "start",
                       display: "flex",
                       justifyContent: "center",
+                      position: "relative",
                     }}
                   >
                     {slide.type === "video" ? (
@@ -232,11 +234,64 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
                         style={sharedMediaStyle}
                       />
                     ) : (
-                      <img
-                        src={slide.src}
-                        alt={slide.alt}
-                        style={sharedMediaStyle}
-                      />
+                      <div
+                        style={{
+                          position: "relative",
+                          display: "inline-block",
+                        }}
+                      >
+                        {slide.link ? (
+                          <a
+                            href={slide.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ display: "block", lineHeight: 0 }}
+                          >
+                            <img
+                              src={slide.src}
+                              alt={slide.alt}
+                              style={sharedMediaStyle}
+                            />
+                          </a>
+                        ) : (
+                          <img
+                            src={slide.src}
+                            alt={slide.alt}
+                            style={sharedMediaStyle}
+                          />
+                        )}
+                        <a
+                          href="https://www.louisarmstronghouse.org/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label="Open Louis Armstrong House website"
+                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            position: "absolute",
+                            right: "12px",
+                            bottom: "12px",
+                            width: "56px",
+                            height: "56px",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                          }}
+                        >
+                          <img
+                            src="/assets/logo_light.png"
+                            alt=""
+                            aria-hidden="true"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              display: "block",
+                              objectFit: "contain",
+                            }}
+                          />
+                        </a>
+                      </div>
                     )}
                   </div>
                 ))}
@@ -387,6 +442,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
                       scrollSnapAlign: "start",
                       display: "flex",
                       justifyContent: "center",
+                      position: "relative",
                     }}
                   >
                     {slide.type === "video" ? (
@@ -401,11 +457,64 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
                         style={sharedMediaStyle}
                       />
                     ) : (
-                      <img
-                        src={slide.src}
-                        alt={slide.alt}
-                        style={sharedMediaStyle}
-                      />
+                      <div
+                        style={{
+                          position: "relative",
+                          display: "inline-block",
+                        }}
+                      >
+                        {slide.link ? (
+                          <a
+                            href={slide.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ display: "block", lineHeight: 0 }}
+                          >
+                            <img
+                              src={slide.src}
+                              alt={slide.alt}
+                              style={sharedMediaStyle}
+                            />
+                          </a>
+                        ) : (
+                          <img
+                            src={slide.src}
+                            alt={slide.alt}
+                            style={sharedMediaStyle}
+                          />
+                        )}
+                        <a
+                          href="https://www.louisarmstronghouse.org/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label="Open Louis Armstrong House website"
+                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            position: "absolute",
+                            right: "12px",
+                            bottom: "12px",
+                            width: "76px",
+                            height: "76px",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                          }}
+                        >
+                          <img
+                            src="/assets/logo_light.png"
+                            alt=""
+                            aria-hidden="true"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              display: "block",
+                              objectFit: "contain",
+                            }}
+                          />
+                        </a>
+                      </div>
                     )}
                   </div>
                 ))}
