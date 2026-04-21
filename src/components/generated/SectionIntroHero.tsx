@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { SectionAboutProject } from "./SectionAboutProject";
 import { useIsMobile } from "../../hooks/use-mobile";
 
 interface SectionIntroHeroProps {
   onNavigateHistory: () => void;
   onNavigateLegacy: () => void;
   onNavigateAmbassador: () => void;
+  onOpenAboutOverlay: () => void;
   isIntroActive?: boolean;
   isTransitionOverlayActive?: boolean;
   sectionRef?: React.Ref<HTMLElement>;
@@ -23,11 +23,11 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
   onNavigateHistory,
   onNavigateLegacy,
   onNavigateAmbassador,
+  onOpenAboutOverlay,
   isIntroActive = false,
   isTransitionOverlayActive = false,
   sectionRef,
 }) => {
-  const [isAboutOverlayOpen, setIsAboutOverlayOpen] = useState(false);
   const [transitionTarget, setTransitionTarget] = useState<HeroPanelKey | null>(
     null,
   );
@@ -50,7 +50,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
       return;
     }
 
-    setIsAboutOverlayOpen(true);
+    onOpenAboutOverlay();
   };
 
   const handlePanelNavigation = (
@@ -784,81 +784,10 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           type="button"
           onClick={openAboutOverlay}
           className="hero-intro-about-button"
-          aria-haspopup="dialog"
-          aria-expanded={isAboutOverlayOpen}
-          aria-controls="hero-intro-about-overlay"
         >
           <span className="hero-intro-nav-link-label">About this project</span>
         </button>
       </div>
-
-      {isAboutOverlayOpen && (
-        <div
-          id="hero-intro-about-overlay"
-          className="mcg-about-overlay hero-intro-about-overlay"
-          style={{
-            position: "fixed",
-            inset: isMobile ? "var(--mcg-mobile-nav-offset, 0px) 0 0 0" : 0,
-            zIndex: 999,
-            backgroundColor: "rgba(0, 0, 0, 0.6)",
-            display: "flex",
-            justifyContent: isMobile ? "stretch" : "center",
-            alignItems: isMobile ? "stretch" : "center",
-            padding: isMobile ? "0" : "24px",
-            boxSizing: "border-box",
-          }}
-        >
-          <div
-            className="mcg-about-overlay-content hero-intro-about-overlay-content"
-            style={{
-              position: "relative",
-              width: isMobile ? "100vw" : "min(100vw, 1280px)",
-              maxWidth: isMobile ? "100vw" : undefined,
-              height: isMobile
-                ? "calc(100dvh - var(--mcg-mobile-nav-offset, 0px))"
-                : undefined,
-              maxHeight: isMobile ? "none" : "90vh",
-              overflowY: "auto",
-              overflowX: "hidden",
-              borderRadius: isMobile ? "0" : "10px",
-              backgroundColor: isMobile ? "#ffffff" : "#000000",
-              boxShadow: isMobile ? "none" : "0 10px 40px rgba(0, 0, 0, 0.35)",
-            }}
-          >
-            <button
-              aria-label="Close about overlay"
-              onClick={() => setIsAboutOverlayOpen(false)}
-              className="hero-intro-about-close-button"
-              style={{
-                position: isMobile ? "fixed" : "absolute",
-                top: isMobile
-                  ? "calc(var(--mcg-mobile-nav-offset, 0px) + 12px)"
-                  : "40px",
-                right: isMobile ? "12px" : "40px",
-                zIndex: isMobile ? 1001 : 5,
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: "10px",
-                touchAction: "manipulation",
-              }}
-            >
-              <img
-                src="/assets/close.svg"
-                alt="Close"
-                className="hero-intro-about-close-icon"
-                style={{
-                  width: "30px",
-                  height: "30px",
-                  filter: "brightness(0) invert(1)",
-                }}
-              />
-            </button>
-
-            <SectionAboutProject />
-          </div>
-        </div>
-      )}
     </section>
   );
 };

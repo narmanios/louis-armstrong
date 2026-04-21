@@ -78,339 +78,245 @@
       "year": 1923,
       "dateText": "April 5, 1923",
       "event": "First recorded solo with King Oliver on \"Chimes Blues\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 2,
       "year": 1924,
       "dateText": "October 7, 1924",
       "event": "First recording as a sideman with Fletcher Henderson in New York, \"Manda\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 3,
       "year": 1924,
       "dateText": "October 10, 1924",
       "event": "Takes influential solo on \"Shanghai Shuffle\" with Fletcher Henderson",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 4,
       "year": 1924,
       "dateText": "October 17, 1924",
       "event": "First recording with Sidney Bechet, \"Texas Moaner Blues\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 5,
       "year": 1924,
       "dateText": "November 6, 1924",
       "event": "Solo on Clarence Williams's \"Everybody Loves My Baby\" helps turn that side into a hit",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 6,
       "year": 1925,
       "dateText": "January 8, 1925",
       "event": "Records \"Cake Walking Babies from Home\" with Sidney Bechet",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 7,
       "year": 1925,
       "dateText": "January 14, 1925",
       "event": "Records \"St. Louis Blues\" with Bessie Smith",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 8,
       "year": 1925,
       "dateText": "May 29, 1925",
       "event": "Featured on his own composition \"Sugar Foot Stomp\" with Fletcher Henderson",
-      "categories": [
-        "bandleader"
-      ]
+      "categories": ["bandleader"]
     },
     {
       "id": 9,
       "year": 1925,
       "dateText": "November 12, 1925",
       "event": "First Hot Five session — \"Gut Bucket Blues\" becomes a hit",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 10,
       "year": 1926,
       "dateText": "February 26, 1926",
       "event": "Records two of his most influential pieces with the Hot Five: \"Heebie Jeebies\" and \"Cornet Chop Suey\"",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 11,
       "year": 1926,
       "dateText": "May 28, 1926",
       "event": "Records \"Stomp Off, Let's Go\" with Erskine Tate's Vendome Orchestra",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 12,
       "year": 1926,
       "dateText": "November 16, 1926",
       "event": "Records \"Big Butter and Egg Man\" with the Hot Five",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 13,
       "year": 1927,
       "dateText": "May 7, 1927",
       "event": "Records \"Wild Man Blues\" at the first Hot Seven session",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 14,
       "year": 1927,
       "dateText": "May 10, 1927",
       "event": "Records a famous solo on \"Potato Head Blues\" with the Hot Seven",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 15,
       "year": 1927,
       "dateText": "December 9, 1927",
       "event": "Records a famous solo on \"Struttin' With Some Barbecue\" with the Hot Five",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 16,
       "year": 1927,
       "dateText": "December 13, 1927",
       "event": "Records \"Hotter Than That\" at the final session of the original Hot Five",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 17,
       "year": 1928,
       "dateText": "June 27, 1928",
       "event": "Records \"A Monday Date\" at the first session of the new Hot Five with Earl \"Fatha\" Hines on piano",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 18,
       "year": 1928,
       "dateText": "June 28, 1928",
       "event": "Records perhaps his most famous solo on \"West End Blues\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 19,
       "year": 1928,
       "dateText": "December 5, 1928",
       "event": "Records famous duet with Earl Hines on \"Weather Bird\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 20,
       "year": 1928,
       "dateText": "December 12, 1928",
       "event": "Ends his 1920s series of Chicago recordings with \"Tight Like This\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 21,
       "year": 1929,
       "dateText": "March 5, 1929",
       "event": "First integrated recording \"Knockin' a Jug\"; first pop tune \"I Can't Give You Anything But Love\"; and famous solo on \"Mahogany Hall Stomp\"",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 22,
       "year": 1929,
       "dateText": "July 19, 1929",
       "event": "Records \"Ain't Misbehavin',\" which turned him into a Broadway star",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 23,
       "year": 1929,
       "dateText": "July 22, 1929",
       "event": "Records \"(What Did I Do to be so) Black and Blue,\" one of the first protest songs",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 24,
       "year": 1929,
       "dateText": "September 11, 1929",
       "event": "Records popular version of \"When You're Smiling\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 25,
       "year": 1929,
       "dateText": "December 13, 1929",
       "event": "Records his first interracial vocal duet, \"Rockin' Chair\" with Hoagy Carmichael",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 26,
       "year": 1930,
       "dateText": "July 16, 1930",
       "event": "Records \"Blue Yodel Number 9\" with Jimmie Rodgers, the father of country music",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 27,
       "year": 1930,
       "dateText": "July 21, 1930",
       "event": "Records a famous solo on \"I'm a Ding Dong Daddy (from Dumas)\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 28,
       "year": 1930,
       "dateText": "August 19, 1930",
       "event": "Records a popular version of \"I'm Confessin' (That I Love You)\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 29,
       "year": 1930,
       "dateText": "December 23, 1930",
       "event": "Fuses jazz and Cuban rhythms on \"The Peanut Vendor\"",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 30,
       "year": 1931,
       "dateText": "April 20, 1931",
       "event": "Records his eventual theme song, \"When It's Sleepy Time Down South,\" for the first time",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 31,
       "year": 1931,
       "dateText": "April 28, 1931",
       "event": "Records popular version of \"(I'll Be Glad When You're Dead) You Rascal You\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 32,
       "year": 1931,
       "dateText": "November 3, 1931",
       "event": "Records popular version of \"Lazy River\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 33,
       "year": 1931,
       "dateText": "November 4, 1931",
       "event": "Records famous version of \"Star Dust\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 34,
       "year": 1932,
       "dateText": "January 27, 1932",
       "event": "Records popular version of \"All of Me\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 35,
       "year": 1932,
       "dateText": "March 1932",
       "event": "Films \"A Rhapsody in Black and Blue\"",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://youtu.be/ThudMtzD3Io"
     },
     {
@@ -418,32 +324,21 @@
       "year": 1932,
       "dateText": "December 8, 1932",
       "event": "Records famous version of \"That's My Home\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 37,
       "year": 1933,
       "dateText": "January 26, 1933",
       "event": "Records famous version of \"I Gotta Right to Sing the Blues\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 38,
       "year": 1933,
       "dateText": "October 21, 1933",
       "event": "Films famous performances in Copenhagen, Denmark",
-      "categories": [
-        "film",
-        "musician"
-      ],
+      "categories": ["film", "musician"],
       "url": "https://youtu.be/ffNTvHgPVvE"
     },
     {
@@ -451,42 +346,28 @@
       "year": 1934,
       "dateText": "November 7, 1934",
       "event": "Records famous two-part version of \"On the Sunny Side of the Street\"",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 40,
       "year": 1935,
       "dateText": "October 3, 1935",
       "event": "Records first session for Decca Records, featuring \"I'm in the Mood for Love\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 41,
       "year": 1936,
       "dateText": "May 18, 1936",
       "event": "Records \"Swing That Music,\" named after his recently published autobiography",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 42,
       "year": 1936,
       "dateText": "July 1936",
       "event": "Films appearance in \"Pennies from Heaven\" with Bing Crosby",
-      "categories": [
-        "film",
-        "musician",
-        "vocalist"
-      ],
+      "categories": ["film", "musician", "vocalist"],
       "url": "https://youtu.be/RrKdtKk8Yhs"
     },
     {
@@ -494,20 +375,14 @@
       "year": 1937,
       "dateText": "April 9, 1937",
       "event": "Debuts as host of \"The Fleischmann's Yeast Show,\" a pioneering radio program",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 44,
       "year": 1937,
       "dateText": "October 1937",
       "event": "Films appearance in \"Artists and Models\"",
-      "categories": [
-        "film",
-        "musician"
-      ],
+      "categories": ["film", "musician"],
       "url": "https://youtu.be/5sC4wA1Z7gE"
     },
     {
@@ -515,43 +390,28 @@
       "year": 1938,
       "dateText": "January 12, 1938",
       "event": "Records famous versions of \"Struttin' with Some Barbecue\" and \"Jubilee\"",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 46,
       "year": 1938,
       "dateText": "May 13, 1938",
       "event": "Records first version of \"When the Saints Go Marching In\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 47,
       "year": 1938,
       "dateText": "June 14, 1938",
       "event": "Records several spirituals, including \"Nobody Knows the Trouble I've Seen\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 48,
       "year": 1938,
       "dateText": "September 1938",
       "event": "Films \"Going Places,\" performing \"Jeepers Creepers\"",
-      "categories": [
-        "film",
-        "musician",
-        "vocalist"
-      ],
+      "categories": ["film", "musician", "vocalist"],
       "url": "https://youtu.be/6kHN1fc8ejs"
     },
     {
@@ -559,20 +419,14 @@
       "year": 1941,
       "dateText": "November 16, 1941",
       "event": "Records famous version of \"When It's Sleepy Time Down South\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 50,
       "year": 1942,
       "dateText": "April 1942",
       "event": "Films four \"Soundies\" shorts",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://youtu.be/wR3DFqsposY"
     },
     {
@@ -580,11 +434,7 @@
       "year": 1943,
       "dateText": "April 1943",
       "event": "Films \"Jam Session,\" performing \"I Can't Give You Anything But Love\"",
-      "categories": [
-        "film",
-        "musician",
-        "vocalist"
-      ],
+      "categories": ["film", "musician", "vocalist"],
       "url": "https://youtu.be/-xj_9sXa4wU"
     },
     {
@@ -592,30 +442,21 @@
       "year": 1945,
       "dateText": "January 14, 1945",
       "event": "Records popular version of \"I Wonder\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 53,
       "year": 1946,
       "dateText": "January 18, 1946",
       "event": "Records with Ella Fitzgerald for the first time on \"You Won't Be Satisfied\"",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 54,
       "year": 1946,
       "dateText": "September–October 1946",
       "event": "Films \"New Orleans\"",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://www.youtube.com/watch?v=mlQKGYnYE88"
     },
     {
@@ -623,40 +464,28 @@
       "year": 1946,
       "dateText": "October 17, 1946",
       "event": "Records \"Do You Know What It Means to Miss New Orleans\"",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 56,
       "year": 1947,
       "dateText": "February 8, 1947",
       "event": "Leads concert at Carnegie Hall",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 57,
       "year": 1947,
       "dateText": "May 17, 1947",
       "event": "Leads concert at Town Hall — particularly \"Rockin' Chair\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 58,
       "year": 1947,
       "dateText": "July 1947",
       "event": "Films \"A Song is Born\"",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://youtu.be/azOPLROrivs"
     },
     {
@@ -664,61 +493,42 @@
       "year": 1947,
       "dateText": "November 30, 1947",
       "event": "Records live album, \"Satchmo at Symphony Hall\"",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 60,
       "year": 1949,
       "dateText": "September 6, 1949",
       "event": "Records hit record of \"Blueberry Hill\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 61,
       "year": 1950,
       "dateText": "April 1950",
       "event": "Records \"New Orleans Nights\" album",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 62,
       "year": 1950,
       "dateText": "June 26, 1950",
       "event": "Records hit record of \"La Vie En Rose\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 63,
       "year": 1950,
       "dateText": "August 25, 1950",
       "event": "Records \"Dream a Little Dream of Me\" with Ella Fitzgerald",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 64,
       "year": 1950,
       "dateText": "December 1950",
       "event": "Films \"The Strip\"",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://youtu.be/zzlb64Ee3pw"
     },
     {
@@ -726,20 +536,14 @@
       "year": 1951,
       "dateText": "July 24, 1951",
       "event": "Records hit record of \"A Kiss to Build a Dream On\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 66,
       "year": 1951,
       "dateText": "November 1951",
       "event": "Films \"Glory Alley\"",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://youtu.be/0wNkYK-Ri3w"
     },
     {
@@ -747,20 +551,14 @@
       "year": 1952,
       "dateText": "April 19, 1952",
       "event": "Records hit record of \"Kiss of Fire\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 68,
       "year": 1953,
       "dateText": "June 1953",
       "event": "Films \"The Glenn Miller Story\"",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://youtu.be/wn04QWMvcAw"
     },
     {
@@ -768,40 +566,28 @@
       "year": 1954,
       "dateText": "July 12–14, 1954",
       "event": "Records famous album \"Louis Armstrong Plays W. C. Handy\"",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 70,
       "year": 1955,
       "dateText": "April 26 – May 3, 1955",
       "event": "Records famous album \"Satch Plays Fats\"",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 71,
       "year": 1955,
       "dateText": "September 28, 1955",
       "event": "Records hit record of \"Mack the Knife\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 72,
       "year": 1956,
       "dateText": "January 1956",
       "event": "Films \"High Society\"",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://youtu.be/FtfxSAnOgoU"
     },
     {
@@ -809,9 +595,7 @@
       "year": 1956,
       "dateText": "July 14, 1956",
       "event": "Performs \"St. Louis Blues (Concerto Grosso)\" with the New York Philharmonic conducted by Leonard Bernstein at Lewisohn Stadium",
-      "categories": [
-        "musician"
-      ],
+      "categories": ["musician"],
       "url": "https://youtu.be/JUhgzAu-KgI"
     },
     {
@@ -819,93 +603,63 @@
       "year": 1956,
       "dateText": "August 16, 1956",
       "event": "Records famous album \"Ella and Louis\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 75,
       "year": 1957,
       "dateText": "Dec 1956 – Jan 1957",
       "event": "Records 4-LP set, \"Satchmo: A Musical Autobiography\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 76,
       "year": 1957,
       "dateText": "January 1957",
       "event": "Records album \"Louis and the Angels\"",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 77,
       "year": 1957,
       "dateText": "July–August 1957",
       "event": "Records famous album \"Ella and Louis Again\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 78,
       "year": 1957,
       "dateText": "August 14–16, 1957",
       "event": "Records two albums: \"Louis Under the Stars\" and \"I've Got the World on a String\"",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 79,
       "year": 1957,
       "dateText": "August 18–19, 1957",
       "event": "Records \"Porgy and Bess\" with Ella Fitzgerald",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["musician", "vocalist"]
     },
     {
       "id": 80,
       "year": 1957,
       "dateText": "October 14, 1957",
       "event": "Records \"Louis Armstrong Meets Oscar Peterson\"",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 81,
       "year": 1958,
       "dateText": "February 4–7, 1958",
       "event": "Records \"Louis and the Good Book\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 82,
       "year": 1958,
       "dateText": "October 1958",
       "event": "Films \"The Five Pennies\"",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://youtu.be/Fsx6mUoTHUM"
     },
     {
@@ -913,28 +667,21 @@
       "year": 1959,
       "dateText": "September–October 1959",
       "event": "Records \"Satchmo Plays King Oliver\"",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 84,
       "year": 1960,
       "dateText": "May 24–25, 1960",
       "event": "Records \"Louie and the Dukes of Dixieland\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 85,
       "year": 1960,
       "dateText": "December 1960",
       "event": "Films \"Paris Blues\"",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://youtu.be/XWj_a4NGS_I"
     },
     {
@@ -942,30 +689,22 @@
       "year": 1961,
       "dateText": "April 3–4, 1961",
       "event": "Records two albums with Duke Ellington: \"For the First Time\" and \"The Great Reunion\"",
-      "categories": [
-        "bandleader",
-        "musician"
-      ]
+      "categories": ["bandleader", "musician"]
     },
     {
       "id": 87,
       "year": 1961,
       "dateText": "September 1961",
       "event": "Records \"The Real Ambassadors\" — a jazz musical about the role of jazz in international diplomacy",
-      "categories": [
-        "ambassador",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["ambassador", "musician", "vocalist"]
     },
+
     {
       "id": 89,
       "year": 1965,
       "dateText": "November 1965",
       "event": "Films \"A Man Called Adam\"",
-      "categories": [
-        "film"
-      ],
+      "categories": ["film"],
       "url": "https://youtu.be/riXiu0wkXyQ"
     },
     {
@@ -973,43 +712,28 @@
       "year": 1966,
       "dateText": "April 21, 1966",
       "event": "Records hit single \"Mame\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 91,
       "year": 1967,
       "dateText": "August 16, 1967",
       "event": "Records the original single \"What a Wonderful World\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 92,
       "year": 1968,
       "dateText": "February–May 1968",
       "event": "Records \"Disney Songs the Satchmo Way\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 93,
       "year": 1968,
       "dateText": "May 1968",
       "event": "Films \"Hello, Dolly!\" with Barbra Streisand",
-      "categories": [
-        "film",
-        "vocalist"
-      ],
+      "categories": ["film", "vocalist"],
       "url": "https://youtu.be/G2MQ_0RUOIA"
     },
     {
@@ -1017,12 +741,7 @@
       "year": 1969,
       "dateText": "October 28, 1969",
       "event": "Records \"We Have All the Time in the World,\" used in James Bond film \"On Her Majesty's Secret Service\"",
-      "categories": [
-        "bandleader",
-        "film",
-        "musician",
-        "vocalist"
-      ],
+      "categories": ["bandleader", "film", "musician", "vocalist"],
       "url": "https://youtu.be/RktwEMS0u28?si=xjBIWR3q2z7vYIj3"
     },
     {
@@ -1030,1473 +749,672 @@
       "year": 1970,
       "dateText": "May 26–29, 1970",
       "event": "Records \"Louis Armstrong and His Friends\"",
-      "categories": [
-        "bandleader",
-        "musician",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "musician", "vocalist"]
     },
     {
       "id": 96,
       "year": 1932,
       "dateText": "1932",
       "event": "England",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 97,
       "year": 1933,
       "dateText": "1933-1934",
       "event": "England, Denmark, Sweden, Netherlands, France, Paris, Switzerland",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 98,
       "year": 1948,
       "dateText": "1948",
       "event": "France",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 99,
       "year": 1949,
       "dateText": "1949",
       "event": "European tour",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 100,
       "year": 1952,
       "dateText": "1952",
       "event": "European tour",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 101,
       "year": 1953,
       "dateText": "1953",
       "event": "Japan",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 102,
       "year": 1954,
       "dateText": "1954",
       "event": "Australia",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 103,
       "year": 1955,
       "dateText": "1955",
       "event": "European tour",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 104,
       "year": 1956,
       "dateText": "1956",
       "event": "Australia, England, Ghana",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 105,
       "year": 1957,
       "dateText": "1957",
       "event": "Jamaica, South America",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 106,
       "year": 1959,
       "dateText": "1959",
       "event": "European tour",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 107,
       "year": 1960,
       "dateText": "1960-1961",
       "event": "African State Department tour",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 108,
       "year": 1961,
       "dateText": "1961",
       "event": "European tour",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 109,
       "year": 1962,
       "dateText": "1962",
       "event": "European tour",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 110,
       "year": 1963,
       "dateText": "1963",
       "event": "Australia, New Zealand, Japan",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 111,
       "year": 1964,
       "dateText": "1964",
       "event": "Australia, New Zealand, Japan",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 112,
       "year": 1965,
       "dateText": "1965",
       "event": "\"Iron Curtain\" tour (Prague, East Berlin), European tour",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 113,
       "year": 1967,
       "dateText": "1967",
       "event": "European tour",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 114,
       "year": 1968,
       "dateText": "1968",
       "event": "England",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 115,
       "year": 1970,
       "dateText": "1970",
       "event": "England",
-      "categories": [
-        "ambassador"
-      ]
+      "categories": ["ambassador"]
     },
     {
       "id": 116,
       "year": 1923,
       "dateText": "April 5, 1923",
       "event": "First recorded solo with King Oliver on \"Chimes Blues\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 117,
       "year": 1924,
       "dateText": "October 7, 1924",
       "event": "First recording as a sideman with Fletcher Henderson in New York, \"Manda\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 118,
       "year": 1924,
       "dateText": "October 10, 1924",
       "event": "Takes influential solo on \"Shanghai Shuffle\" with Fletcher Henderson",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 119,
       "year": 1924,
       "dateText": "October 17, 1924",
       "event": "First recording with Sidney Bechet, \"Texas Moaner Blues\"",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 120,
       "year": 1924,
       "dateText": "November 6, 1924",
       "event": "His solo on Clarence Williams's \"Everybody Loves My Baby\" helps to turn that side into a hit",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 121,
       "year": 1925,
       "dateText": "January 8, 1925",
       "event": "Records \"Cake Walking Babies from Home\" with Sidney Bechet",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 122,
       "year": 1925,
       "dateText": "January 14, 1925",
       "event": "Records \"St. Louis Blues\" with Bessie Smith",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 123,
       "year": 1925,
       "dateText": "May 29, 1925",
       "event": "Featured on his own composition \"Sugar Foot Stomp\" with Fletcher Henderson",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 124,
       "year": 1925,
       "dateText": "November 12, 1925",
       "event": "First Hot Five session, \"Gut Bucket Blues\" becomes a hit",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 125,
       "year": 1926,
       "dateText": "February 26, 1926",
       "event": "Records two of his most influential pieces with the Hot Five, \"Heebie Jeebies\" and \"Cornet Chop Suey\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 126,
       "year": 1926,
       "dateText": "May 28, 1926",
       "event": "Records \"Stomp Off, Let's Go\" with Erskine Tate's Vendome Orchestra",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 127,
       "year": 1926,
       "dateText": "November 16, 1926",
       "event": "Records \"Big Butter and Egg Man\" with the Hot Five",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 128,
       "year": 1927,
       "dateText": "May 7, 1927",
       "event": "Records \"Wild Man Blues\" at the first Hot Seven session",
-      "categories": [
-        "musician",
-        "bandleader"
-      ]
+      "categories": ["musician", "bandleader"]
     },
     {
       "id": 129,
       "year": 1927,
       "dateText": "May 10, 1927",
       "event": "Records a famous solo on \"Potato Head Blues\" with the Hot Seven",
-      "categories": [
-        "musician",
-        "bandleader"
-      ]
+      "categories": ["musician", "bandleader"]
     },
     {
       "id": 130,
       "year": 1927,
       "dateText": "December 9, 1927",
       "event": "Records a famous solo on \"Struttin' With Some Barbecue\" with the Hot Five",
-      "categories": [
-        "musician",
-        "bandleader"
-      ]
+      "categories": ["musician", "bandleader"]
     },
     {
       "id": 131,
       "year": 1927,
       "dateText": "December 13, 1927",
       "event": "Records \"Hotter Than That\" at the final session of the original Hot Five",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 132,
       "year": 1928,
       "dateText": "June 27, 1928",
       "event": "Records \"A Monday Date\" at the first session of the new Hot Five with Earl \"Fatha\" Hines on piano",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 133,
       "year": 1928,
       "dateText": "June 28, 1928",
       "event": "Records maybe his most famous solo on \"West End Blues\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 134,
       "year": 1928,
       "dateText": "December 5, 1928",
       "event": "Records famous duet with Earl Hines on \"Weather Bird\"",
-      "categories": [
-        "musician",
-        "bandleader"
-      ]
+      "categories": ["musician", "bandleader"]
     },
     {
       "id": 136,
       "year": 1929,
       "dateText": "March 5, 1929",
       "event": "Three songs to highlight: his first integrated recording, \"Knockin' a Jug\"; first pop tune, \"I Can't Give You Anything But Love\"' and take a famous solo on \"Mahogany Hall Stomp\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 137,
       "year": 1929,
       "dateText": "July 19, 1929",
       "event": "Records \"Ain't Misbehavin',\" which turned him into a star on Broadway",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 138,
       "year": 1929,
       "dateText": "July 22, 1929",
       "event": "Records \"(What Did I Do to be so) Black and Blue,\" known as one of the first protest songs",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 139,
       "year": 1929,
       "dateText": "September 11, 1929",
       "event": "Records popular version of \"When You're Smiling\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 140,
       "year": 1929,
       "dateText": "December 13, 1929",
       "event": "Records his first interracial vocal duet, singing \"Rockin' Chair\" with Hoagy Carmichael",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 141,
       "year": 1930,
       "dateText": "July 16, 1930",
       "event": "Records \"Blue Yodel Number 9\" with Jimmie Rodgers, the father of country music",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 142,
       "year": 1930,
       "dateText": "July 21, 1930",
       "event": "Records a famous solo on \"I'm a Ding Dong Daddy (from Dumas)\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 143,
       "year": 1930,
       "dateText": "August 19, 1930",
       "event": "Records a popular version of \"I'm Confessin' (That I Love You)\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 144,
       "year": 1930,
       "dateText": "December 23, 1930",
       "event": "Fuses jazz and Cuban rhythms on \"The Peanut Vendor\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 145,
       "year": 1931,
       "dateText": "April 20, 1931",
       "event": "Records his eventual theme song, \"When It's Sleepy Time Down South,\" for the first time",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 146,
       "year": 1931,
       "dateText": "April 28, 1931",
       "event": "Records popular version of \"(I'll Be Glad When You're Dead) You Rascal You\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 147,
       "year": 1931,
       "dateText": "November 3, 1931",
       "event": "Records popular version of \"Lazy River\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 148,
       "year": 1931,
       "dateText": "November 4, 1931",
       "event": "Records famous version of \"Star Dust\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 149,
       "year": 1932,
       "dateText": "January 27, 1932",
       "event": "Records popular version of \"All of Me\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 150,
       "year": 1932,
       "dateText": "December 8, 1932",
       "event": "Records famous version of \"That's My Home\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 151,
       "year": 1933,
       "dateText": "January 26, 1933",
       "event": "Records famous version of \"I Gotta Right to Sing the Blues\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 152,
       "year": 1934,
       "dateText": "November 7, 1934",
       "event": "Records famous two-part version of \"On the Sunny Side of the Street\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 153,
       "year": 1935,
       "dateText": "October 3, 1935",
       "event": "Records first session for Decca Records, featuring \"I'm in the Mood for Love\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 154,
       "year": 1936,
       "dateText": "May 18, 1936",
       "event": "Records \"Swing That Music,\" named after his recently published autobiography of the same name",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 155,
       "year": 1938,
       "dateText": "January 12, 1938",
       "event": "Records famous versions of \"Struttin' with Some Barbecue\" and \"Jubilee\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 156,
       "year": 1938,
       "dateText": "May 13, 1938",
       "event": "Records first version of \"When the Saints Go Marching In\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 157,
       "year": 1938,
       "dateText": "June 14, 1938",
       "event": "Records several spirituals, including \"Nobody Knows the Trouble I've Seen\"",
-      "categories": [
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "vocalist"]
     },
     {
       "id": 158,
       "year": 1941,
       "dateText": "November 16, 1941",
       "event": "Records famous version of \"When It's Sleepy Time Down South\"",
-      "categories": [
-        "musician",
-        "bandleader"
-      ]
+      "categories": ["musician", "bandleader"]
     },
     {
       "id": 159,
       "year": 1945,
       "dateText": "January 14, 1945",
       "event": "Records popular version of \"I Wonder\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 160,
       "year": 1946,
       "dateText": "January 18, 1946",
       "event": "Records with Ella Fitzgerald for the first time on \"You Won't Be Satisfied\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 161,
       "year": 1946,
       "dateText": "October 17, 1946",
       "event": "Records \"Do You Know What It Means to Miss New Orleans\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 162,
       "year": 1947,
       "dateText": "November 30, 1947",
       "event": "Records live album, \"Satchmo at Symphony Hall\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 163,
       "year": 1949,
       "dateText": "September 6, 1949",
       "event": "Records hit record of \"Blueberry Hill\"",
-      "categories": [
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "vocalist"]
     },
     {
       "id": 164,
       "year": 1950,
       "dateText": "April 1950 (exact date unknown)",
       "event": "Records \"New Orleans Nights\" album (you can link to \"New Orleans Function\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 165,
       "year": 1950,
       "dateText": "June 26, 1950",
       "event": "Records hit record of \"La Vie En Rose\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 166,
       "year": 1950,
       "dateText": "August 25, 1950",
       "event": "Records \"Dream a Little Dream of Me\" with Ella Fitzgerald",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 167,
       "year": 1951,
       "dateText": "July 24, 1951",
       "event": "Records hit record of \"A Kiss to Build a Dream On\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 168,
       "year": 1952,
       "dateText": "April 19, 1952",
       "event": "Records hit record of \"Kiss of Fire\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 169,
       "year": 1954,
       "dateText": "July 12, 13, and 14, 1954",
       "event": "Records famous album \"Louis Armstrong Plays W. C. Handy\" (you can link to \"St. Louis Blues)",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 170,
       "year": 1955,
       "dateText": "April 26, 27, and May 3 1955",
       "event": "Records famous album \"Satch Plays Fats\" (you can link to \"Blue Turning Grey Over You\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 171,
       "year": 1955,
       "dateText": "September 28, 1955",
       "event": "Records hit record of \"Mack the Knife\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 172,
       "year": 1956,
       "dateText": "August 16, 1956",
       "event": "Records famous album \"Ella and Louis\" (you can link to \"Cheek to Cheek\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 173,
       "year": 1957,
       "dateText": "December-January 1957",
       "event": "Records 4-LP set, \"Satchmo: A Musical Autobiography\" (you can link to \"When You're Smiling\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 174,
       "year": 1957,
       "dateText": "January 1957",
       "event": "Records album \"Louis and the Angels\" (you can link to \"The Prisoner's Song\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 175,
       "year": 1957,
       "dateText": "July 23, July 31, August 13, 1957",
       "event": "Records famous album \"Ella and Louis Again\" (you can link to \"Stompin' at the Savoy\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 176,
       "year": 1957,
       "dateText": "August 14-16, 1957",
       "event": "Records two albums, \"Louis Under the Stars\" and \"I've Got the World on a String\" (you can link to \"Nobody Knows the Trouble I've Seen\" and \"Stormy Weather\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 177,
       "year": 1957,
       "dateText": "August 18-19, 1957",
       "event": "Records \"Porgy and Bess\" with Ella Fitzgerald (you can link to \"Summertime\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 178,
       "year": 1957,
       "dateText": "October 14, 1957",
       "event": "Records \"Louis Armstrong Meets Oscar Peterson\" (you can link to \"Let's Fall in Love\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 179,
       "year": 1958,
       "dateText": "February 4, 6, 7, 1958",
       "event": "Records \"Louis and the Good Book\" (you can link to \"Go Down Moses\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 180,
       "year": 1959,
       "dateText": "September 30, October 1-2 1959",
       "event": "Records \"Satchmo Plays King Oliver\" (you can link to \"St. James Infirmary)",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 181,
       "year": 1960,
       "dateText": "May 24-25, 1960",
       "event": "Records \"Louie and the Dukes of Dixieland\" (you can link to \"Avalon\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 182,
       "year": 1961,
       "dateText": "April 3-4, 1961",
       "event": "Records two albums with Duke Ellington, \"For the First Time\" and \"The Great Reunion\" (you can link to \"Azalea\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 183,
       "year": null,
       "dateText": "September 12, 13, 19, 20",
       "event": "Records \"The Real Ambassadors\" (you can link to \"Summer Song\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 184,
       "year": 1963,
       "dateText": "December 3, 1963",
       "event": "Records the hit single \"Hello, Dolly!\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 185,
       "year": 1966,
       "dateText": "April 21, 1966",
       "event": "Records hit single \"Mame\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 186,
       "year": 1967,
       "dateText": "August 16, 1967",
       "event": "Records the original single \"What a Wonderful World\"",
-      "categories": [
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "vocalist"]
     },
     {
       "id": 187,
       "year": 1968,
       "dateText": "February 27, May 16, May 17",
       "event": "1968 - Records \"Disney Songs the Satchmo Way\" (you can link to \"When You Wish Upon a Star\")",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician", "bandleader", "vocalist"]
     },
     {
       "id": 188,
       "year": 1969,
       "dateText": "October 28, 1969",
       "event": "Records the single \"We Have All the Time in the World,\" used in James Bond film \"On Her Majesty's Secret Service\"",
-      "categories": [
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["bandleader", "vocalist"]
     },
     {
       "id": 189,
       "year": 1964,
       "dateText": "May 9, 1964",
       "event": "At 62, Louis Armstrong ended the Beatles’ 14-week run at No. 1 on the Billboard Hot 100 when “Hello, Dolly!” replaced “Can’t Buy Me Love” on May 9, 1964.",
-      "categories": [
-        "vocalist"
-      ]
+      "categories": ["vocalist"]
     },
     {
       "id": 190,
       "year": 1923,
       "dateText": "April 6, 1923",
       "event": "Records his composition \"Dipper Mouth Blues\" with King Oliver.",
-      "categories": [
-        "musician"
-      ]
+      "categories": ["musician"]
     },
     {
       "id": 191,
       "year": 1923,
       "dateText": "October 5, 1923",
       "event": "Takes a series of improvised cornet breaks on \"Tears\" with King Oliver.",
-      "categories": [
-        "musician"
-      ]
-    },
-    {
-      "id": 192,
-      "year": 1923,
-      "dateText": "December 24, 1923",
-      "event": "Records final session with King Oliver",
-      "categories": [
-        "musician"
-      ]
-    },
-    {
-      "id": 193,
-      "year": 1924,
-      "dateText": "October 16, 1924",
-      "event": "Records three selections with blues singer Ma Rainey in New York City",
-      "categories": [
-        "musician"
-      ]
-    },
-    {
-      "id": 194,
-      "year": 1924,
-      "dateText": "November 22, 1924",
-      "event": "Takes first vocal break on \"Everybody Loves My Baby\" with Fletcher Henderson",
-      "categories": [
-        "musician",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 195,
-      "year": 1924,
-      "dateText": "December 17, 1924",
-      "event": "Records three selections with blues singer Maggie Jones",
-      "categories": [
-        "musician"
-      ]
-    },
-    {
-      "id": 196,
-      "year": 1925,
-      "dateText": "October 21, 1925",
-      "event": "Records \"TNT\" at final New York session with Fletcher Henderson",
-      "categories": [
-        "musician"
-      ]
-    },
-    {
-      "id": 197,
-      "year": 1926,
-      "dateText": "February 23, 1926",
-      "event": "Records \"Trouble in Mind\" with Bertha \"Chippie\" Hill",
-      "categories": [
-        "musician"
-      ]
-    },
-    {
-      "id": 198,
-      "year": 1926,
-      "dateText": "June 23, 1926",
-      "event": "Records \"King of the Zulus\" with the Hot Five",
-      "categories": [
-        "musician",
-        "bandleader"
-      ]
-    },
-    {
-      "id": 199,
-      "year": 1928,
-      "dateText": "July 5, 1928",
-      "event": "Records two selections with Carroll Dickerson's Savoyagers in Chicago",
-      "categories": [
-        "musician"
-      ]
-    },
-    {
-      "id": 200,
-      "year": 1929,
-      "dateText": "December 13, 1929",
-      "event": "Records \"St. Louis Blues\" with Luis Russell's Orchestra",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 201,
-      "year": 1932,
-      "dateText": "December 8, 1932",
-      "event": "Records \"That's My Home\" with Chick Webb's Orchestra for RCA Victor",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 202,
-      "year": 1933,
-      "dateText": "January 27, 1933",
-      "event": "Records \"Basin Street Blues\" for RCA Victor",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 203,
-      "year": 1933,
-      "dateText": "April 24, 1933",
-      "event": "Records \"Laughin' Louie\" for RCA Victor",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 204,
-      "year": 1935,
-      "dateText": "November 22, 1935",
-      "event": "Records popular version of \"Old Man Mose\" for Decca",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 205,
-      "year": 1935,
-      "dateText": "December 19, 1935",
-      "event": "Records Duke Ellington's \"Solitude\" for Decca",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 206,
-      "year": 1936,
-      "dateText": "August 17, 1936",
-      "event": "Records \"Pennies from Heaven\" with Bing Crosby",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 207,
-      "year": 1937,
-      "dateText": "April 7, 1937",
-      "event": "Records first of several sessions with the Mills Brothers",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 208,
-      "year": 1937,
-      "dateText": "July 7, 1937",
-      "event": "Records his composition \"Heart Full of Rhythm\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 209,
-      "year": 1938,
-      "dateText": "May 18, 1938",
-      "event": "Records George and Ira Gershwin's \"Love Walked In\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 210,
-      "year": 1939,
-      "dateText": "January 18, 1939",
-      "event": "Records \"Jeepers Creepers,\" Academy Award-nominated song from the film \"Going Places\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 211,
-      "year": 1939,
-      "dateText": "December 18, 1939",
-      "event": "Records the spiritual \"Bye and Bye\" for Decca",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 212,
-      "year": 1940,
-      "dateText": "March 14, 1940",
-      "event": "Records instrumental showcase for his band, \"Wolverine Blues\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 213,
-      "year": 1940,
-      "dateText": "May 27, 1940",
-      "event": "Reunion session with Sidney Bechet for Decca",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 214,
-      "year": 1942,
-      "dateText": "April 17, 1942",
-      "event": "Records \"I Never Knew\" at his final session before the recording ban",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 215,
-      "year": 1946,
-      "dateText": "January 10, 1946",
-      "event": "Records two selections with the Esquire All-American Winners, featuring Duke Ellington, Don Byas, Johnny Hodges, and Charlie Shavers",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 216,
-      "year": 1946,
-      "dateText": "April 27, 1946",
-      "event": "Records \"Back O'Town Blues\" for RCA Victor",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 217,
-      "year": 1947,
-      "dateText": "March 12, 1947",
-      "event": "Final recording session of Louis Armstrong and His Orchestra",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 218,
-      "year": 1947,
-      "dateText": "May 17, 1947",
-      "event": "RCA Victor records Armstrong's historic Town Hall concert",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 219,
-      "year": 1947,
-      "dateText": "November 30, 1947",
-      "event": "Records live album, \"Satchmo at Symphony Hall\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 220,
-      "year": 1948,
-      "dateText": "February 20, 1948",
-      "event": "Performs at the first Nice International Jazz Festival in France",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 221,
-      "year": 1949,
-      "dateText": "September 30, 1949",
-      "event": "Records two duets with Billie Holiday at their only studio session",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 222,
-      "year": 1950,
-      "dateText": "August 23, 1950",
-      "event": "Records two duets with Louis Jordan at their only studio session",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 223,
-      "year": 1951,
-      "dateText": "January 30, 1951",
-      "event": "Records live album for Decca, \"Satchmo at Pasadena\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 224,
-      "year": 1951,
-      "dateText": "April 19, 1951",
-      "event": "Records \"Gone Fishin'\" with Bing Crosby",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 225,
-      "year": 1951,
-      "dateText": "September 17, 1951",
-      "event": "Records \"Because of You\" and \"Cold Cold Heart\" for Decca",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 226,
-      "year": 1951,
-      "dateText": "November 28, 1951",
-      "event": "Records remake of \"When It's Sleepy Time Down South\" for Decca",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 227,
-      "year": 1952,
-      "dateText": "August 25, 1952",
-      "event": "Records popular version of \"It Takes Two to Tango\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 228,
-      "year": 1953,
-      "dateText": "October 22, 1953",
-      "event": "Records two popular Christmas songs, \"Cool Yule\" and \"Zat You Santa Claus\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 229,
-      "year": 1954,
-      "dateText": "April 13. 1954",
-      "event": "Records parody version of \"The Whiffenpoof Song\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 230,
-      "year": 1954,
-      "dateText": "August 13, 1954",
-      "event": "Records South African song \"Skokiian\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 231,
-      "year": 1955,
-      "dateText": "January 21, 1955",
-      "event": "Records two live albums for Decca, \"At the Crescendo\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 232,
-      "year": 1955,
-      "dateText": "October 30, 1955, December 19, 1955, January 24, 1956",
-      "event": "Sessions for popular live album \"Ambassador Satch,\" released May 1, 1956",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 233,
-      "year": 1956,
-      "dateText": "June 1, 1956",
-      "event": "Records live concert \"The Great Chicago Concert\" for Columbia -",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 234,
-      "year": 1960,
-      "dateText": "June 28-29, 1960",
-      "event": "Records \"Bing and Satchmo\" LP with Bing Crosby",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 235,
-      "year": 1964,
-      "dateText": "April 18, 1964",
-      "event": "Records the long-playing album \"Hello, Dolly!\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 236,
-      "year": 1968,
-      "dateText": "July 2, 1968",
-      "event": "Records live concert at the BBC in London, later released as \"Louis in London\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
-    },
-    {
-      "id": 237,
-      "year": 1971,
-      "dateText": "August 3, 5, 6, 1971",
-      "event": "Records final studio album, \"Louis 'Country and Western' Armstrong\"",
-      "categories": [
-        "musician",
-        "bandleader",
-        "vocalist"
-      ]
+      "categories": ["musician"]
     }
   ]
 }

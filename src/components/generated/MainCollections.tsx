@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useIsMobile } from "../../hooks/use-mobile";
 import { SectionIntroHero } from "./SectionIntroHero";
+import { SectionAboutProject } from "./SectionAboutProject";
 import { SectionCareerTimeline } from "./SectionCareerTimeline.tsx";
 import { SectionTheBeginning } from "./SectionTheBeginning";
 import { SectionJourneyToAmbassador } from "./SectionJourneyToAmbassador";
@@ -73,7 +74,7 @@ const statsCardContent: Record<StatsCardKey, StatsCardContent> = {
     "The Jazz Diplomacy program sent musicians overseas to promote jazz while also projecting an image of American freedom and culture abroad, even as Cold War conflict and segregation at home challenged that image.",
   ),
   "ambassador-2": buildStatsCard(
-    "Africa tour that Armstrong undertook in 1960 as part of the Jazz Diplomacy program, which was a key moment in his role as a cultural ambassador and in the broader context of U.S. cultural diplomacy during the Cold War.",
+    "The Africa tour that Armstrong undertook in 1960 as part of the Jazz Diplomacy program, was a key moment in his role as a cultural ambassador and in the broader context of U.S. cultural diplomacy during the Cold War.",
   ),
   "ambassador-3": buildStatsCard(
     "Louis Armstrong was sent abroad to symbolize American freedom, even as FBI files, segregation, and voter suppression exposed how limited that freedom was at home.",
@@ -113,8 +114,12 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   const [currentGroupId, setCurrentGroupId] = useState<GroupId>("history");
   const [activeStatsCardKey, setActiveStatsCardKey] =
     useState<StatsCardKey | null>(null);
-  const [isStatsCardDismissed, setIsStatsCardDismissed] = useState(false);
+  const [statsCardVisible, setStatsCardVisible] = useState(false);
+  const [dismissedStatsCards, setDismissedStatsCards] = useState<
+    Set<StatsCardKey>
+  >(new Set());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAboutOverlayOpen, setIsAboutOverlayOpen] = useState(false);
   const [introOverlayGroupId, setIntroOverlayGroupId] =
     useState<GroupId | null>(null);
   const groupNavItems: Array<{ id: GroupId; label: string }> = [
@@ -570,6 +575,23 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   }, [currentGroupId, isMobile, showFixedGroupNav, introOverlayGroupId]);
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
+    if (activeStatsCardKey && !dismissedStatsCards.has(activeStatsCardKey)) {
+      setStatsCardVisible(false);
+      timer = setTimeout(() => {
+        setStatsCardVisible(true);
+      }, 1500);
+    } else {
+      setStatsCardVisible(false);
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [activeStatsCardKey, dismissedStatsCards]);
+
+  useEffect(() => {
     return () => {
       if (sectionJumpTimeoutRef.current !== null) {
         window.clearTimeout(sectionJumpTimeoutRef.current);
@@ -579,10 +601,6 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       }
     };
   }, []);
-
-  useEffect(() => {
-    setIsStatsCardDismissed(false);
-  }, [activeStatsCardKey]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -612,16 +630,80 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     currentGroupId;
 
   const scrollToIntro = () => {
+    // Clear any ongoing transitions
+    if (introOverlayTimeoutRef.current !== null) {
+      window.clearTimeout(introOverlayTimeoutRef.current);
+      introOverlayTimeoutRef.current = null;
+    }
+
+    // Reset all navigation states
+    setIntroOverlayGroupId(null);
+    setIsMobileMenuOpen(false);
+
+    // Jump to intro position instantly (no smooth scroll)
     if (isMobile) {
-      window.scrollTo({ top: 0, behavior: "auto" });
+      window.scrollTo(0, 0);
     } else {
       const container = scrollContainerRef.current;
       if (container) {
-        container.scrollTo({ left: 0, behavior: "auto" });
+        container.scrollLeft = 0;
+        container.scrollTop = 0;
       }
     }
+  };
+
+  const openAboutOverlay = () => {
+    setIsAboutOverlayOpen(true);
     setIsMobileMenuOpen(false);
   };
+
+  // Ensure page loads at IntroHero on initial mount
+  useEffect(() => {
+    // Prevent browser scroll restoration
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    // Immediately set scroll to 0
+    if (isMobile) {
+      window.scrollTo(0, 0);
+    } else {
+      const container = scrollContainerRef.current;
+      if (container) {
+        container.scrollLeft = 0;
+        container.scrollTop = 0;
+      }
+    }
+
+    // Also set after a short delay to ensure refs are ready
+    const timer = setTimeout(() => {
+      if (isMobile) {
+        window.scrollTo({ top: 0, behavior: "auto" });
+      } else {
+        const container = scrollContainerRef.current;
+        if (container) {
+          container.scrollTo({ left: 0, top: 0, behavior: "auto" });
+        }
+      }
+    }, 10);
+
+    return () => clearTimeout(timer);
+  }, [isMobile]);
+
+  // Prevent horizontal overflow on body
+  useEffect(() => {
+    document.body.style.overflowX = "hidden";
+    document.body.style.maxWidth = "100vw";
+    document.documentElement.style.overflowX = "hidden";
+    document.documentElement.style.maxWidth = "100vw";
+
+    return () => {
+      document.body.style.overflowX = "";
+      document.body.style.maxWidth = "";
+      document.documentElement.style.overflowX = "";
+      document.documentElement.style.maxWidth = "";
+    };
+  }, []);
 
   const renderGroupNav = (className = "") => (
     <nav
@@ -636,9 +718,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         Louis Armstrong in Data & Song
       </button>
       <div className="mcg-group-nav-links">
-        <div className="mcg-group-nav-item mcg-group-nav-item--home">
-          <button className="mcg-group-nav-button" onClick={scrollToIntro}>
-            Home
+        <div className="mcg-group-nav-item mcg-group-nav-item--about">
+          <button className="mcg-group-nav-button" onClick={openAboutOverlay}>
+            About
           </button>
         </div>
         {groupNavItems.map((item) => (
@@ -698,9 +780,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             <button
               type="button"
               className="mcg-mobile-menu-group-button"
-              onClick={scrollToIntro}
+              onClick={openAboutOverlay}
             >
-              Home
+              About
             </button>
           </div>
           {groupNavItems.map((item) => (
@@ -744,7 +826,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           width: 100vw;
           max-width: 100vw;
           overflow-x: hidden;
+          overflow-y: hidden;
           background: transparent;
+          position: fixed;
+          inset: 0;
         }
 
         .mcg-root.has-sticky-group-header::before {
@@ -891,20 +976,20 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           right: auto;
           left: 50%;
           bottom: 16px;
-          width: min(420px, calc(100vw - 32px));
+          width: min(820px, calc(100vw - 32px));
           padding: 28px 32px;
-          border-radius: 0;
+          border-radius: 6px;
           border: none;
-          background: rgba(255, 255, 255, 0.9);
+          background: rgba(248, 245, 204, 0.82);
           box-shadow: 0 18px 40px rgba(0, 0, 0, 0.36);
           backdrop-filter: blur(10px);
           z-index: 150;
           pointer-events: none;
           opacity: 0;
-          transform: translateX(-50%) translateY(12px);
+          transform: translateX(-50%) translateY(32px);
           transition:
-            opacity 180ms ease,
-            transform 180ms ease;
+            opacity 400ms ease-out,
+            transform 400ms ease-out;
           font-family: "Hanken Grotesk", Arial, sans-serif;
         }
 
@@ -949,6 +1034,17 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           display: none;
         }
 
+        .mcg-section-stats-card__title {
+          margin: 0 0 8px 0;
+          padding: 0;
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1.4;
+          color: rgba(0, 0, 0, 0.6);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
         .mcg-section-stats-card__note {
           margin: 0;
           padding-right: 24px;
@@ -986,12 +1082,13 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           display: flex;
           flex-direction: row;
           gap: ${desktopGroupGap}px;
-          padding: 0 ${desktopGroupPeek}px 0 0;
+          padding: 0;
           box-sizing: border-box;
           scroll-snap-type: x mandatory;
-          scroll-padding-inline: 0 ${desktopGroupPeek}px;
+          scroll-padding-inline: 0;
           -ms-overflow-style: none;
           scrollbar-width: none;
+          position: relative;
         }
         .mcg-track::-webkit-scrollbar { display: none; }
 
@@ -1001,6 +1098,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
         .mcg-group-page {
           width: 100vw;
+          max-width: 100vw;
           min-width: 100vw;
           height: 100dvh;
           position: relative;
@@ -1018,6 +1116,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
         .mcg-group-frame {
           width: 100vw;
+          max-width: 100vw;
           min-height: 100%;
           background: #ffffff;
           overflow: hidden;
@@ -1070,8 +1169,6 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           overflow-x: hidden;
           padding-top: 0;
           box-sizing: border-box;
-          scroll-snap-type: y mandatory;
-          scroll-padding-top: 0;
           scrollbar-width: none;
           -ms-overflow-style: none;
         }
@@ -1082,9 +1179,10 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
         .mcg-group-section {
           width: 100vw;
+          max-width: 100vw;
           min-width: 0;
-          scroll-snap-align: start;
           min-height: 100dvh;
+          height: auto;
           position: relative;
           overflow: hidden;
           scroll-margin-top: 0;
@@ -1092,31 +1190,45 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
         .mcg-group-section-inner {
           width: 100vw;
-          height: 100dvh;
+          min-height: 100dvh;
+          height: auto;
           transform: none;
           transform-origin: top center;
+          overflow: hidden;
         }
 
         .mcg-group-section--auto-height {
           min-height: 100dvh;
           height: auto;
-          overflow: visible;
+          overflow: hidden;
         }
 
         .mcg-group-section-inner--auto-height {
           min-height: 100dvh;
           height: auto;
+          overflow: hidden;
         }
 
         .mcg-section {
           width: 100vw;
           min-width: 100vw;
-          height: 100dvh;
+          max-width: 100vw;
+          min-height: 100dvh;
+         height: auto;
           position: relative;
           overflow: hidden;
           flex-shrink: 0;
-          scroll-snap-align: start;
           background: #000000;
+        }
+
+        .hero-intro-section {
+          scroll-snap-align: start;
+          flex-shrink: 0;
+          overflow: hidden;
+          width: 100vw;
+          max-width: 100vw;
+          min-width: 100vw;
+          height: 100dvh;
         }
 
         // .mcg-group-page .mcg-section {
@@ -1308,7 +1420,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             right: auto;
             bottom: calc(12px + var(--mcg-mobile-nav-offset, 0px));
             width: calc(100vw - 24px);
-            transform: translateX(-50%) translateY(12px);
+            transform: translateX(-50%) translateY(32px);
           }
 
           .mcg-section-stats-card.is-visible {
@@ -1326,17 +1438,20 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
           .mcg-track {
             height: auto;
-            overflow-x: visible;
+            overflow-x: hidden;
             overflow-y: visible;
             display: block;
             scroll-snap-type: none;
+            position: relative;
           }
 
           .mcg-group-page {
             width: 100vw;
+            max-width: 100vw;
             min-width: 100vw;
             height: auto;
-            overflow: visible;
+            overflow-x: hidden;
+            overflow-y: visible;
             padding: 0 0 28px;
             box-sizing: border-box;
             background: #ffffff;
@@ -1357,6 +1472,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
           .mcg-group-frame {
             width: 100vw;
+            max-width: 100vw;
             height: auto;
             overflow: hidden;
             padding-top: 0;
@@ -1371,7 +1487,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
           .mcg-group-scroll {
             height: auto;
-            overflow: visible;
+            overflow-x: hidden;
+            overflow-y: visible;
             padding-top: 0;
             scroll-padding-top: 0;
             scroll-snap-type: none;
@@ -1380,7 +1497,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           .mcg-group-section {
             scroll-snap-align: none;
             min-height: 0;
-            overflow: visible;
+            overflow-x: hidden;
+            overflow-y: visible;
             scroll-margin-top: calc(var(--mcg-mobile-nav-offset, 0px) + 12px);
           }
 
@@ -1392,9 +1510,11 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           .mcg-section {
             min-width: 0;
             width: 100vw;
+            max-width: 100vw;
             height: auto;
             position: relative;
-            overflow: visible;
+            overflow-x: hidden;
+            overflow-y: visible;
             flex-shrink: unset;
             scroll-snap-align: none;
             padding: 24px 0 32px;
@@ -1642,6 +1762,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           onNavigateHistory={() => scrollToGroup("history")}
           onNavigateLegacy={() => scrollToGroup("legacy")}
           onNavigateAmbassador={() => scrollToGroup("ambassador")}
+          onOpenAboutOverlay={openAboutOverlay}
         />
         {isMobile && showFixedGroupNav ? renderMobileMenu() : null}
         <div
@@ -1824,14 +1945,20 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       </div>
 
       <aside
-        className={`mcg-section-stats-card${activeStatsCardKey && !isStatsCardDismissed ? " is-visible" : ""}${isStatsCardDismissed ? " is-dismissed" : ""}`}
+        className={`mcg-section-stats-card${statsCardVisible && activeStatsCardKey && !dismissedStatsCards.has(activeStatsCardKey) ? " is-visible" : ""}${activeStatsCardKey && dismissedStatsCards.has(activeStatsCardKey) ? " is-dismissed" : ""}`}
         aria-live="polite"
       >
         {activeStatsCardKey && statsCardContent[activeStatsCardKey] ? (
           <>
             <button
               className="mcg-section-stats-card__close"
-              onClick={() => setIsStatsCardDismissed(true)}
+              onClick={() => {
+                if (activeStatsCardKey) {
+                  setDismissedStatsCards((prev) =>
+                    new Set(prev).add(activeStatsCardKey),
+                  );
+                }
+              }}
               aria-label="Close stats card"
             >
               <img src="/assets/close.svg" alt="" aria-hidden="true" />
@@ -1840,6 +1967,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               key={activeStatsCardKey}
               className="mcg-section-stats-card__content"
             >
+              <h4 className="mcg-section-stats-card__title">Fact:</h4>
               <p className="mcg-section-stats-card__note">
                 {statsCardContent[activeStatsCardKey].description}
               </p>
@@ -1847,6 +1975,74 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           </>
         ) : null}
       </aside>
+
+      {isAboutOverlayOpen && (
+        <div
+          id="about-overlay"
+          className="mcg-about-overlay"
+          style={{
+            position: "fixed",
+            inset: isMobile ? "var(--mcg-mobile-nav-offset, 0px) 0 0 0" : 0,
+            zIndex: 999,
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            display: "flex",
+            justifyContent: isMobile ? "stretch" : "center",
+            alignItems: isMobile ? "stretch" : "center",
+            padding: isMobile ? "0" : "24px",
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            className="mcg-about-overlay-content"
+            style={{
+              position: "relative",
+              width: isMobile ? "100vw" : "min(100vw, 1280px)",
+              maxWidth: isMobile ? "100vw" : undefined,
+              height: isMobile
+                ? "calc(100dvh - var(--mcg-mobile-nav-offset, 0px))"
+                : undefined,
+              maxHeight: isMobile ? "none" : "90vh",
+              overflowY: "auto",
+              overflowX: "hidden",
+              borderRadius: isMobile ? "0" : "10px",
+              backgroundColor: isMobile ? "#ffffff" : "#000000",
+              boxShadow: isMobile ? "none" : "0 10px 40px rgba(0, 0, 0, 0.35)",
+            }}
+          >
+            <button
+              aria-label="Close about overlay"
+              onClick={() => setIsAboutOverlayOpen(false)}
+              className="about-close-button"
+              style={{
+                position: isMobile ? "fixed" : "absolute",
+                top: isMobile
+                  ? "calc(var(--mcg-mobile-nav-offset, 0px) + 12px)"
+                  : "40px",
+                right: isMobile ? "12px" : "40px",
+                zIndex: isMobile ? 1001 : 5,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: "10px",
+                touchAction: "manipulation",
+              }}
+            >
+              <img
+                src="/assets/close.svg"
+                alt="Close"
+                className="about-close-icon"
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  filter: "brightness(0) invert(1)",
+                }}
+              />
+            </button>
+
+            <SectionAboutProject />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

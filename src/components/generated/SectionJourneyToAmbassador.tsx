@@ -149,7 +149,7 @@ export const SectionJourneyToAmbassador: React.FC = () => {
           <div className="journey-image-wrap">
             <div className="interactive-card">
               <a
-                href="#"
+                href="https://collections.louisarmstronghouse.org/asset-detail/1134754"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: "block", cursor: "pointer" }}

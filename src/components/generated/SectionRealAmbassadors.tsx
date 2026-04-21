@@ -2,8 +2,15 @@ import React from "react";
 import { TimelineBar } from "./TimelineBar";
 import { mobileTimelineHeight, timelineHeight } from "./TimelineShared";
 
-const realAmbassadorsParagraph =
-  "The Real Ambassadors is a jazz musical by Dave Brubeck and Iola Brubeck, written for Louis Armstrong, that satirizes America’s use of jazz musicians as cultural representatives during the Cold War. The lyrics describe how Armstrong and other Black performers were sent abroad to symbolize freedom and democracy while facing racism and segregation at home.";
+const realAmbassadorsParagraph = [
+  "Though I represent the government, the government",
+  "Don′t represent some policies I'm for",
+  "Oh, we learn to be concerned about the constitutionality",
+  "In our nation, segregation isn′t a legality",
+  "Soon our only differences will be in personality",
+  "That's what I stand for",
+  "Who′s the real ambassador?",
+].join("\n");
 
 export const SectionRealAmbassadors: React.FC<{
   onTimelineJump?: (idx: number) => void;
@@ -44,10 +51,21 @@ export const SectionRealAmbassadors: React.FC<{
 
         .real-ambassadors-copy {
           width: 100%;
+          grid-column: span 2;
           font-family: "Hanken Grotesk", Arial, sans-serif;
           font-size: 20px;
           line-height: 40px;
           color: #000000;
+        }
+
+        .real-ambassadors-copy h3 {
+          margin: 0 0 16px 0;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+          font-size: 20px;
+          font-weight: 600;
+          line-height: 1.4;
+          color: #000000;
+          letter-spacing: 0.02em;
         }
 
         .real-ambassadors-spacer {
@@ -107,6 +125,7 @@ export const SectionRealAmbassadors: React.FC<{
 
           .real-ambassadors-copy {
             width: 100%;
+            grid-column: span 1;
           }
 
           .real-ambassadors-spacer {
@@ -129,7 +148,7 @@ export const SectionRealAmbassadors: React.FC<{
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">
-        The Real Ambassadors 1962
+        Album Release 1962
       </h2>
 
       <div className="mcg-lyrics-wrap real-ambassadors-layout">
@@ -140,7 +159,10 @@ export const SectionRealAmbassadors: React.FC<{
         />
 
         <div className="real-ambassadors-copy">
-          <p>{realAmbassadorsParagraph}</p>
+          <h3>Lyrics to "The Real Ambassadors"</h3>
+          <p style={{ whiteSpace: "pre-wrap", fontStyle: "italic" }}>
+            {realAmbassadorsParagraph}
+          </p>
         </div>
 
         <div className="real-ambassadors-spacer" aria-hidden="true" />

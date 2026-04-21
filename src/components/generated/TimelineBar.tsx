@@ -69,7 +69,9 @@ export function TimelineBar({
     viewportWidth: 1,
     contentWidth: totalWidth,
   });
+  const [isDraggingScrollbar, setIsDraggingScrollbar] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const scrollbarTrackRef = useRef<HTMLDivElement>(null);
   const lyricFontVar = { "--tl-lyric-font": lyricFont } as React.CSSProperties;
 
   // Play audio when sound is enabled
@@ -164,6 +166,83 @@ export function TimelineBar({
     [],
   );
 
+  const handleScrollbarThumbMouseDown = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setIsDraggingScrollbar(true);
+    },
+    [],
+  );
+
+  const handleScrollbarThumbTouchStart = useCallback(
+    (event: React.TouchEvent<HTMLDivElement>) => {
+      event.stopPropagation();
+      setIsDraggingScrollbar(true);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (!isDraggingScrollbar) return;
+
+    // Prevent text selection while dragging
+    document.body.style.userSelect = "none";
+    document.body.style.webkitUserSelect = "none";
+    document.body.style.cursor = "grabbing";
+
+    const handleMouseMove = (event: MouseEvent) => {
+      const el = scrollRef.current;
+      const track = scrollbarTrackRef.current;
+      if (!el || !track) return;
+
+      const rect = track.getBoundingClientRect();
+      const ratio = (event.clientX - rect.left) / rect.width;
+      const maxScroll = Math.max(el.scrollWidth - el.clientWidth, 0);
+      el.scrollLeft = Math.max(0, Math.min(ratio * maxScroll, maxScroll));
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      const el = scrollRef.current;
+      const track = scrollbarTrackRef.current;
+      if (!el || !track || event.touches.length === 0) return;
+
+      const rect = track.getBoundingClientRect();
+      const ratio = (event.touches[0].clientX - rect.left) / rect.width;
+      const maxScroll = Math.max(el.scrollWidth - el.clientWidth, 0);
+      el.scrollLeft = Math.max(0, Math.min(ratio * maxScroll, maxScroll));
+    };
+
+    const handleMouseUp = () => {
+      setIsDraggingScrollbar(false);
+      document.body.style.userSelect = "";
+      document.body.style.webkitUserSelect = "";
+      document.body.style.cursor = "";
+    };
+
+    const handleTouchEnd = () => {
+      setIsDraggingScrollbar(false);
+      document.body.style.userSelect = "";
+      document.body.style.webkitUserSelect = "";
+      document.body.style.cursor = "";
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("touchmove", handleTouchMove, { passive: true });
+    document.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+      document.body.style.userSelect = "";
+      document.body.style.webkitUserSelect = "";
+      document.body.style.cursor = "";
+    };
+  }, [isDraggingScrollbar]);
+
   const renderScrollBar = () => {
     const { left, viewportWidth, contentWidth } = scrollMetrics;
     const maxScroll = Math.max(contentWidth - viewportWidth, 0);
@@ -182,6 +261,7 @@ export function TimelineBar({
     return (
       <div className="tl-custom-scrollbar" aria-hidden="true">
         <div
+          ref={scrollbarTrackRef}
           className="tl-custom-scrollbar-track"
           onClick={handleScrollbarTrackClick}
         >
@@ -190,7 +270,10 @@ export function TimelineBar({
             style={{
               width: `${thumbWidthPercent}%`,
               left: `${thumbLeftPercent}%`,
+              cursor: isDraggingScrollbar ? "grabbing" : "grab",
             }}
+            onMouseDown={handleScrollbarThumbMouseDown}
+            onTouchStart={handleScrollbarThumbTouchStart}
           />
         </div>
       </div>
@@ -297,7 +380,7 @@ export function TimelineBar({
           {/* "The Real Ambassadors" header — always visible */}
           <div className="tl-mobile-header" style={{ height: headerH }}>
             <div className="tl-header-title tl-header-title-mobile">
-              The Real Ambassadors
+              Listen to the Lyrics
             </div>
             <button
               onClick={() => {
@@ -441,7 +524,7 @@ export function TimelineBar({
           >
             {/* "The Real Ambassadors" label — sits in the scrolling area */}
             <div className="tl-header-title tl-header-title-desktop">
-              The Real Ambassadors
+              Listen to the Lyrics
             </div>
 
             <button

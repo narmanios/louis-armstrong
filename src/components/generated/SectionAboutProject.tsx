@@ -13,12 +13,16 @@ export const SectionAboutProject: React.FC = () => {
           background: #ffffff;
           position: relative;
           overflow: hidden;
+          min-height: 100vh;
         }
 
         .about-project-section .about-project-title.mcg-page-title {
+          position: absolute !important;
           left: 56px !important;
+          top: 76px !important;
           color: #000000 !important;
           -webkit-text-fill-color: #000000 !important;
+          z-index: 5 !important;
         }
 
         .about-project-layout {
