@@ -49,11 +49,11 @@ const jazzTooltipIndiaSvg = encodeSvgDataUri(`
   <svg xmlns="http://www.w3.org/2000/svg" width="292" height="210" viewBox="0 0 292 210" fill="none">
     <defs>
       <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-        <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000000" flood-opacity="0.14"/>
+        <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000000" flood-opacity="0.5"/>
       </filter>
     </defs>
-    <rect x="1" y="1" width="290" height="208" rx="18" fill="#FFFFFF" filter="url(#shadow)"/>
-    <rect x="1" y="1" width="290" height="208" rx="18" fill="none" stroke="#E5E7EB"/>
+    <rect x="1" y="1" width="290" height="208" rx="18" fill="rgba(0, 0, 0, 0.92)" filter="url(#shadow)"/>
+    <rect x="1" y="1" width="290" height="208" rx="18" fill="none" stroke="rgba(255, 255, 255, 0.15)"/>
   </svg>
 `);
 
@@ -280,7 +280,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
               position: "absolute",
               top: "15px",
               left: "33px",
-              color: "#000000",
+              color: "#ffffff",
             }}
           >
             <div
@@ -314,7 +314,7 @@ export const SectionJazzAmbassadors: React.FC = () => {
               top: "94px",
               left: "29px",
               width: "239px",
-              color: "#000000",
+              color: "#ffffff",
               fontSize: "12px",
             }}
           >

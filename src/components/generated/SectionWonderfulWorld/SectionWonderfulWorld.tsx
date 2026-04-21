@@ -964,7 +964,7 @@ export function SectionWonderfulWorld({
                       </>
                     )}
                   </svg>
-                  <span>{videoSoundEnabled ? "Sound on" : "Sound off"}</span>
+                  <span>{videoSoundEnabled ? "Sound off" : "Sound on"}</span>
                 </button>
 
                 <label className="slg__decade-filter">
@@ -986,7 +986,9 @@ export function SectionWonderfulWorld({
                   <span className="slg__recording-count-number">
                     {filteredFacts.length}
                   </span>
-                  <span className="slg__recording-count-label">recordings</span>
+                  <span className="slg__recording-count-label">
+                    Re-recordings
+                  </span>
                 </div>
               </div>
 

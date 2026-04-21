@@ -75,13 +75,26 @@
 }
 
 .tl-sound-btn {
-  background: none;
-  border: none;
+  appearance: none;
+  border: 1px solid rgba(17, 17, 17, 0.14);
+  background: rgba(255, 255, 255, 0.38);
+  border-radius: 8px;
+  height: 32px;
+  padding: 0 14px;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 0;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.tl-sound-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 1;
 }
 
 .tl-sound-btn-mobile {
@@ -98,13 +111,28 @@
 }
 
 .tl-sound-icon-mobile {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex: 0 0 auto;
+  color: #111111;
 }
 
 .tl-sound-icon-desktop {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex: 0 0 auto;
+  color: #111111;
+}
+
+.tl-sound-label {
+  font-family: "Hanken Grotesk", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #111111;
+  white-space: nowrap;
 }
 
 .tl-scroll-surface {

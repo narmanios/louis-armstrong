@@ -182,7 +182,7 @@ function buildDotHtml(dot: MusicianDot): string {
 function buildDotPopupHtml(dot: MusicianDot): string {
   const color = MUSICIAN_COLORS[dot.musician] || "#64748b";
   const yearsStr = dot.years.join(", ");
-  return `<div style="font-family:Inter,system-ui,sans-serif;min-width:200px;max-width:260px;"><div style="padding:12px 14px 10px;border-bottom:1px solid ${color}20;"><div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:-0.3px;line-height:1.2;">${dot.country}</div><div style="display:flex;align-items:center;gap:6px;margin-top:5px;"><div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0;"></div><div style="font-size:10px;line-height:1.35;font-weight:600;color:${color};">${dot.musician}</div></div></div><div style="padding:10px 14px 12px;"><div style="font-size:10px;line-height:1.35;color:#64748b;margin-bottom:4px;"><span style="font-weight:600;color:#0f172a;font-size:13px;">${dot.events}</span>&nbsp;${dot.events === 1 ? "event" : "events"}</div><div style="font-size:10px;line-height:1.35;color:#94a3b8;">${yearsStr}</div></div></div>`;
+  return `<div style="font-family:Inter,system-ui,sans-serif;min-width:200px;max-width:260px;background:rgba(0,0,0,0.92);border-radius:6px;"><div style="padding:12px 14px 10px;border-bottom:1px solid ${color}40;"><div style="font-size:13px;font-weight:700;color:#ffffff;letter-spacing:-0.3px;line-height:1.2;">${dot.country}</div><div style="display:flex;align-items:center;gap:6px;margin-top:5px;"><div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0;"></div><div style="font-size:10px;line-height:1.35;font-weight:600;color:${color};">${dot.musician}</div></div></div><div style="padding:10px 14px 12px;"><div style="font-size:10px;line-height:1.35;color:rgba(255,255,255,0.6);margin-bottom:4px;"><span style="font-weight:600;color:#ffffff;font-size:13px;">${dot.events}</span>&nbsp;${dot.events === 1 ? "event" : "events"}</div><div style="font-size:10px;line-height:1.35;color:rgba(255,255,255,0.5);">${yearsStr}</div></div></div>`;
 }
 
 // ─── LeafletMap component ──────────────────────────────────────────────────────
@@ -211,7 +211,7 @@ const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
       maxBoundsViscosity: 1.0,
       minZoom: 2.75,
       maxZoom: 6,
-    }).setView([10, 30], 2);
+    }).setView([10, 30], 1);
 
     if (onMapReady && mapInstanceRef.current) {
       onMapReady(mapInstanceRef.current);
@@ -246,6 +246,7 @@ const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
     const map = mapInstanceRef.current;
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
+
     dots.forEach((dot) => {
       const size = Math.min(9 + Math.round(dot.events * 0.6), 19);
       const icon = L.divIcon({
@@ -261,6 +262,9 @@ const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
       marker.bindPopup(buildDotPopupHtml(dot), {
         maxWidth: 280,
         className: "jazz-popup",
+        closeButton: true,
+        closeOnClick: false,
+        autoClose: false,
       });
       marker.on("click", () => {
         marker.openPopup();
@@ -325,12 +329,43 @@ export const JazzAmbassadorsMap: React.FC = () => {
     >
       <style>{`
         .jazz-popup .leaflet-popup-content-wrapper {
-          border-radius: 14px; padding: 0; overflow: hidden;
-          box-shadow: 0 16px 48px rgba(0,0,0,0.16);
-          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 12px; padding: 0; overflow: hidden;
+          box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+          border: 1px solid rgba(255,255,255,0.15);
+          background: rgba(0,0,0,0.92);
         }
         .jazz-popup .leaflet-popup-content { margin: 0; line-height: 1.4; }
         .jazz-popup .leaflet-popup-tip-container { margin-top: -1px; }
+        .jazz-popup .leaflet-popup-tip {
+          background: rgba(0,0,0,0.92);
+          box-shadow: none;
+        }
+        .jazz-popup .leaflet-popup-close-button {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          width: 28px;
+          height: 28px;
+          padding: 0;
+          border: 0;
+          background: transparent;
+          color: #ffffff !important;
+          font-size: 20px;
+          font-weight: 300;
+          line-height: 28px;
+          text-align: center;
+          cursor: pointer;
+          z-index: 1000;
+          pointer-events: auto;
+          display: block !important;
+        }
+        .jazz-popup .leaflet-popup-close-button:hover {
+          opacity: 0.7;
+          background: transparent !important;
+        }
+        .jazz-popup .leaflet-popup-content-wrapper {
+          pointer-events: auto;
+        }
         .leaflet-control-attribution {
           font-size: 9px !important;
           background: rgba(255,255,255,0.85) !important;
@@ -386,9 +421,6 @@ export const JazzAmbassadorsMap: React.FC = () => {
             {MUSICIANS.map((musician) => {
               const hidden = hiddenMusicians.has(musician);
               const color = MUSICIAN_COLORS[musician];
-              const musicianData =
-                jazzDiplomacyData[musician as keyof typeof jazzDiplomacyData];
-              const totalCount = musicianData?.total_count || 0;
               return (
                 <button
                   key={musician}
@@ -418,10 +450,7 @@ export const JazzAmbassadorsMap: React.FC = () => {
                       color: hidden ? "#94a3b8" : "#334155",
                     }}
                   >
-                    {musician}{" "}
-                    <span style={{ fontSize: "12px" }}>
-                      ({totalCount} events)
-                    </span>
+                    {musician}
                   </span>
                 </button>
               );

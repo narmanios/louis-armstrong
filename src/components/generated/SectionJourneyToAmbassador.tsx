@@ -94,50 +94,6 @@ export const SectionJourneyToAmbassador: React.FC = () => {
         .journey-text {
           display: block;
         }
-
-        @media (max-width: 768px) {
-          .journey-section {
-            height: auto;
-            min-height: 0;
-            overflow: visible;
-            padding: 24px 20px 32px;
-            box-sizing: border-box;
-          }
-
-          .journey-section .mcg-page-title {
-            position: static !important;
-            display: block !important;
-            width: calc(100% - 40px);
-            margin: 0 auto 24px !important;
-          }
-
-          .journey-entry-grid {
-            position: static;
-            left: auto;
-            top: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-            margin-top: 0;
-          }
-
-          .journey-entry,
-          .journey-copy {
-            width: 100%;
-          }
-
-          .journey-entry {
-            display: block;
-            width: calc(100% - 56px);
-            margin: 0 0 0 20px;
-          }
-
-          .journey-media-image {
-            width: 100%;
-            aspect-ratio: 5 / 4;
-            height: auto;
-          }
-        }
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">

@@ -255,22 +255,6 @@ export const SectionFBIFiles: React.FC = () => {
       ) : null}
 
       {/* Responsive Styles Injection */}
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        @media (max-width: 768px) {
-          header {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 16px !important;
-          }
-          nav {
-            margin-top: 0 !important;
-          }
-        }
-      `,
-        }}
-      />
     </section>
   );
 };

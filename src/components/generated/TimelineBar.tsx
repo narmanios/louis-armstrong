@@ -32,10 +32,6 @@ const desktopLyricLetterSpacing = 0.05;
 const scrollbarHeight = 18;
 const mobileScrollbarThumbBoost = 8;
 const desktopScrollbarThumbBoost = 20;
-const soundIconOffFilter =
-  "brightness(0) saturate(100%) invert(23%) sepia(91%) saturate(2862%) hue-rotate(349deg) brightness(93%) contrast(96%)";
-const soundIconOnFilter =
-  "brightness(0) saturate(100%) invert(25%) sepia(96%) saturate(1717%) hue-rotate(206deg) brightness(101%) contrast(96%)";
 
 // Musical font for lyrics
 const lyricFont = "Georgia, 'Times New Roman', serif";
@@ -379,10 +375,8 @@ export function TimelineBar({
           />
           {/* "The Real Ambassadors" header — always visible */}
           <div className="tl-mobile-header" style={{ height: headerH }}>
-            <div className="tl-header-title tl-header-title-mobile">
-              Listen to the Lyrics
-            </div>
             <button
+              type="button"
               onClick={() => {
                 if (soundEnabled) {
                   stopAudio(true);
@@ -390,17 +384,68 @@ export function TimelineBar({
                 setSoundEnabled(!soundEnabled);
               }}
               className="tl-sound-btn tl-sound-btn-mobile"
-              title={soundEnabled ? "Sound: On" : "Sound: Off"}
+              aria-pressed={soundEnabled}
+              aria-label={soundEnabled ? "Mute audio" : "Unmute audio"}
+              title={soundEnabled ? "Sound on" : "Sound off"}
             >
-              <img
-                src="/assets/sound.svg"
-                alt="Sound toggle"
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
                 className="tl-sound-icon tl-sound-icon-mobile"
-                style={{
-                  opacity: 1,
-                  filter: soundEnabled ? soundIconOnFilter : soundIconOffFilter,
-                }}
-              />
+              >
+                {soundEnabled ? (
+                  <>
+                    <path
+                      d="M5 9h4l5-4v14l-5-4H5z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M17 9.5a4 4 0 0 1 0 5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M19.5 7a7.5 7.5 0 0 1 0 10"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <path
+                      d="M5 9h4l5-4v14l-5-4H5z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M17 9l4 6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M21 9l-4 6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                  </>
+                )}
+              </svg>
+              <span className="tl-sound-label">
+                {soundEnabled ? "Sound off" : "Sound on"}
+              </span>
             </button>
           </div>
 
@@ -523,11 +568,8 @@ export function TimelineBar({
             }}
           >
             {/* "The Real Ambassadors" label — sits in the scrolling area */}
-            <div className="tl-header-title tl-header-title-desktop">
-              Listen to the Lyrics
-            </div>
-
             <button
+              type="button"
               onClick={() => {
                 if (soundEnabled) {
                   stopAudio(true);
@@ -535,17 +577,68 @@ export function TimelineBar({
                 setSoundEnabled(!soundEnabled);
               }}
               className="tl-sound-btn tl-sound-btn-desktop"
-              title={soundEnabled ? "Sound: On" : "Sound: Off"}
+              aria-pressed={soundEnabled}
+              aria-label={soundEnabled ? "Mute audio" : "Unmute audio"}
+              title={soundEnabled ? "Sound on" : "Sound off"}
             >
-              <img
-                src="/assets/sound.svg"
-                alt="Sound toggle"
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
                 className="tl-sound-icon tl-sound-icon-desktop"
-                style={{
-                  opacity: 1,
-                  filter: soundEnabled ? soundIconOnFilter : soundIconOffFilter,
-                }}
-              />
+              >
+                {soundEnabled ? (
+                  <>
+                    <path
+                      d="M5 9h4l5-4v14l-5-4H5z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M17 9.5a4 4 0 0 1 0 5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M19.5 7a7.5 7.5 0 0 1 0 10"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <path
+                      d="M5 9h4l5-4v14l-5-4H5z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M17 9l4 6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M21 9l-4 6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                  </>
+                )}
+              </svg>
+              <span className="tl-sound-label">
+                {soundEnabled ? "Sound off" : "Sound on"}
+              </span>
             </button>
 
             <svg

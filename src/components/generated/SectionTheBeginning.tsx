@@ -94,50 +94,6 @@ export const SectionTheBeginning: React.FC = () => {
         .beginning-text {
           display: block;
         }
-
-        @media (max-width: 768px) {
-          .beginning-section {
-            height: auto;
-            min-height: 0;
-            overflow: visible;
-            padding: 24px 20px 32px;
-            box-sizing: border-box;
-          }
-
-          .beginning-section .mcg-page-title {
-            position: static !important;
-            display: block !important;
-            width: calc(100% - 40px);
-            margin: 0 auto 24px !important;
-          }
-
-          .beginning-entry-grid {
-            position: static;
-            left: auto;
-            top: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-            margin-top: 0;
-          }
-
-          .beginning-entry,
-          .beginning-copy {
-            width: 100%;
-          }
-
-          .beginning-entry {
-            display: block;
-            width: calc(100% - 56px);
-            margin: 0 0 0 20px;
-          }
-
-          .beginning-media-image {
-            width: 100%;
-            aspect-ratio: 5 / 4;
-            height: auto;
-          }
-        }
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">

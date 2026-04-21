@@ -420,9 +420,9 @@
   width: min(420px, calc(100vw - 40px));
   padding: 18px 16px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(17, 17, 17, 0.14);
-  background: #ffffff;
-  box-shadow: 0 18px 40px rgba(17, 17, 17, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.92);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
 }
 
 .slg__tooltip-close {
@@ -436,7 +436,7 @@
   justify-content: center;
   border: 0;
   background: transparent;
-  color: #111111;
+  color: #ffffff;
   padding: 0;
   cursor: pointer;
 }
@@ -453,7 +453,7 @@
   flex: 0 0 auto;
   border-radius: 8px;
   object-fit: cover;
-  border: 1px solid rgba(17, 17, 17, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .slg__tooltip-body {
@@ -471,14 +471,14 @@
   line-height: 1.3;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(17, 17, 17, 0.56);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 2px;
 }
 
 .slg__tooltip-value {
   font-size: 13px;
   line-height: 1.45;
-  color: #111111;
+  color: #ffffff;
 }
 
 .slg__tooltip-links {
@@ -495,8 +495,8 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  border: 1px solid rgba(17, 17, 17, 0.14);
-  color: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
   text-decoration: none;
   transition:
     border-color 0.18s ease,
@@ -505,8 +505,8 @@
 }
 
 .slg__tooltip-link:hover {
-  background: rgba(17, 17, 17, 0.04);
-  border-color: rgba(17, 17, 17, 0.28);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-1px);
 }
 
@@ -560,155 +560,4 @@
 
 .slg__status--error {
   color: rgba(255, 120, 120, 0.9);
-}
-
-@media (max-width: 768px) {
-  .slg {
-    height: auto !important;
-  }
-
-  .slg__header-block {
-    padding: 24px 0 0;
-  }
-
-  .slg__title {
-    width: calc(100% - 40px);
-    margin: 0 auto 20px !important;
-    color: var(--slg-text) !important;
-  }
-
-  .slg__header {
-    position: static;
-    flex-direction: column;
-    align-items: flex-start;
-    width: calc(100% - 40px);
-    margin: 0 auto;
-    padding: 0 0 16px;
-    gap: 16px;
-  }
-
-  .slg__controls {
-    width: 100%;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 12px;
-  }
-
-  .slg__controls-left,
-  .slg__controls-right {
-    width: 100%;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    margin-left: 0;
-  }
-
-  .slg__recording-count {
-    justify-content: flex-start;
-  }
-
-  .slg__brand,
-  .slg__sound-toggle,
-  .slg__decade-filter,
-  .slg__search,
-  .slg__zoom-controls {
-    width: 100%;
-    max-width: none;
-  }
-
-  .slg__brand p {
-    max-width: none;
-  }
-
-  .slg__search {
-    display: flex;
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  .slg__search input {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .slg__sound-toggle,
-  .slg__decade-filter select {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .slg__zoom-controls {
-    justify-content: flex-end;
-  }
-
-  .slg__stage {
-    height: auto;
-    padding-top: 20px;
-  }
-
-  .slg__stage-shell {
-    height: auto;
-    padding: 0 20px 20px;
-  }
-
-  .slg__stage-frame {
-    margin: 0 auto;
-    height: auto;
-  }
-
-  .slg__stage-scale {
-    width: 1120px;
-    height: 620px;
-  }
-
-  .slg__viz {
-    width: 1120px;
-    height: 620px;
-  }
-
-  .slg__tooltip {
-    width: min(calc(100vw - 40px), 360px);
-    z-index: 120;
-  }
-
-  .slg__tooltip-inner {
-    width: 100%;
-    padding-top: 18px;
-  }
-
-  .slg__tooltip-image {
-    width: 64px;
-    height: 84px;
-  }
-
-  .slg__tooltip-value {
-    font-size: 12px;
-    line-height: 1.4;
-  }
-
-  .slg__silhouette {
-    top: calc(50% - 12px);
-    opacity: 0.18;
-  }
-
-  .slg__caption-overlay {
-    bottom: 116px;
-    width: min(calc(100% - 48px), 420px);
-  }
-
-  .slg__caption-text {
-    font-size: 12px;
-    line-height: 1.4;
-    padding: 9px 12px;
-  }
-
-  .slg__photo-credit {
-    display: none;
-  }
-
-  .slg__status {
-    left: 20px;
-    bottom: 20px;
-  }
 }

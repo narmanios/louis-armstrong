@@ -94,50 +94,6 @@ export const SectionWorldFair: React.FC = () => {
         .world-fair-text {
           display: block;
         }
-
-        @media (max-width: 768px) {
-          .world-fair-section {
-            height: auto;
-            min-height: 0;
-            overflow: visible;
-            padding: 24px 20px 32px;
-            box-sizing: border-box;
-          }
-
-          .world-fair-section .mcg-page-title {
-            position: static !important;
-            display: block !important;
-            width: calc(100% - 40px);
-            margin: 0 auto 24px !important;
-          }
-
-          .world-fair-entry-grid {
-            position: static;
-            left: auto;
-            top: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-            margin-top: 0;
-          }
-
-          .world-fair-entry,
-          .world-fair-copy {
-            width: 100%;
-          }
-
-          .world-fair-entry {
-            display: block;
-            width: calc(100% - 56px);
-            margin: 0 0 0 20px;
-          }
-
-          .world-fair-media-image {
-            width: 100%;
-            aspect-ratio: 5 / 4;
-            height: auto;
-          }
-        }
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">

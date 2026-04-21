@@ -90,61 +90,6 @@ export const SectionRealAmbassadors: React.FC<{
           max-width: 1180px;
           margin: 0 auto;
         }
-
-        @media (max-width: 768px) {
-          .real-ambassadors-section {
-            height: auto;
-            min-height: 0;
-            overflow: visible;
-            padding: 24px 20px 32px;
-            box-sizing: border-box;
-          }
-
-          .real-ambassadors-section .mcg-page-title {
-            position: static !important;
-            display: block !important;
-            width: calc(100% - 40px);
-            margin: 0 auto 24px !important;
-          }
-
-          .real-ambassadors-layout {
-            position: static;
-            left: auto;
-            top: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 0;
-          }
-
-          .real-ambassadors-cover {
-            width: 100%;
-            max-width: 320px;
-            height: auto;
-          }
-
-          .real-ambassadors-copy {
-            width: 100%;
-            grid-column: span 1;
-          }
-
-          .real-ambassadors-spacer {
-            display: none;
-          }
-
-          .real-ambassadors-timeline {
-            position: static;
-            left: auto;
-            right: auto;
-            bottom: auto;
-            margin-top: 16px;
-          }
-
-          .real-ambassadors-timeline-frame {
-            width: 100%;
-            max-width: none;
-          }
-        }
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">

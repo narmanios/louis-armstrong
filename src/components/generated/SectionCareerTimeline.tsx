@@ -1303,7 +1303,7 @@ function TimelineSVG({
                   {index > 0 && (
                     <span
                       style={{
-                        color: "#9CA3AF",
+                        color: "rgba(255, 255, 255, 0.5)",
                         margin: "0 4px",
                         fontSize: "8px",
                       }}

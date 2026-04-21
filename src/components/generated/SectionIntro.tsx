@@ -31,45 +31,6 @@ export function SectionIntro() {
         }}
       />
       <style>{`
-        @media (max-width: 768px) {
-          .intro-content { transform: scale(1); transform-origin: top left; }
-          .intro-l {
-            width: 15% !important;
-            height: 50vh !important;
-            left: 18% !important;
-            top: 20% !important;
-            fontSize: clamp(20px, 16vw, 140px) !important;
-          }
-          .intro-a {
-            width: 20% !important;
-            height: 50vh !important;
-            left: 44% !important;
-            top: 15% !important;
-            fontSize: clamp(20px, 16vw, 140px) !important;
-          }
-          .intro-louis-img {
-            width: 25% !important;
-            left: 28% !important;
-            top: 15% !important;
-          }
-          .intro-trumpet-img {
-            width: 65% !important;
-            left: 15% !important;
-            top: 30% !important;
-          }
-          .intro-h1 {
-            top: 42% !important;
-            left: 25% !important;
-            width: 80% !important;
-            font-size: 5vw !important;
-          }
-          .intro-p {
-            top: 46% !important;
-            left: 25% !important;
-            width: 80% !important;
-            font-size: 3.5vw !important;
-          }
-        }
         @media (min-width: 1281px) {
           .intro-l {
             font-size: 576px !important;

@@ -431,8 +431,34 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           transition: opacity 90ms linear;
         }
 
+        .hero-intro-mobile-message {
+          display: none;
+        }
+
+        .hero-intro-mobile-message p {
+          font-size: 14px;
+          font-weight: 600;
+          color: #ffffff;
+          text-align: center;
+          margin: 0;
+          padding: 12px 20px;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+        }
+
         /* Responsive hero styles */
         @media (max-width: 768px) {
+          .hero-intro-mobile-message {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            pointer-events: none;
+            backdrop-filter: blur(8px);
+          }
+
           .hero-intro {
             min-height: 840px;
           }
@@ -491,7 +517,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             display: block;
             margin: 0 0 12px 0;
             text-align: center;
-            // white-space: normal;
             font-size: 18px !important;
             max-width: none;
           }
@@ -528,8 +553,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             line-height: 1.1;
           }
 
-          
-
           .hero-intro-nav-link-label {
             position: absolute;
             left: 50%;
@@ -540,7 +563,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             letter-spacing: 0.02em;
             font-weight: 600;
             font-family: "Hanken Grotesk", Arial, sans-serif;
-            // color: #000000;
             opacity: 1;
             max-width: none;
             text-align: center;
@@ -548,7 +570,6 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             transform-origin: left center;
             transform: rotate(-90deg);
           }
-
 
           /* tablet/smaller desktop overlay stays modal */
           .hero-intro-about-overlay {
@@ -778,6 +799,12 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           </button>
         </div>
       </div>
+
+      {isMobile && (
+        <div className="hero-intro-mobile-message">
+          <p>Best viewed on Desktop</p>
+        </div>
+      )}
 
       <div className="hero-intro-nav">
         <button
