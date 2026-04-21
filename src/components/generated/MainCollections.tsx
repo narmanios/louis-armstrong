@@ -122,6 +122,13 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   const [isAboutOverlayOpen, setIsAboutOverlayOpen] = useState(false);
   const [introOverlayGroupId, setIntroOverlayGroupId] =
     useState<GroupId | null>(null);
+  const [currentSectionIndices, setCurrentSectionIndices] = useState<
+    Record<GroupId, number>
+  >({
+    history: 0,
+    ambassador: 0,
+    legacy: 0,
+  });
   const groupNavItems: Array<{ id: GroupId; label: string }> = [
     { id: "history", label: "History" },
     { id: "ambassador", label: "Ambassador" },
@@ -286,7 +293,35 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       return;
     }
 
-    const nextKey = getActiveStatsCardKeyForGroup(currentGroupId);
+    const scroller = getGroupScroller(currentGroupId);
+    const sections = getGroupSectionElements(currentGroupId).filter(
+      (section): section is HTMLDivElement => !!section,
+    );
+
+    let activeIndex = 0;
+
+    if (sections.length > 0) {
+      if (!scroller) {
+        const sectionIndex = getGroupSectionElements(currentGroupId).findIndex(
+          (section) => !!section && section.getBoundingClientRect().top >= 0,
+        );
+        activeIndex = sectionIndex >= 0 ? sectionIndex : 0;
+      } else {
+        const viewportAnchor = scroller.scrollTop + scroller.clientHeight * 0.4;
+        sections.forEach((section, index) => {
+          if (section.offsetTop <= viewportAnchor) {
+            activeIndex = index;
+          }
+        });
+      }
+    }
+
+    setCurrentSectionIndices((prev) => ({
+      ...prev,
+      [currentGroupId]: activeIndex,
+    }));
+
+    const nextKey = getSectionStatsCardKey(currentGroupId, activeIndex);
     setActiveStatsCardKey(nextKey);
   };
 
@@ -1348,13 +1383,16 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               </div>
             </div>
           </div>
-          <button
-            className="mcg-group-scroll-arrow"
-            onClick={() => scrollGroupDown("history")}
-            aria-label="Scroll down in history"
-          >
-            {renderScrollArrowIcon()}
-          </button>
+          {currentSectionIndices.history <
+            groupSectionItems.history.length - 1 && (
+            <button
+              className="mcg-group-scroll-arrow"
+              onClick={() => scrollGroupDown("history")}
+              aria-label="Scroll down in history"
+            >
+              {renderScrollArrowIcon()}
+            </button>
+          )}
         </div>
         <div
           ref={ambassadorPageRef}
@@ -1433,13 +1471,16 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               </div>
             </div>
           </div>
-          <button
-            className="mcg-group-scroll-arrow"
-            onClick={() => scrollGroupDown("ambassador")}
-            aria-label="Scroll down in ambassador"
-          >
-            {renderScrollArrowIcon()}
-          </button>
+          {currentSectionIndices.ambassador <
+            groupSectionItems.ambassador.length - 1 && (
+            <button
+              className="mcg-group-scroll-arrow"
+              onClick={() => scrollGroupDown("ambassador")}
+              aria-label="Scroll down in ambassador"
+            >
+              {renderScrollArrowIcon()}
+            </button>
+          )}
         </div>
         <div
           ref={musicianPageRef}
@@ -1476,13 +1517,16 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               </div>
             </div>
           </div>
-          <button
-            className="mcg-group-scroll-arrow"
-            onClick={() => scrollGroupDown("legacy")}
-            aria-label="Scroll down in legacy"
-          >
-            {renderScrollArrowIcon()}
-          </button>
+          {currentSectionIndices.legacy <
+            groupSectionItems.legacy.length - 1 && (
+            <button
+              className="mcg-group-scroll-arrow"
+              onClick={() => scrollGroupDown("legacy")}
+              aria-label="Scroll down in legacy"
+            >
+              {renderScrollArrowIcon()}
+            </button>
+          )}
         </div>
       </div>
 
