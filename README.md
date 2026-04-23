@@ -102,7 +102,7 @@ At the center of the thesis is the argument that Armstrong’s career reveals th
 
 Description: Louis Armstrong’s life as 2000 facts that can be discovered. Masked around an iconic silhouette of Louis Armstrong’s head and shoulders, these facts are searchable. Louis Armstrong's name is recognizable but most do not know who he was and what he accomplsied throughtout his life and beyond. This visualization will show who Armstrong is through facts that are well known and other facts that less commonly known.
 
-![Facts of Louis Armstrong](../assets/sketches/facts.jpg)
+![Facts of Louis Armstrong](./public/assets/sketches/facts.jpg)
 
 ## Louis Armstrong’s World Tour: A Map of Influence
 
