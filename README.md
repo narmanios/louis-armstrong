@@ -1,4 +1,4 @@
-![Louis Armstrong's Legacy](./public/assets/hero/hero.jpg)
+![Louis Armstrong's Legacy](./public/assets/hero/hero.png)
 
 # Introduction & Abstract
 
