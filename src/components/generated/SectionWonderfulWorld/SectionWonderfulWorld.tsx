@@ -221,12 +221,18 @@ function getYouTubeVideoId(value: string) {
   return null;
 }
 
-function getTooltipPreviewUrl(links: ExternalUri[] | undefined) {
+function getTooltipPreviewUrl(
+  links: ExternalUri[] | undefined,
+  imagePath?: string,
+) {
   const youtubeUrl = getServiceHref(links, "youtube");
-  if (!youtubeUrl) return null;
+  if (youtubeUrl) {
+    const videoId = getYouTubeVideoId(youtubeUrl);
+    if (videoId) return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+  }
 
-  const videoId = getYouTubeVideoId(youtubeUrl);
-  return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;
+  // Fallback to image field if no YouTube URL
+  return imagePath ? normalizeImagePath(imagePath) : null;
 }
 
 function ServiceIcon({ service }: { service: ServiceName }) {
@@ -449,7 +455,7 @@ export function SectionWonderfulWorld({
   );
 
   const tooltipPreviewUrl = useMemo(
-    () => getTooltipPreviewUrl(tooltip.fact?.external_uri),
+    () => getTooltipPreviewUrl(tooltip.fact?.external_uri, tooltip.fact?.image),
     [tooltip.fact],
   );
 
@@ -698,11 +704,21 @@ export function SectionWonderfulWorld({
     });
   }, [searchTerm, selectedDecade]);
 
+  const isFactVisible = (fact: PlacedFact): boolean => {
+    const query = searchTerm.trim().toLowerCase();
+    const matchesSearch = !query || getSearchText(fact).includes(query);
+    const matchesDecade =
+      selectedDecade === "all" || getFactDecadeLabel(fact) === selectedDecade;
+    return matchesSearch && matchesDecade;
+  };
+
   const factStyle = (fact: PlacedFact): CSSProperties => ({
     left: `${fact.x - fact.r}px`,
     top: `${fact.y - fact.r}px`,
     width: `${fact.r * 2}px`,
     height: `${fact.r * 2}px`,
+    opacity: isFactVisible(fact) ? 1 : 0,
+    pointerEvents: isFactVisible(fact) ? "auto" : "none",
     ...(fact.image
       ? { backgroundImage: `url("${normalizeImagePath(fact.image)}")` }
       : {}),
@@ -1063,7 +1079,7 @@ export function SectionWonderfulWorld({
                   style={vizStyle}
                   aria-label="Facts visualization"
                 >
-                  {filteredFacts.map((fact) => (
+                  {placedFacts.map((fact) => (
                     <div
                       key={fact.bubbleId}
                       className={`slg__fact${selectedBubbleId === fact.bubbleId ? " is-selected" : ""}`}

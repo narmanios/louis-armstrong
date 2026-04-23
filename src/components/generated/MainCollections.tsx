@@ -14,6 +14,7 @@ import { SectionGoodwillAmbassador } from "./SectionGoodwill/SectionGoodwillAmba
 import { SectionWonderfulWorld } from "./SectionWonderfulWorld/SectionWonderfulWorld.tsx";
 import { SectionVinyl } from "./SectionVinyl.tsx";
 import JazzAmbassadorsMap from "./JazzAmbassadorsMap.tsx";
+import { SectionGlobalCountries } from "./SectionGlobalCountries.tsx";
 interface MainCollectionsProps {
   className?: string;
 }
@@ -1410,7 +1411,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                 className="mcg-group-section"
               >
                 <div className="mcg-group-section-inner">
-                  <SectionGoodwillAmbassador textBaseStyle={textBaseStyle} />
+                  {/* <SectionGoodwillAmbassador textBaseStyle={textBaseStyle} /> */}
+                  <SectionGlobalCountries />
                 </div>
               </div>
 
