@@ -83,6 +83,13 @@
   grid-column: 1 / -1;
   color: #ffffff !important;
 }
+.career-timeline-description {
+  margin-top: 8px;
+  color: #ffffff !important;
+  font-size: 14px;
+  max-width: 600px;
+}
+
 
 /* Legend / category filters */
 .career-timeline-legend-panel {
@@ -93,6 +100,7 @@
   align-items: center;
   justify-content: flex-start;
   margin-top: 12px;
+  padding-left: 24px;
 }
 
 /* Chart frame */
@@ -221,6 +229,20 @@
   position: absolute;
 }
 
+@keyframes career-timeline-dot-pop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.5);
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .career-timeline-event-dot {
   position: absolute;
   cursor: pointer;
@@ -288,7 +310,7 @@
 .career-timeline-tooltip-wrap {
   position: absolute;
   z-index: 60;
-  max-width: 248px;
+  width: 248px;
 }
 
 .career-timeline-tooltip {
@@ -298,6 +320,7 @@
   box-shadow: none;
   font-family: "Hanken Grotesk", Arial, sans-serif;
   position: relative;
+  width: 100%;
 }
 
 .career-timeline-tooltip-close {

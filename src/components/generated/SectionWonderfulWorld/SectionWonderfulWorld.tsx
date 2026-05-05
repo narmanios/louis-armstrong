@@ -317,7 +317,7 @@ export function SectionWonderfulWorld({
   centerMediaCaptionsUrl = "/assets/www-captions.vtt",
   centerMediaCaptionsLabel = "English captions",
   title = "What a Wonderful World",
-  // subtitle = "Artists' renditions of Louis Armstrong's iconic song.",
+  subtitle = "Artists' renditions of Louis Armstrong's iconic song.",
   className,
   height = "100%",
   initialZoom = 1,
@@ -344,6 +344,13 @@ export function SectionWonderfulWorld({
     verticalAlign: "below",
     fact: null,
   });
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [isInView, setIsInView] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const justClearedRef = useRef(false);
+  const [lastDecadeChange, setLastDecadeChange] = useState(0);
 
   const maskAlphaRef = useRef<Uint8ClampedArray | null>(null);
   const maskReadyRef = useRef(false);
@@ -681,6 +688,35 @@ export function SectionWonderfulWorld({
     };
   }, [centerMediaCaptionsSrc, centerMediaSrc]);
 
+  const suggestions = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
+    if (!query) return [];
+
+    const uniqueTerms = new Set<string>();
+    placedFacts.forEach((fact) => {
+      if (fact.performer_name) uniqueTerms.add(fact.performer_name);
+      if (fact.title) uniqueTerms.add(fact.title);
+      fact.releases_title.forEach((title) => {
+        if (title) uniqueTerms.add(title);
+      });
+      if (fact.firstReleaseDate) {
+        const year = getReleaseYear(fact.firstReleaseDate);
+        if (year) uniqueTerms.add(year.toString());
+      }
+    });
+
+    return Array.from(uniqueTerms)
+      .filter((term) => term.toLowerCase().includes(query))
+      .sort((a, b) => {
+        const aStarts = a.toLowerCase().startsWith(query);
+        const bStarts = b.toLowerCase().startsWith(query);
+        if (aStarts && !bStarts) return -1;
+        if (!aStarts && bStarts) return 1;
+        return a.localeCompare(b);
+      })
+      .slice(0, 8);
+  }, [placedFacts, searchTerm]);
+
   const filteredFacts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
     return placedFacts.filter((fact) => {
@@ -702,7 +738,25 @@ export function SectionWonderfulWorld({
       verticalAlign: "below",
       fact: null,
     });
-  }, [searchTerm, selectedDecade]);
+    setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+    setLastDecadeChange(Date.now());
+    justClearedRef.current = false;
+  }, [selectedDecade]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const isFactVisible = (fact: PlacedFact): boolean => {
     const query = searchTerm.trim().toLowerCase();
@@ -712,17 +766,34 @@ export function SectionWonderfulWorld({
     return matchesSearch && matchesDecade;
   };
 
-  const factStyle = (fact: PlacedFact): CSSProperties => ({
-    left: `${fact.x - fact.r}px`,
-    top: `${fact.y - fact.r}px`,
-    width: `${fact.r * 2}px`,
-    height: `${fact.r * 2}px`,
-    opacity: isFactVisible(fact) ? 1 : 0,
-    pointerEvents: isFactVisible(fact) ? "auto" : "none",
-    ...(fact.image
-      ? { backgroundImage: `url("${normalizeImagePath(fact.image)}")` }
-      : {}),
-  });
+  const factStyle = (fact: PlacedFact): CSSProperties => {
+    const visible = isFactVisible(fact);
+    const shouldSkipAnimation = justClearedRef.current;
+    const isRecentDecadeChange = Date.now() - lastDecadeChange < 100;
+    const shouldAnimate = visible && isInView && !shouldSkipAnimation;
+
+    // Use faster animation for decade filter changes
+    const animationDuration = isRecentDecadeChange ? "0.2s" : "0.3s";
+    const animationDelay = isRecentDecadeChange
+      ? fact.bubbleId * 0.003
+      : fact.bubbleId * 0.005;
+
+    return {
+      left: `${fact.x - fact.r}px`,
+      top: `${fact.y - fact.r}px`,
+      width: `${fact.r * 2}px`,
+      height: `${fact.r * 2}px`,
+      opacity: visible ? 1 : 0,
+      pointerEvents: visible ? "auto" : "none",
+      animation: shouldAnimate
+        ? `slg-fade-in ${animationDuration} ease-out ${animationDelay}s both`
+        : "none",
+      transition: shouldAnimate ? "none" : "opacity 0.15s ease-out",
+      ...(fact.image
+        ? { backgroundImage: `url("${normalizeImagePath(fact.image)}")` }
+        : {}),
+    };
+  };
 
   const isOutsideMask = (x: number, y: number) => {
     const maskAlpha = maskAlphaRef.current;
@@ -894,11 +965,37 @@ export function SectionWonderfulWorld({
     };
   }, [canvasWidth, isMobile]);
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isInView) {
+            setIsInView(true);
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isInView]);
+
   return (
     <section
+      ref={sectionRef}
       className="mcg-section mcg-jazz-section"
       style={{
-        backgroundColor: "#000000",
+        backgroundColor: "#ffffff",
       }}
     >
       <div
@@ -913,7 +1010,7 @@ export function SectionWonderfulWorld({
             {title}
           </h1>
           <header className="slg__header">
-            <div className="slg__brand">{/* <p>{subtitle}</p> */}</div>
+            <div className="slg__brand">{subtitle && <p>{subtitle}</p>}</div>
 
             <div className="slg__controls">
               <div className="slg__controls-left">
@@ -1009,34 +1106,99 @@ export function SectionWonderfulWorld({
               </div>
 
               <div className="slg__controls-right">
-                <label className="slg__search">
-                  <span className="slg__search-icon" aria-hidden="true">
-                    ⌕
-                  </span>
-                  <input
-                    value={searchTerm}
-                    onChange={(event) => setSearchTerm(event.target.value)}
-                    type="text"
-                    placeholder={searchPlaceholder}
-                    autoComplete="off"
-                  />
-                </label>
+                <div className="slg__search-wrapper">
+                  <label className="slg__search">
+                    <span className="slg__search-icon" aria-hidden="true">
+                      ⌕
+                    </span>
+                    <input
+                      ref={searchInputRef}
+                      value={searchTerm}
+                      onChange={(event) => {
+                        justClearedRef.current = false;
+                        setSearchTerm(event.target.value);
+                        setShowSuggestions(true);
+                        setSelectedSuggestionIndex(-1);
+                      }}
+                      onFocus={() => {
+                        if (searchTerm.trim()) setShowSuggestions(true);
+                      }}
+                      onKeyDown={(event) => {
+                        if (!showSuggestions || suggestions.length === 0)
+                          return;
 
-                <div className="slg__zoom-controls" aria-label="Zoom controls">
-                  <button
-                    type="button"
-                    title="Zoom in"
-                    onClick={() => setZoom(zoom + ZOOM_STEP)}
-                  >
-                    +
-                  </button>
-                  <button
-                    type="button"
-                    title="Zoom out"
-                    onClick={() => setZoom(zoom - ZOOM_STEP)}
-                  >
-                    −
-                  </button>
+                        if (event.key === "ArrowDown") {
+                          event.preventDefault();
+                          setSelectedSuggestionIndex((prev) =>
+                            prev < suggestions.length - 1 ? prev + 1 : prev,
+                          );
+                        } else if (event.key === "ArrowUp") {
+                          event.preventDefault();
+                          setSelectedSuggestionIndex((prev) =>
+                            prev > 0 ? prev - 1 : -1,
+                          );
+                        } else if (event.key === "Enter") {
+                          if (selectedSuggestionIndex >= 0) {
+                            event.preventDefault();
+                            setSearchTerm(suggestions[selectedSuggestionIndex]);
+                            setShowSuggestions(false);
+                            setSelectedSuggestionIndex(-1);
+                          }
+                        } else if (event.key === "Escape") {
+                          setShowSuggestions(false);
+                          setSelectedSuggestionIndex(-1);
+                        }
+                      }}
+                      type="text"
+                      placeholder={searchPlaceholder}
+                      autoComplete="off"
+                    />
+                    {searchTerm && (
+                      <button
+                        type="button"
+                        className="slg__search-clear"
+                        onClick={() => {
+                          justClearedRef.current = true;
+                          setSearchTerm("");
+                          setShowSuggestions(false);
+                          setSelectedSuggestionIndex(-1);
+                          searchInputRef.current?.focus();
+                        }}
+                        aria-label="Clear search"
+                      >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M6 6 18 18M18 6 6 18"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </label>
+                  {showSuggestions && suggestions.length > 0 && (
+                    <ul className="slg__suggestions" role="listbox">
+                      {suggestions.map((suggestion, index) => (
+                        <li
+                          key={`${suggestion}-${index}`}
+                          className={`slg__suggestion${index === selectedSuggestionIndex ? " is-selected" : ""}`}
+                          role="option"
+                          aria-selected={index === selectedSuggestionIndex}
+                          onMouseDown={(event) => {
+                            event.preventDefault();
+                            setSearchTerm(suggestion);
+                            setShowSuggestions(false);
+                            setSelectedSuggestionIndex(-1);
+                          }}
+                          onMouseEnter={() => setSelectedSuggestionIndex(index)}
+                        >
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             </div>

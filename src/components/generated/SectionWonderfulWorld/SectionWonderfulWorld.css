@@ -12,6 +12,7 @@
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 100dvh;
   margin: 0;
   background: var(--slg-bg);
   color: var(--slg-text);
@@ -26,6 +27,22 @@
     Arial,
     "Apple Color Emoji",
     "Segoe UI Emoji";
+}
+
+@keyframes slg-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.mcg-jazz-section {
+  background: #ffffff !important;
+  min-height: 100dvh !important;
 }
 
 .slg,
@@ -69,8 +86,9 @@
 .slg__brand p {
   margin: 0;
   color: var(--slg-muted);
-  font-size: 13px;
+  font-size: 16px;
   max-width: 420px;
+  margin-top: 20px;
   line-height: 1.35;
 }
 
@@ -217,6 +235,12 @@
   align-items: center;
 }
 
+.slg__search-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
 .slg__search-icon {
   position: absolute;
   left: 12px;
@@ -233,7 +257,7 @@
 .slg__search input {
   width: 260px;
   height: 32px;
-  padding: 4px 12px 4px 34px;
+  padding: 4px 34px 4px 34px;
   border-radius: 8px;
   border: 1px solid var(--slg-border);
   background: var(--slg-glass);
@@ -246,6 +270,68 @@
 
 .slg__search input::placeholder {
   color: rgba(0, 0, 0, 0.55);
+}
+
+.slg__search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.4);
+  transition: all 0.15s ease;
+}
+
+.slg__search-clear:hover {
+  color: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.slg__search-clear svg {
+  width: 12px;
+  height: 12px;
+  display: block;
+}
+
+.slg__suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--slg-border);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.slg__suggestion {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--slg-text);
+  transition: background 0.15s ease;
+}
+
+.slg__suggestion:hover,
+.slg__suggestion.is-selected {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 /* .slg__search input:focus {

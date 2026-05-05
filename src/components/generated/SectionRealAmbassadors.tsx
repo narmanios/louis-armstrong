@@ -93,8 +93,16 @@ export const SectionRealAmbassadors: React.FC<{
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">
-        Album Release 1962
+        "Who's the Real Ambassador?"
       </h2>
+      <p
+        className="real-ambassadors-description"
+        style={{ color: "#000000", marginTop: "16px", maxWidth: "600px" }}
+      >
+        "The Real Ambassadors" was a jazz musical that was a satirical take on the
+        Jazz Diplomacy program, using humor to critique the contradictions of
+        American cultural diplomacy during the Cold War.
+      </p>
 
       <div className="mcg-lyrics-wrap real-ambassadors-layout">
         <img

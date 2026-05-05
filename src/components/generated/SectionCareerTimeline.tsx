@@ -69,6 +69,14 @@ const allowedCategorySet = new Set<Category>([
   "film",
 ]);
 
+const categoryDetailTitles: Record<Category, string> = {
+  musician: "Armstrong as a Musician",
+  vocalist: "Armstrong as a Vocalist",
+  bandleader: "Armstrong as a Bandleader",
+  ambassador: "Armstrong as an Ambassador",
+  film: "Armstrong as a Film Star",
+};
+
 const rawTimelineData = rawCareerTimeline as RawCareerTimelineData;
 const timelineData: CareerTimelineData = {
   categoryLabels: rawTimelineData.categoryLabels,
@@ -99,21 +107,57 @@ const timelineData: CareerTimelineData = {
       ];
     });
 
-    // Deduplicate events based on content (year, dateText, event, categories)
-    // Keep the event with the lowest ID when duplicates are found
+    // Deduplicate and merge events based on content (year, dateText, event)
+    // Combine categories from all duplicates and keep the lowest ID
     const uniqueEventsMap = new Map<string, ArmstrongEvent>();
 
     parsedEvents.forEach((event) => {
-      const sortedCategories = [...event.categories].sort().join(",");
-      const contentKey = `${event.year}|${event.dateText}|${event.event}|${sortedCategories}`;
+      const contentKey = `${event.year}|${event.dateText}|${event.event}`;
 
       const existing = uniqueEventsMap.get(contentKey);
-      if (!existing || event.id < existing.id) {
+      if (!existing) {
         uniqueEventsMap.set(contentKey, event);
+      } else {
+        // Merge categories and keep the lowest ID
+        const mergedCategories = Array.from(
+          new Set([...existing.categories, ...event.categories]),
+        ).sort() as Category[];
+
+        const mergedEvent: ArmstrongEvent = {
+          ...existing,
+          id: Math.min(existing.id, event.id),
+          categories: mergedCategories,
+          // Keep image and url from the entry with the lowest ID
+          image: existing.id <= event.id ? existing.image : event.image,
+          url: existing.id <= event.id ? existing.url : event.url,
+        };
+
+        uniqueEventsMap.set(contentKey, mergedEvent);
       }
     });
 
-    return Array.from(uniqueEventsMap.values()).sort((a, b) => a.id - b.id);
+    const dedupedEvents = Array.from(uniqueEventsMap.values()).sort(
+      (a, b) => a.id - b.id,
+    );
+
+    // Debug: Log event counts
+    console.log(
+      "[Career Timeline] Total events after dedup:",
+      dedupedEvents.length,
+    );
+    const event189 = dedupedEvents.find((e) => e.id === 189);
+    console.log("[Career Timeline] Event 189:", event189);
+    console.log(
+      "[Career Timeline] Event 189 categories:",
+      event189?.categories,
+    );
+    console.log("[Career Timeline] Event 189 year:", event189?.year);
+    console.log(
+      "[Career Timeline] Vocalist events:",
+      dedupedEvents.filter((e) => e.categories.includes("vocalist")).length,
+    );
+
+    return dedupedEvents;
   })(),
 };
 
@@ -163,11 +207,11 @@ type FeaturedCfg = {
 };
 
 const allCategories: Category[] = [
+  "film",
+  "bandleader",
   "musician",
   "vocalist",
-  "bandleader",
   "ambassador",
-  "film",
 ];
 const categoryOrder: Category[] = [
   "film",
@@ -178,11 +222,11 @@ const categoryOrder: Category[] = [
 ];
 
 const laneY: Record<Category, number> = {
-  film: 77,
-  bandleader: 186,
-  musician: 295,
-  vocalist: 404,
-  ambassador: 513,
+  film: 80,
+  bandleader: 190,
+  musician: 300,
+  vocalist: 410,
+  ambassador: 520,
 };
 const categoryColors: Record<Category, string> = {
   film: "#FF6B6B",
@@ -191,7 +235,7 @@ const categoryColors: Record<Category, string> = {
   vocalist: "#10B981",
   ambassador: "#8B5CF6",
 };
-const svgHeight = 620;
+const svgHeight = 560;
 const yearStart = 1923;
 const yearEnd = Math.max(1973, dataYearMax);
 const marginLeft = 32;
@@ -205,14 +249,14 @@ const decadeDash = "4 4";
 const connectorDash = "2 2";
 const featuredLabelLineHeight = 11;
 const featuredLabelConnectorLength = 24;
-const expandedClusterDotSpacing = 8;
+const expandedClusterDotSpacing = 14;
 const featuredLabelAboveOffset = 4;
 const featuredLabelBelowOffset = 3;
 const tooltipWidth = 248;
 const tooltipEstimatedHeight = 148;
-const tooltipGap = 18;
+const tooltipGap = 8;
 const tooltipEdgePadding = 8;
-const yearAxisY = 545;
+const yearAxisY = 520;
 
 const featuredLabels: Record<number, FeaturedCfg> = {
   35: {
@@ -389,9 +433,15 @@ function StackedDotChart({
 }) {
   const color = categoryColors[category];
   const categoryEvents = useMemo(() => {
-    return timelineData.events.filter((event) =>
+    const filtered = timelineData.events.filter((event) =>
       event.categories.includes(category),
     );
+    console.log(`[Career Timeline] ${category} events:`, filtered.length);
+    console.log(
+      `[Career Timeline] ${category} has event 189:`,
+      filtered.some((e) => e.id === 189),
+    );
+    return filtered;
   }, [category]);
 
   const [isAnimating, setIsAnimating] = useState(true);
@@ -420,6 +470,15 @@ function StackedDotChart({
       existing.push(event);
       yearGroups.set(event.year, existing);
     });
+
+    console.log(
+      `[Career Timeline] ${category} year groups:`,
+      Array.from(yearGroups.keys()).sort((a, b) => a - b),
+    );
+    console.log(
+      `[Career Timeline] ${category} 1964 group:`,
+      yearGroups.get(1964),
+    );
 
     const dots: Array<{
       event: ArmstrongEvent;
@@ -461,6 +520,28 @@ function StackedDotChart({
         });
       });
     });
+
+    console.log(`[Career Timeline] ${category} total dots:`, dots.length);
+    console.log(
+      `[Career Timeline] ${category} has event 189 dot:`,
+      dots.some((d) => d.event.id === 189),
+    );
+    const dot189 = dots.find((d) => d.event.id === 189);
+    if (dot189) {
+      console.log(`[Career Timeline] Event 189 dot position:`, {
+        x: dot189.x,
+        y: dot189.y,
+        year: dot189.event.year,
+      });
+      console.log(`[Career Timeline] SVG dimensions:`, {
+        width: svgWidth,
+        height: stackedHeight + stackMarginTop + 60,
+      });
+      console.log(`[Career Timeline] Visible Y range:`, {
+        min: stackMarginTop,
+        max: stackMarginTop + stackedHeight,
+      });
+    }
 
     return dots;
   }, [categoryEvents, svgWidth, timelineLaneY]);
@@ -564,8 +645,7 @@ function StackedDotChart({
             transition: "opacity 0.6s ease-in 0.4s",
           }}
         >
-          {timelineData.categoryLabels[category]} Events (
-          {categoryEvents.length})
+          {categoryDetailTitles[category]}
         </text>
 
         {/* Dots */}
@@ -646,6 +726,7 @@ function TimelineSVG({
   laneStroke,
   laneStrokeWidth,
   dimmedCategories,
+  setDimmedCategories,
   hoveredLegendCategory,
 }: {
   svgWidth: number;
@@ -656,6 +737,7 @@ function TimelineSVG({
   featuredDotRadiusOffset: number;
   activeDotRadiusOffset: number;
   dimmedCategories: Set<Category>;
+  setDimmedCategories: (categories: Set<Category>) => void;
   laneStroke: string;
   laneStrokeWidth: number;
   hoveredLegendCategory: Category | null;
@@ -667,6 +749,16 @@ function TimelineSVG({
   const [selectionFocusEnabled, setSelectionFocusEnabled] = useState(false);
   const lastHoverPos = useRef<{ x: number; y: number } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const tooltipDismissTimeout = useRef<number | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (tooltipDismissTimeout.current !== null) {
+        window.clearTimeout(tooltipDismissTimeout.current);
+      }
+    };
+  }, []);
 
   const tooltipCategoryLookup = useMemo(() => {
     const lookup = new Map<string, Category[]>();
@@ -751,6 +843,63 @@ function TimelineSVG({
     return lookup;
   }, [clusters]);
 
+  // Calculate animation index for each dot within its category (left to right)
+  const dotAnimationIndices = useMemo(() => {
+    const indices = new Map<string, number>();
+
+    // Collect all dots and sort by x position (year)
+    const allDots: DotData[] = [];
+    clusters.forEach((cluster) => {
+      cluster.dots.forEach((dot) => {
+        allDots.push(dot);
+      });
+    });
+
+    // Sort all dots by x position (left to right across all categories)
+    allDots.sort((a, b) => {
+      if (Math.abs(a.cx - b.cx) < 5) {
+        // If dots are at nearly the same x position, sort by category order
+        return categoryOrder.indexOf(a.cat) - categoryOrder.indexOf(b.cat);
+      }
+      return a.cx - b.cx;
+    });
+
+    // Assign sequential indices based on x position
+    allDots.forEach((dot, index) => {
+      indices.set(dot.key, index);
+    });
+
+    return indices;
+  }, [clusters]);
+
+  // Track initial load animation for all dots
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    // Trigger animation when section becomes visible
+    const element = svgRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setTimeout(() => {
+              setHasAnimated(true);
+            }, 100);
+          }
+        });
+      },
+      { threshold: 0.1 }, // Trigger when 10% of the element is visible
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasAnimated]);
+
   const selectedMatchKeys = useMemo(() => {
     const keys = new Set<string>();
     const targetEvent = pinTip?.event ?? selected;
@@ -762,8 +911,11 @@ function TimelineSVG({
     const matchedCategories = new Set<Category>();
 
     if (pinTip) {
+      // When a dot is pinned, ONLY include that specific dot's key
+      // Don't include dots from other categories even if they're the same event
       keys.add(pinTip.key);
       matchedCategories.add(pinTip.cat);
+      return keys;
     }
 
     for (const dot of dots) {
@@ -821,25 +973,39 @@ function TimelineSVG({
       rightLeft + tooltipWidth <= svgWidth - tooltipEdgePadding;
     const hasRoomOnLeft = leftLeft >= tooltipEdgePadding;
 
-    const left = hasRoomOnRight
-      ? rightLeft
-      : hasRoomOnLeft
-        ? leftLeft
-        : Math.min(
-            Math.max(displayDot.cx - tooltipWidth / 2, tooltipEdgePadding),
-            svgWidth - tooltipWidth - tooltipEdgePadding,
-          );
+    let left: number;
+    let isOnLeft = false;
+
+    if (hasRoomOnRight) {
+      left = rightLeft;
+      isOnLeft = false;
+    } else if (hasRoomOnLeft) {
+      left = leftLeft;
+      isOnLeft = true;
+    } else {
+      left = Math.min(
+        Math.max(displayDot.cx - tooltipWidth / 2, tooltipEdgePadding),
+        svgWidth - tooltipWidth - tooltipEdgePadding,
+      );
+      isOnLeft = false;
+    }
 
     const top = Math.min(
       Math.max(displayDot.cy - tooltipEstimatedHeight / 2, tooltipEdgePadding),
       svgHeight - tooltipEstimatedHeight - tooltipEdgePadding,
     );
 
-    return { left, top };
+    return { left, top, isOnLeft };
   }, [displayDot, displayTip, svgWidth]);
 
   const onEnter = useCallback(
     (event: React.MouseEvent<HTMLElement>, dot: DotData) => {
+      // Cancel any pending dismissal
+      if (tooltipDismissTimeout.current !== null) {
+        window.clearTimeout(tooltipDismissTimeout.current);
+        tooltipDismissTimeout.current = null;
+      }
+
       const rect = svgRef.current?.getBoundingClientRect();
       if (rect) {
         const x = event.clientX - rect.left;
@@ -859,6 +1025,12 @@ function TimelineSVG({
 
   const onClusterEnter = useCallback(
     (clusterKey: string) => {
+      // Cancel any pending dismissal
+      if (tooltipDismissTimeout.current !== null) {
+        window.clearTimeout(tooltipDismissTimeout.current);
+        tooltipDismissTimeout.current = null;
+      }
+
       if (!selected) {
         setSelectionFocusEnabled(false);
       }
@@ -870,13 +1042,24 @@ function TimelineSVG({
   );
 
   const onClusterLeave = useCallback((cluster: DotCluster) => {
-    setHoverClusterKey((prev) => (prev === cluster.key ? null : prev));
-    setHoverTip((prev) =>
-      prev && cluster.dots.some((dot) => dot.key === prev.key) ? null : prev,
-    );
-    setHoverKey((prev) =>
-      prev && cluster.dots.some((dot) => dot.key === prev) ? null : prev,
-    );
+    // Use a short delay before clearing to allow mouse to move to tooltip
+    if (tooltipDismissTimeout.current !== null) {
+      window.clearTimeout(tooltipDismissTimeout.current);
+    }
+
+    tooltipDismissTimeout.current = window.setTimeout(() => {
+      setHoverClusterKey((prev) => (prev === cluster.key ? null : prev));
+      setHoverTip((prev) =>
+        prev && cluster.dots.some((dot) => dot.key === prev.key) ? null : prev,
+      );
+      setHoverKey((prev) =>
+        prev && cluster.dots.some((dot) => dot.key === prev) ? null : prev,
+      );
+
+      // Clear dimmed categories on cluster leave (hover-only mode)
+      setDimmedCategories(new Set());
+      tooltipDismissTimeout.current = null;
+    }, 150);
   }, []);
 
   const toggleDotSelection = useCallback(
@@ -1070,28 +1253,56 @@ function TimelineSVG({
               : 0;
           const maxRadius = dotRadius + activeDotRadiusOffset;
           const clusterWidth = Math.max(maxRadius * 2 + 20, 44);
-          const clusterHeight = Math.max(spread + maxRadius * 2 + 20, 44);
-          const clusterLeft = cluster.cx - clusterWidth / 2;
-          const clusterTop = cluster.cy - clusterHeight / 2;
-          const pinnedDot = cluster.dots.find((dot) => pinTip?.key === dot.key);
-          const selectedDot = cluster.dots.find((dot) =>
-            selectedMatchKeys.has(dot.key),
-          );
+
+          const clusterIsGreyedForDimmed = dimmedCategories.has(cluster.cat);
+          // Only expand on hover (hover-only mode)
           const isExpanded =
-            hoverClusterKey === cluster.key || !!pinnedDot || !!selectedDot;
-          const hoverFocusActive = !selected && hoverClusterKey !== null;
-          const selectionFocusActive = selectionFocusEnabled && !!selected;
+            !clusterIsGreyedForDimmed && hoverClusterKey === cluster.key;
+
+          // Use consistent height for collapsed clusters, centered on the lane
+          const baseClusterHeight = Math.max(maxRadius * 2 + 20, 44);
+          const expandedClusterHeight = Math.max(
+            spread + maxRadius * 2 + 20,
+            44,
+          );
+          const clusterHeight = isExpanded
+            ? expandedClusterHeight
+            : baseClusterHeight;
+
+          const clusterLeft = cluster.cx - clusterWidth / 2;
+          // Always position cluster top based on the lane Y, accounting for half the base height
+          // This ensures the center is always at the lane Y position
+          const clusterTop = cluster.cy - baseClusterHeight / 2;
+
+          const hoverFocusActive = hoverClusterKey !== null;
           const isHoveredCluster = hoverClusterKey === cluster.key;
-          const representativeIsDimmed =
-            (hoverFocusActive && !isHoveredCluster) ||
-            (selectionFocusActive && !selectedDot) ||
-            dimmedCategories.has(cluster.cat);
+          const representativeCanHover = !clusterIsGreyedForDimmed;
           const representativeLegendHovered =
             hoveredLegendCategory !== null &&
-            cluster.cat === hoveredLegendCategory;
+            cluster.cat === hoveredLegendCategory &&
+            !clusterIsGreyedForDimmed;
+          // Don't apply hover focus dimming when legend is hovered
+          const representativeIsDimmed =
+            (!representativeLegendHovered &&
+              hoverFocusActive &&
+              !isHoveredCluster) ||
+            clusterIsGreyedForDimmed;
           const representativeRadius = dotRadius;
           const representativeDiameter = representativeRadius * 2;
           const representativeColor = categoryColors[cluster.cat];
+
+          // Calculate animation properties for the representative dot
+          const representativeDot = cluster.dots[0];
+          const representativeAnimationIndex =
+            dotAnimationIndices.get(representativeDot.key) ?? 0;
+          const representativeAnimationDelay =
+            representativeAnimationIndex * 0.004;
+          const representativeShouldAnimate = hasAnimated;
+
+          // When expanded, move representative dot to its actual position in the spread
+          const representativeCenterY = isExpanded
+            ? baseClusterHeight / 2 + (representativeDot.cy - cluster.cy)
+            : baseClusterHeight / 2;
 
           return (
             <div
@@ -1102,7 +1313,7 @@ function TimelineSVG({
                 top: clusterTop,
                 width: clusterWidth,
                 height: clusterHeight,
-                zIndex: isExpanded ? 3 : selectedDot ? 2 : 1,
+                zIndex: isExpanded ? 3 : 1,
               }}
               onMouseEnter={() => onClusterEnter(cluster.key)}
               onMouseLeave={() => onClusterLeave(cluster)}
@@ -1113,7 +1324,7 @@ function TimelineSVG({
                 aria-label={`${timelineData.categoryLabels[cluster.cat]} cluster for ${cluster.key}`}
                 style={{
                   left: clusterWidth / 2 - representativeRadius,
-                  top: clusterHeight / 2 - representativeRadius,
+                  top: representativeCenterY - representativeRadius,
                   width: representativeDiameter,
                   height: representativeDiameter,
                   borderColor: representativeIsDimmed ? "#8f8a7d" : "#4B473F",
@@ -1122,64 +1333,84 @@ function TimelineSVG({
                     ? "#bcb5a7"
                     : representativeColor,
                   transform:
-                    representativeLegendHovered || isHoveredCluster
+                    representativeCanHover &&
+                    (representativeLegendHovered || isHoveredCluster)
                       ? "scale(1.3)"
                       : "scale(1)",
-                  boxShadow:
-                    representativeLegendHovered || isHoveredCluster
+                  boxShadow: representativeLegendHovered
+                    ? `0 0 3px 1px ${representativeColor}35, 0 0 1px 0px ${representativeColor}50`
+                    : representativeCanHover && isHoveredCluster
                       ? `0 0 4px 1px ${representativeColor}40, 0 0 2px 0px ${representativeColor}60`
                       : "none",
-                  opacity: isExpanded ? 0 : representativeIsDimmed ? 0.32 : 1,
-                  pointerEvents: isExpanded ? "none" : "auto",
-                  zIndex: 1,
+                  opacity: representativeIsDimmed ? 0.32 : 1,
+                  pointerEvents: "auto",
+                  zIndex: isExpanded ? 2 : 1,
+                  transition: "all 0.2s ease-out",
+                  ...(representativeShouldAnimate && {
+                    animation: `career-timeline-dot-pop-in 0.2s ease-out ${representativeAnimationDelay}s both`,
+                  }),
                 }}
                 onMouseEnter={() => {
+                  // Cancel any pending dismissal
+                  if (tooltipDismissTimeout.current !== null) {
+                    window.clearTimeout(tooltipDismissTimeout.current);
+                    tooltipDismissTimeout.current = null;
+                  }
+
                   setHoverTip(null);
                   setHoverKey(null);
                   setHoverClusterKey(cluster.key);
+
+                  // Highlight only this category by dimming all others
+                  const hoveredCategory = cluster.cat;
+                  const otherCategories = allCategories.filter(
+                    (cat) => cat !== hoveredCategory,
+                  );
+                  setDimmedCategories(new Set(otherCategories));
                 }}
-                onClick={() => {
-                  setHoverTip(null);
-                  setHoverKey(null);
-                  setHoverClusterKey(cluster.key);
+                onMouseLeave={() => {
+                  onClusterLeave(cluster);
                 }}
               />
 
               {cluster.dots.map((dot, dotIndex) => {
-                const isSelected = selectedMatchKeys.has(dot.key);
-                const isPinned = pinTip?.key === dot.key;
-                const isHovered = hoverKey === dot.key;
+                const isGreyedForDimmed = dimmedCategories.has(dot.cat);
+                // Only allow interactivity if not dimmed due to category filtering
+                const canInteract = !isGreyedForDimmed;
+                const isHovered = canInteract && hoverKey === dot.key;
                 const featured =
                   featuredLabels[dot.event.id] &&
                   featuredLabels[dot.event.id].cat === dot.cat;
                 const color = categoryColors[dot.cat];
-                const isMetadataMatch = selectedMatchKeys.has(dot.key);
-                const isGreyedForHover = hoverFocusActive && !isHoveredCluster;
-                const isGreyedForSelection =
-                  selectionFocusActive && !isMetadataMatch;
-                const isGreyedForDimmed = dimmedCategories.has(dot.cat);
-                const isDimmed =
-                  isGreyedForHover || isGreyedForSelection || isGreyedForDimmed;
                 const isLegendHovered =
+                  canInteract &&
                   hoveredLegendCategory !== null &&
                   dot.cat === hoveredLegendCategory;
-                const useClusterTint =
-                  isGreyedForSelection &&
-                  isExpanded &&
-                  (!!selectedDot || !!pinnedDot) &&
-                  cluster.dots.length > 1;
-                const radius =
-                  isHovered || isSelected || isPinned
+                // Don't apply hover focus dimming when legend is hovered
+                const isGreyedForHover =
+                  !isLegendHovered && hoverFocusActive && !isHoveredCluster;
+                const isDimmed = isGreyedForHover || isGreyedForDimmed;
+
+                // For legend hover, use base radius for uniform highlighting
+                const radius = isLegendHovered
+                  ? dotRadius
+                  : isHovered
                     ? dotRadius + activeDotRadiusOffset
                     : featured
                       ? dotRadius + featuredDotRadiusOffset
                       : dotRadius;
                 const diameter = radius * 2;
+                // Use baseClusterHeight for consistent positioning - all dots expand from the lane center
                 const centerY = isExpanded
-                  ? clusterHeight / 2 + (dot.cy - cluster.cy)
-                  : clusterHeight / 2;
+                  ? baseClusterHeight / 2 + (dot.cy - cluster.cy)
+                  : baseClusterHeight / 2;
                 const defaultBorderWidth = 0.8;
                 const activeBorderWidth = 1.1;
+
+                // Calculate animation properties for initial load
+                const animationIndex = dotAnimationIndices.get(dot.key) ?? 0;
+                const animationDelay = animationIndex * 0.004; // 4ms between each dot
+                const shouldAnimate = hasAnimated;
 
                 return (
                   <button
@@ -1192,38 +1423,29 @@ function TimelineSVG({
                       top: centerY - radius,
                       width: diameter,
                       height: diameter,
-                      borderColor: useClusterTint
-                        ? withAlpha(color, 0.44)
-                        : isDimmed
-                          ? "#8f8a7d"
-                          : "#4B473F",
-                      borderWidth:
-                        isHovered || isSelected || isPinned
+                      borderColor: isDimmed ? "#8f8a7d" : "#4B473F",
+                      borderWidth: isLegendHovered
+                        ? defaultBorderWidth
+                        : isHovered
                           ? activeBorderWidth
                           : defaultBorderWidth,
-                      backgroundColor: useClusterTint
-                        ? withAlpha(color, 0.2)
-                        : isDimmed
-                          ? "#bcb5a7"
-                          : color,
-                      boxShadow:
-                        isHovered || isLegendHovered
+                      backgroundColor: isDimmed ? "#bcb5a7" : color,
+                      boxShadow: isLegendHovered
+                        ? `0 0 3px 1px ${color}35, 0 0 1px 0px ${color}50`
+                        : isHovered
                           ? `0 0 4px 1px ${color}40, 0 0 2px 0px ${color}60`
                           : "none",
-                      transform:
-                        isHovered || isSelected || isPinned
-                          ? "scale(1.35)"
-                          : isLegendHovered
-                            ? "scale(1.3)"
-                            : "scale(1)",
+                      transform: isHovered
+                        ? "scale(1.35)"
+                        : isLegendHovered
+                          ? "scale(1.3)"
+                          : "scale(1)",
                       opacity: isExpanded
-                        ? useClusterTint
-                          ? 1
-                          : isDimmed
-                            ? hoverFocusActive
-                              ? 0.32
-                              : 0.4
-                            : 1
+                        ? isDimmed
+                          ? hoverFocusActive
+                            ? 0.32
+                            : 0.4
+                          : 1
                         : 0,
                       pointerEvents: isExpanded ? "auto" : "none",
                       zIndex: isExpanded
@@ -1231,24 +1453,49 @@ function TimelineSVG({
                           cluster.dots.length -
                           Math.abs(dot.cy - cluster.cy)
                         : 1,
+                      ...(shouldAnimate && {
+                        animation: `career-timeline-dot-pop-in 0.2s ease-out ${animationDelay}s both`,
+                      }),
                     }}
                     onMouseEnter={(event) => {
+                      // Cancel any pending dismissal
+                      if (tooltipDismissTimeout.current !== null) {
+                        window.clearTimeout(tooltipDismissTimeout.current);
+                        tooltipDismissTimeout.current = null;
+                      }
+
                       if (!isExpanded && dot.clusterCount > 1) {
                         setHoverTip(null);
                         setHoverKey(null);
                         setHoverClusterKey(dot.clusterKey);
+
+                        // Highlight only this category by dimming all others
+                        const hoveredCategory = dot.cat;
+                        const otherCategories = allCategories.filter(
+                          (cat) => cat !== hoveredCategory,
+                        );
+                        setDimmedCategories(new Set(otherCategories));
                         return;
                       }
                       onEnter(event, dot);
+
+                      // Highlight only this category by dimming all others
+                      const hoveredCategory = dot.cat;
+                      const otherCategories = allCategories.filter(
+                        (cat) => cat !== hoveredCategory,
+                      );
+                      setDimmedCategories(new Set(otherCategories));
                     }}
-                    onClick={() => {
-                      if (!isExpanded && dot.clusterCount > 1) {
-                        setHoverTip(null);
-                        setHoverKey(null);
-                        setHoverClusterKey(dot.clusterKey);
-                        return;
+                    onMouseLeave={() => {
+                      // Use a short delay before clearing to allow mouse to move to tooltip
+                      if (tooltipDismissTimeout.current !== null) {
+                        window.clearTimeout(tooltipDismissTimeout.current);
                       }
-                      toggleDotSelection(dot);
+
+                      tooltipDismissTimeout.current = window.setTimeout(() => {
+                        setDimmedCategories(new Set());
+                        tooltipDismissTimeout.current = null;
+                      }, 150);
                     }}
                   />
                 );
@@ -1265,6 +1512,39 @@ function TimelineSVG({
             left: tooltipPosition?.left ?? tooltipEdgePadding,
             top: tooltipPosition?.top ?? tooltipEdgePadding,
             pointerEvents: "auto",
+            display: "flex",
+            justifyContent: tooltipPosition?.isOnLeft
+              ? "flex-end"
+              : "flex-start",
+            alignItems: "flex-start",
+          }}
+          onMouseEnter={() => {
+            // Cancel any pending dismissal
+            if (tooltipDismissTimeout.current !== null) {
+              window.clearTimeout(tooltipDismissTimeout.current);
+              tooltipDismissTimeout.current = null;
+            }
+
+            // Keep the tooltip visible and category highlighted when hovering over tooltip
+            if (displayTip) {
+              const hoveredCategory = displayTip.cat;
+              const otherCategories = allCategories.filter(
+                (cat) => cat !== hoveredCategory,
+              );
+              setDimmedCategories(new Set(otherCategories));
+            }
+          }}
+          onMouseLeave={() => {
+            // Dismiss tooltip and clear highlighting when leaving tooltip
+            if (tooltipDismissTimeout.current !== null) {
+              window.clearTimeout(tooltipDismissTimeout.current);
+            }
+
+            setHoverTip(null);
+            setHoverKey(null);
+            setHoverClusterKey(null);
+            setDimmedCategories(new Set());
+            tooltipDismissTimeout.current = null;
           }}
         >
           <div
@@ -1534,8 +1814,12 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
         <div className="career-timeline-surface">
           <div className="career-timeline-header">
             <h2 className="career-timeline-title mcg-page-title mcg-page-title--flow">
-              Historical Highlights
+              Career Highlights
             </h2>
+            <p className="career-timeline-description">
+              An interactive timeline showcasing key moments and achievements in
+              Armstrong's career.
+            </p>
           </div>
 
           <div className="career-timeline-chart-card">
@@ -1547,16 +1831,29 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
                     transition: "all 0.3s ease-out",
                   }}
                 >
+                  <span
+                    style={{
+                      fontFamily: '"Hanken Grotesk", Arial, sans-serif',
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      color: "#6b7280",
+                      marginRight: "12px",
+                    }}
+                  >
+                    Filter by
+                  </span>
                   {allCategories.map((category) => {
                     const isInSelectedEvent =
                       selectedEventCategories === null ||
                       selectedEventCategories.includes(category);
-                    const shouldDim =
-                      dimmedCategories.has(category) || !isInSelectedEvent;
+                    const isDimmedByCategory = dimmedCategories.has(category);
+                    const shouldDim = isDimmedByCategory || !isInSelectedEvent;
                     return (
                       <CategoryPill
                         key={category}
-                        active={!dimmedCategories.has(category)}
+                        active={
+                          activeCategories.has(category) && !isDimmedByCategory
+                        }
                         count={categoryCounts[category]}
                         onToggle={() => toggleCategory(category)}
                         label={timelineData.categoryLabels[category]}
@@ -1592,6 +1889,7 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
                       laneStroke={laneStroke}
                       laneStrokeWidth={laneStrokeWidth}
                       dimmedCategories={dimmedCategories}
+                      setDimmedCategories={setDimmedCategories}
                       hoveredLegendCategory={hoveredLegendCategory}
                     />
                   </div>

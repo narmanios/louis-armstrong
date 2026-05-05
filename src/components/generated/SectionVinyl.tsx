@@ -180,7 +180,7 @@ export function VinylRecordExplorer({
   soundtracks: soundtrackProps,
   soundtracksUrl = DEFAULT_SOUNDTRACKS_URL,
   title = "Legacy on Screen",
-  // subtitle = "A decade by decade look at how Louis Armstrong’s music kept finding new life on screen, introducing his sound to new audiences through film and television across generations.",
+  subtitle = "A decade by decade look at how Louis Armstrong’s music kept finding new life on screen, introducing his sound to new audiences through film and television across generations.",
   centerImageUrl = DEFAULT_CENTER_IMAGE,
   className,
   style,
@@ -220,6 +220,9 @@ export function VinylRecordExplorer({
     null,
   );
   const [hoveredMediaType, setHoveredMediaType] = useState<string | null>(null);
+  const [selectedMediaType, setSelectedMediaType] = useState<string | null>(
+    null,
+  );
   const visualRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -294,6 +297,8 @@ export function VinylRecordExplorer({
     // Clear bar hover state when switching away from chart mode
     if (viewMode === "rings") {
       setHoveredBarDecadeId(null);
+      setHoveredMediaType(null);
+      setSelectedMediaType(null);
     }
   }, [viewMode]);
 
@@ -574,6 +579,8 @@ export function VinylRecordExplorer({
           </h1>
         </div>
 
+        {subtitle && <p className="vre__subtitle">{subtitle}</p>}
+
         <div className="vre__view-toggle">
           <button
             className={cx("vre__view-btn", viewMode === "rings" && "is-active")}
@@ -615,10 +622,17 @@ export function VinylRecordExplorer({
                   key={decade.id}
                   className={cx(
                     "vre__song-btn",
-                    activeDecadeId === decade.id && "is-active",
+                    (activeDecadeId === decade.id ||
+                      selectedDecadeId === decade.id) &&
+                      "is-active",
                   )}
                   onMouseEnter={() => onDecadeHover(decade.id)}
                   onMouseLeave={() => onDecadeUnhover(decade.id)}
+                  onClick={() =>
+                    setSelectedDecadeId(
+                      selectedDecadeId === decade.id ? null : decade.id,
+                    )
+                  }
                 >
                   <span className="vre__song-title">{decade.label}</span>
                 </div>
@@ -635,10 +649,17 @@ export function VinylRecordExplorer({
                   key={mediaType}
                   className={cx(
                     "vre__song-btn",
-                    hoveredMediaType === mediaType && "is-active",
+                    (hoveredMediaType === mediaType ||
+                      selectedMediaType === mediaType) &&
+                      "is-active",
                   )}
                   onMouseEnter={() => setHoveredMediaType(mediaType)}
                   onMouseLeave={() => setHoveredMediaType(null)}
+                  onClick={() =>
+                    setSelectedMediaType(
+                      selectedMediaType === mediaType ? null : mediaType,
+                    )
+                  }
                 >
                   <span className="vre__song-title">{mediaType}</span>
                 </div>
@@ -954,50 +975,64 @@ export function VinylRecordExplorer({
                       onMouseEnter={() => onBarDecadeEnter(bar.decade.id)}
                       onMouseLeave={() => onBarDecadeLeave()}
                     >
-                      {bar.stacks.map((stack) => (
-                        <g
-                          key={stack.soundtrack.key}
-                          onMouseEnter={(event) =>
-                            onSoundtrackEnter(
-                              bar.decade.id,
-                              stack.soundtrack.key,
-                              event,
-                            )
-                          }
-                          onMouseLeave={() =>
-                            onSoundtrackLeave(stack.soundtrack.key)
-                          }
-                          onClick={(event) =>
-                            onSoundtrackEnter(
-                              bar.decade.id,
-                              stack.soundtrack.key,
-                              event,
-                            )
-                          }
-                        >
-                          <rect
-                            className="vre__bar-rect"
-                            x={stack.x}
-                            y={stack.y}
-                            width={stack.width}
-                            height={stack.height - 2}
-                            fill={
-                              hoveredMediaType !== null
-                                ? stack.soundtrack.media === hoveredMediaType
-                                  ? "#ffffff"
-                                  : "rgba(255,255,255,0.2)"
-                                : shouldGreyOut
-                                  ? "rgba(255,255,255,0.2)"
-                                  : hoveredSoundtrackKey ===
-                                      stack.soundtrack.key
-                                    ? "#ffffff"
-                                    : "rgba(255,255,255,0.7)"
+                      {bar.stacks.map((stack) => {
+                        const isHovered =
+                          hoveredSoundtrackKey === stack.soundtrack.key;
+                        const heightExpansion = isHovered ? 8 : 0;
+                        const adjustedHeight =
+                          stack.height - 2 + heightExpansion;
+                        const adjustedY = stack.y - heightExpansion;
+
+                        return (
+                          <g
+                            key={stack.soundtrack.key}
+                            onMouseEnter={(event) =>
+                              onSoundtrackEnter(
+                                bar.decade.id,
+                                stack.soundtrack.key,
+                                event,
+                              )
                             }
-                            stroke="rgba(0,0,0,0.3)"
-                            strokeWidth="1"
-                          />
-                        </g>
-                      ))}
+                            onMouseLeave={() =>
+                              onSoundtrackLeave(stack.soundtrack.key)
+                            }
+                            onClick={(event) =>
+                              onSoundtrackEnter(
+                                bar.decade.id,
+                                stack.soundtrack.key,
+                                event,
+                              )
+                            }
+                          >
+                            <rect
+                              className="vre__bar-rect"
+                              x={stack.x}
+                              y={adjustedY}
+                              width={stack.width}
+                              height={adjustedHeight}
+                              fill={
+                                hoveredMediaType !== null ||
+                                selectedMediaType !== null
+                                  ? stack.soundtrack.media ===
+                                    (hoveredMediaType || selectedMediaType)
+                                    ? "#ffffff"
+                                    : "rgba(255,255,255,0.2)"
+                                  : shouldGreyOut
+                                    ? "rgba(255,255,255,0.2)"
+                                    : hoveredSoundtrackKey ===
+                                        stack.soundtrack.key
+                                      ? "#ffffff"
+                                      : "rgba(255,255,255,0.7)"
+                              }
+                              stroke="rgba(0,0,0,0.3)"
+                              strokeWidth="1"
+                              style={{
+                                transition: "all 0.2s ease",
+                              }}
+                            />
+                          </g>
+                        );
+                      })}
 
                       {/* Show count at top of bar when hovered */}
                       {isDecadeHovered && bar.stacks.length > 0 && (

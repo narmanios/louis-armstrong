@@ -96,7 +96,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
     if (activeOverlay === "tour") {
       return africaTourImageData.map((image) => ({
         id: image.id,
-        type: "image",
+        type: "image" as const,
         src: image.src,
         alt: image.caption,
         caption: image.description,
@@ -108,7 +108,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
       return [
         {
           id: "congo",
-          type: "video",
+          type: "video" as const,
           src: "/assets/congo-footage.mp4",
           poster: "/assets/congo.png",
           alt: "Congo footage",
@@ -377,12 +377,6 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
         <OverlayGallery
           slides={overlaySlides}
           onClose={() => setActiveOverlay(null)}
-          desktopWidth={
-            activeOverlay === "tour" ? "min(76vw, 980px)" : "min(62vw, 620px)"
-          }
-          mobileCaptionMaxWidth="100%"
-          desktopCaptionMaxWidth={activeOverlay === "tour" ? "560px" : "460px"}
-          bottomLabel={overlayTitle}
           closeAriaLabel="Close overlay"
         />
       ) : null}

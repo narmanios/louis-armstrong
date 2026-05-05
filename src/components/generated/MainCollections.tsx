@@ -14,7 +14,7 @@ import { SectionGoodwillAmbassador } from "./SectionGoodwill/SectionGoodwillAmba
 import { SectionWonderfulWorld } from "./SectionWonderfulWorld/SectionWonderfulWorld.tsx";
 import { SectionVinyl } from "./SectionVinyl.tsx";
 import JazzAmbassadorsMap from "./JazzAmbassadorsMap.tsx";
-import { SectionGlobalCountries } from "./SectionGlobalCountries.tsx";
+import { SectionCountries } from "./SectionCountries.tsx";
 interface MainCollectionsProps {
   className?: string;
 }
@@ -81,7 +81,7 @@ const statsCardContent: Record<StatsCardKey, StatsCardContent> = {
     "Louis Armstrong was sent abroad to symbolize American freedom, even as FBI files, segregation, and voter suppression exposed how limited that freedom was at home.",
   ),
   "ambassador-4": buildStatsCard(
-    "Real Ambassadors was a jazz musical that was a satirical take on the Jazz Diplomacy program, using humor to critique the contradictions of American cultural diplomacy during the Cold War.",
+    'Released in 1962, "The Real Ambassadors" used satire and music to reveal the contradictions between America’s image abroad and its reality at home.',
   ),
   "ambassador-5": buildStatsCard(
     "1964 World Fair in New York and the 1965 Berlin tour were major highlights of Armstrong's ambassadorial career, showcasing his global influence",
@@ -123,6 +123,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   const [isAboutOverlayOpen, setIsAboutOverlayOpen] = useState(false);
   const [introOverlayGroupId, setIntroOverlayGroupId] =
     useState<GroupId | null>(null);
+  const [factsEnabled, setFactsEnabled] = useState(false);
   const [currentSectionIndices, setCurrentSectionIndices] = useState<
     Record<GroupId, number>
   >({
@@ -136,11 +137,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     { id: "legacy", label: "Legacy" },
   ];
   const groupSectionItems: Record<GroupId, string[]> = {
-    history: [
-      "Historical Highlights",
-      "The Beginning",
-      "Journey to Ambassador",
-    ],
+    history: ["Career Highlights", "The Beginning", "Journey to Ambassador"],
     ambassador: [
       "Goodwill Ambassador",
       "Jazz Ambassadors",
@@ -655,6 +652,107 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     };
   }, [isMobile, showFixedGroupNav, isMobileMenuOpen]);
 
+  // Parallax scrolling effect
+  useEffect(() => {
+    if (isMobile) return; // Only apply on desktop
+
+    const applyParallax = (
+      scroller: HTMLDivElement,
+      sectionRefs: Array<HTMLDivElement | null>,
+    ) => {
+      const scrollTop = scroller.scrollTop;
+      const scrollHeight = scroller.scrollHeight;
+      const clientHeight = scroller.clientHeight;
+
+      sectionRefs.forEach((section, index) => {
+        // Skip first section in each group (index 0)
+        if (!section || index === 0) return;
+
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        const sectionBottom = sectionTop + sectionHeight;
+
+        // Calculate if section is in viewport or near it
+        const viewportTop = scrollTop;
+        const viewportBottom = scrollTop + clientHeight;
+        const isInViewport =
+          sectionTop < viewportBottom + clientHeight &&
+          sectionBottom > viewportTop - clientHeight;
+
+        const inner = section.querySelector(
+          ".mcg-group-section-inner",
+        ) as HTMLElement;
+        if (!inner) return;
+
+        if (isInViewport) {
+          // Calculate scroll progress relative to section (0 = entering from bottom, 1 = exiting at top)
+          const scrollProgress =
+            (viewportBottom - sectionTop) / (clientHeight + sectionHeight);
+
+          // Clamp between 0 and 1
+          const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
+
+          // Apply parallax transform with scale for depth
+          const parallaxOffset = (clampedProgress - 0.5) * 200; // Moderate strength (±100px)
+          const scale = 0.88 + clampedProgress * 0.12; // Scale from 0.88 to 1.0
+
+          inner.style.transform = `translateY(${parallaxOffset}px) scale(${scale})`;
+          inner.style.transition = "none"; // Remove transition for smoother scroll-linked animation
+        } else {
+          // Reset transform for sections out of range
+          inner.style.transform = "translateY(0) scale(1)";
+        }
+      });
+    };
+
+    const handleHistoryScroll = () => {
+      const scroller = historyScrollRef.current;
+      if (scroller) {
+        requestAnimationFrame(() => {
+          applyParallax(scroller, historySectionRefs.current);
+        });
+      }
+    };
+
+    const handleAmbassadorScroll = () => {
+      const scroller = ambassadorScrollRef.current;
+      if (scroller) {
+        requestAnimationFrame(() => {
+          applyParallax(scroller, ambassadorSectionRefs.current);
+        });
+      }
+    };
+
+    const handleLegacyScroll = () => {
+      const scroller = musicianScrollRef.current;
+      if (scroller) {
+        requestAnimationFrame(() => {
+          applyParallax(scroller, musicianSectionRefs.current);
+        });
+      }
+    };
+
+    const historyScroller = historyScrollRef.current;
+    const ambassadorScroller = ambassadorScrollRef.current;
+    const legacyScroller = musicianScrollRef.current;
+
+    historyScroller?.addEventListener("scroll", handleHistoryScroll, {
+      passive: true,
+    });
+    ambassadorScroller?.addEventListener("scroll", handleAmbassadorScroll, {
+      passive: true,
+    });
+    legacyScroller?.addEventListener("scroll", handleLegacyScroll, {
+      passive: true,
+    });
+
+    return () => {
+      historyScroller?.removeEventListener("scroll", handleHistoryScroll);
+      ambassadorScroller?.removeEventListener("scroll", handleAmbassadorScroll);
+      legacyScroller?.removeEventListener("scroll", handleLegacyScroll);
+    };
+  }, [isMobile]);
+
   const textBaseStyle: React.CSSProperties = {
     fontFamily: '"Hanken Grotesk", Arial, sans-serif',
     fontWeight: 400,
@@ -788,6 +886,42 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
             </div>
           </div>
         ))}
+        <div className="mcg-group-nav-item mcg-group-nav-item--facts-toggle">
+          <button
+            className={`mcg-group-nav-button mcg-facts-toggle-button${factsEnabled ? " is-active" : ""}`}
+            onClick={() => setFactsEnabled(!factsEnabled)}
+            aria-label={factsEnabled ? "Hide facts" : "Show facts"}
+            aria-pressed={factsEnabled}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="9"
+                cy="9"
+                r="8"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                fill="none"
+              />
+              <text
+                x="9"
+                y="13"
+                fontSize="12"
+                fontWeight="600"
+                textAnchor="middle"
+                fill="currentColor"
+                fontFamily="Hanken Grotesk, Arial, sans-serif"
+              >
+                i
+              </text>
+            </svg>
+          </button>
+        </div>
       </div>
     </nav>
   );
@@ -846,6 +980,44 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               </div>
             </div>
           ))}
+          <div className="mcg-mobile-menu-group">
+            <button
+              type="button"
+              className={`mcg-mobile-menu-group-button mcg-mobile-facts-toggle${factsEnabled ? " is-active" : ""}`}
+              onClick={() => setFactsEnabled(!factsEnabled)}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="9"
+                  cy="9"
+                  r="8"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  fill="none"
+                />
+                <text
+                  x="9"
+                  y="13"
+                  fontSize="12"
+                  fontWeight="600"
+                  textAnchor="middle"
+                  fill="currentColor"
+                  fontFamily="Hanken Grotesk, Arial, sans-serif"
+                >
+                  i
+                </text>
+              </svg>
+              <span style={{ marginLeft: "8px" }}>
+                Facts {factsEnabled ? "On" : "Off"}
+              </span>
+            </button>
+          </div>
         </div>
       ) : null}
     </div>
@@ -953,6 +1125,70 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           opacity: 1;
         }
 
+        .mcg-facts-toggle-button {
+          position: relative;
+          padding-left: 8px;
+          padding-right: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .mcg-facts-toggle-button svg {
+          display: block;
+          transition: all 0.2s ease;
+        }
+
+        .mcg-facts-toggle-button:not(.is-active) svg circle {
+          stroke: rgba(255, 255, 255, 0.4);
+        }
+
+        .mcg-facts-toggle-button:not(.is-active) svg text {
+          fill: rgba(255, 255, 255, 0.4);
+        }
+
+        .mcg-facts-toggle-button.is-active svg circle {
+          stroke: #ffffff;
+          fill: rgba(255, 255, 255, 0.15);
+        }
+
+        .mcg-facts-toggle-button.is-active svg text {
+          fill: #ffffff;
+        }
+
+        .mcg-facts-toggle-button::before {
+          content: "";
+          position: absolute;
+          left: -5px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 1px;
+          height: 14px;
+          background: rgba(255, 255, 255, 0.25);
+        }
+
+        .mcg-mobile-facts-toggle {
+          display: flex;
+          align-items: center;
+        }
+
+        .mcg-mobile-facts-toggle:not(.is-active) svg circle {
+          stroke: rgba(255, 255, 255, 0.4);
+        }
+
+        .mcg-mobile-facts-toggle:not(.is-active) svg text {
+          fill: rgba(255, 255, 255, 0.4);
+        }
+
+        .mcg-mobile-facts-toggle.is-active svg circle {
+          stroke: #ffffff;
+          fill: rgba(255, 255, 255, 0.15);
+        }
+
+        .mcg-mobile-facts-toggle.is-active svg text {
+          fill: #ffffff;
+        }
+
         .mcg-group-nav-dropdown {
           position: absolute;
           top: 100%;
@@ -1008,21 +1244,21 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
         .mcg-section-stats-card {
           position: fixed;
-          top: auto;
+          top: 60px;
           right: auto;
           left: 50%;
-          bottom: 16px;
+          bottom: auto;
           width: min(820px, calc(100vw - 32px));
           padding: 28px 32px;
           border-radius: 6px;
           border: none;
-          background: rgba(248, 245, 204, 0.82);
+          background: rgba(255, 255, 255, 0.65);
           box-shadow: 0 18px 40px rgba(0, 0, 0, 0.36);
           backdrop-filter: blur(10px);
           z-index: 150;
           pointer-events: none;
           opacity: 0;
-          transform: translateX(-50%) translateY(32px);
+          transform: translateX(-50%) translateY(-32px);
           transition:
             opacity 400ms ease-out,
             transform 400ms ease-out;
@@ -1284,6 +1520,93 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           color: #ffffff !important;
         }
 
+        /* Ensure FBI Files section wrapper has black background */
+        .mcg-group-section:has(.mcg-fbi-section) {
+          background: #000000 !important;
+        }
+
+        .mcg-group-section:has(.mcg-fbi-section) .mcg-group-section-inner {
+          background: #000000 !important;
+        }
+
+        /* Ensure Vinyl section wrapper has black background and fills viewport */
+        .mcg-group-section:has(.vre) {
+          background: #000000 !important;
+          min-height: 100dvh !important;
+        }
+
+        .mcg-group-section:has(.vre) .mcg-group-section-inner {
+          background: #000000 !important;
+          min-height: 100dvh !important;
+        }
+
+        /* Ensure Wonderful World section wrapper has white background and fills viewport */
+        .mcg-group-section:has(.mcg-jazz-section) {
+          background: #ffffff !important;
+          min-height: 100dvh !important;
+        }
+
+        .mcg-group-section:has(.mcg-jazz-section) .mcg-group-section-inner {
+          background: #ffffff !important;
+          min-height: 100dvh !important;
+        }
+
+        /* Ensure Africa Tour section wrapper has white background and fills viewport */
+        .mcg-group-section:has(.africa-tour-section) {
+          background: #ffffff !important;
+          min-height: 100dvh !important;
+        }
+
+        .mcg-group-section:has(.africa-tour-section) .mcg-group-section-inner {
+          background: #ffffff !important;
+          min-height: 100dvh !important;
+        }
+
+        /* Ensure Real Ambassadors section wrapper has white background */
+        .mcg-group-section:has(.real-ambassadors-section) {
+          background: #ffffff !important;
+        }
+
+        .mcg-group-section:has(.real-ambassadors-section) .mcg-group-section-inner {
+          background: #ffffff !important;
+        }
+
+        /* Ensure World Fair section wrapper has white background */
+        .mcg-group-section:has(.world-fair-section) {
+          background: #ffffff !important;
+        }
+
+        .mcg-group-section:has(.world-fair-section) .mcg-group-section-inner {
+          background: #ffffff !important;
+        }
+
+        /* Ensure Beginning section wrapper has white background */
+        .mcg-group-section:has(.beginning-section) {
+          background: #ffffff !important;
+        }
+
+        .mcg-group-section:has(.beginning-section) .mcg-group-section-inner {
+          background: #ffffff !important;
+        }
+
+        /* Ensure Journey section wrapper has white background */
+        .mcg-group-section:has(.journey-section) {
+          background: #ffffff !important;
+        }
+
+        .mcg-group-section:has(.journey-section) .mcg-group-section-inner {
+          background: #ffffff !important;
+        }
+
+        /* Ensure Countries section wrapper has white background */
+        .mcg-group-section:has(.countries-section) {
+          background: #ffffff !important;
+        }
+
+        .mcg-group-section:has(.countries-section) .mcg-group-section-inner {
+          background: #ffffff !important;
+        }
+
         /* Shared page title styling for all non-hero sections */
         .mcg-page-title {
           margin: 0 !important;
@@ -1412,7 +1735,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               >
                 <div className="mcg-group-section-inner">
                   {/* <SectionGoodwillAmbassador textBaseStyle={textBaseStyle} /> */}
-                  <SectionGlobalCountries />
+                  <SectionCountries />
                 </div>
               </div>
 
@@ -1533,7 +1856,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       </div>
 
       <aside
-        className={`mcg-section-stats-card${statsCardVisible && activeStatsCardKey && !dismissedStatsCards.has(activeStatsCardKey) ? " is-visible" : ""}${activeStatsCardKey && dismissedStatsCards.has(activeStatsCardKey) ? " is-dismissed" : ""}`}
+        className={`mcg-section-stats-card${statsCardVisible && activeStatsCardKey && !dismissedStatsCards.has(activeStatsCardKey) && factsEnabled ? " is-visible" : ""}${activeStatsCardKey && dismissedStatsCards.has(activeStatsCardKey) ? " is-dismissed" : ""}`}
         aria-live="polite"
       >
         {activeStatsCardKey && statsCardContent[activeStatsCardKey] ? (
@@ -1568,6 +1891,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         <div
           id="about-overlay"
           className="mcg-about-overlay"
+          onClick={() => setIsAboutOverlayOpen(false)}
           style={{
             position: "fixed",
             inset: isMobile ? "var(--mcg-mobile-nav-offset, 0px) 0 0 0" : 0,
@@ -1582,6 +1906,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         >
           <div
             className="mcg-about-overlay-content"
+            onClick={(e) => e.stopPropagation()}
             style={{
               position: "relative",
               width: isMobile ? "100vw" : "min(100vw, 1280px)",

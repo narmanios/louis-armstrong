@@ -310,7 +310,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
         .hero-intro-logo {
           position: absolute;
-          left: 32px;
+          right: 24px;
           bottom: 24px;
           width: 110px;
           z-index: 14;
@@ -334,7 +334,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
         .hero-intro-nav {
           position: absolute;
           z-index: 14;
-          right: 24px;
+          left: 32px;
           bottom: 24px;
         }
 
@@ -359,8 +359,8 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
         .hero-intro-about-button .hero-intro-nav-link-label {
           position: absolute;
-          right: calc(100% + 12px);
-          left: auto;
+          left: calc(100% + 12px);
+          right: auto;
           bottom: 0%;
           display: block;
           transform: none;

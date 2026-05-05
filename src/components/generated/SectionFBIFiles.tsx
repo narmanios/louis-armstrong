@@ -76,7 +76,7 @@ export const SectionFBIFiles: React.FC = () => {
     () =>
       fileItems.map((item) => ({
         id: item.id,
-        type: "image",
+        type: "image" as const,
         src: item.src,
         alt: item.alt,
         caption: item.caption,
@@ -133,7 +133,14 @@ export const SectionFBIFiles: React.FC = () => {
           >
             FBI Files
           </h1>
-
+          <p
+            className="FBI-description"
+            style={{ color: "#ffffff", marginTop: "16px", maxWidth: "600px" }}
+          >
+            Sent abroad as a symbol of freedom, Armstrong was simultaneously
+            surveilled by the FBI in a country where that freedom was still
+            denied to him.
+          </p>
           {/* <nav
             style={{
               display: "flex",
@@ -246,11 +253,7 @@ export const SectionFBIFiles: React.FC = () => {
       {selectedImageIndex !== null ? (
         <OverlayGallery
           slides={overlaySlides}
-          initialIndex={selectedImageIndex}
           onClose={() => setSelectedImageIndex(null)}
-          mobileCaptionMaxWidth="100%"
-          desktopCaptionMaxWidth="460px"
-          mobilePanelLabel="FBI Files"
         />
       ) : null}
 

@@ -1,0 +1,590 @@
+[
+  {
+    "id": "usa",
+    "name": "United States",
+    "exactDates": "every year 1901-1971",
+    "decades": [
+      "1900s",
+      "1910s",
+      "1920s",
+      "1930s",
+      "1940s",
+      "1950s",
+      "1960s",
+      "1970s"
+    ],
+    "description": "Louis Armstrong played each of the 50 states numerous times during his long career, often criss-crossing the nation on seemingly endless stretches of one-nighters, performing at venues large and small."
+  },
+  {
+    "id": "uk",
+    "name": "United Kingdom",
+    "exactDates": "1932, 1933, 1956, 1959, 1962, 1965, 1968, 1970",
+    "decades": [
+      "1930s",
+      "1950s",
+      "1960s",
+      "1970s"
+    ],
+    "description": "Armstrong’s first and last international performances took place in the United Kingdom, a country that especially loved him. He lived there for a time in 1933 and 1934 and returned regularly after 1956, including a tour after “What a Wonderful World” hit number one in 1968."
+  },
+  {
+    "id": "france",
+    "name": "France",
+    "exactDates": "1934, 1948, 1949, 1952, 1955, 1959, 1960, 1961, 1962, 1965, 1967",
+    "decades": [
+      "1930s",
+      "1940s",
+      "1950s",
+      "1960s"
+    ],
+    "description": "Like England, France first fell in love with Armstrong in 1934. Armstrong’s first international tour after World War II occurred in France in 1948 and he continued performing throughout the country until 1967."
+  },
+  {
+    "id": "germany",
+    "name": "Germany",
+    "exactDates": "1952, 1955, 1959, 1961, 1962, 1965",
+    "decades": [
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong first performed in Germany in 1952 and created a sensation, with fans coming from Russia and from the Soviet-controlled section of Berlin to see him live. Armstrong continued visiting Germany into the 1960s, most notably during his first tour behind the Iron Curtain, performing in East Berlin in 1965."
+  },
+  {
+    "id": "canada",
+    "name": "Canada",
+    "exactDates": "1936, 1941, 1942, 1943, 1948-1954, 1956-1965, 1967, 1968",
+    "decades": [
+      "1930s",
+      "1940s",
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong first visited Canada in 1936 and performed there regularly throughout his career, often adding big cities like Toronto and Vancouver to his itinerary when touring the United States."
+  },
+  {
+    "id": "italy",
+    "name": "Italy",
+    "exactDates": "1934, 1935, 1949, 1952, 1955, 1959, 1962, 1968",
+    "decades": [
+      "1930s",
+      "1940s",
+      "1950s",
+      "1960s"
+    ],
+    "description": "When Armstrong first played Italy in 1934, there wasn’t much of a jazz scene, but when he returned in 1949, he was greeted by the “Roman New Orleans Jazz Band,” proof of how much his music was embraced in the region. He continued performing there in the 1950s and 1960s and recorded part of his album “Ambassador Satch” in Milan in 1955."
+  },
+  {
+    "id": "switzerland",
+    "name": "Switzerland",
+    "exactDates": "1934, 1935, 1949, 1952, 1955, 1959, 1961",
+    "decades": [
+      "1930s",
+      "1940s",
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong first performed in Switzerland in late 1934, at the end of his 18-month stay in Europe, but managed to return with the All Stars, playing there multiple times between 1949 and 1961."
+  },
+  {
+    "id": "japan",
+    "name": "Japan",
+    "exactDates": "1953, 1963, 1964",
+    "decades": [
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong’s first tour of Japan in December 1953 caused a sensation. He would return two more times in 1963 and 1964 and he remains a beloved figure there today."
+  },
+  {
+    "id": "denmark",
+    "name": "Denmark",
+    "exactDates": "1933, 1949, 1952, 1955, 1959, 1961, 1962, 1965, 1967",
+    "decades": [
+      "1930s",
+      "1940s",
+      "1950s",
+      "1960s"
+    ],
+    "description": "During Armstrong’s first visit to Copenhagen in 1933, he was filmed performing three numbers for a Danish film, some of the most important footage ever shot of the trumpeter. He returned regularly with the All Stars, performing there in 1949, 1952, 1955, 1959, 1961, 1962, 1965, and 1967."
+  },
+  {
+    "id": "australia",
+    "name": "Australia",
+    "exactDates": "1954, 1956, 1963, 1964",
+    "decades": [
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong’s first tour of Australia occurred in 1954, when he played 22 concerts in two weeks. It was so successful, he returned in 1956, 1963, and 1964, each time playing with his All Stars."
+  },
+  {
+    "id": "newzealand",
+    "name": "New Zealand",
+    "exactDates": "1963, 1964",
+    "decades": [
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong made two extended tours of New Zealand with his All Stars in 1963 and 1964."
+  },
+  {
+    "id": "ghana",
+    "name": "Ghana",
+    "exactDates": "1956, 1960",
+    "decades": [
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong first performed in the Gold Coast of Africa during a whirlwind three-day tour set up by Edward R. Murrow in 1956. The following year, Lucille Armstrong attended the independence ceremonies for the new nation of Ghana. Louis returned with his All Stars to play a longer engagement sponsored by Pepsi-Cola in October 1960."
+  },
+  {
+    "id": "norway",
+    "name": "Norway",
+    "exactDates": "1933, 1952, 1955, 1959, 1961",
+    "decades": [
+      "1930s",
+      "1950s",
+      "1960s"
+    ],
+    "description": "After initially performing there in 1933, Armstrong returned to Norway with his All Stars in 1952, 1955, 1959, and 1961, often performing in Oslo."
+  },
+  {
+    "id": "scotland",
+    "name": "Scotland",
+    "exactDates": "1932, 1933, 1956, 1959",
+    "decades": [
+      "1930s",
+      "1950s"
+    ],
+    "description": "Armstrong first performed in Scotland during his 1932-1934 visits to England and returned in 1956 and 1959 with the All Stars."
+  },
+  {
+    "id": "sweden",
+    "name": "Sweden",
+    "exactDates": "1933, 1949, 1952, 1955, 1959, 1961, 1962, 1965",
+    "decades": [
+      "1930s",
+      "1940s",
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong first performed in Sweden in 1934 and visited regularly with his All Stars, performing there in 1949, 1952, 1955, 1959, 1961, 1962, and 1965."
+  },
+  {
+    "id": "sudan",
+    "name": "Sudan",
+    "exactDates": "1961",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong performed multiple shows in Khartoum, Sudan in January 1961 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "belgium",
+    "name": "Belgium",
+    "exactDates": "1934, 1949, 1952, 1955, 1959",
+    "decades": [
+      "1930s",
+      "1940s",
+      "1950s"
+    ],
+    "description": "After several performances in Belgium in 1934, Armstrong returned with the All Stars to play there on tours in 1949, 1952, 1955, and 1959, becoming especially popular in Brussels."
+  },
+  {
+    "id": "finland",
+    "name": "Finland",
+    "exactDates": "1949, 1952, 1962",
+    "decades": [
+      "1940s",
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong performed in Finland with the All Stars in 1949, 1952, and 1962, often playing in Helsinki."
+  },
+  {
+    "id": "netherlands",
+    "name": "Netherlands",
+    "exactDates": "1933, 1949, 1952, 1955, 1959, 1965",
+    "decades": [
+      "1930s",
+      "1940s",
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong first performed in Amsterdam during his first Scandinavian tour in 1933 and regularly returned with the All Stars, including recording part of his album “Ambassador Satch” at the Concertgebouw in 1955."
+  },
+  {
+    "id": "uganda",
+    "name": "Uganda",
+    "exactDates": "1960",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong performed multiple shows in Entebbe, Uganda in October 1960 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "china",
+    "name": "China",
+    "exactDates": "1963",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong and the All Stars performed one date at City Hall in Hong Kong, China at the start of a Far East tour in April 1963."
+  },
+  {
+    "id": "cotedivoire",
+    "name": "Côte d'Ivoire",
+    "exactDates": "1960",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong performed multiple shows in Abidjan, Ivory Coast in December 1960 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "egypt",
+    "name": "Egypt",
+    "exactDates": "1961",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong finished his State Department-sponsored tour of Africa with dates in Egypt in late January 1961, performing in Cairo and taking time to pose for several iconic photographs with the Great Sphinx of Giza."
+  },
+  {
+    "id": "kenya",
+    "name": "Kenya",
+    "exactDates": "1960",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong performed several dates in Kenya during his State Department-sponsored tour of Africa 1960, playing in Nairobi, Nakuru, and Mombasa."
+  },
+  {
+    "id": "chile",
+    "name": "Chile",
+    "exactDates": "1957, 1962",
+    "decades": [
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong first performed in Chile as part of his tour of South America in 1957 with the All Stars and was sent back there by the U. S. State Department in 1962."
+  },
+  {
+    "id": "nigeria",
+    "name": "Nigeria",
+    "exactDates": "1960",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Pepsi-Cola sponsored Armstrong’s weeklong tour of Nigeria in October 1960, when the trumpeter performed multiple concerts in Lagos."
+  },
+  {
+    "id": "tanzania",
+    "name": "Tanzania",
+    "exactDates": "1960",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong performed multiple shows in Zanzibar and Dar-Es-Salaam, Tanzania in November 1960 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "portugal",
+    "name": "Portugal",
+    "exactDates": "1961",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong performed two dates in Lisbon with the All Stars in 1961."
+  },
+  {
+    "id": "austria",
+    "name": "Austria",
+    "exactDates": "1955, 1959",
+    "decades": [
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong performed several dates in Austria with the All Stars in 1955 and 1959."
+  },
+  {
+    "id": "ireland",
+    "name": "Ireland",
+    "exactDates": "1956, 1962, 1967",
+    "decades": [
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong first made it to Ireland in 1956 and returned in 1962 and 1967."
+  },
+  {
+    "id": "cuba",
+    "name": "Cuba",
+    "exactDates": "1962",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong was filmed performing at the Guantanamo Naval Base in Cuba for “The Ed Sullivan Show” in December 1962."
+  },
+  {
+    "id": "mexico",
+    "name": "Mexico",
+    "exactDates": "1960, 1968",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong didn’t make it to Mexico until the 1960s, performing three weeks in Mexico City in 1960 and returning for another extended engagement in 1968."
+  },
+  {
+    "id": "spain",
+    "name": "Spain",
+    "exactDates": "1955, 1967",
+    "decades": [
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong and the All Stars did three shows in one day in Barcelona in December 1955 and returned to perform in Majorca and Alicante in 1967."
+  },
+  {
+    "id": "brazil",
+    "name": "Brazil",
+    "exactDates": "1957",
+    "decades": [
+      "1950s"
+    ],
+    "description": "Armstrong and the All Stars performed multiple dates in Sao Paolo and Rio De Janeiro, Brazil, during their 1957 South American tour."
+  },
+  {
+    "id": "jamaica",
+    "name": "Jamaica",
+    "exactDates": "1957, 1960",
+    "decades": [
+      "1950s",
+      "1960s"
+    ],
+    "description": "Armstrong’s first tour of Jamaica in 1957 caused riots from adoring fans trying to see him perform Kingston. He returned for a shorter tour in 1960."
+  },
+  {
+    "id": "southkorea",
+    "name": "South Korea",
+    "exactDates": "1963",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong’s All Stars played the opening of the Walker Hill Resort in April 1963 for two weeks."
+  },
+  {
+    "id": "venezuela",
+    "name": "Venezuela",
+    "exactDates": "1957",
+    "decades": [
+      "1950s"
+    ],
+    "description": "Armstrong and the All Stars finished their 1957 South American tour with multiple performances in Caracas, including a concert for President Jiménez, in November and early December 1957."
+  },
+  {
+    "id": "dr-of-congo",
+    "name": "DR of Congo",
+    "exactDates": "1960",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong arrived in the Congo at a fractious time as the region was in the middle of an internal war. In Leopoldville in the middle of this war in 1960, a temporary truce was declared to allow him to perform in peace. A month later, Armstrong returned and performed multiple shows in Katanga, the mineral-rich province."
+  },
+  {
+    "id": "argentina",
+    "name": "Argentina",
+    "exactDates": "1957",
+    "decades": [
+      "1950s"
+    ],
+    "description": "Armstrong kicked off his 1957 South American tour by nearly causing a riot in Buenos Aires during a series of performances in October."
+  },
+  {
+    "id": "uruguay",
+    "name": "Uruguay",
+    "exactDates": "1957",
+    "decades": [
+      "1950s"
+    ],
+    "description": "Armstrong performed multiple concerts and did a broadcast from Montevideo in November 1957 as part of his South American tour."
+  },
+  {
+    "id": "cameroon",
+    "name": "Cameroon",
+    "exactDates": "1960",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong gave two performances in Doula, Cameroon in October 1960 and returned in November to perform in Doula, Yaounde, and Garoua as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "zimbabwe",
+    "name": "Zimbabwe",
+    "exactDates": "1960",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong gave performances in Harare and Bulawayo, Zimbabwe in November 1960 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "zambia",
+    "name": "Zambia",
+    "exactDates": "1960",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong gave performances in Lusaka and N’dola, Zambia in November 1960 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "togo",
+    "name": "Togo",
+    "exactDates": "1960",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong gave performances in Lome, Togo in November 1960 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "senegal",
+    "name": "Senegal",
+    "exactDates": "1961",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong gave performances in Dakar, Senegal in January 1961 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "liberia",
+    "name": "Liberia",
+    "exactDates": "1961",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong gave performances in Monrovia, Liberia in January 1961 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "guinea",
+    "name": "Guinea",
+    "exactDates": "1961",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong gave performances in Conakry, Guinea in January 1961 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "sierra-leone",
+    "name": "Sierra Leone",
+    "exactDates": "1961",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong gave performances in Freetown, Sierra Leone in January 1961 as part of his State Department-sponsored tour of Africa."
+  },
+  {
+    "id": "czech-republic",
+    "name": "Czech Republic",
+    "exactDates": "1965",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong performed a week in Prague, Czechoslovakia as part of his Iron Curtain tour of 1965."
+  },
+  {
+    "id": "romania",
+    "name": "Romania",
+    "exactDates": "1965",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong performed four shows in Bucarest as part of his Iron Curtain tour of 1965."
+  },
+  {
+    "id": "yugoslavia",
+    "name": "Yugoslavia",
+    "exactDates": "1965",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong performed multiple concerts in Belgrad, Zagreb, Ljubljana and Novi Sad as part of his Iron Curtain tour of 1965."
+  },
+  {
+    "id": "balkans",
+    "name": "Balkans",
+    "exactDates": "1965",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong performed in Bulgaria as part of his Iron Curtain tour of 1965."
+  },
+  {
+    "id": "hungary",
+    "name": "Hungary",
+    "exactDates": "1965",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong and the All Stars performed in front of 90,000 fans at Nep Stadium in Budapest, Hungary on June 9, 1965."
+  },
+  {
+    "id": "greece",
+    "name": "Greece",
+    "exactDates": "1959",
+    "decades": [
+      "1950s"
+    ],
+    "description": "Armstrong and the All Stars performed in Greece in April 1959."
+  },
+  {
+    "id": "israel",
+    "name": "Israel",
+    "exactDates": "1959",
+    "decades": [
+      "1950s"
+    ],
+    "description": "Armstrong and the All Stars played 13 concerts in 8 days in Israel in April 1959."
+  },
+  {
+    "id": "lebanon",
+    "name": "Lebanon",
+    "exactDates": "1959",
+    "decades": [
+      "1950s"
+    ],
+    "description": "Armstrong and the All Stars performed in Lebanon in April 1959."
+  },
+  {
+    "id": "slovenia",
+    "name": "Slovenia",
+    "exactDates": "1959",
+    "decades": [
+      "1950s"
+    ],
+    "description": "Armstrong and the All Stars performed in Ljubljana, Slovenia in May 1959."
+  },
+  {
+    "id": "india",
+    "name": "India",
+    "exactDates": "1964",
+    "decades": [
+      "1960s"
+    ],
+    "description": "Armstrong and the All Stars performed in India in late 1964."
+  },
+  {
+    "id": "algeria",
+    "name": "Algeria",
+    "exactDates": "1952",
+    "decades": [
+      "1950s"
+    ],
+    "description": "Armstrong and the All Stars performed in Oran and Algiers, Algeria in November 1952."
+  },
+  {
+    "id": "morocco",
+    "name": "Morocco",
+    "exactDates": "1952",
+    "decades": [
+      "1950s"
+    ],
+    "description": "Armstrong and the All Stars performed in Casablanca, Morocco on November 22, 1952."
+  }
+]

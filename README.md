@@ -1,5 +1,11 @@
 ![Louis Armstrong's Legacy](./public/assets/hero/hero.png)
 
+![Louis Armstrong's Legacy](./public/assets/hero/career-highlights.png)
+
+![Louis Armstrong's Legacy](./public/assets/hero/ambassador.png)
+
+![Louis Armstrong's Legacy](./public/assets/hero/legacy.png)
+
 # Introduction & Abstract
 
 ## Introduction

@@ -216,11 +216,11 @@ const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
     if (onMapReady && mapInstanceRef.current) {
       onMapReady(mapInstanceRef.current);
     }
+
     L.tileLayer(
       "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
       {
-        attribution: "&copy; OpenStreetMap &copy; CartoDB",
-        subdomains: "abcd",
+        attribution: "&copy; OpenStreetMap contributors",
         maxZoom: 19,
       },
     ).addTo(mapInstanceRef.current);
@@ -277,7 +277,7 @@ const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
       ref={mapRef}
       className="w-full h-full"
       style={{
-        background: "#e8eef4",
+        background: "#ffffff",
       }}
     />
   );
@@ -304,12 +304,17 @@ export const JazzAmbassadorsMap: React.FC = () => {
   };
   const toggleMusician = (musician: string) => {
     setHiddenMusicians((prev) => {
-      const next = new Set(prev);
-      if (next.has(musician)) {
-        next.delete(musician);
-      } else {
-        next.add(musician);
+      const isCurrentlyHidden = prev.has(musician);
+      const onlyThisOneVisible =
+        prev.size === MUSICIANS.length - 1 && !isCurrentlyHidden;
+
+      // If clicking on the only visible musician, show all
+      if (onlyThisOneVisible) {
+        return new Set();
       }
+
+      // Otherwise, show only this musician (hide all others)
+      const next = new Set(MUSICIANS.filter((m) => m !== musician));
       return next;
     });
   };
@@ -392,7 +397,8 @@ export const JazzAmbassadorsMap: React.FC = () => {
             className="mcg-page-title mcg-page-title--flow"
             style={{ color: "#000000" }}
           >
-            Jazz Diplomacy Tours
+            "The Jazz Ambassadors" — U.S. State Department Jazz Diplomacy Tours
+            (1956-1978)
           </h1>
         </div>
 
@@ -400,59 +406,78 @@ export const JazzAmbassadorsMap: React.FC = () => {
           className="flex items-center gap-4 flex-wrap"
           style={{ width: "100%" }}
         >
-          <p
-            className="flex-shrink-0 tracking-widest"
-            style={{
-              marginBottom: "2px",
-              fontFamily: '"Hanken Grotesk", Arial, sans-serif',
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#6b7280",
-            }}
-          >
-            Artists
-          </p>
-
           {/* Artist toggle pills — horizontal row */}
           <div
             className="flex items-center gap-2 flex-wrap"
             style={{ marginBottom: "2px" }}
           >
-            {MUSICIANS.map((musician) => {
+            {MUSICIANS.map((musician, index) => {
               const hidden = hiddenMusicians.has(musician);
               const color = MUSICIAN_COLORS[musician];
+              const isLouis = musician === "Louis Armstrong";
+
               return (
-                <button
-                  key={musician}
-                  onClick={() => toggleMusician(musician)}
-                  className="flex items-center gap-2 px-1 py-1.5 transition-all text-left"
-                  style={{
-                    opacity: hidden ? 0.35 : 1,
-                  }}
-                  aria-pressed={!hidden}
-                  aria-label={`${hidden ? "Show" : "Hide"} ${musician}`}
-                >
-                  <div
-                    className="w-2.5 h-2.5 rounded-full flex-shrink-0 transition-all"
+                <React.Fragment key={musician}>
+                  <button
+                    onClick={() => toggleMusician(musician)}
+                    className="flex items-center gap-2 px-1 py-1.5 transition-all text-left"
                     style={{
-                      background: hidden ? "#cbd5e1" : color,
-                      boxShadow: hidden
-                        ? "none"
-                        : `0 0 0 2px white, 0 1px 3px ${color}60`,
+                      opacity: hidden ? 0.35 : 1,
                     }}
-                  />
-                  <span
-                    className="whitespace-nowrap transition-colors"
-                    style={{
-                      fontFamily: '"Hanken Grotesk", Arial, sans-serif',
-                      fontSize: "14px",
-                      fontWeight: 400,
-                      color: hidden ? "#94a3b8" : "#334155",
-                    }}
+                    aria-pressed={!hidden}
+                    aria-label={`${hidden ? "Show" : "Hide"} ${musician}`}
                   >
-                    {musician}
-                  </span>
-                </button>
+                    <div
+                      className="w-2.5 h-2.5 rounded-full flex-shrink-0 transition-all"
+                      style={{
+                        background: hidden ? "#cbd5e1" : color,
+                        boxShadow: hidden
+                          ? "none"
+                          : `0 0 0 2px white, 0 1px 3px ${color}60`,
+                      }}
+                    />
+                    <span
+                      className="whitespace-nowrap transition-colors"
+                      style={{
+                        fontFamily: '"Hanken Grotesk", Arial, sans-serif',
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        color: hidden ? "#94a3b8" : "#334155",
+                      }}
+                    >
+                      {musician}
+                    </span>
+                  </button>
+
+                  {isLouis && (
+                    <>
+                      <span
+                        style={{
+                          color: "#d1d5db",
+                          fontSize: "14px",
+                          fontWeight: 300,
+                          marginBottom: "2px",
+                          marginLeft: "12px",
+                          marginRight: "4px",
+                        }}
+                      >
+                        |
+                      </span>
+                      <p
+                        className="flex-shrink-0 tracking-widest"
+                        style={{
+                          marginBottom: "2px",
+                          fontFamily: '"Hanken Grotesk", Arial, sans-serif',
+                          fontSize: "14px",
+                          fontWeight: 400,
+                          color: "#6b7280",
+                        }}
+                      >
+                        Other artists
+                      </p>
+                    </>
+                  )}
+                </React.Fragment>
               );
             })}
           </div>
@@ -481,9 +506,9 @@ export const JazzAmbassadorsMap: React.FC = () => {
         <div
           className="overflow-hidden"
           style={{
-            borderRadius: "16px",
+            // borderRadius: "16px",
             border: "1.5px solid #e2e8f0",
-            boxShadow: "0 4px 24px rgba(0,0,0,0.10)",
+            boxShadow: "none",
             maxWidth: "1400px",
             maxHeight: "700px",
             width: "100%",
