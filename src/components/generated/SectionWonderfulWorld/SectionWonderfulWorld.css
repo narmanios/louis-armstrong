@@ -1,10 +1,10 @@
 .slg {
-  --slg-bg: #ffffff;
-  --slg-text: #111111;
-  --slg-muted: rgba(17, 17, 17, 0.62);
-  --slg-glass: rgba(255, 255, 255, 0.38);
-  --slg-glass-2: rgba(255, 255, 255, 0.5);
-  --slg-border: rgba(17, 17, 17, 0.14);
+  --slg-bg: #000000;
+  --slg-text: #ffffff;
+  --slg-muted: rgba(255, 255, 255, 0.62);
+  --slg-glass: rgba(255, 255, 255, 0.1);
+  --slg-glass-2: rgba(255, 255, 255, 0.15);
+  --slg-border: rgba(255, 255, 255, 0.2);
   /* --slg-amber: #f59e0b; */
   /* --slg-amber-2: #d4af37;
   --slg-amber-3: #f5deb3; */
@@ -41,7 +41,7 @@
 }
 
 .mcg-jazz-section {
-  background: #ffffff !important;
+  background: #000000 !important;
   min-height: 100dvh !important;
 }
 
@@ -55,7 +55,7 @@
   z-index: 10;
   width: 100%;
   margin: 0;
-  padding: 0 56px 0;
+  padding: 0;
 }
 
 .slg__header {
@@ -73,9 +73,9 @@
   color: var(--slg-text);
   margin: 0 0 12px;
 }
-.slg .mcg-page-title,
-.slg__title {
-  color: #000000 !important;
+.mcg-jazz-section .slg .mcg-page-title,
+.mcg-jazz-section .slg__title {
+  color: #ffffff !important;
 }
 
 .slg__brand,
@@ -179,9 +179,9 @@
   border-radius: 8px;
   border: 1px solid var(--slg-border);
   background:
-    linear-gradient(45deg, transparent 50%, rgba(17, 17, 17, 0.58) 50%)
+    linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.58) 50%)
       calc(100% - 15px) calc(50% - 2px) / 6px 6px no-repeat,
-    linear-gradient(135deg, rgba(17, 17, 17, 0.58) 50%, transparent 50%)
+    linear-gradient(135deg, rgba(255, 255, 255, 0.58) 50%, transparent 50%)
       calc(100% - 10px) calc(50% - 2px) / 6px 6px no-repeat,
     var(--slg-glass);
   text-align: left;
@@ -249,7 +249,7 @@
 
   font-size: 32px;
   z-index: 1;
-  color: #000000;
+  color: #ffffff;
   opacity: 0.3;
   pointer-events: none;
 }
@@ -269,7 +269,7 @@
 }
 
 .slg__search input::placeholder {
-  color: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .slg__search-clear {
@@ -287,13 +287,13 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.4);
   transition: all 0.15s ease;
 }
 
 .slg__search-clear:hover {
-  color: rgba(0, 0, 0, 0.7);
-  background: rgba(0, 0, 0, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .slg__search-clear svg {
@@ -310,7 +310,7 @@
   margin: 0;
   padding: 4px;
   list-style: none;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.95);
   border: 1px solid var(--slg-border);
   border-radius: 8px;
   backdrop-filter: blur(10px);
@@ -331,7 +331,7 @@
 
 .slg__suggestion:hover,
 .slg__suggestion.is-selected {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* .slg__search input:focus {

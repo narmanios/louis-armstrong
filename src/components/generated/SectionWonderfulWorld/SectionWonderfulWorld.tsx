@@ -270,7 +270,7 @@ function ServiceIcon({ service }: { service: ServiceName }) {
 
 function getSilhouetteBounds(canvasWidth: number, canvasHeight: number) {
   const canvasAspect = canvasWidth / canvasHeight;
-  const silhouetteFit = 0.75 * SILHOUETTE_SCALE;
+  const silhouetteFit = 0.65 * SILHOUETTE_SCALE;
 
   if (SVG_ASPECT_RATIO > canvasAspect) {
     const drawWidth = canvasWidth * silhouetteFit;
@@ -321,7 +321,7 @@ export function SectionWonderfulWorld({
   className,
   height = "100%",
   initialZoom = 1,
-  canvasWidth = 1060,
+  canvasWidth = 1400,
   canvasHeight = 590,
   searchPlaceholder = "Search artists, release dates...",
 }: SectionWonderfulWorldProps) {
@@ -974,6 +974,9 @@ export function SectionWonderfulWorld({
         entries.forEach((entry) => {
           if (entry.isIntersecting && !isInView) {
             setIsInView(true);
+          } else if (!entry.isIntersecting && isInView) {
+            setIsInView(false);
+            hideTooltip();
           }
         });
       },
@@ -995,7 +998,7 @@ export function SectionWonderfulWorld({
       ref={sectionRef}
       className="mcg-section mcg-jazz-section"
       style={{
-        backgroundColor: "#ffffff",
+        backgroundColor: "#000000",
       }}
     >
       <div

@@ -1540,14 +1540,14 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           min-height: 100dvh !important;
         }
 
-        /* Ensure Wonderful World section wrapper has white background and fills viewport */
+        /* Ensure Wonderful World section wrapper has black background and fills viewport */
         .mcg-group-section:has(.mcg-jazz-section) {
-          background: #ffffff !important;
+          background: #000000 !important;
           min-height: 100dvh !important;
         }
 
         .mcg-group-section:has(.mcg-jazz-section) .mcg-group-section-inner {
-          background: #ffffff !important;
+          background: #000000 !important;
           min-height: 100dvh !important;
         }
 
@@ -1598,13 +1598,13 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           background: #ffffff !important;
         }
 
-        /* Ensure Countries section wrapper has white background */
+        /* Ensure Countries section wrapper has black background */
         .mcg-group-section:has(.countries-section) {
-          background: #ffffff !important;
+          background: #000000 !important;
         }
 
         .mcg-group-section:has(.countries-section) .mcg-group-section-inner {
-          background: #ffffff !important;
+          background: #000000 !important;
         }
 
         /* Shared page title styling for all non-hero sections */
@@ -1651,6 +1651,42 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         .map-marker:hover { transform: scale(1.2); }
         .fbi-doc { transition: transform 0.2s ease; cursor: zoom-in; }
         .fbi-doc:hover { transform: scale(1.1); z-index: 10; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+
+        .mcg-group-nav-button-container {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 60px 24px 80px;
+          box-sizing: border-box;
+        }
+
+        .mcg-group-nav-next-button {
+          background: #000000;
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 6px;
+          padding: 16px 32px;
+          font-family: "Hanken Grotesk", Arial, sans-serif;
+          font-size: 16px;
+          font-weight: 600;
+          letter-spacing: 0.02em;
+          color: #ffffff;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          text-align: center;
+          min-width: 280px;
+        }
+
+        .mcg-group-nav-next-button:hover {
+          background: rgba(0, 0, 0, 0.9);
+          border-color: rgba(255, 255, 255, 0.35);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .mcg-group-nav-next-button:active {
+          transform: translateY(0);
+        }
       `}</style>
 
       {!isMobile && showFixedGroupNav ? renderGroupNav() : null}
@@ -1704,6 +1740,14 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                 <div className="mcg-group-section-inner mcg-group-section-inner--auto-height">
                   <SectionJourneyToAmbassador />
                 </div>
+              </div>
+              <div className="mcg-group-nav-button-container">
+                <button
+                  className="mcg-group-nav-next-button"
+                  onClick={() => scrollToGroup("ambassador")}
+                >
+                  Explore Armstrong's work as an Ambassador
+                </button>
               </div>
             </div>
           </div>
@@ -1794,6 +1838,14 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                   <SectionWorldFair />
                 </div>
               </div>
+              <div className="mcg-group-nav-button-container">
+                <button
+                  className="mcg-group-nav-next-button"
+                  onClick={() => scrollToGroup("legacy")}
+                >
+                  Learn more about Armstrong's Legacy
+                </button>
+              </div>
             </div>
           </div>
           {currentSectionIndices.ambassador <
@@ -1839,6 +1891,14 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                 <div className="mcg-group-section-inner">
                   <SectionWonderfulWorld />
                 </div>
+              </div>
+              <div className="mcg-group-nav-button-container">
+                <button
+                  className="mcg-group-nav-next-button"
+                  onClick={() => scrollToGroup("history")}
+                >
+                  More of Armstrong's History
+                </button>
               </div>
             </div>
           </div>

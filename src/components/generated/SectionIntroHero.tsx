@@ -295,8 +295,8 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
 
         .hero-intro-kicker {
           position: absolute;
-          top: 0px;
-          right: 0;
+          bottom: 40px;
+          right: 120px;
           display: block;
           font-family: "Hanken Grotesk", Arial, sans-serif;
           font-weight: 600;
@@ -366,7 +366,7 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           transform: none;
          
           white-space: nowrap;
-          font-size: 20px;
+          font-size: 18px;
           line-height: 1;
           letter-spacing: 0;
           color: #ffffff;
@@ -394,17 +394,22 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
           top: auto;
           bottom: 132px;
           display: block;
-          transform: rotate(-90deg);
-          transform-origin: left center;
+          transform: translateX(-50%);
           white-space: nowrap;
-          font-size: 80px;
-          line-height: 0;
-          letter-spacing: -0.06em;
+          font-size: 60px;
+          line-height: 1;
+          letter-spacing: -0.02em;
           font-weight: 600;
           font-family: "Hanken Grotesk", Arial, sans-serif;
           color: #000000;
           opacity: 0.28;
           transition: opacity 0.18s ease;
+          text-align: center;
+        }
+
+        .hero-intro-nav-link-label-prefix {
+          font-size: 36px;
+          display: block;
         }
 
         
@@ -717,18 +722,18 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
               margin: 0,
             }}
           >
-            The Story of Louis Armstrong in Data and Song{" "}
+            In Data and Song{" "}
           </p>
 
-          <p
+          {/* <p
             className="hero-intro-kicker-date"
             style={{
-              fontSize: "clamp(14px, 2.2vw, 38px)",
+              fontSize: "clamp(14px, 1.75vw, 38px)",
               margin: 0,
             }}
           >
             1901-1971{" "}
-          </p>
+          </p> */}
         </div>
       </div>
 
@@ -753,7 +758,10 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             className="hero-intro-panel-button hero-intro-nav-link hero-intro-nav-link--history"
             disabled={transitionTarget !== null}
           >
-            <span className="hero-intro-nav-link-label">History</span>
+            <span className="hero-intro-nav-link-label">
+              <span className="hero-intro-nav-link-label-prefix">His</span>
+              History
+            </span>
           </button>
         </div>
         <div className="hero-intro-panel hero-intro-panel--ambassador">
@@ -775,7 +783,12 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             className="hero-intro-panel-button hero-intro-nav-link hero-intro-nav-link--ambassador"
             disabled={transitionTarget !== null}
           >
-            <span className="hero-intro-nav-link-label">Ambassador</span>
+            <span className="hero-intro-nav-link-label">
+              <span className="hero-intro-nav-link-label-prefix">
+                His work as an
+              </span>
+              Ambassador
+            </span>
           </button>
         </div>
         <div className="hero-intro-panel hero-intro-panel--legacy">
@@ -795,7 +808,10 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             className="hero-intro-panel-button hero-intro-nav-link hero-intro-nav-link--legacy"
             disabled={transitionTarget !== null}
           >
-            <span className="hero-intro-nav-link-label">Legacy</span>
+            <span className="hero-intro-nav-link-label">
+              <span className="hero-intro-nav-link-label-prefix">His</span>
+              Legacy
+            </span>
           </button>
         </div>
       </div>
@@ -807,13 +823,13 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
       )}
 
       <div className="hero-intro-nav">
-        <button
+        {/* <button
           type="button"
           onClick={openAboutOverlay}
           className="hero-intro-about-button"
         >
           <span className="hero-intro-nav-link-label">About this project</span>
-        </button>
+        </button> */}
       </div>
     </section>
   );

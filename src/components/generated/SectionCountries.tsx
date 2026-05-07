@@ -565,7 +565,7 @@ export const SectionCountries = () => {
     <>
       <style>{`
         .countries-section .mcg-page-title {
-          color: #000000 !important;
+          color: #ffffff !important;
         }
       `}</style>
       <div
@@ -581,6 +581,7 @@ export const SectionCountries = () => {
           padding: "56px 56px 48px",
           alignItems: "start",
           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          background: "#000000",
         }}
       >
         {/* ── Left sidebar ── */}
@@ -598,7 +599,7 @@ export const SectionCountries = () => {
             <h1
               className="mcg-page-title"
               style={{
-                color: "#000000",
+                color: "#ffffff",
                 whiteSpace: "nowrap",
               }}
             >
@@ -606,7 +607,7 @@ export const SectionCountries = () => {
             </h1>
             <p
               className="goodwill-description"
-              style={{ color: "#000000", marginTop: "16px" }}
+              style={{ color: "#ffffff", marginTop: "16px" }}
             >
               An interactive visualization of Armstrong’s travels and concerts
               across 60+ countries as a Goodwill Ambassador.
@@ -628,7 +629,7 @@ export const SectionCountries = () => {
               style={{
                 fontSize: "10px",
                 fontWeight: 600,
-                color: "#666",
+                color: "rgba(255, 255, 255, 0.6)",
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
                 marginBottom: "8px",
@@ -648,10 +649,10 @@ export const SectionCountries = () => {
                     display: "inline-flex",
                     textAlign: "left",
                     background: isActive
-                      ? "rgba(0, 0, 0, 0.08)"
+                      ? "rgba(255, 255, 255, 0.15)"
                       : "transparent",
                     border: "0",
-                    color: isActive ? "#1a1a1a" : "rgba(0, 0, 0, 0.55)",
+                    color: isActive ? "#ffffff" : "rgba(255, 255, 255, 0.55)",
                     padding: "6px 10px",
                     borderRadius: "8px",
                     fontSize: "11px",
@@ -663,7 +664,8 @@ export const SectionCountries = () => {
                   onMouseEnter={(e) => {
                     if (!isActive) {
                       e.currentTarget.style.fontWeight = "700";
-                      e.currentTarget.style.background = "rgba(0, 0, 0, 0.05)";
+                      e.currentTarget.style.background =
+                        "rgba(255, 255, 255, 0.1)";
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -693,7 +695,7 @@ export const SectionCountries = () => {
               style={{
                 fontSize: "10px",
                 fontWeight: 600,
-                color: "#666",
+                color: "rgba(255, 255, 255, 0.6)",
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
                 marginBottom: "8px",
@@ -713,10 +715,10 @@ export const SectionCountries = () => {
                     display: "inline-flex",
                     textAlign: "left",
                     background: isActive
-                      ? "rgba(0, 0, 0, 0.08)"
+                      ? "rgba(255, 255, 255, 0.15)"
                       : "transparent",
                     border: "0",
-                    color: isActive ? "#1a1a1a" : "rgba(0, 0, 0, 0.55)",
+                    color: isActive ? "#ffffff" : "rgba(255, 255, 255, 0.55)",
                     padding: "6px 10px",
                     borderRadius: "8px",
                     fontSize: "11px",
@@ -728,7 +730,8 @@ export const SectionCountries = () => {
                   onMouseEnter={(e) => {
                     if (!isActive) {
                       e.currentTarget.style.fontWeight = "700";
-                      e.currentTarget.style.background = "rgba(0, 0, 0, 0.05)";
+                      e.currentTarget.style.background =
+                        "rgba(255, 255, 255, 0.1)";
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -797,7 +800,7 @@ export const SectionCountries = () => {
                     style={{
                       fontSize: "26px",
                       fontWeight: 700,
-                      fill: "#1a1a1a",
+                      fill: "#ffffff",
                       fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                       letterSpacing: "-0.7px",
                     }}
@@ -814,7 +817,7 @@ export const SectionCountries = () => {
                     style={{
                       fontSize: "9px",
                       fontWeight: 600,
-                      fill: "#1a1a1a",
+                      fill: "#ffffff",
                       fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                       letterSpacing: "0.8px",
                       textTransform: "uppercase",
@@ -829,7 +832,7 @@ export const SectionCountries = () => {
                     y1={CY - 18}
                     x2={CX + 16}
                     y2={CY - 18}
-                    stroke="#e8e5df"
+                    stroke="rgba(255, 255, 255, 0.3)"
                     strokeWidth="1"
                   />
 
@@ -842,7 +845,7 @@ export const SectionCountries = () => {
                     style={{
                       fontSize: "11px",
                       fontWeight: 500,
-                      fill: "#1a1a1a",
+                      fill: "#ffffff",
                       fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                       letterSpacing: "0.2px",
                     }}
@@ -862,7 +865,7 @@ export const SectionCountries = () => {
                         style={{
                           fontSize: "9px",
                           fontWeight: 400,
-                          color: "#888",
+                          color: "rgba(255, 255, 255, 0.6)",
                           fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                           letterSpacing: "0.2px",
                           lineHeight: "1.5",
@@ -888,7 +891,7 @@ export const SectionCountries = () => {
                     style={{
                       fontSize: "26px",
                       fontWeight: 700,
-                      fill: "#1a1a1a",
+                      fill: "#ffffff",
                       fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                       letterSpacing: "-1px",
                     }}
@@ -902,7 +905,7 @@ export const SectionCountries = () => {
                     dominantBaseline="middle"
                     style={{
                       fontSize: "9px",
-                      fill: "#aaa",
+                      fill: "rgba(255, 255, 255, 0.6)",
                       fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                       letterSpacing: "0.2px",
                     }}
@@ -923,7 +926,7 @@ export const SectionCountries = () => {
                     style={{
                       fontSize: "13px",
                       fontWeight: 500,
-                      fill: "#c8c5be",
+                      fill: "rgba(255, 255, 255, 0.3)",
                       fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                       letterSpacing: "0.4px",
                     }}
@@ -938,7 +941,7 @@ export const SectionCountries = () => {
                     style={{
                       fontSize: "13px",
                       fontWeight: 500,
-                      fill: "#c8c5be",
+                      fill: "rgba(255, 255, 255, 0.3)",
                       fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                       letterSpacing: "0.4px",
                     }}
@@ -954,13 +957,12 @@ export const SectionCountries = () => {
                 const isActive =
                   activeFlagNames === null || activeFlagNames.has(flag.name);
                 const isHovered = hoveredFlag === flag.name;
+                const isOtherHovered = hoveredFlag !== null && !isHovered;
                 const regionColor = REGION_COLOR_MAP.get(flag.region) ?? "#ccc";
-                const FLAG_W = 28;
-                const FLAG_H = 18;
-                const FLAG_W_HOV = 34;
-                const FLAG_H_HOV = 22;
-                const w = isHovered ? FLAG_W_HOV : FLAG_W;
-                const h = isHovered ? FLAG_H_HOV : FLAG_H;
+                const FLAG_W = 42;
+                const FLAG_H = 28;
+                const w = FLAG_W;
+                const h = FLAG_H;
 
                 // Uniform dot radius
                 const dotR = 3.5;
@@ -973,6 +975,7 @@ export const SectionCountries = () => {
                 // When not flipped: the flag's "left" in rotated space points outward → label to the left (textAnchor="end")
                 // When flipped (180° correction applied): the flag's "left" in rotated space now points inward → label to the right (textAnchor="start")
                 // This ensures the label is ALWAYS on the outer/away-from-center side.
+
                 const labelX = flipped ? fx + w / 2 + 6 : fx - w / 2 - 6;
                 const labelAnchor = flipped ? "start" : "end";
                 return (
@@ -980,8 +983,10 @@ export const SectionCountries = () => {
                     key={flag.name}
                     style={{
                       cursor: "pointer",
-                      transition: "all 0.3s ease-out",
-                      opacity: animationOpacity * (isActive ? 1 : 0.08),
+                      transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                      opacity:
+                        animationOpacity *
+                        (isOtherHovered ? 0.15 : isActive ? 1 : 0.15),
                       transform: `scale(${animationScale})`,
                       transformOrigin: `${fx}px ${fy}px`,
                     }}
@@ -998,7 +1003,7 @@ export const SectionCountries = () => {
                       fill={regionColor}
                       opacity={isHovered ? 0.9 : 0.28}
                       style={{
-                        transition: "all 0.2s ease",
+                        transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                       }}
                     />
 
@@ -1013,25 +1018,22 @@ export const SectionCountries = () => {
                         height={h}
                         preserveAspectRatio="xMidYMid meet"
                         style={{
-                          transition: "all 0.2s ease",
-                          filter: isHovered
-                            ? "drop-shadow(0 3px 10px rgba(0,0,0,0.30))"
-                            : "drop-shadow(0 1px 3px rgba(0,0,0,0.10))",
+                          transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                         }}
                       />
 
                       {/* Country name — always on the outer side of the flag */}
                       <text
                         x={labelX}
-                        y={fy + (isHovered ? 3 : 2.5)}
+                        y={fy + 2.5}
                         textAnchor={labelAnchor}
                         style={{
-                          fontSize: isHovered ? "8px" : "6.5px",
-                          fontWeight: isHovered ? 600 : 400,
-                          fill: isHovered ? "#1a1a1a" : "#888",
+                          fontSize: "8px",
+                          fontWeight: 600,
+                          fill: "rgba(255, 255, 255, 0.7)",
                           fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                           letterSpacing: "0.2px",
-                          transition: "all 0.2s ease",
+                          transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                           pointerEvents: "none",
                         }}
                       >
@@ -1041,10 +1043,10 @@ export const SectionCountries = () => {
 
                     {/* Invisible hit area (unrotated, centred on flag position) */}
                     <rect
-                      x={fx - FLAG_W_HOV / 2}
-                      y={fy - FLAG_H_HOV / 2}
-                      width={FLAG_W_HOV}
-                      height={FLAG_H_HOV}
+                      x={fx - FLAG_W / 2 - 10}
+                      y={fy - FLAG_H / 2 - 10}
+                      width={FLAG_W + 20}
+                      height={FLAG_H + 20}
                       fill="transparent"
                     />
                   </g>

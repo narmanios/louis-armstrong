@@ -235,7 +235,7 @@ const categoryColors: Record<Category, string> = {
   vocalist: "#10B981",
   ambassador: "#8B5CF6",
 };
-const svgHeight = 560;
+const svgHeight = 580;
 const yearStart = 1923;
 const yearEnd = Math.max(1973, dataYearMax);
 const marginLeft = 32;
@@ -256,7 +256,7 @@ const tooltipWidth = 248;
 const tooltipEstimatedHeight = 148;
 const tooltipGap = 8;
 const tooltipEdgePadding = 8;
-const yearAxisY = 520;
+const yearAxisY = 540;
 
 const featuredLabels: Record<number, FeaturedCfg> = {
   35: {
@@ -324,8 +324,12 @@ function xOf(year: number, width: number) {
   );
 }
 
-function getTimelineEventKey(event: Pick<ArmstrongEvent, "id">) {
-  return `event-${event.id}`;
+function getTimelineEventKey(
+  event: Pick<ArmstrongEvent, "id" | "year" | "dateText" | "event">,
+) {
+  // Use a combination of id, year, and dateText to create a truly unique key
+  // This handles cases where duplicate IDs exist in the source data
+  return `event-${event.id}-${event.year}-${event.dateText.replace(/[^a-zA-Z0-9]/g, "")}`;
 }
 
 function withAlpha(hexColor: string, alpha: number) {
@@ -452,15 +456,12 @@ function StackedDotChart({
     return () => clearTimeout(timer);
   }, [category]);
 
-  const stackedHeight = 300;
   const stackMarginLeft = 32;
   const stackMarginRight = 32;
-  const stackMarginTop = 200;
-  const xAxisY = 140;
-  const dotSpacing = 2;
-  const maxDotsPerColumn = Math.floor(
-    stackedHeight / (dotRadius * 2 + dotSpacing),
-  );
+  const stackMarginTop = 120;
+  const xAxisY = 80;
+  const detailDotRadius = dotRadius * 0.6; // Smaller dots in detail view to fit more
+  const dotSpacing = 2; // Reduced vertical spacing between dots in same year column
   const timelineLaneY = laneY[category];
 
   const stackedDots = useMemo(() => {
@@ -480,6 +481,12 @@ function StackedDotChart({
       yearGroups.get(1964),
     );
 
+    // Find the maximum number of events in any single year to calculate height
+    let maxEventsInYear = 0;
+    yearGroups.forEach((events) => {
+      maxEventsInYear = Math.max(maxEventsInYear, events.length);
+    });
+
     const dots: Array<{
       event: ArmstrongEvent;
       x: number;
@@ -497,11 +504,10 @@ function StackedDotChart({
       const xPos =
         stackMarginLeft + ((year - yearStart) / yearRange) * chartWidth;
 
+      // All dots for this year in a single column, stacked vertically
       events.forEach((event, idx) => {
-        const columnIdx = Math.floor(idx / maxDotsPerColumn);
-        const rowIdx = idx % maxDotsPerColumn;
-        const x = xPos + columnIdx * (dotRadius * 2 + dotSpacing);
-        const y = stackMarginTop + rowIdx * (dotRadius * 2 + dotSpacing);
+        const x = xPos; // All dots at same X position (single column per year)
+        const y = stackMarginTop + idx * (detailDotRadius * 2 + dotSpacing);
 
         // Calculate initial position from timeline
         const initialX =
@@ -523,28 +529,20 @@ function StackedDotChart({
 
     console.log(`[Career Timeline] ${category} total dots:`, dots.length);
     console.log(
-      `[Career Timeline] ${category} has event 189 dot:`,
-      dots.some((d) => d.event.id === 189),
+      `[Career Timeline] ${category} max events in single year:`,
+      maxEventsInYear,
     );
-    const dot189 = dots.find((d) => d.event.id === 189);
-    if (dot189) {
-      console.log(`[Career Timeline] Event 189 dot position:`, {
-        x: dot189.x,
-        y: dot189.y,
-        year: dot189.event.year,
-      });
-      console.log(`[Career Timeline] SVG dimensions:`, {
-        width: svgWidth,
-        height: stackedHeight + stackMarginTop + 60,
-      });
-      console.log(`[Career Timeline] Visible Y range:`, {
-        min: stackMarginTop,
-        max: stackMarginTop + stackedHeight,
-      });
-    }
 
-    return dots;
-  }, [categoryEvents, svgWidth, timelineLaneY]);
+    return { dots, maxEventsInYear };
+  }, [categoryEvents, svgWidth, timelineLaneY, detailDotRadius, dotSpacing]);
+
+  // Calculate dynamic height based on tallest column
+  const dynamicHeight = Math.max(
+    300,
+    stackMarginTop +
+      stackedDots.maxEventsInYear * (detailDotRadius * 2 + dotSpacing) +
+      300, // Increased bottom padding significantly to prevent cutoff
+  );
 
   const [hoveredDot, setHoveredDot] = useState<string | null>(null);
   const [selectedDot, setSelectedDot] = useState<string | null>(null);
@@ -591,7 +589,7 @@ function StackedDotChart({
       </button>
       <svg
         width={svgWidth}
-        height={stackedHeight + stackMarginTop + 60}
+        height={dynamicHeight}
         style={{ display: "block", background: "transparent" }}
       >
         {/* X-axis line */}
@@ -649,10 +647,10 @@ function StackedDotChart({
         </text>
 
         {/* Dots */}
-        {stackedDots.map((dot) => {
+        {stackedDots.dots.map((dot) => {
           const isHovered = hoveredDot === dot.key;
           const isSelected = selectedDot === dot.key;
-          const radius = dotRadius * (isHovered || isSelected ? 1.4 : 1);
+          const radius = detailDotRadius * (isHovered || isSelected ? 1.4 : 1);
 
           const displayX = isAnimating ? dot.initialX : dot.x;
           const displayY = isAnimating ? dot.initialY : dot.y;
@@ -695,6 +693,7 @@ function StackedDotChart({
             left: Math.min(tooltip.x + 10, svgWidth - 260),
             top: Math.max(tooltip.y - 60, 10),
             background: "rgba(0, 0, 0, 0.92)",
+            border: "1px solid rgba(255, 255, 255, 0.15)",
             color: "#ffffff",
             padding: "12px 14px",
             borderRadius: "6px",
@@ -776,53 +775,42 @@ function TimelineSVG({
     return lookup;
   }, []);
 
-  const clusters = useMemo<DotCluster[]>(() => {
-    const grouped = new Map<string, ArmstrongEvent[]>();
+  // Simplified: only one dot per year/category combination
+  const dots = useMemo<DotData[]>(() => {
+    const grouped = new Map<string, ArmstrongEvent>();
+
+    // Keep only the first event per year/category combination
     timelineData.events.forEach((event) => {
       event.categories.forEach((category) => {
         if (!active.has(category)) return;
         const key = `${event.year}-${category}`;
-        if (!grouped.has(key)) grouped.set(key, []);
-        grouped.get(key)!.push(event);
+        if (!grouped.has(key)) {
+          grouped.set(key, event);
+        }
       });
     });
 
-    const output: DotCluster[] = [];
-    grouped.forEach((eventsAtPoint, groupKey) => {
+    const output: DotData[] = [];
+    grouped.forEach((event, groupKey) => {
       const separatorIndex = groupKey.indexOf("-");
       const year = parseInt(groupKey.slice(0, separatorIndex), 10);
       const category = groupKey.slice(separatorIndex + 1) as Category;
-      const baseY = laneY[category];
+      const cy = laneY[category];
       const cx = xOf(year, svgWidth);
-      const count = eventsAtPoint.length;
-      const step = count === 1 ? 0 : expandedClusterDotSpacing;
-      const dots = eventsAtPoint.map((event, index) => {
-        const yOffset = count === 1 ? 0 : (index - (count - 1) / 2) * step;
-        return {
-          key: `${event.id}-${category}`,
-          event,
-          cx,
-          cy: baseY + yOffset,
-          cat: category,
-          clusterKey: groupKey,
-          clusterCount: count,
-        };
-      });
+
       output.push({
-        key: groupKey,
+        key: groupKey, // Use year-category as unique key instead of event.id-category
+        event,
         cx,
-        cy: baseY,
+        cy,
         cat: category,
-        dots,
+        clusterKey: groupKey,
+        clusterCount: 1,
       });
     });
+
     return output.sort((a, b) => a.cx - b.cx || a.cy - b.cy);
   }, [active, svgWidth]);
-
-  const dots = useMemo(
-    () => clusters.flatMap((cluster) => cluster.dots),
-    [clusters],
-  );
 
   const featuredDots = useMemo(() => {
     const seen = new Set<number>();
@@ -835,58 +823,74 @@ function TimelineSVG({
     });
   }, [dots]);
 
-  const clusterCenterYByKey = useMemo(() => {
-    const lookup = new Map<string, number>();
-    clusters.forEach((cluster) => {
-      lookup.set(cluster.key, cluster.cy);
-    });
-    return lookup;
-  }, [clusters]);
-
-  // Calculate animation index for each dot within its category (left to right)
+  // Calculate animation index - all dots from same year animate together
   const dotAnimationIndices = useMemo(() => {
     const indices = new Map<string, number>();
 
-    // Collect all dots and sort by x position (year)
-    const allDots: DotData[] = [];
-    clusters.forEach((cluster) => {
-      cluster.dots.forEach((dot) => {
-        allDots.push(dot);
-      });
-    });
-
-    // Sort all dots by x position (left to right across all categories)
-    allDots.sort((a, b) => {
-      if (Math.abs(a.cx - b.cx) < 5) {
-        // If dots are at nearly the same x position, sort by category order
-        return categoryOrder.indexOf(a.cat) - categoryOrder.indexOf(b.cat);
+    // Group dots by actual year value (ensure it's a number)
+    const yearGroups = new Map<number, DotData[]>();
+    dots.forEach((dot) => {
+      const year = Number(dot.event.year); // Explicitly convert to number
+      if (!yearGroups.has(year)) {
+        yearGroups.set(year, []);
       }
-      return a.cx - b.cx;
+      yearGroups.get(year)!.push(dot);
     });
 
-    // Assign sequential indices based on x position
-    allDots.forEach((dot, index) => {
-      indices.set(dot.key, index);
+    // Sort years chronologically with explicit number comparison
+    const sortedYears = Array.from(yearGroups.keys()).sort((a, b) => a - b);
+
+    // Debug: log the animation order
+    console.log("[Career Timeline] Animation year order:", sortedYears);
+    const year1942Dots = dots.filter((d) => d.event.year === 1942);
+    console.log(
+      "[Career Timeline] 1942 dots found:",
+      year1942Dots.length,
+      year1942Dots,
+    );
+
+    // Assign the same animation index to all dots from the same year
+    sortedYears.forEach((year, index) => {
+      const dotsInYear = yearGroups.get(year)!;
+      dotsInYear.forEach((dot) => {
+        indices.set(dot.key, index);
+      });
+      if (year === 1942) {
+        console.log(
+          "[Career Timeline] 1942 assigned animation index:",
+          index,
+          "out of",
+          sortedYears.length,
+        );
+      }
     });
 
     return indices;
-  }, [clusters]);
+  }, [dots]);
 
   // Track initial load animation for all dots
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [animationComplete, setAnimationComplete] = useState(false);
 
   useEffect(() => {
-    // Trigger animation when section becomes visible
+    // Trigger animation when section becomes visible - only run once
     const element = svgRef.current;
-    if (!element) return;
+    if (!element || hasAnimated) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            // Calculate total animation time and mark complete after
+            const maxDelay = dotAnimationIndices.size * 0.04; // 40ms per year position for slower wave
+            const totalDuration = maxDelay + 0.3; // 0.2s animation + 0.1s buffer
             setTimeout(() => {
-              setHasAnimated(true);
-            }, 100);
+              setAnimationComplete(true);
+            }, totalDuration * 1000);
+
+            // Disconnect observer immediately after triggering animation
+            observer.disconnect();
           }
         });
       },
@@ -898,7 +902,7 @@ function TimelineSVG({
     return () => {
       observer.disconnect();
     };
-  }, [hasAnimated]);
+  }, []); // Empty dependency array - only run once on mount
 
   const selectedMatchKeys = useMemo(() => {
     const keys = new Set<string>();
@@ -957,12 +961,10 @@ function TimelineSVG({
       return dots.find((dot) => dot.key === pinTip.key)?.cx ?? null;
     }
     if (hoverClusterKey) {
-      return (
-        clusters.find((cluster) => cluster.key === hoverClusterKey)?.cx ?? null
-      );
+      return dots.find((dot) => dot.clusterKey === hoverClusterKey)?.cx ?? null;
     }
     return null;
-  }, [clusters, dots, hoverClusterKey, hoverTip, pinTip]);
+  }, [dots, hoverClusterKey, hoverTip, pinTip]);
 
   const tooltipPosition = useMemo(() => {
     if (!displayTip || !displayDot) return null;
@@ -1019,44 +1021,27 @@ function TimelineSVG({
       setHoverKey(dot.key);
       setHoverClusterKey(dot.clusterKey);
       setPinTip((prev) => (prev?.key === dot.key ? prev : null));
+
+      // Highlight only this category by dimming all others
+      const hoveredCategory = dot.cat;
+      const otherCategories = allCategories.filter(
+        (cat) => cat !== hoveredCategory,
+      );
+      setDimmedCategories(new Set(otherCategories));
     },
     [selected],
   );
 
-  const onClusterEnter = useCallback(
-    (clusterKey: string) => {
-      // Cancel any pending dismissal
-      if (tooltipDismissTimeout.current !== null) {
-        window.clearTimeout(tooltipDismissTimeout.current);
-        tooltipDismissTimeout.current = null;
-      }
-
-      if (!selected) {
-        setSelectionFocusEnabled(false);
-      }
-      setHoverClusterKey(clusterKey);
-      setHoverTip(null);
-      setHoverKey(null);
-    },
-    [selected],
-  );
-
-  const onClusterLeave = useCallback((cluster: DotCluster) => {
+  const onLeave = useCallback(() => {
     // Use a short delay before clearing to allow mouse to move to tooltip
     if (tooltipDismissTimeout.current !== null) {
       window.clearTimeout(tooltipDismissTimeout.current);
     }
 
     tooltipDismissTimeout.current = window.setTimeout(() => {
-      setHoverClusterKey((prev) => (prev === cluster.key ? null : prev));
-      setHoverTip((prev) =>
-        prev && cluster.dots.some((dot) => dot.key === prev.key) ? null : prev,
-      );
-      setHoverKey((prev) =>
-        prev && cluster.dots.some((dot) => dot.key === prev) ? null : prev,
-      );
-
-      // Clear dimmed categories on cluster leave (hover-only mode)
+      setHoverClusterKey(null);
+      setHoverTip(null);
+      setHoverKey(null);
       setDimmedCategories(new Set());
       tooltipDismissTimeout.current = null;
     }, 150);
@@ -1158,7 +1143,7 @@ function TimelineSVG({
         {featuredDots.map((dot) => {
           if (!active.has(dot.cat)) return null;
           const featured = featuredLabels[dot.event.id];
-          const anchorY = clusterCenterYByKey.get(dot.clusterKey) ?? dot.cy;
+          const anchorY = dot.cy;
           const offset = dotRadius + 1;
           const y1 =
             featured.dir === "above" ? anchorY - offset : anchorY + offset;
@@ -1187,7 +1172,7 @@ function TimelineSVG({
         {featuredDots.map((dot) => {
           if (!active.has(dot.cat)) return null;
           const featured = featuredLabels[dot.event.id];
-          const anchorY = clusterCenterYByKey.get(dot.clusterKey) ?? dot.cy;
+          const anchorY = dot.cy;
           const offset = dotRadius + 1;
           const connectorLength =
             featured.connectorLength ?? featuredLabelConnectorLength;
@@ -1246,261 +1231,82 @@ function TimelineSVG({
       </svg>
 
       <div className="career-timeline-dot-layer">
-        {clusters.map((cluster) => {
-          const spread =
-            cluster.dots.length > 1
-              ? cluster.dots[cluster.dots.length - 1].cy - cluster.dots[0].cy
-              : 0;
-          const maxRadius = dotRadius + activeDotRadiusOffset;
-          const clusterWidth = Math.max(maxRadius * 2 + 20, 44);
-
-          const clusterIsGreyedForDimmed = dimmedCategories.has(cluster.cat);
-          // Only expand on hover (hover-only mode)
-          const isExpanded =
-            !clusterIsGreyedForDimmed && hoverClusterKey === cluster.key;
-
-          // Use consistent height for collapsed clusters, centered on the lane
-          const baseClusterHeight = Math.max(maxRadius * 2 + 20, 44);
-          const expandedClusterHeight = Math.max(
-            spread + maxRadius * 2 + 20,
-            44,
-          );
-          const clusterHeight = isExpanded
-            ? expandedClusterHeight
-            : baseClusterHeight;
-
-          const clusterLeft = cluster.cx - clusterWidth / 2;
-          // Always position cluster top based on the lane Y, accounting for half the base height
-          // This ensures the center is always at the lane Y position
-          const clusterTop = cluster.cy - baseClusterHeight / 2;
-
-          const hoverFocusActive = hoverClusterKey !== null;
-          const isHoveredCluster = hoverClusterKey === cluster.key;
-          const representativeCanHover = !clusterIsGreyedForDimmed;
-          const representativeLegendHovered =
+        {dots.map((dot) => {
+          const isGreyedForDimmed = dimmedCategories.has(dot.cat);
+          const canInteract = !isGreyedForDimmed;
+          const isHovered = canInteract && hoverKey === dot.key;
+          const featured =
+            featuredLabels[dot.event.id] &&
+            featuredLabels[dot.event.id].cat === dot.cat;
+          const color = categoryColors[dot.cat];
+          const isLegendHovered =
+            canInteract &&
             hoveredLegendCategory !== null &&
-            cluster.cat === hoveredLegendCategory &&
-            !clusterIsGreyedForDimmed;
-          // Don't apply hover focus dimming when legend is hovered
-          const representativeIsDimmed =
-            (!representativeLegendHovered &&
-              hoverFocusActive &&
-              !isHoveredCluster) ||
-            clusterIsGreyedForDimmed;
-          const representativeRadius = dotRadius;
-          const representativeDiameter = representativeRadius * 2;
-          const representativeColor = categoryColors[cluster.cat];
+            dot.cat === hoveredLegendCategory;
 
-          // Calculate animation properties for the representative dot
-          const representativeDot = cluster.dots[0];
-          const representativeAnimationIndex =
-            dotAnimationIndices.get(representativeDot.key) ?? 0;
-          const representativeAnimationDelay =
-            representativeAnimationIndex * 0.004;
-          const representativeShouldAnimate = hasAnimated;
+          const hoverFocusActive = hoverKey !== null;
+          const isGreyedForHover =
+            !isLegendHovered && hoverFocusActive && !isHovered;
+          const isDimmed = isGreyedForHover || isGreyedForDimmed;
 
-          // When expanded, move representative dot to its actual position in the spread
-          const representativeCenterY = isExpanded
-            ? baseClusterHeight / 2 + (representativeDot.cy - cluster.cy)
-            : baseClusterHeight / 2;
+          const radius = isLegendHovered
+            ? dotRadius
+            : isHovered
+              ? dotRadius + activeDotRadiusOffset
+              : featured
+                ? dotRadius + featuredDotRadiusOffset
+                : dotRadius;
+          const diameter = radius * 2;
+          const defaultBorderWidth = 0.8;
+          const activeBorderWidth = 1.1;
+
+          // Calculate animation properties for initial load
+          const animationIndex = dotAnimationIndices.get(dot.key) ?? 0;
+          const animationDelay = animationIndex * 0.04; // 40ms between each year position for slower wave
+          const shouldAnimate = hasAnimated && !animationComplete;
 
           return (
-            <div
-              key={cluster.key}
-              className={`career-timeline-dot-cluster ${isExpanded ? "is-expanded" : ""}`}
+            <button
+              key={dot.key}
+              type="button"
+              className="career-timeline-event-dot"
+              aria-label={dot.event.event}
               style={{
-                left: clusterLeft,
-                top: clusterTop,
-                width: clusterWidth,
-                height: clusterHeight,
-                zIndex: isExpanded ? 3 : 1,
-              }}
-              onMouseEnter={() => onClusterEnter(cluster.key)}
-              onMouseLeave={() => onClusterLeave(cluster)}
-            >
-              <button
-                type="button"
-                className="career-timeline-event-dot"
-                aria-label={`${timelineData.categoryLabels[cluster.cat]} cluster for ${cluster.key}`}
-                style={{
-                  left: clusterWidth / 2 - representativeRadius,
-                  top: representativeCenterY - representativeRadius,
-                  width: representativeDiameter,
-                  height: representativeDiameter,
-                  borderColor: representativeIsDimmed ? "#8f8a7d" : "#4B473F",
-                  borderWidth: 0.8,
-                  backgroundColor: representativeIsDimmed
-                    ? "#bcb5a7"
-                    : representativeColor,
-                  transform:
-                    representativeCanHover &&
-                    (representativeLegendHovered || isHoveredCluster)
-                      ? "scale(1.3)"
-                      : "scale(1)",
-                  boxShadow: representativeLegendHovered
-                    ? `0 0 3px 1px ${representativeColor}35, 0 0 1px 0px ${representativeColor}50`
-                    : representativeCanHover && isHoveredCluster
-                      ? `0 0 4px 1px ${representativeColor}40, 0 0 2px 0px ${representativeColor}60`
-                      : "none",
-                  opacity: representativeIsDimmed ? 0.32 : 1,
-                  pointerEvents: "auto",
-                  zIndex: isExpanded ? 2 : 1,
-                  transition: "all 0.2s ease-out",
-                  ...(representativeShouldAnimate && {
-                    animation: `career-timeline-dot-pop-in 0.2s ease-out ${representativeAnimationDelay}s both`,
-                  }),
-                }}
-                onMouseEnter={() => {
-                  // Cancel any pending dismissal
-                  if (tooltipDismissTimeout.current !== null) {
-                    window.clearTimeout(tooltipDismissTimeout.current);
-                    tooltipDismissTimeout.current = null;
-                  }
-
-                  setHoverTip(null);
-                  setHoverKey(null);
-                  setHoverClusterKey(cluster.key);
-
-                  // Highlight only this category by dimming all others
-                  const hoveredCategory = cluster.cat;
-                  const otherCategories = allCategories.filter(
-                    (cat) => cat !== hoveredCategory,
-                  );
-                  setDimmedCategories(new Set(otherCategories));
-                }}
-                onMouseLeave={() => {
-                  onClusterLeave(cluster);
-                }}
-              />
-
-              {cluster.dots.map((dot, dotIndex) => {
-                const isGreyedForDimmed = dimmedCategories.has(dot.cat);
-                // Only allow interactivity if not dimmed due to category filtering
-                const canInteract = !isGreyedForDimmed;
-                const isHovered = canInteract && hoverKey === dot.key;
-                const featured =
-                  featuredLabels[dot.event.id] &&
-                  featuredLabels[dot.event.id].cat === dot.cat;
-                const color = categoryColors[dot.cat];
-                const isLegendHovered =
-                  canInteract &&
-                  hoveredLegendCategory !== null &&
-                  dot.cat === hoveredLegendCategory;
-                // Don't apply hover focus dimming when legend is hovered
-                const isGreyedForHover =
-                  !isLegendHovered && hoverFocusActive && !isHoveredCluster;
-                const isDimmed = isGreyedForHover || isGreyedForDimmed;
-
-                // For legend hover, use base radius for uniform highlighting
-                const radius = isLegendHovered
-                  ? dotRadius
+                position: "absolute",
+                left: dot.cx - radius,
+                top: dot.cy - radius,
+                width: diameter,
+                height: diameter,
+                borderColor: isDimmed ? "#8f8a7d" : "#4B473F",
+                borderWidth: isLegendHovered
+                  ? defaultBorderWidth
                   : isHovered
-                    ? dotRadius + activeDotRadiusOffset
-                    : featured
-                      ? dotRadius + featuredDotRadiusOffset
-                      : dotRadius;
-                const diameter = radius * 2;
-                // Use baseClusterHeight for consistent positioning - all dots expand from the lane center
-                const centerY = isExpanded
-                  ? baseClusterHeight / 2 + (dot.cy - cluster.cy)
-                  : baseClusterHeight / 2;
-                const defaultBorderWidth = 0.8;
-                const activeBorderWidth = 1.1;
-
-                // Calculate animation properties for initial load
-                const animationIndex = dotAnimationIndices.get(dot.key) ?? 0;
-                const animationDelay = animationIndex * 0.004; // 4ms between each dot
-                const shouldAnimate = hasAnimated;
-
-                return (
-                  <button
-                    key={dot.key}
-                    type="button"
-                    className="career-timeline-event-dot"
-                    aria-label={dot.event.event}
-                    style={{
-                      left: clusterWidth / 2 - radius,
-                      top: centerY - radius,
-                      width: diameter,
-                      height: diameter,
-                      borderColor: isDimmed ? "#8f8a7d" : "#4B473F",
-                      borderWidth: isLegendHovered
-                        ? defaultBorderWidth
-                        : isHovered
-                          ? activeBorderWidth
-                          : defaultBorderWidth,
-                      backgroundColor: isDimmed ? "#bcb5a7" : color,
-                      boxShadow: isLegendHovered
-                        ? `0 0 3px 1px ${color}35, 0 0 1px 0px ${color}50`
-                        : isHovered
-                          ? `0 0 4px 1px ${color}40, 0 0 2px 0px ${color}60`
-                          : "none",
-                      transform: isHovered
-                        ? "scale(1.35)"
-                        : isLegendHovered
-                          ? "scale(1.3)"
-                          : "scale(1)",
-                      opacity: isExpanded
-                        ? isDimmed
-                          ? hoverFocusActive
-                            ? 0.32
-                            : 0.4
-                          : 1
-                        : 0,
-                      pointerEvents: isExpanded ? "auto" : "none",
-                      zIndex: isExpanded
-                        ? 1 +
-                          cluster.dots.length -
-                          Math.abs(dot.cy - cluster.cy)
-                        : 1,
-                      ...(shouldAnimate && {
-                        animation: `career-timeline-dot-pop-in 0.2s ease-out ${animationDelay}s both`,
-                      }),
-                    }}
-                    onMouseEnter={(event) => {
-                      // Cancel any pending dismissal
-                      if (tooltipDismissTimeout.current !== null) {
-                        window.clearTimeout(tooltipDismissTimeout.current);
-                        tooltipDismissTimeout.current = null;
-                      }
-
-                      if (!isExpanded && dot.clusterCount > 1) {
-                        setHoverTip(null);
-                        setHoverKey(null);
-                        setHoverClusterKey(dot.clusterKey);
-
-                        // Highlight only this category by dimming all others
-                        const hoveredCategory = dot.cat;
-                        const otherCategories = allCategories.filter(
-                          (cat) => cat !== hoveredCategory,
-                        );
-                        setDimmedCategories(new Set(otherCategories));
-                        return;
-                      }
-                      onEnter(event, dot);
-
-                      // Highlight only this category by dimming all others
-                      const hoveredCategory = dot.cat;
-                      const otherCategories = allCategories.filter(
-                        (cat) => cat !== hoveredCategory,
-                      );
-                      setDimmedCategories(new Set(otherCategories));
-                    }}
-                    onMouseLeave={() => {
-                      // Use a short delay before clearing to allow mouse to move to tooltip
-                      if (tooltipDismissTimeout.current !== null) {
-                        window.clearTimeout(tooltipDismissTimeout.current);
-                      }
-
-                      tooltipDismissTimeout.current = window.setTimeout(() => {
-                        setDimmedCategories(new Set());
-                        tooltipDismissTimeout.current = null;
-                      }, 150);
-                    }}
-                  />
-                );
-              })}
-            </div>
+                    ? activeBorderWidth
+                    : defaultBorderWidth,
+                backgroundColor: isDimmed ? "#bcb5a7" : color,
+                boxShadow: isLegendHovered
+                  ? `0 0 3px 1px ${color}35, 0 0 1px 0px ${color}50`
+                  : isHovered
+                    ? `0 0 4px 1px ${color}40, 0 0 2px 0px ${color}60`
+                    : "none",
+                transform: isHovered
+                  ? "scale(1.35)"
+                  : isLegendHovered
+                    ? "scale(1.3)"
+                    : shouldAnimate
+                      ? "translateY(-15px) scale(1)"
+                      : "scale(1)",
+                opacity: isDimmed ? 0.32 : 1,
+                pointerEvents: "auto",
+                transition: "all 0.2s ease-out",
+                ...(shouldAnimate && {
+                  animation: `career-timeline-dot-pop-in 0.2s ease-out ${animationDelay}s both`,
+                }),
+              }}
+              onMouseEnter={(event) => onEnter(event, dot)}
+              onMouseLeave={onLeave}
+              onClick={() => toggleDotSelection(dot)}
+            />
           );
         })}
       </div>
@@ -1801,17 +1607,32 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
       style={{
         width: isMobile ? "100%" : "100vw",
         minWidth: isMobile ? 0 : "100vw",
-        height: isMobile ? "auto" : "100dvh",
+        height: isMobile ? "auto" : detailViewCategory ? "auto" : "100dvh",
+        minHeight: undefined, // Remove minHeight constraint to allow full expansion
         flexShrink: isMobile ? undefined : 0,
         scrollSnapAlign: isMobile ? undefined : "start",
         position: "relative",
-        overflow: "hidden",
+        overflow: detailViewCategory ? "visible" : "hidden",
         backgroundColor: "var(--career-surface-bg)",
         ...style,
       }}
     >
-      <div className="career-timeline-layout">
-        <div className="career-timeline-surface">
+      <div
+        className="career-timeline-layout"
+        style={{
+          overflow: detailViewCategory ? "visible" : undefined,
+          height: detailViewCategory ? "auto" : undefined,
+        }}
+      >
+        <div
+          className="career-timeline-surface"
+          style={{
+            overflow: detailViewCategory ? "visible" : undefined,
+            height: detailViewCategory ? "auto" : undefined,
+            minHeight: detailViewCategory ? "100%" : undefined,
+            paddingBottom: detailViewCategory ? "100px" : undefined,
+          }}
+        >
           <div className="career-timeline-header">
             <h2 className="career-timeline-title mcg-page-title mcg-page-title--flow">
               Career Highlights
@@ -1822,8 +1643,21 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
             </p>
           </div>
 
-          <div className="career-timeline-chart-card">
-            <div className="career-timeline-chart-surface">
+          <div
+            className="career-timeline-chart-card"
+            style={{
+              overflow: detailViewCategory ? "visible" : undefined,
+              height: detailViewCategory ? "auto" : undefined,
+              paddingBottom: detailViewCategory ? "100px" : undefined,
+            }}
+          >
+            <div
+              className="career-timeline-chart-surface"
+              style={{
+                overflow: detailViewCategory ? "visible" : undefined,
+                paddingBottom: detailViewCategory ? "100px" : undefined,
+              }}
+            >
               {!detailViewCategory && (
                 <div
                   className="career-timeline-legend-panel"
