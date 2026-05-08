@@ -567,6 +567,89 @@ export const SectionCountries = () => {
         .countries-section .mcg-page-title {
           color: #ffffff !important;
         }
+
+        /* ── 4K Proportional Scaling ── */
+        @media (min-width: 2560px) {
+          .countries-section {
+            padding: 56px 98px 105px !important;
+            grid-template-columns: 700px minmax(0, 1fr) !important;
+            gap: 56px !important;
+          }
+
+          .countries-section .mcg-page-title {
+            white-space: normal !important;
+          }
+
+          .countries-header-wrap {
+            margin-top: 90px !important;
+          }
+
+          .countries-main {
+            margin-top: 55px;
+          }
+
+          .countries-filter-nav {
+            gap: 15px !important;
+            margin-top: 115px !important;
+          }
+
+          .countries-region-nav {
+            gap: 15px !important;
+            margin-top: 42px !important;
+          }
+
+          .countries-filter-label {
+            font-size: 25px !important;
+            margin-bottom: 20px !important;
+          }
+
+          .countries-filter-btn {
+            padding: 15px 25px !important;
+            border-radius: 20px !important;
+            font-size: 27.5px !important;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .countries-section {
+            padding: 56px 112px 120px !important;
+            grid-template-columns: 820px minmax(0, 1fr) !important;
+            gap: 64px !important;
+          }
+
+          .countries-section .mcg-page-title {
+            white-space: normal !important;
+          }
+
+          .countries-header-wrap {
+            margin-top: 110px !important;
+          }
+
+          .countries-main {
+            margin-top: 65px;
+          }
+
+          .countries-filter-nav {
+            gap: 18px !important;
+            margin-top: 132px !important;
+          }
+
+          .countries-region-nav {
+            gap: 18px !important;
+            margin-top: 48px !important;
+          }
+
+          .countries-filter-label {
+            font-size: 30px !important;
+            margin-bottom: 24px !important;
+          }
+
+          .countries-filter-btn {
+            padding: 18px 30px !important;
+            border-radius: 24px !important;
+            font-size: 33px !important;
+          }
+        }
       `}</style>
       <div
         ref={sectionRef}
@@ -586,6 +669,7 @@ export const SectionCountries = () => {
       >
         {/* ── Left sidebar ── */}
         <aside
+          className="countries-sidebar"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -595,7 +679,10 @@ export const SectionCountries = () => {
             top: "20px",
           }}
         >
-          <div style={{ marginBottom: "0", marginTop: "20px" }}>
+          <div
+            className="countries-header-wrap"
+            style={{ marginBottom: "0", marginTop: "20px" }}
+          >
             <h1
               className="mcg-page-title"
               style={{
@@ -617,6 +704,7 @@ export const SectionCountries = () => {
           {/* Decade filter */}
           <nav
             aria-label="Filter by decade"
+            className="countries-filter-nav"
             style={{
               display: "flex",
               flexDirection: "row",
@@ -626,6 +714,7 @@ export const SectionCountries = () => {
             }}
           >
             <div
+              className="countries-filter-label"
               style={{
                 fontSize: "10px",
                 fontWeight: 600,
@@ -645,6 +734,7 @@ export const SectionCountries = () => {
                   key={decade.label}
                   onClick={() => handleDecadeClick(idx)}
                   aria-pressed={isActive}
+                  className="countries-filter-btn"
                   style={{
                     display: "inline-flex",
                     textAlign: "left",
@@ -684,6 +774,7 @@ export const SectionCountries = () => {
           {/* Region filter */}
           <nav
             aria-label="Filter by region"
+            className="countries-region-nav"
             style={{
               display: "flex",
               flexDirection: "row",
@@ -692,6 +783,7 @@ export const SectionCountries = () => {
             }}
           >
             <div
+              className="countries-filter-label"
               style={{
                 fontSize: "10px",
                 fontWeight: 600,
@@ -711,6 +803,7 @@ export const SectionCountries = () => {
                   key={region.label}
                   onClick={() => handleRegionClick(region.label)}
                   aria-pressed={isActive}
+                  className="countries-filter-btn"
                   style={{
                     display: "inline-flex",
                     textAlign: "left",
@@ -757,6 +850,7 @@ export const SectionCountries = () => {
 
         {/* ── Main visualization ── */}
         <main
+          className="countries-main"
           style={{
             minWidth: 0,
             display: "flex",
@@ -767,6 +861,7 @@ export const SectionCountries = () => {
         >
           {/* SVG */}
           <div
+            className="countries-svg-wrap"
             style={{
               flex: 1,
               width: "100%",

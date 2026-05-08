@@ -90,6 +90,77 @@ export const SectionRealAmbassadors: React.FC<{
           max-width: 1180px;
           margin: 0 auto;
         }
+
+        /* ── 4K Proportional Scaling ── */
+        @media (min-width: 2560px) {
+          .real-ambassadors-section {
+            padding: 0 98px 105px;
+          }
+
+          .real-ambassadors-layout {
+            gap: 56px 70px;
+            margin-top: 42px;
+          }
+
+          .real-ambassadors-copy {
+            font-size: 36px;
+            line-height: 54px;
+          }
+
+          .real-ambassadors-copy h3 {
+            font-size: 36px;
+            margin-bottom: 28px;
+          }
+
+          .real-ambassadors-timeline {
+            margin-top: 21px;
+          }
+
+          .real-ambassadors-timeline-frame {
+            width: calc(100% - 168px);
+            max-width: 2065px;
+            height: 280px !important; /* 160 * 1.75 for desktop */
+          }
+
+          .real-ambassadors-timeline-frame.is-mobile {
+            height: 350px !important; /* 200 * 1.75 for mobile */
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .real-ambassadors-section {
+            padding: 0 112px 120px;
+          }
+
+          .real-ambassadors-layout {
+            gap: 64px 80px;
+            margin-top: 48px;
+          }
+
+          .real-ambassadors-copy {
+            font-size: 42px;
+            line-height: 63px;
+          }
+
+          .real-ambassadors-copy h3 {
+            font-size: 42px;
+            margin-bottom: 32px;
+          }
+
+          .real-ambassadors-timeline {
+            margin-top: 24px;
+          }
+
+          .real-ambassadors-timeline-frame {
+            width: calc(100% - 192px);
+            max-width: 2360px;
+            height: 320px !important; /* 160 * 2.0 for desktop */
+          }
+
+          .real-ambassadors-timeline-frame.is-mobile {
+            height: 400px !important; /* 200 * 2.0 for mobile */
+          }
+        }
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">
@@ -99,9 +170,9 @@ export const SectionRealAmbassadors: React.FC<{
         className="real-ambassadors-description"
         style={{ color: "#000000", marginTop: "16px", maxWidth: "600px" }}
       >
-        "The Real Ambassadors" was a jazz musical that was a satirical take on the
-        Jazz Diplomacy program, using humor to critique the contradictions of
-        American cultural diplomacy during the Cold War.
+        "The Real Ambassadors" was a jazz musical that was a satirical take on
+        the Jazz Diplomacy program, using humor to critique the contradictions
+        of American cultural diplomacy during the Cold War.
       </p>
 
       <div className="mcg-lyrics-wrap real-ambassadors-layout">
@@ -123,7 +194,7 @@ export const SectionRealAmbassadors: React.FC<{
 
       <div className="real-ambassadors-timeline">
         <div
-          className="real-ambassadors-timeline-frame"
+          className={`real-ambassadors-timeline-frame${isMobile ? " is-mobile" : ""}`}
           style={{ height: isMobile ? mobileTimelineHeight : timelineHeight }}
         >
           <TimelineBar

@@ -360,6 +360,15 @@ export function SectionWonderfulWorld({
   const isMobile = useIsMobile();
   const [stageScale, setStageScale] = useState(1);
 
+  // Increase canvas width at 4K to spread bubbles
+  const effectiveCanvasWidth = useMemo(() => {
+    if (typeof window === "undefined") return canvasWidth;
+    const width = window.innerWidth;
+    if (width >= 3440) return 1500;
+    if (width >= 2560) return 1250;
+    return canvasWidth;
+  }, [canvasWidth]);
+
   const setZoom = (next: number) =>
     setZoomState(clamp(next, ZOOM_MIN, ZOOM_MAX));
 
@@ -381,15 +390,29 @@ export function SectionWonderfulWorld({
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const stageRect = stageOuterRef.current?.getBoundingClientRect();
+    // Scale tooltip max width for 4K displays to match CSS
+    const maxTooltipWidth =
+      window.innerWidth >= 3440
+        ? 840
+        : window.innerWidth >= 2560
+          ? 735
+          : TOOLTIP_MAX_WIDTH;
     const tooltipWidth = Math.min(
-      TOOLTIP_MAX_WIDTH,
+      maxTooltipWidth,
       window.innerWidth - TOOLTIP_VIEWPORT_MARGIN * 2,
     );
+    // Scale edge threshold for 4K displays
+    const edgeThreshold =
+      window.innerWidth >= 3440
+        ? 500
+        : window.innerWidth >= 2560
+          ? 400
+          : TOOLTIP_EDGE_THRESHOLD;
     const align = isMobile
       ? "center"
-      : rect.left <= TOOLTIP_EDGE_THRESHOLD
+      : rect.left <= edgeThreshold
         ? "right"
-        : window.innerWidth - rect.right <= TOOLTIP_EDGE_THRESHOLD
+        : window.innerWidth - rect.right <= edgeThreshold
           ? "left"
           : "center";
     const preferredLeft = isMobile
@@ -570,34 +593,34 @@ export function SectionWonderfulWorld({
 
   const vizStyle = useMemo<CSSProperties>(
     () => ({
-      width: `${canvasWidth}px`,
+      width: `${effectiveCanvasWidth}px`,
       height: `${canvasHeight}px`,
       transform: `translate(-50%, -50%) scale(${zoom})`,
     }),
-    [canvasHeight, canvasWidth, zoom],
+    [canvasHeight, effectiveCanvasWidth, zoom],
   );
 
   const stageFrameStyle = useMemo<CSSProperties>(
     () => ({
-      width: `${canvasWidth * stageScale}px`,
+      width: `${effectiveCanvasWidth * stageScale}px`,
       height: `${canvasHeight * stageScale}px`,
     }),
-    [canvasHeight, canvasWidth, stageScale],
+    [canvasHeight, effectiveCanvasWidth, stageScale],
   );
 
   const stageScaleStyle = useMemo<CSSProperties>(
     () => ({
-      width: `${canvasWidth}px`,
+      width: `${effectiveCanvasWidth}px`,
       height: `${canvasHeight}px`,
       transform: `scale(${stageScale})`,
       transformOrigin: "top left",
     }),
-    [canvasHeight, canvasWidth, stageScale],
+    [canvasHeight, effectiveCanvasWidth, stageScale],
   );
 
   const silhouetteStyle = useMemo<CSSProperties>(() => {
     const { drawWidth, drawHeight } = getSilhouetteBounds(
-      canvasWidth,
+      effectiveCanvasWidth,
       canvasHeight,
     );
 
@@ -605,11 +628,11 @@ export function SectionWonderfulWorld({
       width: `${drawWidth}px`,
       height: `${drawHeight}px`,
     };
-  }, [canvasHeight, canvasWidth]);
+  }, [canvasHeight, effectiveCanvasWidth]);
 
   const centerMediaStyle = useMemo<CSSProperties>(() => {
     const { drawWidth, drawHeight } = getSilhouetteBounds(
-      canvasWidth,
+      effectiveCanvasWidth,
       canvasHeight,
     );
 
@@ -617,7 +640,7 @@ export function SectionWonderfulWorld({
       width: `${drawWidth * CENTER_MEDIA_SCALE}px`,
       height: `${drawHeight * CENTER_MEDIA_SCALE}px`,
     };
-  }, [canvasHeight, canvasWidth]);
+  }, [canvasHeight, effectiveCanvasWidth]);
 
   const centerMediaSrc = useMemo(
     () => normalizeImagePath(centerMediaUrl),
@@ -801,17 +824,17 @@ export function SectionWonderfulWorld({
 
     const px = Math.floor(x);
     const py = Math.floor(y);
-    if (px < 0 || py < 0 || px >= canvasWidth || py >= canvasHeight)
+    if (px < 0 || py < 0 || px >= effectiveCanvasWidth || py >= canvasHeight)
       return true;
 
-    const alphaIndex = (py * canvasWidth + px) * 4 + 3;
+    const alphaIndex = (py * effectiveCanvasWidth + px) * 4 + 3;
     return maskAlpha[alphaIndex] === 0;
   };
 
   const overlapsMask = (x: number, y: number, r: number) => {
     const reach = r + MASK_CLEARANCE;
     const minX = Math.max(0, Math.floor(x - reach));
-    const maxX = Math.min(canvasWidth - 1, Math.ceil(x + reach));
+    const maxX = Math.min(effectiveCanvasWidth - 1, Math.ceil(x + reach));
     const minY = Math.max(0, Math.floor(y - reach));
     const maxY = Math.min(canvasHeight - 1, Math.ceil(y + reach));
 
@@ -834,7 +857,7 @@ export function SectionWonderfulWorld({
       let ok = false;
 
       for (let attempt = 0; attempt < 100; attempt += 1) {
-        const x = Math.random() * canvasWidth;
+        const x = Math.random() * effectiveCanvasWidth;
         const y = Math.random() * canvasHeight;
         const r = R_MIN + Math.random() * (R_MAX - R_MIN);
 
@@ -867,7 +890,7 @@ export function SectionWonderfulWorld({
         const image = new Image();
         image.onload = () => {
           const maskCanvas = document.createElement("canvas");
-          maskCanvas.width = canvasWidth;
+          maskCanvas.width = effectiveCanvasWidth;
           maskCanvas.height = canvasHeight;
           const context = maskCanvas.getContext("2d", {
             willReadFrequently: true,
@@ -879,18 +902,18 @@ export function SectionWonderfulWorld({
           }
 
           const { drawWidth, drawHeight } = getSilhouetteBounds(
-            canvasWidth,
+            effectiveCanvasWidth,
             canvasHeight,
           );
-          const offsetX = (canvasWidth - drawWidth) / 2;
+          const offsetX = (effectiveCanvasWidth - drawWidth) / 2;
           const offsetY = (canvasHeight - drawHeight) / 2;
 
-          context.clearRect(0, 0, canvasWidth, canvasHeight);
+          context.clearRect(0, 0, effectiveCanvasWidth, canvasHeight);
           context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
           maskAlphaRef.current = context.getImageData(
             0,
             0,
-            canvasWidth,
+            effectiveCanvasWidth,
             canvasHeight,
           ).data;
           maskReadyRef.current = true;
@@ -939,7 +962,14 @@ export function SectionWonderfulWorld({
       window.removeEventListener("scroll", hideOnViewportChange);
       window.removeEventListener("resize", hideOnViewportChange);
     };
-  }, [canvasHeight, canvasWidth, facts, factsUrl, initialZoom, maskSvgUrl]);
+  }, [
+    canvasHeight,
+    effectiveCanvasWidth,
+    facts,
+    factsUrl,
+    initialZoom,
+    maskSvgUrl,
+  ]);
 
   useEffect(() => {
     const updateScale = () => {
@@ -948,7 +978,7 @@ export function SectionWonderfulWorld({
       const horizontalPadding = isMobile ? 40 : 64;
       const availableWidth = Math.max(outerWidth - horizontalPadding, 280);
       const maxScale = isMobile ? 1 : DESKTOP_STAGE_SCALE;
-      setStageScale(Math.min(availableWidth / canvasWidth, maxScale));
+      setStageScale(Math.min(availableWidth / effectiveCanvasWidth, maxScale));
     };
 
     updateScale();
@@ -963,7 +993,7 @@ export function SectionWonderfulWorld({
       resizeObserver.disconnect();
       window.removeEventListener("resize", updateScale);
     };
-  }, [canvasWidth, isMobile]);
+  }, [effectiveCanvasWidth, isMobile]);
 
   useEffect(() => {
     const section = sectionRef.current;

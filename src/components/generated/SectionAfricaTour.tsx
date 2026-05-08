@@ -138,6 +138,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
       }}
     >
       <div
+        className="africa-tour-outer-pad"
         style={{
           width: "100%",
           padding: isMobile ? "24px 20px 32px" : "0 56px 0",
@@ -168,6 +169,61 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             display: block;
             object-fit: contain;
           }
+
+          /* ── 4K Proportional Scaling ── */
+          @media (min-width: 2560px) {
+            .africa-tour-logo-link {
+              right: 21px;
+              bottom: 21px;
+              width: 133px;
+              height: 133px;
+            }
+
+            .africa-tour-outer-pad {
+              padding: 0 98px !important;
+            }
+
+            .africa-tour-card-grid {
+              gap: 56px 98px !important;
+              margin-top: 42px !important;
+            }
+
+            .africa-tour-copy {
+              font-size: 44px !important;
+              line-height: 66px !important;
+            }
+
+            .africa-tour-caption {
+              font-size: 24px !important;
+            }
+          }
+
+          @media (min-width: 3440px) {
+            .africa-tour-logo-link {
+              right: 24px;
+              bottom: 24px;
+              width: 152px;
+              height: 152px;
+            }
+
+            .africa-tour-outer-pad {
+              padding: 0 112px !important;
+            }
+
+            .africa-tour-card-grid {
+              gap: 64px 112px !important;
+              margin-top: 48px !important;
+            }
+
+            .africa-tour-copy {
+              font-size: 52px !important;
+              line-height: 78px !important;
+            }
+
+            .africa-tour-caption {
+              font-size: 28px !important;
+            }
+          }
         `}</style>
 
         <h1
@@ -186,6 +242,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
         </h1>
 
         <div
+          className="africa-tour-card-grid"
           style={{
             display: "grid",
             gridTemplateColumns: isMobile
@@ -248,6 +305,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                 </a>
               </div>
               <span
+                className="africa-tour-caption"
                 style={{
                   display: "block",
                   fontSize: "11px",
@@ -261,6 +319,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             </div>
             <div>
               <p
+                className="africa-tour-copy"
                 style={{
                   fontSize: "28px",
                   lineHeight: "40px",
@@ -346,6 +405,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
                 </span>
               </div>
               <span
+                className="africa-tour-caption"
                 style={{
                   display: "block",
                   fontSize: "11px",
@@ -359,6 +419,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
             </div>
             <div>
               <p
+                className="africa-tour-copy"
                 style={{
                   fontSize: "28px",
                   lineHeight: "40px",

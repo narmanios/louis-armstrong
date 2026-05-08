@@ -290,3 +290,151 @@
 /* .tl-logo-desktop {
   bottom: 180px;
 } */
+
+/* ── 4K Proportional Scaling ── */
+@media (min-width: 2560px) {
+  .tl-mobile-root,
+  .tl-desktop-root {
+    border-top-width: 1.75px;
+  }
+
+  .tl-mobile-header {
+    padding-left: 28px;
+    padding-top: 10.5px;
+  }
+
+  .tl-mobile-left-mask {
+    width: calc(var(--tl-mobile-left-gutter, 18px) * 1.75);
+  }
+
+  .tl-mobile-right-mask {
+    width: calc(var(--tl-mobile-right-gutter, 18px) * 1.75);
+  }
+
+  .tl-desktop-right-mask {
+    width: calc(var(--tl-desktop-right-gutter, 40px) * 1.75);
+  }
+
+  .tl-header-title-mobile {
+    font-size: 19.25px;
+  }
+
+  .tl-header-title-desktop {
+    top: 28px;
+    left: 70px;
+    font-size: 22.75px;
+  }
+
+  .tl-sound-btn {
+    height: 56px;
+    padding: 0 24.5px;
+    border-radius: 14px;
+    gap: 14px;
+  }
+
+  .tl-sound-btn-mobile {
+    margin-right: 70px;
+    margin-top: 35px;
+  }
+
+  .tl-sound-btn-desktop {
+    top: 28px;
+    left: 17.5px;
+  }
+
+  .tl-sound-icon-mobile,
+  .tl-sound-icon-desktop {
+    width: 28px;
+    height: 28px;
+  }
+
+  .tl-sound-label {
+    font-size: 21px;
+  }
+
+  .tl-logo {
+    width: 140px;
+    height: 140px;
+  }
+
+  .tl-desktop-viewport {
+    width: min(100%, 2240px);
+  }
+
+  .tl-custom-scrollbar-track {
+    height: 14px;
+    border-radius: 999px;
+  }
+
+  .tl-custom-scrollbar {
+    padding: 0 31.5px 10.5px;
+  }
+}
+
+@media (min-width: 3440px) {
+  .tl-mobile-header {
+    padding-left: 32px;
+    padding-top: 12px;
+  }
+
+  .tl-mobile-left-mask {
+    width: calc(var(--tl-mobile-left-gutter, 18px) * 2);
+  }
+
+  .tl-mobile-right-mask {
+    width: calc(var(--tl-mobile-right-gutter, 18px) * 2);
+  }
+
+  .tl-desktop-right-mask {
+    width: calc(var(--tl-desktop-right-gutter, 40px) * 2);
+  }
+
+  .tl-header-title-mobile {
+    font-size: 22px;
+  }
+
+  .tl-header-title-desktop {
+    top: 32px;
+    left: 80px;
+    font-size: 26px;
+  }
+
+  .tl-sound-btn {
+    height: 64px;
+    padding: 0 28px;
+    border-radius: 16px;
+    gap: 16px;
+  }
+
+  .tl-sound-btn-mobile {
+    margin-right: 80px;
+    margin-top: 40px;
+  }
+
+  .tl-sound-icon-mobile,
+  .tl-sound-icon-desktop {
+    width: 32px;
+    height: 32px;
+  }
+
+  .tl-sound-label {
+    font-size: 24px;
+  }
+
+  .tl-logo {
+    width: 160px;
+    height: 160px;
+  }
+
+  .tl-desktop-viewport {
+    width: min(100%, 2560px);
+  }
+
+  .tl-custom-scrollbar-track {
+    height: 16px;
+  }
+
+  .tl-custom-scrollbar {
+    padding: 0 36px 12px;
+  }
+}

@@ -689,6 +689,103 @@ export const SectionIntroHero: React.FC<SectionIntroHeroProps> = ({
             height: 22px !important;
           }
         }
+
+        /* ── 4K Proportional Scaling ── */
+        @media (min-width: 2560px) {
+          .hero-intro-logo {
+            right: 42px;
+            bottom: 42px;
+            width: 192px;
+          }
+
+          .hero-intro-title-block {
+            left: 56px;
+            right: 56px;
+            top: 98px;
+          }
+
+          .hero-intro-title-main {
+            font-size: clamp(126px, 10vw, 343px) !important;
+          }
+
+          .hero-intro-kicker {
+            bottom: 70px;
+            right: 210px;
+            font-size: 66.5px !important;
+          }
+
+          .hero-intro-nav {
+            left: 56px;
+            bottom: 42px;
+          }
+
+          .hero-intro-about-button {
+            width: 70px;
+            height: 437px;
+          }
+
+          .hero-intro-about-button .hero-intro-nav-link-label {
+            font-size: 31.5px;
+            left: calc(100% + 21px);
+          }
+
+          .hero-intro-nav-link-label {
+            bottom: 231px;
+            font-size: 105px;
+          }
+
+          .hero-intro-nav-link-label-prefix {
+            font-size: 63px;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .hero-intro-logo {
+            right: 48px;
+            bottom: 48px;
+            width: 220px;
+          }
+
+          .hero-intro-title-block {
+            left: 64px;
+            right: 64px;
+            top: 112px;
+          }
+
+          .hero-intro-title-main {
+            font-size: clamp(144px, 10vw, 392px) !important;
+          }
+
+          .hero-intro-kicker {
+            bottom: 80px;
+            right: 240px;
+            font-size: 76px !important;
+          }
+
+          .hero-intro-nav {
+            left: 64px;
+            bottom: 48px;
+          }
+
+          .hero-intro-about-button {
+            width: 80px;
+            height: 500px;
+          }
+
+          .hero-intro-about-button .hero-intro-nav-link-label {
+            font-size: 36px;
+            left: calc(100% + 24px);
+          }
+
+          .hero-intro-nav-link-label {
+            bottom: 264px;
+            font-size: 120px;
+          }
+
+          .hero-intro-nav-link-label-prefix {
+            font-size: 72px;
+          }
+        }
       `}</style>
 
       <a

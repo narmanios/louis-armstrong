@@ -109,8 +109,54 @@ export const SectionFBIFiles: React.FC = () => {
         .mcg-fbi-section .mcg-page-title {
           color: #ffffff !important;
         }
+
+        /* ── 4K Proportional Scaling ── */
+        @media (min-width: 2560px) {
+          .mcg-fbi-section .mcg-page-title {
+            font-size: 96px !important;
+            line-height: 112px !important;
+          }
+
+          .fbi-outer-pad {
+            padding: 0 98px !important;
+          }
+
+          .fbi-grid {
+            grid-template-columns: repeat(auto-fit, 203px) !important;
+            gap: 19px 21px !important;
+            margin-top: 60px !important;
+          }
+
+          .fbi-doc-btn {
+            width: 203px !important;
+            height: 262px !important;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .mcg-fbi-section .mcg-page-title {
+            font-size: 112px !important;
+            line-height: 128px !important;
+          }
+
+          .fbi-outer-pad {
+            padding: 0 112px !important;
+          }
+
+          .fbi-grid {
+            grid-template-columns: repeat(auto-fit, 232px) !important;
+            gap: 22px 24px !important;
+            margin-top: 68px !important;
+          }
+
+          .fbi-doc-btn {
+            width: 232px !important;
+            height: 300px !important;
+          }
+        }
       `}</style>
       <div
+        className="fbi-outer-pad"
         style={{
           width: "100%",
           padding: isMobile ? "0 20px" : "0 56px 0",
@@ -177,6 +223,7 @@ export const SectionFBIFiles: React.FC = () => {
 
         {/* Grid Container */}
         <div
+          className="fbi-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, 116px)",
@@ -195,6 +242,7 @@ export const SectionFBIFiles: React.FC = () => {
               return (
                 <button
                   key={item.id}
+                  className="fbi-doc-btn"
                   onClick={() => handleOpenImage(index)}
                   style={{
                     width: "116px",

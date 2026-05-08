@@ -7,7 +7,7 @@
   --career-dot-active-radius-offset: 1.25px;
   --career-lane-stroke: rgba(255, 255, 255, 0.5);
   --career-lane-stroke-width: 0.5px;
-  --career-pill-dot-size: 8px;
+  --career-pill-dot-size: 12px;
   --career-pill-dot-border-width: 0.8px;
   --career-tag-film-bg: #ff6b6b;
   --career-tag-film-color: #ff6b6b;
@@ -432,4 +432,153 @@
   color: #c5cad3;
   font-size: 8px;
   font-style: italic;
+}
+
+/* ── 4K Proportional Scaling ── */
+@media (min-width: 2560px) {
+  /* Header / legend outside the chart — scale manually */
+  .career-timeline-header {
+    padding: 0 98px;
+  }
+
+  .career-timeline-legend-panel {
+    gap: 17.5px 28px;
+    margin-top: 21px;
+    padding-left: 42px;
+  }
+
+  .career-timeline-legend-filter {
+    padding: 7px 17.5px;
+    gap: 10.5px;
+  }
+
+  .career-timeline-chart-card .career-timeline-legend-label {
+    font-size: 24.5px;
+  }
+
+  .career-timeline-chart-card .career-timeline-legend-count {
+    font-size: 15.75px;
+  }
+
+  .career-timeline-chart-surface {
+    padding: 0 56px 14px;
+  }
+
+  /* Legend dot & filter-by label */
+  .career-timeline-section {
+    --career-pill-dot-size: 21px;
+  }
+
+  .career-timeline-legend-panel > span {
+    font-size: 24.5px !important;
+  }
+
+  .career-timeline-description {
+    font-size: 36px;
+    max-width: 1200px;
+    margin-top: 14px;
+  }
+
+  /*
+   * Chart scaling strategy:
+   * Constrain the measured container to 1/scale of its parent so the SVG
+   * renders at that width. Then scale(1.75) brings the visual width back to
+   * exactly 100% of the parent, while also making it 1.75× taller.
+   * transform-origin: top left keeps the back-button visible at the top-left
+   * corner.  All SVG text and tooltip scale automatically with the transform.
+   * min-height ensures the layout box grows to fit the scaled visual height
+   * (svgHeight 580px × scale 1.75 = 1015px).
+   */
+  .career-timeline-surface {
+    overflow: visible;
+  }
+
+  .career-timeline-scroll-area {
+    width: calc(100% / 1.75);
+    min-height: 1140px;
+    overflow: visible;
+  }
+
+  .career-timeline-chart-wrap {
+    transform: scale(1.75);
+    transform-origin: top left;
+  }
+
+  /* Scale featured event labels */
+  .career-timeline-featured-label {
+    font-size: 11px;
+  }
+
+  .career-timeline-year-label {
+    font-size: calc(var(--career-year-size, 9px) * 1.75);
+  }
+}
+
+@media (min-width: 3440px) {
+  .career-timeline-header {
+    padding: 0 112px;
+  }
+
+  .career-timeline-legend-panel {
+    gap: 20px 32px;
+    margin-top: 24px;
+    padding-left: 48px;
+  }
+
+  .career-timeline-legend-filter {
+    padding: 8px 20px;
+    gap: 12px;
+  }
+
+  .career-timeline-chart-card .career-timeline-legend-label {
+    font-size: 28px;
+  }
+
+  .career-timeline-chart-card .career-timeline-legend-count {
+    font-size: 18px;
+  }
+
+  .career-timeline-chart-surface {
+    padding: 0 64px 16px;
+  }
+
+  /* Legend dot & filter-by label */
+  .career-timeline-section {
+    --career-pill-dot-size: 24px;
+  }
+
+  .career-timeline-legend-panel > span {
+    font-size: 28px !important;
+  }
+
+  .career-timeline-description {
+    font-size: 42px;
+    max-width: 1400px;
+    margin-top: 16px;
+  }
+
+  /* Chart scaling (svgHeight 580 × 2.0 = 1160px min-height) */
+  .career-timeline-surface {
+    overflow: visible;
+  }
+
+  .career-timeline-scroll-area {
+    width: calc(100% / 2);
+    min-height: 1460px;
+    overflow: visible;
+  }
+
+  .career-timeline-chart-wrap {
+    transform: scale(2);
+    transform-origin: top left;
+  }
+
+  /* Scale featured event labels */
+  .career-timeline-featured-label {
+    font-size: 13px;
+  }
+
+  .career-timeline-year-label {
+    font-size: calc(var(--career-year-size, 9px) * 2);
+  }
 }

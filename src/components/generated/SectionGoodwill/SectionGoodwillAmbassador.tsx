@@ -863,6 +863,87 @@ export function SectionGoodwillAmbassador({
           z-index: 6;
           touch-action: manipulation;
         }
+
+        /* ── 4K Proportional Scaling ── */
+        @media (min-width: 2560px) {
+          .goodwill-section-header {
+            padding: 0 98px 0;
+          }
+
+          .goodwill-filters {
+            gap: 17.5px;
+            margin-top: 21px;
+          }
+
+          .goodwill-event-count {
+            font-size: 56px;
+            margin-left: 42px;
+          }
+
+          .goodwill-event-label {
+            font-size: 22.75px;
+            margin-left: 10.5px;
+          }
+
+          .goodwill-filter-button {
+            font-size: 24.5px;
+          }
+
+          .goodwill-segmented {
+            border-radius: 14px;
+            border-width: 1.75px;
+          }
+
+          .goodwill-segmented-button {
+            font-size: 21px;
+            height: 56px;
+            padding: 0 24.5px;
+          }
+
+          .goodwill-segmented-button + .goodwill-segmented-button {
+            border-left-width: 1.75px;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .goodwill-section-header {
+            padding: 0 112px 0;
+          }
+
+          .goodwill-filters {
+            gap: 20px;
+            margin-top: 24px;
+          }
+
+          .goodwill-event-count {
+            font-size: 64px;
+            margin-left: 48px;
+          }
+
+          .goodwill-event-label {
+            font-size: 26px;
+            margin-left: 12px;
+          }
+
+          .goodwill-filter-button {
+            font-size: 28px;
+          }
+
+          .goodwill-segmented {
+            border-radius: 16px;
+            border-width: 2px;
+          }
+
+          .goodwill-segmented-button {
+            font-size: 24px;
+            height: 64px;
+            padding: 0 28px;
+          }
+
+          .goodwill-segmented-button + .goodwill-segmented-button {
+            border-left-width: 2px;
+          }
+        }
       `}</style>
 
       <div className="goodwill-section-header">

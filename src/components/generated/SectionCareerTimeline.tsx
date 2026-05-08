@@ -258,7 +258,7 @@ const tooltipGap = 8;
 const tooltipEdgePadding = 8;
 const yearAxisY = 540;
 
-const featuredLabels: Record<number, FeaturedCfg> = {
+const featuredLabels: Record<number, FeaturedCfg | FeaturedCfg[]> = {
   35: {
     lines: ["A Rhapsody in", "Black & Blue (1932)"],
     cat: "film",
@@ -268,7 +268,7 @@ const featuredLabels: Record<number, FeaturedCfg> = {
   48: { lines: ["Going Places", "(1938)"], cat: "film", dir: "above" },
   72: { lines: ["High Society", "(1956)"], cat: "film", dir: "below" },
   82: { lines: ["The Five Pennies", "(1958)"], cat: "film", dir: "above" },
-  93: { lines: ["Hello, Dolly!", "Film (1968)"], cat: "film", dir: "above" },
+  92: { lines: ["Hello, Dolly!", "Film (1968)"], cat: "film", dir: "above" },
   9: { lines: ["Hot Five (1925)"], cat: "bandleader", dir: "above" },
   10: {
     lines: ["Heebie Jeebies", "(1926)"],
@@ -280,16 +280,16 @@ const featuredLabels: Record<number, FeaturedCfg> = {
   },
   56: { lines: ["Carnegie Hall", "(1947)"], cat: "bandleader", dir: "above" },
   74: { lines: ["Ella and Louis", "(1956)"], cat: "bandleader", dir: "below" },
-  91: {
-    lines: ["What a", "Wonderful World", "(1967)"],
-    cat: "bandleader",
+  90: {
+    lines: ["What a Wonderful World", "(1967)"],
+    cat: "vocalist",
     dir: "above",
   },
   1: { lines: ["Chimes Blues", "(1923)"], cat: "musician", dir: "below" },
   18: { lines: ["West End Blues", "(1928)"], cat: "musician", dir: "above" },
   22: { lines: ["Ain't Misbehavin'", "(1929)"], cat: "musician", dir: "below" },
   71: { lines: ["Mack the Knife", "(1955)"], cat: "musician", dir: "below" },
-  189: { lines: ["Hello, Dolly!", "(1964)"], cat: "vocalist", dir: "below" },
+  187: { lines: ["Hello, Dolly!", "(1964)"], cat: "vocalist", dir: "below" },
   7: {
     lines: ["St. Louis Blues", "w/ Bessie Smith", "(1925)"],
     cat: "vocalist",
@@ -303,7 +303,7 @@ const featuredLabels: Record<number, FeaturedCfg> = {
     dir: "below",
   },
 
-  107: {
+  106: {
     lines: ["African State Department tour", "(1960)"],
     cat: "ambassador",
     dir: "above",
@@ -429,11 +429,13 @@ function StackedDotChart({
   svgWidth,
   dotRadius,
   onBack,
+  laneY,
 }: {
   category: Category;
   svgWidth: number;
   dotRadius: number;
   onBack: () => void;
+  laneY: Record<Category, number>;
 }) {
   const color = categoryColors[category];
   const categoryEvents = useMemo(() => {
@@ -727,6 +729,10 @@ function TimelineSVG({
   dimmedCategories,
   setDimmedCategories,
   hoveredLegendCategory,
+  featuredLabelLineHeight,
+  svgHeight,
+  yearAxisY,
+  laneY,
 }: {
   svgWidth: number;
   active: Set<Category>;
@@ -740,6 +746,10 @@ function TimelineSVG({
   laneStroke: string;
   laneStrokeWidth: number;
   hoveredLegendCategory: Category | null;
+  featuredLabelLineHeight: number;
+  svgHeight: number;
+  yearAxisY: number;
+  laneY: Record<Category, number>;
 }) {
   const [hoverKey, setHoverKey] = useState<string | null>(null);
   const [hoverTip, setHoverTip] = useState<TipInfo | null>(null);
@@ -790,6 +800,21 @@ function TimelineSVG({
       });
     });
 
+    // Second pass: ensure featured events are prioritized
+    timelineData.events.forEach((event) => {
+      const featuredCfg = featuredLabels[event.id];
+      if (!featuredCfg) return;
+
+      const configs = Array.isArray(featuredCfg) ? featuredCfg : [featuredCfg];
+      configs.forEach((config) => {
+        if (!active.has(config.cat)) return;
+        // Only set if the event actually has this category
+        if (!event.categories.includes(config.cat)) return;
+        const key = `${event.year}-${config.cat}`;
+        grouped.set(key, event);
+      });
+    });
+
     const output: DotData[] = [];
     grouped.forEach((event, groupKey) => {
       const separatorIndex = groupKey.indexOf("-");
@@ -810,15 +835,20 @@ function TimelineSVG({
     });
 
     return output.sort((a, b) => a.cx - b.cx || a.cy - b.cy);
-  }, [active, svgWidth]);
+  }, [active, svgWidth, laneY]);
 
   const featuredDots = useMemo(() => {
-    const seen = new Set<number>();
+    const seen = new Set<string>();
     return dots.filter((dot) => {
-      const featured = featuredLabels[dot.event.id];
-      if (!featured || featured.cat !== dot.cat) return false;
-      if (seen.has(dot.event.id)) return false;
-      seen.add(dot.event.id);
+      const featuredCfg = featuredLabels[dot.event.id];
+      if (!featuredCfg) return false;
+      const hasMatch = Array.isArray(featuredCfg)
+        ? featuredCfg.some((f) => f.cat === dot.cat)
+        : featuredCfg.cat === dot.cat;
+      if (!hasMatch) return false;
+      const key = `${dot.event.id}-${dot.cat}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
       return true;
     });
   }, [dots]);
@@ -1142,7 +1172,10 @@ function TimelineSVG({
 
         {featuredDots.map((dot) => {
           if (!active.has(dot.cat)) return null;
-          const featured = featuredLabels[dot.event.id];
+          const featuredCfg = featuredLabels[dot.event.id];
+          const featured = Array.isArray(featuredCfg)
+            ? featuredCfg.find((f) => f.cat === dot.cat)!
+            : featuredCfg;
           const anchorY = dot.cy;
           const offset = dotRadius + 1;
           const y1 =
@@ -1171,7 +1204,10 @@ function TimelineSVG({
 
         {featuredDots.map((dot) => {
           if (!active.has(dot.cat)) return null;
-          const featured = featuredLabels[dot.event.id];
+          const featuredCfg = featuredLabels[dot.event.id];
+          const featured = Array.isArray(featuredCfg)
+            ? featuredCfg.find((f) => f.cat === dot.cat)!
+            : featuredCfg;
           const anchorY = dot.cy;
           const offset = dotRadius + 1;
           const connectorLength =
@@ -1235,9 +1271,12 @@ function TimelineSVG({
           const isGreyedForDimmed = dimmedCategories.has(dot.cat);
           const canInteract = !isGreyedForDimmed;
           const isHovered = canInteract && hoverKey === dot.key;
-          const featured =
-            featuredLabels[dot.event.id] &&
-            featuredLabels[dot.event.id].cat === dot.cat;
+          const featuredCfg = featuredLabels[dot.event.id];
+          const featured = featuredCfg
+            ? Array.isArray(featuredCfg)
+              ? featuredCfg.some((f) => f.cat === dot.cat)
+              : featuredCfg.cat === dot.cat
+            : false;
           const color = categoryColors[dot.cat];
           const isLegendHovered =
             canInteract &&
@@ -1438,6 +1477,9 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   const [svgWidth, setSvgWidth] = useState(1000);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1920,
+  );
   const [dotRadius, setDotRadius] = useState(fallbackDotRadius);
   const [featuredDotRadiusOffset, setFeaturedDotRadiusOffset] = useState(
     fallbackFeaturedDotRadiusOffset,
@@ -1464,6 +1506,49 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
     null,
   );
 
+  // Responsive line height for featured labels
+  const responsiveFeaturedLineHeight = useMemo(() => {
+    if (windowWidth >= 3440) return 16;
+    if (windowWidth >= 2560) return 13.75;
+    return featuredLabelLineHeight;
+  }, [windowWidth]);
+
+  // Responsive SVG height for 4K displays
+  const responsiveSvgHeight = useMemo(() => {
+    if (windowWidth >= 3440) return 730;
+    if (windowWidth >= 2560) return 650;
+    return 580;
+  }, [windowWidth]);
+
+  const responsiveYearAxisY = useMemo(() => {
+    if (windowWidth >= 3440) return 680;
+    if (windowWidth >= 2560) return 600;
+    return 540;
+  }, [windowWidth]);
+
+  // Responsive lane positions - spread categories vertically on 4K
+  const responsiveLaneY = useMemo(() => {
+    if (windowWidth >= 3440) {
+      return {
+        film: 90,
+        bandleader: 230,
+        musician: 370,
+        vocalist: 510,
+        ambassador: 650,
+      };
+    }
+    if (windowWidth >= 2560) {
+      return {
+        film: 85,
+        bandleader: 210,
+        musician: 335,
+        vocalist: 460,
+        ambassador: 585,
+      };
+    }
+    return laneY;
+  }, [windowWidth]);
+
   useEffect(() => {
     const element = containerRef.current;
     if (!element) return;
@@ -1482,6 +1567,7 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
           "--career-dot-active-radius-offset",
         ),
       );
+      setWindowWidth(window.innerWidth);
       const cssLaneStroke = getComputedStyle(element)
         .getPropertyValue("--career-lane-stroke")
         .trim();
@@ -1725,6 +1811,10 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
                       dimmedCategories={dimmedCategories}
                       setDimmedCategories={setDimmedCategories}
                       hoveredLegendCategory={hoveredLegendCategory}
+                      featuredLabelLineHeight={responsiveFeaturedLineHeight}
+                      svgHeight={responsiveSvgHeight}
+                      yearAxisY={responsiveYearAxisY}
+                      laneY={responsiveLaneY}
                     />
                   </div>
                   {detailViewCategory && (
@@ -1743,6 +1833,7 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
                         svgWidth={svgWidth}
                         dotRadius={dotRadius}
                         onBack={() => setDetailViewCategory(null)}
+                        laneY={responsiveLaneY}
                       />
                     </div>
                   )}

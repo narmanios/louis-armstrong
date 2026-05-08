@@ -174,15 +174,30 @@ function loadLeaflet(): Promise<void> {
     document.head.appendChild(script);
   });
 }
-function buildDotHtml(dot: MusicianDot): string {
+function buildDotHtml(dot: MusicianDot, scale = 1): string {
   const color = MUSICIAN_COLORS[dot.musician] || "#64748b";
-  const size = Math.min(9 + Math.round(dot.events * 0.6), 19);
-  return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};box-shadow:0 0 0 2px white,0 2px 6px ${color}70;cursor:pointer;transition:transform .12s,box-shadow .12s;" onmouseenter="this.style.transform='scale(1.35)';this.style.boxShadow='0 0 0 2px white,0 3px 10px ${color}90';" onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 0 0 2px white,0 2px 6px ${color}70';"></div>`;
+  const baseSize = Math.min(9 + Math.round(dot.events * 0.6), 19);
+  const size = Math.round(baseSize * scale);
+  const borderWidth = Math.round(0.5 * scale);
+  const shadowBlur = Math.round(6 * scale);
+  const hoverShadowBlur = Math.round(10 * scale);
+  return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};box-shadow:0 0 0 ${borderWidth}px black,0 ${Math.round(2 * scale)}px ${shadowBlur}px ${color}70;cursor:pointer;transition:transform .12s,box-shadow .12s;" onmouseenter="this.style.transform='scale(1.35)';this.style.boxShadow='0 0 0 ${borderWidth}px black,0 ${Math.round(3 * scale)}px ${hoverShadowBlur}px ${color}90';" onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 0 0 ${borderWidth}px black,0 ${Math.round(2 * scale)}px ${shadowBlur}px ${color}70';"></div>`;
 }
-function buildDotPopupHtml(dot: MusicianDot): string {
+function buildDotPopupHtml(dot: MusicianDot, scale = 1): string {
   const color = MUSICIAN_COLORS[dot.musician] || "#64748b";
   const yearsStr = dot.years.join(", ");
-  return `<div style="font-family:Inter,system-ui,sans-serif;min-width:200px;max-width:260px;background:rgba(0,0,0,0.92);border-radius:6px;"><div style="padding:12px 14px 10px;border-bottom:1px solid ${color}40;"><div style="font-size:13px;font-weight:700;color:#ffffff;letter-spacing:-0.3px;line-height:1.2;">${dot.country}</div><div style="display:flex;align-items:center;gap:6px;margin-top:5px;"><div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0;"></div><div style="font-size:10px;line-height:1.35;font-weight:600;color:${color};">${dot.musician}</div></div></div><div style="padding:10px 14px 12px;"><div style="font-size:10px;line-height:1.35;color:rgba(255,255,255,0.6);margin-bottom:4px;"><span style="font-weight:600;color:#ffffff;font-size:13px;">${dot.events}</span>&nbsp;${dot.events === 1 ? "event" : "events"}</div><div style="font-size:10px;line-height:1.35;color:rgba(255,255,255,0.5);">${yearsStr}</div></div></div>`;
+  const minWidth = Math.round(240 * scale);
+  const maxWidth = Math.round(320 * scale);
+  const borderRadius = Math.round(6 * scale);
+  const padding1 = `${Math.round(12 * scale)}px ${Math.round(14 * scale)}px ${Math.round(10 * scale)}px`;
+  const padding2 = `${Math.round(10 * scale)}px ${Math.round(14 * scale)}px ${Math.round(12 * scale)}px`;
+  const fontSize13 = Math.round(13 * scale);
+  const fontSize10 = Math.round(10 * scale);
+  const dotSize = Math.round(8 * scale);
+  const gap = Math.round(6 * scale);
+  const marginTop = Math.round(5 * scale);
+  const marginBottom = Math.round(4 * scale);
+  return `<div style="font-family:Inter,system-ui,sans-serif;min-width:${minWidth}px;max-width:${maxWidth}px;background:rgba(0,0,0,0.92);border-radius:${borderRadius}px;"><div style="padding:${padding1};border-bottom:1px solid ${color}40;"><div style="font-size:${fontSize13}px;font-weight:700;color:#ffffff;letter-spacing:-0.3px;line-height:1.2;">${dot.country}</div><div style="display:flex;align-items:center;gap:${gap}px;margin-top:${marginTop}px;"><div style="width:${dotSize}px;height:${dotSize}px;border-radius:50%;background:${color};flex-shrink:0;"></div><div style="font-size:${fontSize10}px;line-height:1.35;font-weight:600;color:${color};">${dot.musician}</div></div></div><div style="padding:${padding2};"><div style="font-size:${fontSize10}px;line-height:1.35;color:rgba(255,255,255,0.6);margin-bottom:${marginBottom}px;"><span style="font-weight:600;color:#ffffff;font-size:${fontSize13}px;">${dot.events}</span>&nbsp;${dot.events === 1 ? "event" : "events"}</div><div style="font-size:${fontSize10}px;line-height:1.35;color:rgba(255,255,255,0.5);">${yearsStr}</div></div></div>`;
 }
 
 // ─── LeafletMap component ──────────────────────────────────────────────────────
@@ -190,8 +205,13 @@ function buildDotPopupHtml(dot: MusicianDot): string {
 interface LeafletMapProps {
   dots: MusicianDot[];
   onMapReady?: (map: LeafletMap) => void;
+  scale?: number;
 }
-const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
+const LeafletMapView: React.FC<LeafletMapProps> = ({
+  dots,
+  onMapReady,
+  scale = 1,
+}) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<LeafletMap | null>(null);
   const markersRef = useRef<LeafletMarker[]>([]);
@@ -204,6 +224,8 @@ const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
   useEffect(() => {
     if (!ready || !mapRef.current || mapInstanceRef.current) return;
     const L = window.L;
+    // Increase zoom for 4K resolutions
+    const initialZoom = scale >= 2.0 ? 3.5 : scale >= 1.75 ? 3.0 : 1;
     mapInstanceRef.current = L.map(mapRef.current, {
       zoomControl: false,
       attributionControl: true,
@@ -211,7 +233,7 @@ const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
       maxBoundsViscosity: 1.0,
       minZoom: 2.75,
       maxZoom: 6,
-    }).setView([10, 30], 1);
+    }).setView([10, 30], initialZoom);
 
     if (onMapReady && mapInstanceRef.current) {
       onMapReady(mapInstanceRef.current);
@@ -240,6 +262,14 @@ const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
       }
     };
   }, [ready]);
+
+  // Update zoom level when scale changes
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+    const initialZoom = scale >= 2.0 ? 3.5 : scale >= 1.75 ? 3.0 : 1;
+    mapInstanceRef.current.setView([10, 30], initialZoom);
+  }, [scale]);
+
   useEffect(() => {
     if (!ready || !mapInstanceRef.current) return;
     const L = window.L;
@@ -248,36 +278,37 @@ const LeafletMapView: React.FC<LeafletMapProps> = ({ dots, onMapReady }) => {
     markersRef.current = [];
 
     dots.forEach((dot) => {
-      const size = Math.min(9 + Math.round(dot.events * 0.6), 19);
+      const baseSize = Math.min(9 + Math.round(dot.events * 0.6), 19);
+      const size = Math.round(baseSize * scale);
       const icon = L.divIcon({
-        html: buildDotHtml(dot),
+        html: buildDotHtml(dot, scale),
         className: "",
         iconSize: [size, size],
         iconAnchor: [size / 2, size / 2],
-        popupAnchor: [0, -(size / 2) - 4],
+        popupAnchor: [0, -(size / 2) - Math.round(4 * scale)],
       });
       const marker = L.marker([dot.lat, dot.lng] as [number, number], {
         icon,
       }).addTo(map);
-      marker.bindPopup(buildDotPopupHtml(dot), {
-        maxWidth: 280,
+      marker.bindPopup(buildDotPopupHtml(dot, scale), {
+        maxWidth: Math.round(340 * scale),
         className: "jazz-popup",
         closeButton: true,
         closeOnClick: false,
-        autoClose: false,
+        autoClose: true,
       });
       marker.on("click", () => {
         marker.openPopup();
       });
       markersRef.current.push(marker);
     });
-  }, [ready, dots]);
+  }, [ready, dots, scale]);
   return (
     <div
       ref={mapRef}
       className="w-full h-full"
       style={{
-        background: "#ffffff",
+        background: "#000000",
       }}
     />
   );
@@ -289,7 +320,22 @@ export const JazzAmbassadorsMap: React.FC = () => {
   const [hiddenMusicians, setHiddenMusicians] = useState<Set<string>>(
     new Set(),
   );
+  const [windowWidth, setWindowWidth] = useState<number>(
+    typeof window !== "undefined" ? window.innerWidth : 1920,
+  );
   const mapInstanceRef = useRef<LeafletMap | null>(null);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const scale = useMemo(() => {
+    if (windowWidth >= 3440) return 2.0;
+    if (windowWidth >= 2560) return 1.75;
+    return 1;
+  }, [windowWidth]);
 
   const handleZoomIn = () => {
     if (mapInstanceRef.current) {
@@ -329,12 +375,12 @@ export const JazzAmbassadorsMap: React.FC = () => {
       className="flex flex-col w-full h-screen"
       style={{
         fontFamily: "Inter, system-ui, sans-serif",
-        background: "#ffffff",
+        background: "#000000",
       }}
     >
       <style>{`
         .jazz-popup .leaflet-popup-content-wrapper {
-          border-radius: 12px; padding: 0; overflow: hidden;
+          border-radius: 6px; padding: 0; overflow: hidden;
           box-shadow: 0 16px 48px rgba(0,0,0,0.5);
           border: 1px solid rgba(255,255,255,0.15);
           background: rgba(0,0,0,0.92);
@@ -346,22 +392,22 @@ export const JazzAmbassadorsMap: React.FC = () => {
           box-shadow: none;
         }
         .jazz-popup .leaflet-popup-close-button {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          width: 28px;
-          height: 28px;
-          padding: 0;
-          border: 0;
-          background: transparent;
+          position: absolute !important;
+          top: 4px !important;
+          right: 4px !important;
+          width: 32px !important;
+          height: 32px !important;
+          padding: 0 !important;
+          border: 0 !important;
+          background: transparent !important;
           color: #ffffff !important;
-          font-size: 20px;
-          font-weight: 300;
-          line-height: 28px;
-          text-align: center;
-          cursor: pointer;
-          z-index: 1000;
-          pointer-events: auto;
+          font-size: 24px !important;
+          font-weight: 300 !important;
+          line-height: 32px !important;
+          text-align: center !important;
+          cursor: pointer !important;
+          z-index: 1000 !important;
+          pointer-events: auto !important;
           display: block !important;
         }
         .jazz-popup .leaflet-popup-close-button:hover {
@@ -377,25 +423,172 @@ export const JazzAmbassadorsMap: React.FC = () => {
           border-radius: 6px 0 0 0 !important;
         }
         header h1.mcg-page-title {
-          color: #000000 !important;
+          color: #ffffff !important;
+        }
+
+        /* ── 4K Proportional Scaling ── */
+        @media (min-width: 2560px) {
+          .jazz-popup .leaflet-popup-content-wrapper {
+            border-radius: 10.5px;
+          }
+
+          .jazz-popup .leaflet-popup-close-button {
+            top: 7px !important;
+            right: 7px !important;
+            width: 56px !important;
+            height: 56px !important;
+            font-size: 42px !important;
+            line-height: 56px !important;
+          }
+
+          .leaflet-control-attribution {
+            font-size: 15.75px !important;
+            border-radius: 10.5px 0 0 0 !important;
+          }
+
+          header h1.mcg-page-title {
+            font-size: 56px !important;
+          }
+
+          /* Legend text - match Career Timeline */
+          .jazz-legend-text {
+            font-size: 24.5px !important;
+          }
+
+          .jazz-legend-separator {
+            font-size: 24.5px !important;
+            margin-left: 21px !important;
+            margin-right: 7px !important;
+          }
+
+          .jazz-legend-dot {
+            width: 15px !important;
+            height: 15px !important;
+          }
+
+          .jazz-legend-pills {
+            gap: 28px !important;
+          }
+
+          .jazz-map-header {
+            padding: 0 !important;
+            gap: 21px !important;
+          }
+
+          .jazz-map-container {
+            padding: 0 !important;
+          }
+
+          .jazz-map-frame {
+            max-width: 3200px !important;
+            max-height: 1600px !important;
+            border-width: 2.625px !important;
+          }
+
+          .jazz-zoom-controls {
+            top: 28px !important;
+            right: 28px !important;
+            gap: 7px !important;
+          }
+
+          .jazz-zoom-button {
+            width: 63px !important;
+            height: 63px !important;
+            border-radius: 14px !important;
+            border-width: 2.625px !important;
+            font-size: 31.5px !important;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .jazz-popup .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+          }
+
+          .jazz-popup .leaflet-popup-close-button {
+            top: 8px !important;
+            right: 8px !important;
+            width: 64px !important;
+            height: 64px !important;
+            font-size: 48px !important;
+            line-height: 64px !important;
+          }
+
+          .leaflet-control-attribution {
+            font-size: 18px !important;
+            border-radius: 12px 0 0 0 !important;
+          }
+
+          header h1.mcg-page-title {
+            font-size: 64px !important;
+          }
+
+          /* Legend text - match Career Timeline */
+          .jazz-legend-text {
+            font-size: 28px !important;
+          }
+
+          .jazz-legend-separator {
+            font-size: 28px !important;
+            margin-left: 24px !important;
+            margin-right: 8px !important;
+          }
+
+          .jazz-legend-dot {
+            width: 17px !important;
+            height: 17px !important;
+          }
+
+          .jazz-legend-pills {
+            gap: 32px !important;
+          }
+
+          .jazz-map-header {
+            padding: 0 !important;
+            gap: 24px !important;
+          }
+
+          .jazz-map-container {
+            padding: 0 !important;
+          }
+
+          .jazz-map-frame {
+            max-width: 3600px !important;
+            max-height: 1800px !important;
+            border-width: 3px !important;
+          }
+
+          .jazz-zoom-controls {
+            top: 32px !important;
+            right: 32px !important;
+            gap: 8px !important;
+          }
+
+          .jazz-zoom-button {
+            width: 72px !important;
+            height: 72px !important;
+            border-radius: 16px !important;
+            border-width: 3px !important;
+            font-size: 36px !important;
+          }
         }
       `}</style>
 
       {/* ── Top header / legend bar ── */}
       <header
-        className="flex-shrink-0 flex flex-col items-start gap-3"
+        className="jazz-map-header flex-shrink-0 flex flex-col items-start gap-3"
         style={{
           width: "100%",
           margin: "0",
-          padding: "0 56px 0",
-          background: "#ffffff",
+          padding: "0",
+          background: "#000000",
         }}
       >
         {/* Title block */}
         <div className="flex-shrink-0">
           <h1
             className="mcg-page-title mcg-page-title--flow"
-            style={{ color: "#000000" }}
+            style={{ color: "#ffffff" }}
           >
             "The Jazz Ambassadors" — U.S. State Department Jazz Diplomacy Tours
             (1956-1978)
@@ -408,7 +601,7 @@ export const JazzAmbassadorsMap: React.FC = () => {
         >
           {/* Artist toggle pills — horizontal row */}
           <div
-            className="flex items-center gap-2 flex-wrap"
+            className="jazz-legend-pills flex items-center gap-2 flex-wrap"
             style={{ marginBottom: "2px" }}
           >
             {MUSICIANS.map((musician, index) => {
@@ -420,29 +613,26 @@ export const JazzAmbassadorsMap: React.FC = () => {
                 <React.Fragment key={musician}>
                   <button
                     onClick={() => toggleMusician(musician)}
-                    className="flex items-center gap-2 px-1 py-1.5 transition-all text-left"
+                    className="jazz-legend-button flex items-center gap-2 px-1 py-1.5 transition-all text-left"
                     style={{
-                      opacity: hidden ? 0.35 : 1,
+                      opacity: hidden ? 0.6 : 1,
                     }}
                     aria-pressed={!hidden}
                     aria-label={`${hidden ? "Show" : "Hide"} ${musician}`}
                   >
                     <div
-                      className="w-2.5 h-2.5 rounded-full flex-shrink-0 transition-all"
+                      className="jazz-legend-dot w-2.5 h-2.5 rounded-full flex-shrink-0 transition-all"
                       style={{
-                        background: hidden ? "#cbd5e1" : color,
-                        boxShadow: hidden
-                          ? "none"
-                          : `0 0 0 2px white, 0 1px 3px ${color}60`,
+                        background: hidden ? "#475569" : color,
                       }}
                     />
                     <span
-                      className="whitespace-nowrap transition-colors"
+                      className="jazz-legend-text whitespace-nowrap transition-colors"
                       style={{
                         fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                         fontSize: "14px",
                         fontWeight: 400,
-                        color: hidden ? "#94a3b8" : "#334155",
+                        color: hidden ? "#94a3b8" : "#ffffff",
                       }}
                     >
                       {musician}
@@ -452,8 +642,9 @@ export const JazzAmbassadorsMap: React.FC = () => {
                   {isLouis && (
                     <>
                       <span
+                        className="jazz-legend-separator"
                         style={{
-                          color: "#d1d5db",
+                          color: "#475569",
                           fontSize: "14px",
                           fontWeight: 300,
                           marginBottom: "2px",
@@ -464,13 +655,13 @@ export const JazzAmbassadorsMap: React.FC = () => {
                         |
                       </span>
                       <p
-                        className="flex-shrink-0 tracking-widest"
+                        className="jazz-legend-text flex-shrink-0 tracking-widest"
                         style={{
                           marginBottom: "2px",
                           fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                           fontSize: "14px",
                           fontWeight: 400,
-                          color: "#6b7280",
+                          color: "#9ca3af",
                         }}
                       >
                         Other artists
@@ -486,13 +677,13 @@ export const JazzAmbassadorsMap: React.FC = () => {
           {!allVisible && (
             <button
               onClick={showAll}
-              className="flex-shrink-0 transition-colors underline underline-offset-2"
+              className="jazz-legend-text flex-shrink-0 transition-colors underline underline-offset-2"
               style={{
                 marginBottom: "2px",
                 fontFamily: '"Hanken Grotesk", Arial, sans-serif',
                 fontSize: "14px",
                 fontWeight: 400,
-                color: "#9ca3af",
+                color: "#cbd5e1",
               }}
             >
               Show all
@@ -502,12 +693,15 @@ export const JazzAmbassadorsMap: React.FC = () => {
       </header>
 
       {/* ── Map frame ── */}
-      <div className="flex-1 min-h-0 px-16 pb-12 pt-8">
+      <div
+        className="jazz-map-container flex-1 min-h-0 px-0 pb-0 pt-0"
+        style={{ background: "#000000", marginTop: "2rem" }}
+      >
         <div
-          className="overflow-hidden"
+          className="jazz-map-frame overflow-hidden"
           style={{
             // borderRadius: "16px",
-            border: "1.5px solid #e2e8f0",
+            border: "1.5px solid #334155",
             boxShadow: "none",
             maxWidth: "1400px",
             maxHeight: "700px",
@@ -520,6 +714,7 @@ export const JazzAmbassadorsMap: React.FC = () => {
           <div className="relative w-full h-full">
             <LeafletMapView
               dots={visibleDots}
+              scale={scale}
               onMapReady={(map) => {
                 mapInstanceRef.current = map;
               }}
@@ -527,7 +722,7 @@ export const JazzAmbassadorsMap: React.FC = () => {
 
             {/* Zoom Controls */}
             <div
-              className="absolute top-4 right-4 flex flex-col gap-1"
+              className="jazz-zoom-controls absolute top-4 right-4 flex flex-col gap-1"
               style={{
                 zIndex: 1000,
                 pointerEvents: "auto",
@@ -535,13 +730,13 @@ export const JazzAmbassadorsMap: React.FC = () => {
             >
               <button
                 onClick={handleZoomIn}
-                className="bg-white hover:bg-gray-50 text-slate-700 font-bold transition-colors"
+                className="jazz-zoom-button bg-slate-800 hover:bg-slate-700 text-white font-bold transition-colors"
                 style={{
                   width: "36px",
                   height: "36px",
                   borderRadius: "8px",
-                  border: "1.5px solid #e2e8f0",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                  border: "1.5px solid #475569",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.32)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -555,13 +750,13 @@ export const JazzAmbassadorsMap: React.FC = () => {
               </button>
               <button
                 onClick={handleZoomOut}
-                className="bg-white hover:bg-gray-50 text-slate-700 font-bold transition-colors"
+                className="jazz-zoom-button bg-slate-800 hover:bg-slate-700 text-white font-bold transition-colors"
                 style={{
                   width: "36px",
                   height: "36px",
                   borderRadius: "8px",
-                  border: "1.5px solid #e2e8f0",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                  border: "1.5px solid #475569",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.32)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",

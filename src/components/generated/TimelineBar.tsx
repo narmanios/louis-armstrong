@@ -60,15 +60,61 @@ export function TimelineBar({
 }) {
   const [hoveredLyricId, setHoveredLyricId] = useState<string | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1920,
+  );
+
+  // Get scale factor for 4K monitors
+  const scaleFactor = useMemo(() => {
+    if (windowWidth >= 3440) return 2.0;
+    if (windowWidth >= 2560) return 1.75;
+    return 1;
+  }, [windowWidth]);
+
+  const scaledTotalWidth = Math.round(totalWidth * scaleFactor);
+
   const [scrollMetrics, setScrollMetrics] = useState({
     left: 0,
     viewportWidth: 1,
-    contentWidth: totalWidth,
+    contentWidth: scaledTotalWidth,
   });
   const [isDraggingScrollbar, setIsDraggingScrollbar] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const scrollbarTrackRef = useRef<HTMLDivElement>(null);
   const lyricFontVar = { "--tl-lyric-font": lyricFont } as React.CSSProperties;
+
+  // Track window width for responsive scaling
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Update contentWidth when scale changes
+  useEffect(() => {
+    setScrollMetrics((prev) => ({
+      ...prev,
+      contentWidth: scaledTotalWidth,
+    }));
+  }, [scaledTotalWidth]);
+
+  // Scaled dimensions for 4K (moved here after scaleFactor is defined above)
+  const scaledTimelineHeight = Math.round(timelineHeight * scaleFactor);
+  const scaledMobileTimelineHeight = Math.round(
+    mobileTimelineHeight * scaleFactor,
+  );
+  const scaledScrollbarHeight = Math.round(scrollbarHeight * scaleFactor);
+  const scaledTimelineTopPad = Math.round(timelineTopPad * scaleFactor);
+  const scaledTimelineLineSpacing = Math.round(
+    timelineLineSpacing * scaleFactor,
+  );
+  const scaledRoleLineStartOffset = Math.round(
+    roleLineStartOffset * scaleFactor,
+  );
+  const scaledLyricLabelStartOffset = Math.round(
+    lyricLabelStartOffset * scaleFactor,
+  );
+  const scaledLineStrokeWidth = lineStrokeWidth * scaleFactor;
 
   // Play audio when sound is enabled
   const playAudio = useCallback(() => {
@@ -277,7 +323,9 @@ export function TimelineBar({
   };
 
   const renderLyricLabels = (isMobileView: boolean) => {
-    const yOffset = isMobileView ? 4 : 2;
+    const yOffset = isMobileView
+      ? Math.round(4 * scaleFactor)
+      : Math.round(2 * scaleFactor);
     const letterSpacingEm = isMobileView
       ? mobileLyricLetterSpacing
       : desktopLyricLetterSpacing;
@@ -289,18 +337,21 @@ export function TimelineBar({
       hoveredIndex >= 0 ? rawLyrics[hoveredIndex].phraseGroup : -1;
 
     return lyricLabels.map((lyr, lyrIndex) => {
-      const lineY = timelineTopPad + lyr.lineIndex * timelineLineSpacing;
+      const lineY =
+        scaledTimelineTopPad + lyr.lineIndex * scaledTimelineLineSpacing;
       const isHovered = hoveredLyricId === lyr.id;
       const isInSamePhrase =
         hoveredPhraseGroup >= 0 &&
         rawLyrics[lyrIndex].phraseGroup === hoveredPhraseGroup;
       const isActive = isHovered || isInSamePhrase;
-      const fontSize = isActive ? 13 : 9;
+      const fontSize = Math.round((isActive ? 13 : 9) * scaleFactor);
       const fontColor = isActive ? "#000000" : "#000000";
-      const textX = lyr.x + lyricLabelStartOffset;
+      const textX =
+        Math.round(lyr.x * scaleFactor) + scaledLyricLabelStartOffset;
       const textWidth = estimateLyricWidth(lyr.text, fontSize, letterSpacingEm);
-      const backgroundHeight = fontSize + 6;
-      const backgroundY = lineY + yOffset - fontSize + 1 - 3;
+      const backgroundHeight = fontSize + Math.round(6 * scaleFactor);
+      const backgroundY =
+        lineY + yOffset - fontSize + 1 - Math.round(3 * scaleFactor);
 
       return (
         <g
@@ -331,9 +382,9 @@ export function TimelineBar({
           }
         >
           <rect
-            x={textX - 6}
+            x={textX - Math.round(6 * scaleFactor)}
             y={backgroundY}
-            width={textWidth + 12}
+            width={textWidth + Math.round(12 * scaleFactor)}
             height={backgroundHeight}
             rx={backgroundHeight / 2}
             fill={lyricHoverBackground}
@@ -359,13 +410,13 @@ export function TimelineBar({
 
   // ── MOBILE LAYOUT ─────────────────────────────────────────────────────────
   if (isMobile) {
-    const headerH = 32;
-    const svgH = mobileTimelineHeight - headerH - scrollbarHeight;
+    const headerH = Math.round(32 * scaleFactor);
+    const svgH = scaledMobileTimelineHeight - headerH - scaledScrollbarHeight;
     return (
       <>
         <div
           className={`tl-mobile-root${placement === "section" ? " is-section" : ""}`}
-          style={{ height: mobileTimelineHeight, ...lyricFontVar }}
+          style={{ height: scaledMobileTimelineHeight, ...lyricFontVar }}
         >
           <audio
             ref={audioRef}
@@ -472,7 +523,7 @@ export function TimelineBar({
                 className="tl-mob-scroll"
                 style={
                   {
-                    width: totalWidth,
+                    width: scaledTotalWidth,
                     height: svgH,
                     minHeight: svgH,
                     position: "relative",
@@ -480,25 +531,27 @@ export function TimelineBar({
                 }
               >
                 <svg
-                  width={totalWidth}
+                  width={scaledTotalWidth}
                   height={svgH}
-                  viewBox={`0 0 ${totalWidth} ${svgH}`}
+                  viewBox={`0 0 ${scaledTotalWidth} ${svgH}`}
                   className="tl-svg"
                 >
                   {/* 5 horizontal role lines */}
                   {roleLines.map((rl, i) => {
                     const lineY =
-                      timelineTopPad + i * timelineLineSpacing + 0.5;
+                      scaledTimelineTopPad +
+                      i * scaledTimelineLineSpacing +
+                      0.5;
                     return (
                       <line
                         className="tl-role-line"
                         key={rl.id}
-                        x1={roleLineStartOffset}
+                        x1={scaledRoleLineStartOffset}
                         y1={lineY}
-                        x2={totalWidth}
+                        x2={scaledTotalWidth}
                         y2={lineY}
                         stroke={lineDefaultColor}
-                        strokeWidth={lineStrokeWidth}
+                        strokeWidth={scaledLineStrokeWidth}
                         opacity={lineDefaultOpacity}
                         vectorEffect="non-scaling-stroke"
                         strokeLinecap="butt"
@@ -529,11 +582,11 @@ export function TimelineBar({
   }
 
   // ── DESKTOP LAYOUT ────────────────────────────────────────────────────────
-  const svgH = timelineHeight - scrollbarHeight;
+  const svgH = scaledTimelineHeight - scaledScrollbarHeight;
   return (
     <div
       className={`tl-desktop-root${placement === "section" ? " is-section" : ""}`}
-      style={{ height: timelineHeight, ...lyricFontVar }}
+      style={{ height: scaledTimelineHeight, ...lyricFontVar }}
     >
       <audio
         ref={audioRef}
@@ -642,24 +695,25 @@ export function TimelineBar({
             </button>
 
             <svg
-              width={totalWidth}
+              width={scaledTotalWidth}
               height={svgH}
-              viewBox={`0 0 ${totalWidth} ${svgH}`}
+              viewBox={`0 0 ${scaledTotalWidth} ${svgH}`}
               className="tl-svg"
             >
               {/* 5 horizontal role lines — uniform pale grey, thin and crisp */}
               {roleLines.map((rl, i) => {
-                const lineY = timelineTopPad + i * timelineLineSpacing + 0.5;
+                const lineY =
+                  scaledTimelineTopPad + i * scaledTimelineLineSpacing + 0.5;
                 return (
                   <line
                     className="tl-role-line"
                     key={rl.id}
-                    x1={roleLineStartOffset}
+                    x1={scaledRoleLineStartOffset}
                     y1={lineY}
-                    x2={totalWidth}
+                    x2={scaledTotalWidth}
                     y2={lineY}
                     stroke={lineDefaultColor}
-                    strokeWidth={lineStrokeWidth}
+                    strokeWidth={scaledLineStrokeWidth}
                     opacity={lineDefaultOpacity}
                     vectorEffect="non-scaling-stroke"
                     strokeLinecap="butt"

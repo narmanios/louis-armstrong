@@ -94,6 +94,73 @@ export const SectionJourneyToAmbassador: React.FC = () => {
         .journey-text {
           display: block;
         }
+
+        /* ── 4K Proportional Scaling ── */
+        @media (min-width: 2560px) {
+          .journey-section {
+            padding: 0 98px 105px;
+          }
+
+          .journey-entry-grid {
+            gap: 56px 98px;
+            margin-top: 42px;
+          }
+
+          .journey-logo-link {
+            right: 21px;
+            bottom: 21px;
+            width: 133px;
+            height: 133px;
+          }
+
+          .journey-caption,
+          .journey-copy {
+            font-size: 44px;
+          }
+
+          .journey-caption {
+            font-size: 24px;
+            margin-top: 21px;
+          }
+
+          .journey-copy {
+            line-height: 66px;
+            margin-top: 21px;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .journey-section {
+            padding: 0 112px 120px;
+          }
+
+          .journey-entry-grid {
+            gap: 64px 112px;
+            margin-top: 48px;
+          }
+
+          .journey-logo-link {
+            right: 24px;
+            bottom: 24px;
+            width: 152px;
+            height: 152px;
+          }
+
+          .journey-caption,
+          .journey-copy {
+            font-size: 52px;
+          }
+
+          .journey-caption {
+            font-size: 28px;
+            margin-top: 24px;
+          }
+
+          .journey-copy {
+            line-height: 78px;
+            margin-top: 24px;
+          }
+        }
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">

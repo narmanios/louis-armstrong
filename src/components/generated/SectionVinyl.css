@@ -500,3 +500,297 @@
     opacity 180ms ease,
     transform 180ms ease;
 }
+
+/* ── 4K Proportional Scaling ── */
+@media (min-width: 2560px) {
+  .vre {
+    padding: 0 98px 63px;
+    grid-template-columns: minmax(260px, 1000px) minmax(0, 1fr);
+    gap: 56px;
+  }
+
+  .vre__title .mcg-page-title {
+    font-size: 80px !important;
+    line-height: 1 !important;
+  }
+
+  .vre__subtitle {
+    max-width: 1200px;
+    font-size: 36px;
+    line-height: 1.5;
+    margin: 24.5px 0 0 0;
+  }
+
+  .vre__soundtrack-count {
+    margin-top: 28px;
+    margin-bottom: 42px;
+    gap: 10.5px;
+  }
+
+  .vre__soundtrack-count-number {
+    font-size: 56px;
+  }
+
+  .vre__soundtrack-count-label {
+    font-size: 22.75px;
+  }
+
+  .vre__view-toggle {
+    gap: 14px;
+    margin-top: 28px;
+    margin-bottom: 14px;
+  }
+
+  .vre__view-btn {
+    padding: 14px 28px;
+    border-radius: 10.5px;
+    font-size: 22.75px;
+    border-width: 1.75px;
+  }
+
+  .vre__view-btn svg {
+    width: 42px;
+    height: 42px;
+  }
+
+  .vre__legend {
+    gap: 40px 64px;
+    margin-bottom: 72px;
+  }
+
+  .vre__legend-row {
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .vre__song-list--horizontal {
+    gap: 24px;
+    max-width: 900px;
+  }
+
+  .vre__song-section--header {
+    margin-top: 24px;
+    margin-bottom: 0;
+  }
+
+  .vre__song-list--horizontal .vre__song-btn {
+    padding: 15px 25px;
+    border-radius: 20px;
+    font-size: 27.5px;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .vre__svg {
+    width: min(100%, 1794px);
+    max-width: 1794px;
+  }
+
+  .vre__tooltip {
+    width: min(434px, calc(100% - 56px));
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 17.5px 21px;
+    padding: 19.25px 22.75px;
+    border-radius: 14px;
+    border-width: 1.75px;
+  }
+
+  .vre__tooltip-image-wrap {
+    width: 112px;
+    height: 150.5px;
+    border-radius: 7px;
+    border-width: 1.75px;
+  }
+
+  .vre__tooltip-kicker {
+    font-size: 17.5px;
+    margin: 0 0 7px 0;
+  }
+
+  .vre__tooltip-title-row {
+    gap: 14px;
+    margin-bottom: 10.5px;
+  }
+
+  .vre__tooltip-title-row h2 {
+    font-size: 22.75px;
+  }
+
+  .vre__tooltip-title-row span {
+    font-size: 22.75px;
+  }
+
+  .vre__tooltip-row + .vre__tooltip-row {
+    margin-top: 8.75px;
+  }
+
+  .vre__meta-label {
+    font-size: 17.5px;
+    margin-bottom: 3.5px;
+  }
+
+  .vre__meta-value {
+    font-size: 22.75px;
+  }
+
+  .vre__tooltip-links {
+    gap: 14px;
+    margin-top: 17.5px;
+  }
+
+  .vre__tooltip-link {
+    width: 45.5px;
+    height: 45.5px;
+  }
+
+  .vre__tooltip-link svg {
+    width: 24.5px;
+    height: 24.5px;
+  }
+}
+
+@media (min-width: 3440px) {
+  .vre {
+    padding: 0 112px 72px;
+    grid-template-columns: minmax(260px, 1200px) minmax(0, 1fr);
+    gap: 64px;
+  }
+
+  .vre__title .mcg-page-title {
+    font-size: 96px !important;
+    line-height: 1 !important;
+  }
+
+  .vre__subtitle {
+    max-width: 1400px;
+    font-size: 42px;
+    margin: 28px 0 0 0;
+  }
+
+  .vre__soundtrack-count {
+    margin-top: 32px;
+    margin-bottom: 48px;
+    gap: 12px;
+  }
+
+  .vre__soundtrack-count-number {
+    font-size: 64px;
+  }
+
+  .vre__soundtrack-count-label {
+    font-size: 26px;
+  }
+
+  .vre__view-toggle {
+    gap: 16px;
+    margin-top: 32px;
+    margin-bottom: 16px;
+  }
+
+  .vre__view-btn {
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-size: 26px;
+    border-width: 2px;
+  }
+
+  .vre__view-btn svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .vre__legend {
+    gap: 50px 80px;
+    margin-bottom: 90px;
+  }
+
+  .vre__legend-row {
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+
+  .vre__song-list--horizontal {
+    gap: 30px;
+    max-width: 1080px;
+  }
+
+  .vre__song-section--header {
+    margin-top: 30px;
+    margin-bottom: 0;
+  }
+
+  .vre__song-list--horizontal .vre__song-btn {
+    padding: 18px 30px;
+    border-radius: 24px;
+    font-size: 33px;
+    gap: 10px;
+    white-space: nowrap;
+  }
+
+  .vre__svg {
+    width: min(100%, 2050px);
+    max-width: 2050px;
+  }
+
+  .vre__tooltip {
+    width: min(496px, calc(100% - 64px));
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: 20px 24px;
+    padding: 22px 26px;
+    border-radius: 16px;
+    border-width: 2px;
+  }
+
+  .vre__tooltip-image-wrap {
+    width: 128px;
+    height: 172px;
+    border-radius: 8px;
+    border-width: 2px;
+  }
+
+  .vre__tooltip-kicker {
+    font-size: 20px;
+    margin: 0 0 8px 0;
+  }
+
+  .vre__tooltip-title-row {
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .vre__tooltip-title-row h2 {
+    font-size: 26px;
+  }
+
+  .vre__tooltip-title-row span {
+    font-size: 26px;
+  }
+
+  .vre__tooltip-row + .vre__tooltip-row {
+    margin-top: 10px;
+  }
+
+  .vre__meta-label {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+
+  .vre__meta-value {
+    font-size: 26px;
+  }
+
+  .vre__tooltip-links {
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .vre__tooltip-link {
+    width: 52px;
+    height: 52px;
+  }
+
+  .vre__tooltip-link svg {
+    width: 28px;
+    height: 28px;
+  }
+}

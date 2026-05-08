@@ -1687,6 +1687,219 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         .mcg-group-nav-next-button:active {
           transform: translateY(0);
         }
+
+        /* ── 4K Proportional Scaling ── */
+        @media (min-width: 2560px) {
+          .mcg-root.has-sticky-group-header::before {
+            height: ${desktopStickyHeaderHeight * 1.75}px;
+          }
+
+          .mcg-group-nav {
+            height: ${desktopStickyHeaderHeight * 1.75}px;
+            padding: 0 42px;
+            gap: 17.5px;
+          }
+
+          .mcg-group-nav-label {
+            font-size: 24.5px;
+          }
+
+          .mcg-group-nav-links {
+            gap: 17.5px;
+          }
+
+          .mcg-group-nav-button {
+            font-size: 19.25px;
+          }
+
+          .mcg-group-nav-dropdown {
+            min-width: 315px;
+            padding-top: 14px;
+          }
+
+          .mcg-group-nav-dropdown-button {
+            padding: 10.5px 17.5px;
+            font-size: 21px;
+          }
+
+          .mcg-section-stats-card {
+            top: ${desktopStickyHeaderHeight * 1.75 + 21}px;
+            width: min(1435px, calc(100vw - 56px));
+            padding: 49px 56px;
+            border-radius: 10.5px;
+          }
+
+          .mcg-section-stats-card__close {
+            top: 21px;
+            right: 21px;
+            width: 31.5px;
+            height: 31.5px;
+          }
+
+          .mcg-section-stats-card__title {
+            font-size: 24.5px;
+            margin-bottom: 14px;
+          }
+
+          .mcg-section-stats-card__note {
+            font-size: 28px;
+            line-height: 1.6;
+            padding-right: 42px;
+          }
+
+          .mcg-page-title {
+            font-size: 80px !important;
+            line-height: 96px !important;
+          }
+
+          .mcg-track > .mcg-section .mcg-page-title:not(.mcg-page-title--flow),
+          .mcg-track > .mcg-group-page .mcg-section .mcg-page-title:not(.mcg-page-title--flow) {
+            left: 98px !important;
+            top: 133px !important;
+          }
+
+          .mcg-page-title--flow {
+            margin-top: 140px !important;
+          }
+
+          .mcg-group-scroll-arrow {
+            right: 35px;
+            bottom: 35px;
+            width: 77px;
+            height: 77px;
+          }
+
+          .mcg-group-scroll-arrow svg {
+            width: 49px;
+            height: 49px;
+          }
+
+          .mcg-group-nav-button-container {
+            padding: 105px 42px 140px;
+          }
+
+          .mcg-group-nav-next-button {
+            padding: 28px 56px;
+            border-radius: 10.5px;
+            font-size: 28px;
+            min-width: 490px;
+          }
+
+          /* ── Consistent section descriptions across all sections ── */
+          .real-ambassadors-description,
+          .FBI-description,
+          .goodwill-description {
+            font-size: 36px !important;
+            max-width: 1200px !important;
+            margin-top: 32px !important;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .mcg-root.has-sticky-group-header::before {
+            height: ${desktopStickyHeaderHeight * 2}px;
+          }
+
+          .mcg-group-nav {
+            height: ${desktopStickyHeaderHeight * 2}px;
+            padding: 0 48px;
+            gap: 20px;
+          }
+
+          .mcg-group-nav-label {
+            font-size: 28px;
+          }
+
+          .mcg-group-nav-links {
+            gap: 20px;
+          }
+
+          .mcg-group-nav-button {
+            font-size: 22px;
+          }
+
+          .mcg-group-nav-dropdown {
+            min-width: 360px;
+            padding-top: 16px;
+          }
+
+          .mcg-group-nav-dropdown-button {
+            padding: 12px 20px;
+            font-size: 24px;
+          }
+
+          .mcg-section-stats-card {
+            top: ${desktopStickyHeaderHeight * 2 + 24}px;
+            width: min(1640px, calc(100vw - 64px));
+            padding: 56px 64px;
+            border-radius: 12px;
+          }
+
+          .mcg-section-stats-card__close {
+            top: 24px;
+            right: 24px;
+            width: 36px;
+            height: 36px;
+          }
+
+          .mcg-section-stats-card__title {
+            font-size: 28px;
+            margin-bottom: 16px;
+          }
+
+          .mcg-section-stats-card__note {
+            font-size: 32px;
+            line-height: 1.6;
+            padding-right: 48px;
+          }
+
+          .mcg-page-title {
+            font-size: 96px !important;
+            line-height: 112px !important;
+          }
+
+          .mcg-track > .mcg-section .mcg-page-title:not(.mcg-page-title--flow),
+          .mcg-track > .mcg-group-page .mcg-section .mcg-page-title:not(.mcg-page-title--flow) {
+            left: 112px !important;
+            top: 152px !important;
+          }
+
+          .mcg-page-title--flow {
+            margin-top: 160px !important;
+          }
+
+          .mcg-group-scroll-arrow {
+            right: 40px;
+            bottom: 40px;
+            width: 88px;
+            height: 88px;
+          }
+
+          .mcg-group-scroll-arrow svg {
+            width: 56px;
+            height: 56px;
+          }
+
+          .mcg-group-nav-button-container {
+            padding: 120px 48px 160px;
+          }
+
+          .mcg-group-nav-next-button {
+            padding: 32px 64px;
+            border-radius: 12px;
+            font-size: 32px;
+            min-width: 560px;
+          }
+
+          /* ── Consistent section descriptions across all sections ── */
+          .real-ambassadors-description,
+          .FBI-description,
+          .goodwill-description {
+            font-size: 42px !important;
+            max-width: 1400px !important;
+            margin-top: 36px !important;
+          }
+        }
       `}</style>
 
       {!isMobile && showFixedGroupNav ? renderGroupNav() : null}
@@ -1788,8 +2001,12 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
                   ambassadorSectionRefs.current[1] = element;
                 }}
                 className="mcg-group-section"
+                style={{ background: "#000000" }}
               >
-                <div className="mcg-group-section-inner">
+                <div
+                  className="mcg-group-section-inner"
+                  style={{ background: "#000000" }}
+                >
                   <JazzAmbassadorsMap />
                 </div>
               </div>

@@ -89,6 +89,79 @@ export const SectionAboutProject: React.FC = () => {
           font-size: 12px;
           text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
         }
+
+        /* ── 4K Proportional Scaling ── */
+        @media (min-width: 2560px) {
+          .about-project-section {
+            --about-project-max-width: 100vw;
+            --about-project-layout-width: 100vw;
+          }
+
+          .about-project-layout {
+            width: 100vw !important;
+            max-width: 100vw !important;
+            right: 0;
+          }
+
+          .about-project-section .about-project-title.mcg-page-title {
+            left: 98px !important;
+            top: 133px !important;
+          }
+
+          .about-project-text-panel {
+            padding: 287px 98px 105px;
+          }
+
+          .about-project-copy {
+            font-size: 24.5px;
+            line-height: 38.5px;
+            width: min(100%, 670px);
+            max-width: 670px;
+          }
+
+          .about-project-caption {
+            left: 42px;
+            right: 42px;
+            bottom: 42px;
+            font-size: 21px;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .about-project-section {
+            --about-project-max-width: 100vw;
+            --about-project-layout-width: 100vw;
+          }
+
+          .about-project-layout {
+            width: 100vw !important;
+            max-width: 100vw !important;
+            right: 0;
+          }
+
+          .about-project-section .about-project-title.mcg-page-title {
+            left: 112px !important;
+            top: 152px !important;
+          }
+
+          .about-project-text-panel {
+            padding: 328px 112px 120px;
+          }
+
+          .about-project-copy {
+            font-size: 28px;
+            line-height: 44px;
+            width: min(100%, 766px);
+            max-width: 766px;
+          }
+
+          .about-project-caption {
+            left: 48px;
+            right: 48px;
+            bottom: 48px;
+            font-size: 24px;
+          }
+        }
       `}</style>
 
       <h2 className="about-project-title mcg-section-title mcg-page-title mcg-page-title--light">

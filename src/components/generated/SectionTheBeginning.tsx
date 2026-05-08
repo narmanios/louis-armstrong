@@ -94,6 +94,73 @@ export const SectionTheBeginning: React.FC = () => {
         .beginning-text {
           display: block;
         }
+
+        /* ── 4K Proportional Scaling ── */
+        @media (min-width: 2560px) {
+          .beginning-section {
+            padding: 0 98px 105px;
+          }
+
+          .beginning-entry-grid {
+            gap: 56px 98px;
+            margin-top: 42px;
+          }
+
+          .beginning-logo-link {
+            right: 21px;
+            bottom: 21px;
+            width: 133px;
+            height: 133px;
+          }
+
+          .beginning-caption,
+          .beginning-copy {
+            font-size: 44px;
+          }
+
+          .beginning-caption {
+            font-size: 24px;
+            margin-top: 21px;
+          }
+
+          .beginning-copy {
+            line-height: 66px;
+            margin-top: 21px;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .beginning-section {
+            padding: 0 112px 120px;
+          }
+
+          .beginning-entry-grid {
+            gap: 64px 112px;
+            margin-top: 48px;
+          }
+
+          .beginning-logo-link {
+            right: 24px;
+            bottom: 24px;
+            width: 152px;
+            height: 152px;
+          }
+
+          .beginning-caption,
+          .beginning-copy {
+            font-size: 52px;
+          }
+
+          .beginning-caption {
+            font-size: 28px;
+            margin-top: 24px;
+          }
+
+          .beginning-copy {
+            line-height: 78px;
+            margin-top: 24px;
+          }
+        }
       `}</style>
 
       <h2 className="mcg-section-title mcg-page-title mcg-page-title--flow">

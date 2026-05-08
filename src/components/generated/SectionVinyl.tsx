@@ -622,7 +622,7 @@ export function VinylRecordExplorer({
                   key={decade.id}
                   className={cx(
                     "vre__song-btn",
-                    (activeDecadeId === decade.id ||
+                    (hoveredDecadeId === decade.id ||
                       selectedDecadeId === decade.id) &&
                       "is-active",
                   )}

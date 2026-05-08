@@ -43,7 +43,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
       <style>{`
         .mcg-horizontal-gallery-container {
           display: flex;
-          gap: ${isMobile ? "48px" : "64px"};
+          gap: ${isMobile ? "96px" : "128px"};
           padding: ${isMobile ? "24px" : "32px"};
           overflow-x: auto;
           overflow-y: hidden;
@@ -69,6 +69,42 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
         .mcg-horizontal-gallery-container::-webkit-scrollbar-thumb:hover {
           background: rgba(255, 255, 255, 0.6);
         }
+
+        @media (min-width: 2560px) {
+          .mcg-horizontal-gallery-container {
+            gap: 200px !important;
+          }
+          .mcg-gallery-img {
+            max-width: min(85vw, 1050px) !important;
+            max-height: 78vh !important;
+          }
+          .mcg-gallery-caption {
+            font-size: 24px !important;
+            line-height: 36px !important;
+            max-width: 840px !important;
+          }
+          .mcg-gallery-slide {
+            gap: 80px !important;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .mcg-horizontal-gallery-container {
+            gap: 256px !important;
+          }
+          .mcg-gallery-img {
+            max-width: min(85vw, 1200px) !important;
+            max-height: 80vh !important;
+          }
+          .mcg-gallery-caption {
+            font-size: 28px !important;
+            line-height: 42px !important;
+            max-width: 960px !important;
+          }
+          .mcg-gallery-slide {
+            gap: 100px !important;
+          }
+        }
       `}</style>
 
       <div
@@ -79,11 +115,11 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
           height: isMobile
             ? "calc(100dvh - var(--mcg-mobile-nav-offset, 0px))"
             : "100vh",
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          backgroundColor: "rgba(0, 0, 0, 0.75)",
           zIndex: 1000,
           display: "flex",
           flexDirection: "column",
-          backdropFilter: isMobile ? "none" : "blur(5px)",
+          backdropFilter: isMobile ? "none" : "blur(20px)",
         }}
         onClick={onClose}
       >
@@ -142,6 +178,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
               muted
               playsInline
               controls
+              className="mcg-gallery-img"
               style={{
                 maxWidth: isMobile ? "85vw" : "min(50vw, 620px)",
                 maxHeight: isMobile ? "50vh" : "68vh",
@@ -167,6 +204,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
                     lineHeight: isMobile ? "20px" : "24px",
                     textAlign: "left",
                   }}
+                  className="mcg-gallery-caption"
                 >
                   {slides[0].caption}
                 </p>
@@ -187,6 +225,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
             {slides.map((slide, index) => (
               <div
                 key={`${slide.id}-${index}`}
+                className="mcg-gallery-slide"
                 style={{
                   flex: "0 0 auto",
                   display: "flex",
@@ -213,6 +252,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
                       muted
                       playsInline
                       controls
+                      className="mcg-gallery-img"
                       style={{
                         maxWidth: isMobile ? "85vw" : "600px",
                         maxHeight: isMobile ? "50vh" : "60vh",
@@ -234,6 +274,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
                           <img
                             src={slide.src}
                             alt={slide.alt}
+                            className="mcg-gallery-img"
                             style={{
                               maxWidth: isMobile ? "85vw" : "600px",
                               maxHeight: isMobile ? "50vh" : "60vh",
@@ -248,6 +289,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
                         <img
                           src={slide.src}
                           alt={slide.alt}
+                          className="mcg-gallery-img"
                           style={{
                             maxWidth: isMobile ? "85vw" : "600px",
                             maxHeight: isMobile ? "50vh" : "60vh",
@@ -302,6 +344,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
                       textAlign: "left",
                       maxWidth: isMobile ? "70vw" : "450px",
                     }}
+                    className="mcg-gallery-caption"
                   >
                     {slide.caption}
                   </p>
