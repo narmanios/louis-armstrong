@@ -10,7 +10,6 @@ import { SectionFBIFiles } from "./SectionFBIFiles";
 import { SectionAfricaTour } from "./SectionAfricaTour";
 import { SectionRealAmbassadors } from "./SectionRealAmbassadors";
 import { SectionWorldFair } from "./SectionWorldFair";
-import { SectionGoodwillAmbassador } from "./SectionGoodwill/SectionGoodwillAmbassador.tsx";
 import { SectionWonderfulWorld } from "./SectionWonderfulWorld/SectionWonderfulWorld.tsx";
 import { SectionVinyl } from "./SectionVinyl.tsx";
 import JazzAmbassadorsMap from "./JazzAmbassadorsMap.tsx";
