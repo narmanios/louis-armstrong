@@ -242,7 +242,7 @@ const MapboxMapView: React.FC<MapboxMapProps> = ({
 
     try {
       // Increase zoom for 4K resolutions
-      const initialZoom = scale >= 2.0 ? 3.2 : scale >= 1.75 ? 2.7 : 0.8;
+      const initialZoom = scale >= 2.0 ? 4.0 : scale >= 1.75 ? 3.5 : 1.4;
 
       console.log("Initializing Mapbox with token:", mapboxgl.accessToken);
 
@@ -350,7 +350,7 @@ const MapboxMapView: React.FC<MapboxMapProps> = ({
                     map.setLayoutProperty(layer.id, "visibility", "visible");
                     map.setPaintProperty(layer.id, "line-color", "#8a8a8a");
                     map.setPaintProperty(layer.id, "line-width", 1.5);
-                    map.setPaintProperty(layer.id, "line-opacity", 0.3);
+                    map.setPaintProperty(layer.id, "line-opacity", 0.2);
                     borderCount++;
                     console.log(`  ✓ Styled boundary: ${layer.id}`);
                   } else {
@@ -411,7 +411,7 @@ const MapboxMapView: React.FC<MapboxMapProps> = ({
                   paint: {
                     "line-color": "#8a8a8a",
                     "line-width": 1.5,
-                    "line-opacity": 0.6,
+                    "line-opacity": 0.4,
                   },
                 },
                 firstSymbolId,
@@ -430,7 +430,7 @@ const MapboxMapView: React.FC<MapboxMapProps> = ({
                   paint: {
                     "line-color": "#8a8a8a",
                     "line-width": 1.5,
-                    "line-opacity": 0.6,
+                    "line-opacity": 0.4,
                   },
                 },
                 firstSymbolId,
@@ -526,7 +526,7 @@ const MapboxMapView: React.FC<MapboxMapProps> = ({
   // Update zoom level when scale changes
   useEffect(() => {
     if (!mapInstanceRef.current) return;
-    const initialZoom = scale >= 2.0 ? 3.2 : scale >= 1.75 ? 2.7 : 0.8;
+    const initialZoom = scale >= 2.0 ? 4.0 : scale >= 1.75 ? 3.5 : 1.4;
     mapInstanceRef.current.setZoom(initialZoom);
     mapInstanceRef.current.setMaxZoom(initialZoom); // Keep max zoom locked to default
 
