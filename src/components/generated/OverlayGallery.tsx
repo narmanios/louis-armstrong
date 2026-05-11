@@ -105,6 +105,28 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
             gap: 100px !important;
           }
         }
+
+        @media (min-width: 2560px) {
+          .mcg-close-button {
+            width: 112px !important;
+            height: 112px !important;
+          }
+          .mcg-close-icon {
+            width: 49px !important;
+            height: 49px !important;
+          }
+        }
+
+        @media (min-width: 3440px) {
+          .mcg-close-button {
+            width: 128px !important;
+            height: 128px !important;
+          }
+          .mcg-close-icon {
+            width: 56px !important;
+            height: 56px !important;
+          }
+        }
       `}</style>
 
       <div
@@ -125,6 +147,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
       >
         <button
           onClick={onClose}
+          className="mcg-close-button"
           style={{
             position: "fixed",
             top: isMobile
@@ -148,6 +171,7 @@ export const OverlayGallery: React.FC<OverlayGalleryProps> = ({
           <img
             src="/assets/close.svg"
             alt="Close"
+            className="mcg-close-icon"
             style={{
               width: isMobile ? "24px" : "28px",
               height: isMobile ? "24px" : "28px",

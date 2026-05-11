@@ -41,15 +41,20 @@ type MapboxMap = {
   remove(): void;
   setCenter(center: [number, number]): MapboxMap;
   setZoom(zoom: number): MapboxMap;
+  setMinZoom(zoom: number): MapboxMap;
+  setMaxZoom(zoom: number): MapboxMap;
   zoomIn(): MapboxMap;
   zoomOut(): MapboxMap;
   on(event: string, callback: (...args: any[]) => void): MapboxMap;
   getSource(id: string): any;
   addSource(id: string, source: any): void;
-  addLayer(layer: any): void;
+  addLayer(layer: any, beforeId?: string): void;
   getLayer(id: string): any;
   removeLayer(id: string): void;
   removeSource(id: string): void;
+  getStyle(): any;
+  setLayoutProperty(layerId: string, property: string, value: any): MapboxMap;
+  setPaintProperty(layerId: string, property: string, value: any): MapboxMap;
   getCanvas(): HTMLCanvasElement;
   project(lngLat: [number, number]): { x: number; y: number };
   unproject(point: { x: number; y: number }): { lng: number; lat: number };
@@ -246,18 +251,248 @@ const MapboxMapView: React.FC<MapboxMapProps> = ({
         style: "mapbox://styles/narmanios/clo4ut9ap00hd01oybzy2hm3f",
         center: [30, 10],
         zoom: initialZoom,
-        minZoom: 1.75,
-        maxZoom: 6,
+        minZoom: 0.5,
+        maxZoom: initialZoom, // Lock max zoom to default zoom level
         projection: "mercator", // Use flat map instead of globe
         attributionControl: true,
       });
 
       mapInstanceRef.current.on("load", () => {
         console.log("Mapbox map loaded successfully");
-        // Log the actual style being used
-        const style = (mapInstanceRef.current as any).getStyle();
-        console.log("Loaded style:", style?.name || "Unknown");
-        console.log("Style ID:", style?.id || "Unknown");
+
+        // Enable country labels from Mapbox
+        if (mapInstanceRef.current) {
+          const map = mapInstanceRef.current;
+          const style = map.getStyle();
+
+          // Log the actual style being used
+          console.log("Loaded style:", style?.name || "Unknown");
+          console.log("Style ID:", style?.id || "Unknown");
+
+          // Log all layer IDs to help debug
+          if (style && style.layers) {
+            console.log(
+              "All layers:",
+              style.layers.map((l: any) => l.id),
+            );
+
+            // Set background layers to black
+            console.log("\n=== Setting background layers to black ===");
+            style.layers.forEach((layer: any) => {
+              if (layer.type === "background") {
+                console.log(`Background layer: ${layer.id}`);
+                try {
+                  map.setPaintProperty(layer.id, "background-color", "#000000");
+                  map.setPaintProperty(layer.id, "background-opacity", 1);
+                  console.log(`  ✓ Set to black: ${layer.id}`);
+                } catch (err) {
+                  console.warn(`  ✗ Failed to set: ${layer.id}`, err);
+                }
+              }
+            });
+
+            // Hide circle layers (dots, points)
+            console.log("\n=== Hiding circle layers ===");
+            let circleCount = 0;
+            style.layers.forEach((layer: any) => {
+              if (layer.type === "circle") {
+                console.log(`Circle layer: ${layer.id}`);
+                try {
+                  map.setLayoutProperty(layer.id, "visibility", "none");
+                  circleCount++;
+                  console.log(`  ✓ Hidden: ${layer.id}`);
+                } catch (err) {
+                  console.warn(`  ✗ Failed to hide: ${layer.id}`, err);
+                }
+              }
+            });
+            console.log(`Total circle layers hidden: ${circleCount}`);
+
+            // Hide fill-extrusion layers (3D shapes)
+            console.log("\n=== Hiding fill-extrusion layers ===");
+            let extrusionCount = 0;
+            style.layers.forEach((layer: any) => {
+              if (layer.type === "fill-extrusion") {
+                console.log(`Fill-extrusion layer: ${layer.id}`);
+                try {
+                  map.setLayoutProperty(layer.id, "visibility", "none");
+                  extrusionCount++;
+                  console.log(`  ✓ Hidden: ${layer.id}`);
+                } catch (err) {
+                  console.warn(`  ✗ Failed to hide: ${layer.id}`, err);
+                }
+              }
+            });
+            console.log(
+              `Total fill-extrusion layers hidden: ${extrusionCount}`,
+            );
+
+            // Process ONLY boundary line layers (hide roads, paths, etc.)
+            console.log("\n=== Processing line layers for boundaries only ===");
+            let borderCount = 0;
+            style.layers.forEach((layer: any) => {
+              if (layer.type === "line") {
+                const layerId = layer.id.toLowerCase();
+                // Check if this is a boundary/admin/border layer
+                const isBoundary =
+                  layerId.includes("admin") ||
+                  layerId.includes("border") ||
+                  layerId.includes("boundary") ||
+                  layerId.includes("country");
+
+                console.log(
+                  `Line layer: ${layer.id}, isBoundary: ${isBoundary}`,
+                );
+
+                try {
+                  if (isBoundary) {
+                    // Show and style boundary layers
+                    map.setLayoutProperty(layer.id, "visibility", "visible");
+                    map.setPaintProperty(layer.id, "line-color", "#8a8a8a");
+                    map.setPaintProperty(layer.id, "line-width", 1.5);
+                    map.setPaintProperty(layer.id, "line-opacity", 0.3);
+                    borderCount++;
+                    console.log(`  ✓ Styled boundary: ${layer.id}`);
+                  } else {
+                    // Hide non-boundary layers (roads, paths, etc.)
+                    map.setLayoutProperty(layer.id, "visibility", "none");
+                    console.log(`  ✓ Hidden non-boundary: ${layer.id}`);
+                  }
+                } catch (err) {
+                  console.warn(`  ✗ Failed to process: ${layer.id}`, err);
+                }
+              }
+            });
+            console.log(`Total boundary layers processed: ${borderCount}`);
+
+            // Hide ALL symbol layers (icons, dots, labels) - we'll add our own custom labels
+            console.log("\n=== Hiding all symbol layers ===");
+            let hiddenSymbols = 0;
+            style.layers.forEach((layer: any) => {
+              if (layer.type === "symbol") {
+                console.log(`Symbol layer: ${layer.id}`);
+                try {
+                  map.setLayoutProperty(layer.id, "visibility", "none");
+                  hiddenSymbols++;
+                  console.log(`  ✓ Hidden symbol: ${layer.id}`);
+                } catch (err) {
+                  console.warn(`  ✗ Failed to hide: ${layer.id}`, err);
+                }
+              }
+            });
+            console.log(`Total symbols hidden: ${hiddenSymbols}`);
+          }
+
+          // Add dedicated layers for continent/land outlines
+          try {
+            console.log("\n=== Adding continent outline layers ===");
+
+            // Find the first symbol layer to insert boundaries before labels
+            const layers = map.getStyle().layers;
+            let firstSymbolId: string | undefined;
+            for (const layer of layers) {
+              if (layer.type === "symbol") {
+                firstSymbolId = layer.id;
+                break;
+              }
+            }
+
+            // Add land/continent outline layer using natural earth or landuse data
+            // Try multiple approaches to ensure coastlines are visible
+
+            // Approach 1: Use landuse/land layer outlines
+            if (map.getSource("composite")) {
+              map.addLayer(
+                {
+                  id: "continent-land-outlines",
+                  type: "line",
+                  source: "composite",
+                  "source-layer": "landuse",
+                  paint: {
+                    "line-color": "#8a8a8a",
+                    "line-width": 1.5,
+                    "line-opacity": 0.6,
+                  },
+                },
+                firstSymbolId,
+              );
+              console.log("Added land outlines layer");
+            }
+
+            // Approach 2: Add water boundaries which define land edges
+            if (map.getSource("composite")) {
+              map.addLayer(
+                {
+                  id: "continent-water-boundaries",
+                  type: "line",
+                  source: "composite",
+                  "source-layer": "water",
+                  paint: {
+                    "line-color": "#8a8a8a",
+                    "line-width": 1.5,
+                    "line-opacity": 0.6,
+                  },
+                },
+                firstSymbolId,
+              );
+              console.log("Added water boundaries layer");
+            }
+
+            console.log("=== Finished adding continent outlines ===\n");
+          } catch (err) {
+            console.warn("Failed to add continent outline layers:", err);
+          }
+
+          // Add custom country labels for visited countries
+          const countryFeatures = COUNTRY_PINS.map((pin) => ({
+            type: "Feature" as const,
+            geometry: {
+              type: "Point" as const,
+              coordinates: [pin.lng, pin.lat],
+            },
+            properties: {
+              name: pin.country,
+            },
+          }));
+
+          const geojson = {
+            type: "FeatureCollection" as const,
+            features: countryFeatures,
+          };
+
+          // Add source for country labels
+          map.addSource("visited-country-labels", {
+            type: "geojson",
+            data: geojson,
+          });
+
+          // Add text layer for country names
+          map.addLayer({
+            id: "visited-country-labels-layer",
+            type: "symbol",
+            source: "visited-country-labels",
+            layout: {
+              "text-field": ["get", "name"],
+              "text-font": ["Open Sans Semibold", "Arial Unicode MS Regular"],
+              "text-size": Math.round(10 * scale),
+              "text-anchor": "center",
+              "text-offset": [0, -2],
+              "text-allow-overlap": false,
+              "text-ignore-placement": false,
+            },
+            paint: {
+              "text-color": "#cccccc",
+              "text-halo-color": "#000000",
+              "text-halo-width": 2,
+              "text-halo-blur": 1,
+            },
+          });
+
+          console.log(
+            `Added custom labels for ${COUNTRY_PINS.length} visited countries`,
+          );
+        }
+
         setMapLoaded(true);
       });
 
@@ -293,6 +528,19 @@ const MapboxMapView: React.FC<MapboxMapProps> = ({
     if (!mapInstanceRef.current) return;
     const initialZoom = scale >= 2.0 ? 3.2 : scale >= 1.75 ? 2.7 : 0.8;
     mapInstanceRef.current.setZoom(initialZoom);
+    mapInstanceRef.current.setMaxZoom(initialZoom); // Keep max zoom locked to default
+
+    // Update custom country label text size
+    const layer = mapInstanceRef.current.getLayer(
+      "visited-country-labels-layer",
+    );
+    if (layer) {
+      mapInstanceRef.current.setLayoutProperty(
+        "visited-country-labels-layer",
+        "text-size",
+        Math.round(10 * scale),
+      );
+    }
   }, [scale]);
 
   useEffect(() => {
@@ -357,7 +605,7 @@ const MapboxMapView: React.FC<MapboxMapProps> = ({
       ref={mapRef}
       className="w-full h-full"
       style={{
-        background: "#1e293b",
+        background: "#000000",
         position: "relative",
         opacity: mapLoaded ? 1 : 0.3,
         transition: "opacity 0.5s ease-in-out",
