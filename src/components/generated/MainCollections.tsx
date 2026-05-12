@@ -213,7 +213,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       scrollMobileElementIntoView(child);
       setTimeout(() => {
         isNavigatingRef.current = false;
-      }, 100);
+      }, 800);
       return;
     }
 
@@ -225,7 +225,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     // Clear navigation flag after scroll completes
     setTimeout(() => {
       isNavigatingRef.current = false;
-    }, 100);
+    }, 1000);
   };
 
   const getGroupPageElement = (groupId: GroupId) => {
@@ -297,7 +297,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   };
 
   const updateActiveStatsCard = () => {
-    if (!showFixedGroupNav || introOverlayGroupId !== null) {
+    if (!showFixedGroupNav || introOverlayGroupId !== null || isNavigatingRef.current) {
       setActiveStatsCardKey(null);
       return;
     }
@@ -359,7 +359,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       // Clear navigation flag after scroll completes
       setTimeout(() => {
         isNavigatingRef.current = false;
-      }, 100);
+      }, 800);
       return;
     }
 
@@ -386,7 +386,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         setShowFixedGroupNav(true);
         setIntroOverlayGroupId(null);
         introOverlayTimeoutRef.current = null;
-        isNavigatingRef.current = false;
+        setTimeout(() => {
+          isNavigatingRef.current = false;
+        }, 1000);
       }, introOverlayDurationMs);
       return;
     }
@@ -411,7 +413,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     // Clear navigation flag after scroll completes
     setTimeout(() => {
       isNavigatingRef.current = false;
-    }, 100);
+    }, 1000);
   };
 
   const scrollToTimelineSection = (timelineIdx: number) => {
@@ -453,7 +455,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       scrollMobileElementIntoView(nextSection);
       setTimeout(() => {
         isNavigatingRef.current = false;
-      }, 100);
+      }, 800);
       return;
     }
 
@@ -473,7 +475,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     // Clear navigation flag after scroll completes
     setTimeout(() => {
       isNavigatingRef.current = false;
-    }, 600); // Longer timeout for smooth scroll
+    }, 1000); // Longer timeout for smooth scroll
   };
 
   useEffect(() => {
@@ -816,6 +818,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     // Reset all navigation states
     setIntroOverlayGroupId(null);
     setIsMobileMenuOpen(false);
+    setShowFixedGroupNav(false);
 
     // Jump to intro position instantly (no smooth scroll)
     if (isMobile) {
@@ -831,7 +834,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     // Clear navigation flag after scroll completes
     setTimeout(() => {
       isNavigatingRef.current = false;
-    }, 100);
+    }, 1000);
   };
 
   const openAboutOverlay = () => {
