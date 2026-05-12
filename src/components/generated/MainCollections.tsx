@@ -220,16 +220,18 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       return;
     }
 
-    container.scrollTo({
-      left: Math.max(child.offsetLeft - desktopGroupPeek, 0),
-      behavior: "auto",
-    });
+    requestAnimationFrame(() => {
+      container.scrollTo({
+        left: Math.max(child.offsetLeft - desktopGroupPeek, 0),
+        behavior: "auto",
+      });
 
-    // Clear navigation flag after scroll completes
-    setTimeout(() => {
-      isNavigatingRef.current = false;
-      scrollListenersEnabledRef.current = true;
-    }, 1200);
+      // Clear navigation flag after scroll completes
+      setTimeout(() => {
+        isNavigatingRef.current = false;
+        scrollListenersEnabledRef.current = true;
+      }, 1200);
+    });
   };
 
   const getGroupPageElement = (groupId: GroupId) => {
@@ -350,11 +352,13 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       0,
     );
 
+    // CRITICAL: Set group ID first, synchronously, before any async operations
+    setCurrentGroupId(groupId);
+    
     // Set navigation flag and disable scroll listeners to prevent interference
     isNavigatingRef.current = true;
     scrollListenersEnabledRef.current = false;
 
-    setCurrentGroupId(groupId);
     if (isMobile) {
       setIsMobileMenuOpen(false);
     }
@@ -378,50 +382,58 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     if (isNavigatingFromIntro) {
       setIntroOverlayGroupId(groupId);
 
+      // Use requestAnimationFrame to ensure state updates before scroll
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          scroller?.scrollTo({
+            top: targetTop,
+            behavior: "auto",
+          });
+
+          scrollContainerRef.current?.scrollTo({
+            left: targetLeft,
+            behavior: "auto",
+          });
+
+          introOverlayTimeoutRef.current = window.setTimeout(() => {
+            setShowFixedGroupNav(true);
+            setIntroOverlayGroupId(null);
+            introOverlayTimeoutRef.current = null;
+            setTimeout(() => {
+              isNavigatingRef.current = false;
+              scrollListenersEnabledRef.current = true;
+            }, 1200);
+          }, introOverlayDurationMs);
+        });
+      });
+      return;
+    }
+
+    // Non-intro navigation: use requestAnimationFrame for timing
+    requestAnimationFrame(() => {
+      if (page) {
+        scrollContainerRef.current?.scrollTo({
+          left: Math.max(page.offsetLeft - desktopGroupPeek, 0),
+          behavior: "auto",
+        });
+      }
+
+      if (sectionJumpTimeoutRef.current !== null) {
+        window.clearTimeout(sectionJumpTimeoutRef.current);
+        sectionJumpTimeoutRef.current = null;
+      }
+
       scroller?.scrollTo({
         top: targetTop,
         behavior: "auto",
       });
 
-      scrollContainerRef.current?.scrollTo({
-        left: targetLeft,
-        behavior: "auto",
-      });
-
-      introOverlayTimeoutRef.current = window.setTimeout(() => {
-        setShowFixedGroupNav(true);
-        setIntroOverlayGroupId(null);
-        introOverlayTimeoutRef.current = null;
-        setTimeout(() => {
-          isNavigatingRef.current = false;
-          scrollListenersEnabledRef.current = true;
-        }, 1200);
-      }, introOverlayDurationMs);
-      return;
-    }
-
-    if (page) {
-      scrollContainerRef.current?.scrollTo({
-        left: Math.max(page.offsetLeft - desktopGroupPeek, 0),
-        behavior: "auto",
-      });
-    }
-
-    if (sectionJumpTimeoutRef.current !== null) {
-      window.clearTimeout(sectionJumpTimeoutRef.current);
-      sectionJumpTimeoutRef.current = null;
-    }
-
-    scroller?.scrollTo({
-      top: targetTop,
-      behavior: "auto",
+      // Clear navigation flag after scroll completes
+      setTimeout(() => {
+        isNavigatingRef.current = false;
+        scrollListenersEnabledRef.current = true;
+      }, 1200);
     });
-
-    // Clear navigation flag after scroll completes
-    setTimeout(() => {
-      isNavigatingRef.current = false;
-      scrollListenersEnabledRef.current = true;
-    }, 1200);
   };
 
   const scrollToTimelineSection = (timelineIdx: number) => {
@@ -472,21 +484,23 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     const scroller = getGroupScroller(groupId);
     if (!scroller) return;
 
-    const threshold = scroller.scrollTop + 24;
-    const nextSection =
-      sections.find((section) => section.offsetTop > threshold) ??
-      sections[sections.length - 1];
+    requestAnimationFrame(() => {
+      const threshold = scroller.scrollTop + 24;
+      const nextSection =
+        sections.find((section) => section.offsetTop > threshold) ??
+        sections[sections.length - 1];
 
-    scroller.scrollTo({
-      top: nextSection.offsetTop,
-      behavior: "smooth",
+      scroller.scrollTo({
+        top: nextSection.offsetTop,
+        behavior: "smooth",
+      });
+
+      // Clear navigation flag after scroll completes
+      setTimeout(() => {
+        isNavigatingRef.current = false;
+        scrollListenersEnabledRef.current = true;
+      }, 1200); // Longer timeout for smooth scroll
     });
-
-    // Clear navigation flag after scroll completes
-    setTimeout(() => {
-      isNavigatingRef.current = false;
-      scrollListenersEnabledRef.current = true;
-    }, 1200); // Longer timeout for smooth scroll
   };
 
   useEffect(() => {
@@ -833,21 +847,23 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     setShowFixedGroupNav(false);
 
     // Jump to intro position instantly (no smooth scroll)
-    if (isMobile) {
-      window.scrollTo(0, 0);
-    } else {
-      const container = scrollContainerRef.current;
-      if (container) {
-        container.scrollLeft = 0;
-        container.scrollTop = 0;
+    requestAnimationFrame(() => {
+      if (isMobile) {
+        window.scrollTo(0, 0);
+      } else {
+        const container = scrollContainerRef.current;
+        if (container) {
+          container.scrollLeft = 0;
+          container.scrollTop = 0;
+        }
       }
-    }
 
-    // Clear navigation flag after scroll completes
-    setTimeout(() => {
-      isNavigatingRef.current = false;
-      scrollListenersEnabledRef.current = true;
-    }, 1200);
+      // Clear navigation flag after scroll completes
+      setTimeout(() => {
+        isNavigatingRef.current = false;
+        scrollListenersEnabledRef.current = true;
+      }, 1200);
+    });
   };
 
   const openAboutOverlay = () => {
