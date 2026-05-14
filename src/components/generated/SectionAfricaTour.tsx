@@ -82,7 +82,7 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
   const congoDescription =
     "Armstrong toured the Congo during its civil war, performing in Leopoldville under a temporary truce, for 10,000 people in Katanga";
   const congoOverlayDescription =
-    "As part of his 1960-1961 State Department tour, Armstrong visited the wartorn Congo region in the middle of a civil war between supporters of Patrice Lumumba and Mobutu Sese Seke. A temporary truce was declared to allow Armstrong to perform in Leopoldville. Two weeks later, he performed in front of 10,000 fans in the secessionist state of Katanga, staying with President Moises Tshombe during his time there";
+    "As part of his 1960-1961 State Department tour, Armstrong visited the wartorn Congo region in the middle of a civil war between supporters of Patrice Lumumba and Mobutu Sese Seke. A temporary truce was declared to allow Armstrong to perform in Leopoldville. Two weeks later, he performed in front of 10,000 fans in the secessionist state of Katanga, staying with President Moises Tshombe during his time there.";
   const desktopMediaAspectRatio = "470 / 360";
   const mobileTourCardImageSrc = "/assets/africa.png";
   const logoLinkProps = {
