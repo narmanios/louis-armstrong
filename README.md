@@ -24,7 +24,7 @@ By combining archival research, political history, music history, and data visua
 
 The research draws from archival and historical materials from institutions including the Louis Armstrong House Museum, the Louis Armstrong Educational Foundation, the Schomburg Center for Research in Black Culture, public FBI records, discographies, and media archives. These sources are translated into a series of visual and analytical frameworks, including timelines, network diagrams, geographic maps, and custom charts. The visualizations trace Armstrong’s early career and relationship with King Oliver, his rise as a bandleader and entertainer, his global travel, his official Africa tour, his presence in the Congo during political turmoil, and his later artistic engagement with diplomacy in The Real Ambassadors. Additional visualizations place him alongside other jazz ambassadors and map the broader institutional world of U.S. cultural diplomacy.
 
-Abroad, Armstrong e was celebrated as a symbol of freedom, creativity, and goodwill. At home, he lived within a nation structured by racism and was subject to government scrutiny. The Real Ambassadors turned this contradiction into art, while “What a Wonderful World” extended Armstrong’s ambassadorial voice into a later era, allowing his message to continue circulating globally long after the official Jazz Ambassador program had ended. By bringing together music history, political history, and data visualization, this project offers a new interpretation of Louis Armstrong as one of the most important cultural ambassadors of the twentieth century.
+Abroad, Armstrong was celebrated as a symbol of freedom, creativity, and goodwill. At home, he lived within a nation structured by racism and was subject to government scrutiny. The Real Ambassadors turned this contradiction into art, while “What a Wonderful World” extended Armstrong’s ambassadorial voice into a later era, allowing his message to continue circulating globally long after the official Jazz Ambassador program had ended. By bringing together music history, political history, and data visualization, this project offers a new interpretation of Louis Armstrong as one of the most important cultural ambassadors of the twentieth century.
 
 ### Sources
 
@@ -32,13 +32,13 @@ Louis Armstrong House Museum<br>
 Louis Armstrong Educational Foundation<br>
 Schomburg Center for Research<br>
 Public-domain audio archives 1900-1925<br>
-"Heart Full of Rhythm: The Big Band Years of Louis Armstrong". Oxford University Press, 2020.
-"Stomp Off, Let's Go: The Early Years of Louis Armstrong," Ricky Riccadi, Oxford University Press, 2025.  
-"What a Wonderful World: The Magic of Louis Armstrong's Later Years", Ricky Riccadi,Pantheon Books, 2011.
+"Heart Full of Rhythm: The Big Band Years of Louis Armstrong". Oxford University Press, 2020.<br>
+"Stomp Off, Let's Go: The Early Years of Louis Armstrong," Ricky Riccadi, Oxford University Press, 2025. <br>
+"What a Wonderful World: The Magic of Louis Armstrong's Later Years", Ricky Riccadi,Pantheon Books, 2011.<br>
 
 ### Data Sources
 
-Louis Armstrong House Museum
-IMDB
-Secondhandsongs.org
-Public archives of Armstrong's early recordings
+Louis Armstrong House Museum<br>
+IMDB<br>
+Secondhandsongs.org<br>
+Public archives of Armstrong's early recordings<br>
