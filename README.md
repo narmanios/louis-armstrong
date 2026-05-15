@@ -4,6 +4,10 @@
 
 ![Louis Armstrong's Legacy](./public/assets/hero/ambassador.png)
 
+![Louis Armstrong's Legacy](./public/assets/hero/map.png)
+
+![Louis Armstrong's Legacy](./public/assets/hero/real-ambassadors.png)
+
 ![Louis Armstrong's Legacy](./public/assets/hero/legacy.png)
 
 ## Introduction
