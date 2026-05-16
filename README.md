@@ -10,6 +10,9 @@
 
 ![Louis Armstrong's Legacy](./public/assets/hero/legacy.png)
 
+## Written Thesis
+![The Story of Louis Armstrong in Data and Song](./public/assets/written-thesis/lThesis_TheStoryofLouisArmstronginDataandSong.pdf)
+
 ## Introduction
 
 Louis Armstrong is most often remembered as one of the most influential musicians in the history of jazz. Yet to understand the full scope of his significance, he must also be recognized as an ambassador. First unofficially, through his early international fame and global touring, and later officially, through his appointment as a U.S. jazz ambassador in Africa between 1960 and 1961. Long before the United States government formally sent him abroad as a representative of American culture, Armstrong had already become one of the first Black international stars whose music, image, and charisma circulated across borders on a global scale. His career therefore offers a powerful lens through which to examine the intersections of music, race, diplomacy, and political power in the twentieth century.
