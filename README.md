@@ -11,7 +11,7 @@
 ![Louis Armstrong's Legacy](./public/assets/hero/legacy.png)
 
 ## Written Thesis
-![The Story of Louis Armstrong in Data and Song](./public/assets/written-thesis/lThesis_TheStoryofLouisArmstronginDataandSong.pdf)
+[The Story of Louis Armstrong in Data and Song](./public/assets/written-thesis/lThesis_TheStoryofLouisArmstronginDataandSong.pdf)
 
 ## Introduction
 
