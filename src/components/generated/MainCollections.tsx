@@ -138,6 +138,13 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     ambassador: 0,
     legacy: 0,
   });
+  const [nextButtonVisible, setNextButtonVisible] = useState<
+    Record<GroupId, boolean>
+  >({
+    history: false,
+    ambassador: false,
+    legacy: false,
+  });
   const groupNavItems: Array<{ id: GroupId; label: string }> = [
     { id: "history", label: "History" },
     { id: "ambassador", label: "Ambassador" },
@@ -500,6 +507,22 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           ? index
           : closestIndex;
       }, 0);
+
+      // If on last section, scroll to next button
+      if (currentIndex === sections.length - 1) {
+        const page = getGroupPageElement(groupId);
+        const nextButtonContainer = page?.querySelector(
+          ".mcg-group-nav-button-container",
+        ) as HTMLElement;
+        if (nextButtonContainer) {
+          scrollMobileElementIntoView(nextButtonContainer);
+          setTimeout(() => {
+            isNavigatingRef.current = false;
+          }, 1000);
+          return;
+        }
+      }
+
       const nextSection =
         sections[Math.min(currentIndex + 1, sections.length - 1)];
       scrollMobileElementIntoView(nextSection);
@@ -513,14 +536,33 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     if (!scroller) return;
 
     const threshold = scroller.scrollTop + 24;
-    const nextSection =
-      sections.find((section) => section.offsetTop > threshold) ??
-      sections[sections.length - 1];
+    const nextSection = sections.find(
+      (section) => section.offsetTop > threshold,
+    );
 
-    scroller.scrollTo({
-      top: nextSection.offsetTop,
-      behavior: "smooth",
-    });
+    // If no next section found, we're at or past the last section - scroll to next button
+    if (!nextSection) {
+      const page = getGroupPageElement(groupId);
+      const nextButtonContainer = page?.querySelector(
+        ".mcg-group-nav-button-container",
+      ) as HTMLElement;
+      if (nextButtonContainer && scroller.parentElement) {
+        const containerTop = nextButtonContainer.offsetTop;
+        scroller.scrollTo({
+          top:
+            containerTop -
+            scroller.clientHeight +
+            nextButtonContainer.offsetHeight +
+            100,
+          behavior: "smooth",
+        });
+      }
+    } else {
+      scroller.scrollTo({
+        top: nextSection.offsetTop,
+        behavior: "smooth",
+      });
+    }
 
     setTimeout(() => {
       isNavigatingRef.current = false;
@@ -678,21 +720,65 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   }, [isMobile, isMobileMenuOpen]);
 
   useEffect(() => {
+    const checkNextButtonVisibility = () => {
+      const groups: GroupId[] = ["history", "ambassador", "legacy"];
+      const newVisibility: Record<GroupId, boolean> = {
+        history: false,
+        ambassador: false,
+        legacy: false,
+      };
+
+      groups.forEach((groupId) => {
+        const scroller = getGroupScroller(groupId);
+        const page = getGroupPageElement(groupId);
+        const nextButtonContainer = page?.querySelector(
+          ".mcg-group-nav-button-container",
+        ) as HTMLElement;
+
+        if (!scroller || !nextButtonContainer) {
+          newVisibility[groupId] = false;
+          return;
+        }
+
+        if (isMobile) {
+          const rect = nextButtonContainer.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+          const mobileNavOffset = getMobileNavOffset();
+          // Button is visible if it's fully in viewport (accounting for mobile nav)
+          newVisibility[groupId] =
+            rect.top >= mobileNavOffset && rect.bottom <= viewportHeight;
+        } else {
+          const scrollBottom = scroller.scrollTop + scroller.clientHeight;
+          const buttonTop = nextButtonContainer.offsetTop;
+          const buttonHeight = nextButtonContainer.offsetHeight;
+          // Button is visible only if the top of the button is in the viewport
+          newVisibility[groupId] = scrollBottom >= buttonTop + buttonHeight / 2;
+        }
+      });
+
+      setNextButtonVisible(newVisibility);
+    };
+
+    const combinedHandler = () => {
+      updateActiveStatsCard();
+      checkNextButtonVisibility();
+    };
+
     const listeners: Array<{
       element: HTMLElement | null;
       handler: () => void;
     }> = [
       {
         element: historyScrollRef.current,
-        handler: updateActiveStatsCard,
+        handler: combinedHandler,
       },
       {
         element: ambassadorScrollRef.current,
-        handler: updateActiveStatsCard,
+        handler: combinedHandler,
       },
       {
         element: musicianScrollRef.current,
-        handler: updateActiveStatsCard,
+        handler: combinedHandler,
       },
     ];
 
@@ -702,12 +788,20 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
       element?.addEventListener("scroll", handler, { passive: true });
     });
 
+    if (isMobile) {
+      window.addEventListener("scroll", combinedHandler, { passive: true });
+    }
+
     updateActiveStatsCard();
+    checkNextButtonVisibility();
 
     return () => {
       activeListeners.forEach(({ element, handler }) => {
         element?.removeEventListener("scroll", handler);
       });
+      if (isMobile) {
+        window.removeEventListener("scroll", combinedHandler);
+      }
     };
   }, [currentGroupId, isMobile, showFixedGroupNav, introOverlayGroupId]);
 
@@ -2078,8 +2172,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               </div>
             </div>
           </div>
-          {currentSectionIndices.history <
-            groupSectionItems.history.length - 1 && (
+          {!nextButtonVisible.history && (
             <button
               className="mcg-group-scroll-arrow"
               onClick={() => scrollGroupDown("history")}
@@ -2179,8 +2272,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               </div>
             </div>
           </div>
-          {currentSectionIndices.ambassador <
-            groupSectionItems.ambassador.length - 1 && (
+          {!nextButtonVisible.ambassador && (
             <button
               className="mcg-group-scroll-arrow"
               onClick={() => scrollGroupDown("ambassador")}
@@ -2233,8 +2325,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
               </div>
             </div>
           </div>
-          {currentSectionIndices.legacy <
-            groupSectionItems.legacy.length - 1 && (
+          {!nextButtonVisible.legacy && (
             <button
               className="mcg-group-scroll-arrow"
               onClick={() => scrollGroupDown("legacy")}

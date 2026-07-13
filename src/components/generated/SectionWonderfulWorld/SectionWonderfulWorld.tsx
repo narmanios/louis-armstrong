@@ -335,6 +335,7 @@ export function SectionWonderfulWorld({
     clamp(initialZoom, ZOOM_MIN, ZOOM_MAX),
   );
   const [selectedBubbleId, setSelectedBubbleId] = useState<number | null>(null);
+  const [isPinned, setIsPinned] = useState(false);
   const [placedFacts, setPlacedFacts] = useState<PlacedFact[]>([]);
   const [tooltip, setTooltip] = useState<TooltipState>({
     visible: false,
@@ -357,6 +358,7 @@ export function SectionWonderfulWorld({
   const stageOuterRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const centerMediaRef = useRef<HTMLVideoElement | null>(null);
+  const isPinnedRef = useRef(false);
   const isMobile = useIsMobile();
   const [stageScale, setStageScale] = useState(1);
 
@@ -383,6 +385,8 @@ export function SectionWonderfulWorld({
 
   const hideTooltip = () => {
     setSelectedBubbleId(null);
+    setIsPinned(false);
+    isPinnedRef.current = false;
     setTooltip({
       visible: false,
       x: -9999,
@@ -477,13 +481,37 @@ export function SectionWonderfulWorld({
     event: React.MouseEvent<HTMLDivElement>,
     fact: PlacedFact,
   ) => {
-    if (selectedBubbleId === fact.bubbleId && tooltip.visible) {
+    event.stopPropagation();
+
+    // If clicking on the same bubble that's already pinned, unpin it
+    if (selectedBubbleId === fact.bubbleId && isPinned) {
       hideTooltip();
       return;
     }
 
+    // Pin the tooltip
+    setSelectedBubbleId(fact.bubbleId);
+    setIsPinned(true);
+    isPinnedRef.current = true;
+    showTooltipFor(event, fact);
+  };
+
+  const handleFactHover = (
+    event: React.MouseEvent<HTMLDivElement>,
+    fact: PlacedFact,
+  ) => {
+    // Don't show hover tooltip if another tooltip is pinned
+    if (isPinned) return;
+
     setSelectedBubbleId(fact.bubbleId);
     showTooltipFor(event, fact);
+  };
+
+  const handleFactLeave = () => {
+    // Don't hide if tooltip is pinned
+    if (isPinned) return;
+
+    hideTooltip();
   };
 
   const tooltipStyle = useMemo<CSSProperties>(
@@ -967,7 +995,11 @@ export function SectionWonderfulWorld({
 
     initialize();
 
-    const hideOnViewportChange = () => hideTooltip();
+    const hideOnViewportChange = () => {
+      // Don't hide if tooltip is pinned
+      if (isPinnedRef.current) return;
+      hideTooltip();
+    };
     window.addEventListener("scroll", hideOnViewportChange, { passive: true });
     window.addEventListener("resize", hideOnViewportChange);
 
@@ -1020,7 +1052,10 @@ export function SectionWonderfulWorld({
             setIsInView(true);
           } else if (!entry.isIntersecting && isInView) {
             setIsInView(false);
-            hideTooltip();
+            // Don't hide if tooltip is pinned
+            if (!isPinnedRef.current) {
+              hideTooltip();
+            }
           }
         });
       },
@@ -1252,7 +1287,19 @@ export function SectionWonderfulWorld({
           </header>
         </div>
 
-        <main className="slg__stage" onMouseDown={hideTooltip}>
+        <main
+          className="slg__stage"
+          onMouseDown={(e) => {
+            // Hide tooltip if clicking outside (only when tooltip is visible and pinned)
+            if (
+              tooltip.visible &&
+              isPinned &&
+              !tooltipRef.current?.contains(e.target as Node)
+            ) {
+              hideTooltip();
+            }
+          }}
+        >
           <div className="slg__stage-shell" ref={stageOuterRef}>
             <div className="slg__stage-frame" style={stageFrameStyle}>
               <div className="slg__stage-scale" style={stageScaleStyle}>
@@ -1293,6 +1340,8 @@ export function SectionWonderfulWorld({
                       key={fact.bubbleId}
                       className={`slg__fact${selectedBubbleId === fact.bubbleId ? " is-selected" : ""}`}
                       style={factStyle(fact)}
+                      onMouseEnter={(event) => handleFactHover(event, fact)}
+                      onMouseLeave={handleFactLeave}
                       onClick={(event) => handleFactClick(event, fact)}
                     />
                   ))}
