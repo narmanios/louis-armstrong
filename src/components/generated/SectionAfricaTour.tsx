@@ -123,8 +123,8 @@ export const SectionAfricaTour: React.FC<SectionAfricaTourProps> = ({
     <section
       className={`mcg-section text-overlay-section africa-tour-section ${className || ""}`}
       style={{
-        width: isMobile ? "100%" : "100vw",
-        minWidth: isMobile ? 0 : "100vw",
+        width: isMobile ? "100%" : "100%",
+        minWidth: isMobile ? 0 : "100%",
         minHeight: isMobile ? undefined : "100dvh",
         height: "auto",
         display: "flow-root",

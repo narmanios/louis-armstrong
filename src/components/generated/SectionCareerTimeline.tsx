@@ -1691,8 +1691,8 @@ export const SectionCareerTimeline: React.FC<SectionCareerTimelineProps> = ({
     <section
       className={`mcg-section career-timeline-section ${className || ""}`}
       style={{
-        width: isMobile ? "100%" : "100vw",
-        minWidth: isMobile ? 0 : "100vw",
+        width: isMobile ? "100%" : "100%",
+        minWidth: isMobile ? 0 : "100%",
         height: isMobile ? "auto" : detailViewCategory ? "auto" : "100dvh",
         minHeight: undefined, // Remove minHeight constraint to allow full expansion
         flexShrink: isMobile ? undefined : 0,

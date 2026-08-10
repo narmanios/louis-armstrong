@@ -116,6 +116,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   const pendingGroupIdRef = useRef<GroupId | null>(null);
   const scrollListenerActiveRef = useRef<boolean>(true);
   const updateNavVisibilityRef = useRef<(() => void) | null>(null);
+  const isResizingRef = useRef<boolean>(false);
   const navigationLockDurationMs = 3000;
   const isMobile = useIsMobile();
   const [showFixedGroupNav, setShowFixedGroupNav] = useState(false);
@@ -308,6 +309,11 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
   };
 
   const updateActiveStatsCard = () => {
+    // Don't update during resize
+    if (isResizingRef.current) {
+      return;
+    }
+
     // Check navigation flag FIRST
     if (isNavigatingRef.current) {
       setActiveStatsCardKey(null);
@@ -571,6 +577,11 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
   useEffect(() => {
     const updateNavVisibility = () => {
+      // Check resize lock FIRST - prevent changes during resize
+      if (isResizingRef.current) {
+        return;
+      }
+
       // Check navigation lock FIRST - absolute priority
       const timeSinceNavigation = Date.now() - lastNavigationTimeRef.current;
       if (timeSinceNavigation < navigationLockDurationMs) {
@@ -702,6 +713,129 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
     };
   }, [isMobile, introOverlayGroupId]);
 
+  // Handle window resize to maintain correct scroll position
+  useEffect(() => {
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    let resizeEndTimer: ReturnType<typeof setTimeout>;
+    let lastWidth = window.innerWidth;
+    let lastHeight = window.innerHeight;
+
+    const handleResize = () => {
+      const currentWidth = window.innerWidth;
+      const currentHeight = window.innerHeight;
+
+      // Only act if dimensions actually changed (prevents unnecessary updates)
+      if (currentWidth === lastWidth && currentHeight === lastHeight) {
+        return;
+      }
+
+      lastWidth = currentWidth;
+      lastHeight = currentHeight;
+
+      // Set resize flag immediately
+      isResizingRef.current = true;
+
+      // Clear existing timers
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+      }
+      if (resizeEndTimer) {
+        clearTimeout(resizeEndTimer);
+      }
+
+      // Immediate position adjustment (runs quickly during resize)
+      resizeTimer = setTimeout(() => {
+        if (isMobile) {
+          // On mobile, ensure we maintain proper scroll position
+          if (!showFixedGroupNav) {
+            // If at intro, ensure we're at the beginning
+            window.scrollTo({
+              top: 0,
+              behavior: "auto",
+            });
+          }
+          // If in a section, don't adjust - let natural scroll work
+        } else {
+          // Desktop resize handling
+          const container = scrollContainerRef.current;
+          if (!container) return;
+
+          // Lock to current group position
+          if (showFixedGroupNav) {
+            const page = getGroupPageElement(currentGroupId);
+            if (page) {
+              // Calculate the target position to keep the current group centered
+              const targetLeft = Math.max(
+                page.offsetLeft - desktopGroupPeek,
+                0,
+              );
+              container.scrollTo({
+                left: targetLeft,
+                behavior: "auto",
+              });
+
+              // Also maintain section scroll position within the current group
+              const scroller = getGroupScroller(currentGroupId);
+              if (scroller) {
+                const currentScrollTop = scroller.scrollTop;
+                // Re-apply scroll position to handle any layout shifts
+                requestAnimationFrame(() => {
+                  if (scroller) {
+                    scroller.scrollTop = currentScrollTop;
+                  }
+                });
+              }
+            }
+          } else {
+            // If at intro, ensure we're at the beginning
+            container.scrollTo({
+              left: 0,
+              behavior: "auto",
+            });
+          }
+        }
+      }, 50); // Quick adjustment during resize
+
+      // Final cleanup after resize stops (longer debounce)
+      resizeEndTimer = setTimeout(() => {
+        // Ensure final position is correct
+        if (!isMobile) {
+          const container = scrollContainerRef.current;
+          if (container && showFixedGroupNav) {
+            const page = getGroupPageElement(currentGroupId);
+            if (page) {
+              const targetLeft = Math.max(
+                page.offsetLeft - desktopGroupPeek,
+                0,
+              );
+              container.scrollTo({
+                left: targetLeft,
+                behavior: "auto",
+              });
+            }
+          }
+        }
+
+        // Clear resize flag after a delay to allow things to settle
+        setTimeout(() => {
+          isResizingRef.current = false;
+        }, 500);
+      }, 300); // Longer delay to ensure resize has stopped
+    };
+
+    window.addEventListener("resize", handleResize, { passive: true });
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+      }
+      if (resizeEndTimer) {
+        clearTimeout(resizeEndTimer);
+      }
+    };
+  }, [isMobile, showFixedGroupNav, currentGroupId]);
+
   useEffect(() => {
     if (!isMobile || !showFixedGroupNav) {
       setIsMobileMenuOpen(false);
@@ -721,6 +855,9 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
 
   useEffect(() => {
     const checkNextButtonVisibility = () => {
+      // Don't update during resize
+      if (isResizingRef.current) return;
+
       const groups: GroupId[] = ["history", "ambassador", "legacy"];
       const newVisibility: Record<GroupId, boolean> = {
         history: false,
@@ -1249,6 +1386,16 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
           inset: 0;
         }
 
+        /* Prevent scrollbar flicker during resize */
+        .mcg-root * {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        .mcg-root *::-webkit-scrollbar {
+          display: none;
+        }
+
         .mcg-root.has-sticky-group-header::before {
           content: "";
           position: fixed;
@@ -1595,8 +1742,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
 
         .mcg-group-frame {
-          width: 100vw;
-          max-width: 100vw;
+          width: 100%;
+          max-width: 100%;
           min-height: 100%;
           background: #ffffff;
           overflow: hidden;
@@ -1643,7 +1790,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
 
         .mcg-group-scroll {
-          width: 100vw;
+          width: 100%;
+          max-width: 100%;
           height: 100%;
           overflow-y: auto;
           overflow-x: hidden;
@@ -1658,8 +1806,8 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
 
         .mcg-group-section {
-          width: 100vw;
-          max-width: 100vw;
+          width: 100%;
+          max-width: 100%;
           min-width: 0;
           min-height: 100dvh;
           height: auto;
@@ -1669,7 +1817,7 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
 
         .mcg-group-section-inner {
-          width: 100vw;
+          width: 100%;
           min-height: 100dvh;
           height: auto;
           transform: none;
@@ -1690,11 +1838,11 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
 
         .mcg-section {
-          width: 100vw;
-          min-width: 100vw;
-          max-width: 100vw;
+          width: 100%;
+          min-width: 100%;
+          max-width: 100%;
           min-height: 100dvh;
-         height: auto;
+          height: auto;
           position: relative;
           overflow: hidden;
           flex-shrink: 0;
@@ -1702,7 +1850,6 @@ export const MainCollections: React.FC<MainCollectionsProps> = ({
         }
 
         .hero-intro-section {
-        
           flex-shrink: 0;
           overflow: hidden;
           width: 100vw;

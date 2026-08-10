@@ -87,8 +87,8 @@ export const SectionFBIFiles: React.FC = () => {
     <section
       className="mcg-section mcg-fbi-section"
       style={{
-        width: "100vw",
-        minWidth: "100vw",
+        width: "100%",
+        minWidth: "100%",
         flexShrink: 0,
         scrollSnapAlign: "start",
         minHeight: "100dvh",
